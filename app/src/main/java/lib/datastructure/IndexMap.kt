@@ -1,8 +1,5 @@
 package lib.datastructure
 
-
-import java.util.Iterator
-
 class IndexMap<K,V>: Iterator<V>
 {
     private val map = HashMap<K,V>()
@@ -25,8 +22,7 @@ class IndexMap<K,V>: Iterator<V>
 
     override fun hasNext(): Boolean
     {
-        val has = if(currentIndex <= index.size) true else false
-        return has
+        return currentIndex <= index.size
     }
 
     override fun next():V
@@ -82,7 +78,7 @@ class IndexMap<K,V>: Iterator<V>
     {
         if(index.isEmpty()) return null
         val key = index.first()
-        val v =  map.get(key)
+        val v = map[key]
         remove(key)
         return v
     }
@@ -91,7 +87,7 @@ class IndexMap<K,V>: Iterator<V>
     {
         if(index.isEmpty()) return null
         val key = index.last()
-        val v =  map.get(key)
+        val v = map[key]
         remove(key)
         return v
     }

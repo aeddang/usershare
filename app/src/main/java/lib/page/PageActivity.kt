@@ -28,17 +28,12 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
 
     open fun getCurentFragment(): PageFragment?
     {
-        supportFragmentManager.fragments?.let {
-            val cf = it.last() as PageFragment
-            return cf
-        }
-        return null
+        return supportFragmentManager.fragments.last() as PageFragment
     }
 
     open fun getPageAreaSize():Pair<Float,Float>
     {
-        pageArea?.let { return Pair(it.width.toFloat(),it.height.toFloat())}
-        return Pair(0f,0f)
+        return Pair(pageArea.width.toFloat(),pageArea.height.toFloat())
     }
 
     override fun onBackPressed()
@@ -48,16 +43,14 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         super.onBackPressed()
     }
 
-    open protected fun <T> getPageByID(id:T): PageFragment? {return null}
+    abstract fun <T> getPageByID(id:T): PageFragment
     final override fun onPageChange(id:T,isBack:Boolean)
     {
         val willChangePage = getPageByID(id)
-        willChangePage?.let {
-            it.pageID = id
-            it.delegate = this
-            it.pageType = if(isBack) PageFragment.PageType.BACK else PageFragment.PageType.DEFAULT
-            supportFragmentManager.beginTransaction().add(getPageAreaId(),it).commit()
-        }
+        willChangePage.pageID = id
+        willChangePage.delegate = this
+        willChangePage.pageType = if(isBack) PageFragment.PageType.BACK else PageFragment.PageType.DEFAULT
+        supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commit()
     }
 
     override fun onCreateAnimation(v:PageFragment)
@@ -70,20 +63,18 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         currentPage = v
     }
 
-    open protected fun <T> getPopupByID(id:T): PageFragment? {return null}
+    abstract fun <T> getPopupByID(id:T): PageFragment
     final override fun onOpenPopup(id:T)
     {
         val popup = getPopupByID(id)
-        popup?.pageID = id
-        popup?.let {
-            it.pageType = PageFragment.PageType.POPUP
-            supportFragmentManager.beginTransaction().add(getPageAreaId(),it,id.toString()).commit()
-        }
+        popup.pageID = id
+        popup.pageType = PageFragment.PageType.POPUP
+        supportFragmentManager.beginTransaction().add(getPageAreaId(),popup,id.toString()).commit()
     }
 
     final override fun onClosePopup(id:T)
     {
         val popup = supportFragmentManager.findFragmentByTag(id.toString()) as PageFragment
-        popup?.let { it.onDestroyAnimation()}
+        popup.onDestroyAnimation()
     }
 }

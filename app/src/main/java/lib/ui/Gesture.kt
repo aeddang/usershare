@@ -176,7 +176,7 @@ class Gesture(var delegate:Delegate?, private val isVertical: Boolean, private v
     {
         if (startPosA.size != movePosA.size && isComplete == false) return
         val spdMD = 100f
-        var moveMD = 0f
+        var moveMD: Float
         val start: Point
         val move: Point
         val change: Point
@@ -204,6 +204,7 @@ class Gesture(var delegate:Delegate?, private val isVertical: Boolean, private v
                         if (moveMD > changeMax) delegate?.gestureComplete(this, Type.PAN_DOWN)
                         else if (moveMD < -changeMax) delegate?.gestureComplete(this, Type.PAN_UP)
                     }
+                    else -> { }
                 }
                 if (Math.abs(change.x) < changeMin && Math.abs(change.y) < changeMin) delegate?.gestureComplete(this, Type.TOUCH)
 
@@ -232,9 +233,9 @@ class Gesture(var delegate:Delegate?, private val isVertical: Boolean, private v
             val moveDist = Math.sqrt(((Math.abs(move.x - move2.x) xor 2) + (Math.abs(move.y - move2.y) xor 2)).toDouble()).toFloat()
             val dist = moveDist - startDist
 
-            var rotate = 0f
-            var w = 0f
-            var h = 0f
+            var rotate:Float
+            var w:Float
+            var h:Float
             if (startRotate == 0f)
             {
                 w = (start.x - start2.x).toFloat()
@@ -271,6 +272,7 @@ class Gesture(var delegate:Delegate?, private val isVertical: Boolean, private v
                             if (moveMD > changeMax) delegate?.gestureComplete(this, Type.PINCH_DOWN)
                             else if (moveMD < -changeMax) delegate?.gestureComplete(this, Type.PINCH_UP)
                         }
+                        else -> { }
                     }
                 }
             }

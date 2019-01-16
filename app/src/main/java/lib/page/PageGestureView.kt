@@ -14,8 +14,7 @@ abstract class PageGestureView : FrameLayout, Gesture.Delegate
 {
     var closeType = Gesture.Type.PAN_DOWN
     var delegate: Delegate? = null
-    var contentsView:View? = null
-
+    lateinit var contentsView:View
     private var isVertical = false
     private var isHorizontal = false
     private var gesture:Gesture? = null
@@ -24,19 +23,19 @@ abstract class PageGestureView : FrameLayout, Gesture.Delegate
     private var animationCloseRunnable: Runnable = Runnable {didCloseAnimation()}
     private var animationReturnRunnable: Runnable = Runnable {didReturnAnimation()}
 
-    constructor(context: Context) : super(context){}
-    constructor(context: Context, attrs:AttributeSet) : super(context,attrs){}
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs:AttributeSet) : super(context,attrs)
 
     fun willCreateAnimation(startPos:Float)
     {
-        if(isVertical) contentsView?.translationY = startPos else contentsView?.translationX = startPos
+        if(isVertical) contentsView.translationY = startPos else contentsView.translationX = startPos
     }
 
     override fun onAttachedToWindow()
     {
         super.onAttachedToWindow()
-        isVertical = if(closeType == Gesture.Type.PAN_UP || closeType == Gesture.Type.PAN_DOWN) true else false
-        isHorizontal = if(closeType == Gesture.Type.PAN_LEFT || closeType == Gesture.Type.PAN_RIGHT) true else false
+        isVertical = closeType == Gesture.Type.PAN_UP || closeType == Gesture.Type.PAN_DOWN
+        isHorizontal = closeType == Gesture.Type.PAN_LEFT || closeType == Gesture.Type.PAN_RIGHT
         gesture = Gesture(this,isVertical,isHorizontal)
 
     }
@@ -44,7 +43,6 @@ abstract class PageGestureView : FrameLayout, Gesture.Delegate
     override fun onDetachedFromWindow()
     {
         super.onDetachedFromWindow()
-        contentsView = null
         delegate = null
         gesture?.onDestroy()
         gesture = null
@@ -72,7 +70,7 @@ abstract class PageGestureView : FrameLayout, Gesture.Delegate
     private fun touchStart()
     {
         finalGesture = Gesture.Type.NONE
-        contentsView?.let {startPosition = if(isVertical) it.translationY else it.translationX }
+        contentsView.let {startPosition = if(isVertical) it.translationY else it.translationX }
     }
 
     private fun touchMove(delta:Int)
@@ -85,31 +83,31 @@ abstract class PageGestureView : FrameLayout, Gesture.Delegate
             {
                 max = height
                 if (p > max) p = max.toFloat() else if (p < 0f) p = 0f
-                contentsView?.translationY = Math.floor(p.toDouble()).toFloat()
+                contentsView.translationY = Math.floor(p.toDouble()).toFloat()
             }
             Gesture.Type.PAN_UP ->
             {
                 max = -height
                 if (p < max) p = max.toFloat() else if (p > 0f) p = 0f
-                contentsView?.translationY = Math.floor(p.toDouble()).toFloat()
+                contentsView.translationY = Math.floor(p.toDouble()).toFloat()
             }
 
             Gesture.Type.PAN_RIGHT ->
             {
                 max = width
                 if (p > max) p = max.toFloat() else if (p < 0f) p = 0f
-                contentsView?.translationX = Math.floor(p.toDouble()).toFloat()
+                contentsView.translationX = Math.floor(p.toDouble()).toFloat()
             }
             Gesture.Type.PAN_LEFT ->
             {
                 max = width
                 if (p < max) p = max.toFloat() else if (p > 0f) p = 0f
-                contentsView?.translationX = Math.floor(p.toDouble()).toFloat()
+                contentsView.translationX = Math.floor(p.toDouble()).toFloat()
             }
-
+            else -> { }
         }
         val pct = (max - p) / max
-       // alpha = pct
+        // alpha = pct
         delegate?.onMove(this,pct)
     }
 
@@ -127,54 +125,48 @@ abstract class PageGestureView : FrameLayout, Gesture.Delegate
     {
         var closePosX = 0f
         var closePosY = 0f
-        var duration = 100L;
+        var duration = 100L
         when(closeType)
         {
             Gesture.Type.PAN_DOWN -> closePosY = height.toFloat()
             Gesture.Type.PAN_UP -> closePosY = -height.toFloat()
             Gesture.Type.PAN_RIGHT -> closePosX = width.toFloat()
             Gesture.Type.PAN_LEFT -> closePosX = -width.toFloat()
+            else -> { }
         }
-
-        contentsView?.let {
-            duration = if(closePosY != 0f) Math.abs(closePosY - it.translationY).toLong() else Math.abs(closePosX - it.translationX).toLong()
-            duration = duration/5
-            val ani =
-                    it.animate()
-                    .translationX(closePosX)
-                    .translationY(closePosY)
-                    .setInterpolator(DecelerateInterpolator())
-                    .setDuration(duration)
-            if(isClosure) ani.withEndAction(animationCloseRunnable)
-            ani.start()
-            }
-
+        duration = if(closePosY != 0f) Math.abs(closePosY - contentsView.translationY).toLong() else Math.abs(closePosX - contentsView.translationX).toLong()
+        duration /= 5
+        val ani =
+            contentsView.animate()
+                .translationX(closePosX)
+                .translationY(closePosY)
+                .setInterpolator(DecelerateInterpolator())
+                .setDuration(duration)
+        if(isClosure) ani.withEndAction(animationCloseRunnable)
+        ani.start()
         return duration
     }
-    open protected fun didCloseAnimation()
+    protected open fun didCloseAnimation()
     {
         delegate?.onClose(this)
     }
 
     open fun onGestureReturn(isClosure:Boolean = true):Long
     {
-        var duration = 100L;
-
-        contentsView?.let {
-            duration = if (isVertical) Math.abs(it.translationY).toLong() else Math.abs(it.translationX).toLong()
-            duration = duration / 5
-            val ani = it.animate()
-                    .translationX(0f)
-                    .translationY(0f)
-                    .setInterpolator(AccelerateInterpolator())
-                    .setDuration(duration)
-            if (isClosure) ani.withEndAction(animationReturnRunnable)
-            ani.start()
-        }
+        var duration = 100L
+        duration = if (isVertical) Math.abs(contentsView.translationY).toLong() else Math.abs(contentsView.translationX).toLong()
+        duration /= 5
+        val ani = contentsView.animate()
+            .translationX(0f)
+            .translationY(0f)
+            .setInterpolator(AccelerateInterpolator())
+            .setDuration(duration)
+        if (isClosure) ani.withEndAction(animationReturnRunnable)
+        ani.start()
         return duration
     }
 
-    open protected fun didReturnAnimation()
+    protected open fun didReturnAnimation()
     {
         delegate?.onReturn(this)
     }

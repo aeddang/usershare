@@ -21,30 +21,31 @@ class MainActivity : PageActivity<PageID>() {
        this.pagePresenter.pageChange(PageID.MAIN)
     }
 
-    override fun <T> getPageByID(id:T): PageFragment?
+    override fun <T> getPageByID(id:T): PageFragment
     {
-        var page: PageFragment? = null
+        var page: PageFragment
         when(id)
         {
-            PageID.MAIN -> {page = PageMain()}
-            PageID.TEST -> {page = PageNetworkTest()}
+            PageID.MAIN -> { page = PageMain() }
+            PageID.TEST -> { page = PageNetworkTest() }
+            else -> { page = PageMain() }
         }
-        return page?.let {it} ?: super.getPageByID(id)
+        return page
     }
 
-    /*
-    override fun <T> getPopupByID(id:T): PageFragment?
-    {
 
-        var popup: PageFragment? = null
+    override fun <T> getPopupByID(id:T): PageFragment
+    {
+        var page: PageFragment
         when(id)
         {
-            PageID.TEST -> {popup = PopupTest()}
+            PageID.MAIN -> { page = PageMain() }
+            PageID.TEST -> { page = PageNetworkTest() }
+            else -> { page = PageMain() }
         }
-
-        return popup?.let {it} ?: super.getPopupByID(id)
+        return page
     }
-    */
+
 }
 enum class PageID
 {

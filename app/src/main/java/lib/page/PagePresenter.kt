@@ -4,11 +4,11 @@ open class PagePresenter<T>(val view: PagePresenter.View<T>, val model: PagePres
 {
     companion object
     {
-        internal val TAG = "Page"
+        internal const val TAG = "Page"
         private var currentInstence:Any? = null
         fun <T> getInstence(): PagePresenter<T>?
         {
-            return currentInstence as? PagePresenter<T>
+            return currentInstence as PagePresenter<T>
         }
     }
 
@@ -16,7 +16,7 @@ open class PagePresenter<T>(val view: PagePresenter.View<T>, val model: PagePres
     {
         currentInstence = this
     }
-
+    /*
     fun openMenu()
     {
     }
@@ -24,7 +24,7 @@ open class PagePresenter<T>(val view: PagePresenter.View<T>, val model: PagePres
     fun closeMenu()
     {
     }
-
+    */
     fun onBack():Boolean
     {
         val pop:T? = model.getPopup()
@@ -43,20 +43,20 @@ open class PagePresenter<T>(val view: PagePresenter.View<T>, val model: PagePres
     fun closePopup(id:T):PagePresenter<T>
     {
         model.removePopup(id)
-        view?.onClosePopup(id)
+        view.onClosePopup(id)
         return this
     }
 
     fun openPopup(id:T):PagePresenter<T>
     {
-        view?.onOpenPopup(id)
+        view.onOpenPopup(id)
         model.addPopup(id)
         return this
     }
 
     fun pageChange(id:T,isHistory:Boolean=false,isBack:Boolean = false):PagePresenter<T>
     {
-        view?.onPageChange(id,isBack)
+        view.onPageChange(id,isBack)
         model.addHistory(id,isHistory)
         return this
     }
