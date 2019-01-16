@@ -7,9 +7,9 @@
     <Button
             android:text="buttonTestA"
             android:layout_width="match_parent"
-            android:id="@+id/button_test_A" android:layout_weight="1" android:layout_height="wrap_content"/>
+            android:id="@+id/buttonTestA" android:layout_weight="1" android:layout_height="wrap_content"/>
     <Button
             android:text="buttonTestB"
             android:layout_width="match_parent"
-            android:id="@+id/button_test_B" android:layout_weight="1" android:layout_height="wrap_content"/>
+            android:id="@+id/buttonTestB" android:layout_weight="1" android:layout_height="wrap_content"/>
 </LinearLayout>

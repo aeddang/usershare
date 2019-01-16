@@ -1,4 +1,4 @@
-package com.kakaovx.homet.component.page
+package com.kakaovx.homet.component.ui
 
 import android.support.v4.app.Fragment
 import com.kakaovx.homet.App
@@ -19,7 +19,4 @@ abstract class ApiPageFragment : InjectablePageFragment()
                 .build().inject(this@ApiPageFragment)
         }
     }
-
-    abstract protected fun handleComplete(data: Any)
-    abstract protected fun handleError(err:Throwable)
 }

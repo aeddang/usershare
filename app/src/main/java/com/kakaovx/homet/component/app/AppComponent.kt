@@ -1,6 +1,5 @@
 package com.kakaovx.homet.component.app
 
-import com.kakaovx.homet.App
 import com.kakaovx.homet.component.network.NetworkModule
 import com.kakaovx.homet.component.preference.PreferenceModule
 import com.kakaovx.homet.component.preference.SettingPreference

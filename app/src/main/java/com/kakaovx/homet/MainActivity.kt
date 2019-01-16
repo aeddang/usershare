@@ -1,23 +1,24 @@
 package com.kakaovx.homet
 
-import android.annotation.SuppressLint
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.view.ViewGroup
 import com.kakaovx.homet.page.PageMain
 import com.kakaovx.homet.page.PageNetworkTest
 import lib.page.PageActivity
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.rxkotlin.toObservable
 import lib.page.PageFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : PageActivity<PageID>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        pageArea = findViewById<ViewGroup>(R.id.pageArea) as ViewGroup?
-        this.pagePresenter.pageChange(PageID.MAIN)
+    override fun getLayoutResId(): Int {
+        return R.layout.activity_main
+    }
+
+    override fun getPageAreaId(): Int {
+        return R.id.area
+    }
+
+    override fun init() {
+       this.pagePresenter.pageChange(PageID.MAIN)
     }
 
     override fun <T> getPageByID(id:T): PageFragment?
@@ -30,6 +31,7 @@ class MainActivity : PageActivity<PageID>() {
         }
         return page?.let {it} ?: super.getPageByID(id)
     }
+
     /*
     override fun <T> getPopupByID(id:T): PageFragment?
     {

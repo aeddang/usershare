@@ -3,6 +3,7 @@ package lib.page
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.CallSuper
+import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,14 +31,18 @@ abstract class PageFragment:Fragment()
     internal var delegate:Delegate? = null
     internal var pageType = PageType.DEFAULT
 
+    @LayoutRes protected abstract fun getLayoutResId(): Int
+    abstract fun init()
+
     @CallSuper
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(getLayoutResId(), container, false)
     }
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        init()
         willCreateAnimation()
         animationHandler.post(viewCreateRunnable)
     }

@@ -1,5 +1,8 @@
 package lib.page
 
+import android.os.Bundle
+import android.support.annotation.IdRes
+import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import com.kakaovx.homet.R
@@ -10,12 +13,17 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
     open var currentPage: PageFragment? = null
         protected set
 
-    protected var pageArea:ViewGroup? = null
+    private lateinit var pageArea:ViewGroup
 
-    override fun onStart()
-    {
-        super.onStart()
-        //pageArea = findViewById<ViewGroup>(R.id.pageArea) as ViewGroup?
+    @LayoutRes abstract fun getLayoutResId(): Int
+    @IdRes abstract fun getPageAreaId(): Int
+    abstract fun init()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(getLayoutResId())
+        pageArea = findViewById(getPageAreaId())
+        init()
     }
 
     open fun getCurentFragment(): PageFragment?
@@ -29,7 +37,6 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
 
     open fun getPageAreaSize():Pair<Float,Float>
     {
-        //val dpi = applicationContext.resources.displayMetrics.density
         pageArea?.let { return Pair(it.width.toFloat(),it.height.toFloat())}
         return Pair(0f,0f)
     }
@@ -49,7 +56,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
             it.pageID = id
             it.delegate = this
             it.pageType = if(isBack) PageFragment.PageType.BACK else PageFragment.PageType.DEFAULT
-            supportFragmentManager.beginTransaction().add(R.id.pageArea,it).commit()
+            supportFragmentManager.beginTransaction().add(getPageAreaId(),it).commit()
         }
     }
 
@@ -70,7 +77,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         popup?.pageID = id
         popup?.let {
             it.pageType = PageFragment.PageType.POPUP
-            supportFragmentManager.beginTransaction().add(R.id.pageArea,it,id.toString()).commit()
+            supportFragmentManager.beginTransaction().add(getPageAreaId(),it,id.toString()).commit()
         }
     }
 

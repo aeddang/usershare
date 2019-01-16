@@ -1,41 +1,27 @@
 package com.kakaovx.homet.page
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
+import android.support.v4.app.Fragment
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.PageID
 import com.kakaovx.homet.R
-import com.kakaovx.homet.component.network.RxObservableConverter
-import com.kakaovx.homet.component.network.api.GitHubApi
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import lib.page.PageFragment
+import com.kakaovx.homet.component.ui.InjectablePageFragment
 import lib.page.PagePresenter
-import java.util.*
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.page_main.*
 
 
-class PageMain : PageFragment()
+class PageMain : InjectablePageFragment()
 {
-    @Inject lateinit var api: GitHubApi
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-    {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.page_main,container,false)
+    override fun getLayoutResId(): Int {
+        return R.layout.page_main
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?)
-    {
-        super.onActivityCreated(savedInstanceState)
-        val buttonA = view?.findViewById<Button>(R.id.button_test_A) as Button?
-        val buttonB = view?.findViewById<Button>(R.id.button_test_B) as Button?
-        buttonA?.setOnClickListener {  PagePresenter.getInstence<PageID>()?.pageChange(PageID.TEST)}
+    override fun inject(fragment: Fragment) {
 
     }
 
+    override fun init() {
+        buttonTestA.clicks()
+            .subscribe({ PagePresenter.getInstence<PageID>()?.pageChange(PageID.TEST)})
+            .apply { disposables.add(this) }
+    }
 
 }
