@@ -5,18 +5,16 @@ import kotlin.collections.ArrayList
 
 class PageModel<T> : PagePresenter.Model<T>
 {
-    var currentHistoryStack:T? = null
-    val historys = Stack<T>()
-    val popups = ArrayList<T>()
+    private var currentHistoryStack:T? = null
+    private val historys = Stack<T>()
+    private val popups = ArrayList<T>()
 
-    override fun addHistory(id: T,isHistory:Boolean)
-    {
+    override fun addHistory(id: T,isHistory:Boolean) {
         if(isHistory) currentHistoryStack?.let { historys.push(it) }
         currentHistoryStack = id
     }
 
-    override fun getHistory():T?
-    {
+    override fun getHistory():T? {
         currentHistoryStack = null
         if(historys.empty()) return null
         return historys.pop()
@@ -26,17 +24,15 @@ class PageModel<T> : PagePresenter.Model<T>
         historys.clear()
     }
 
-    override fun removePopup(id:T)
-    {
+    override fun removePopup(id:T) {
         popups.remove(id)
     }
 
-    override fun addPopup(id:T)
-    {
+    override fun addPopup(id:T) {
         popups.add(id)
     }
-    override fun getPopup():T?
-    {
+
+    override fun getPopup():T? {
         if(popups.isEmpty()) return null
         return popups.last()
     }

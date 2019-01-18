@@ -12,22 +12,18 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
+import lib.constant.AnimationDuration
 
-abstract class PageFragment:Fragment()
-{
-    enum class PageType
-    {
+abstract class PageFragment:Fragment() {
+    enum class PageType {
         DEFAULT,BACK,POPUP
     }
-    private var animationDuration = 200L
+    private var animationDuration = AnimationDuration.SHORT.duration
     private var animationHandler: Handler = Handler()
     private var viewCreateRunnable: Runnable = Runnable {onCreateAnimation()}
     protected var animationCreateRunnable: Runnable = Runnable {didCreateAnimation()}
     protected var animationDestroyRunnable: Runnable = Runnable {didDestroyAnimation()}
-
-    var pageID:Any? = null
-        internal set
-
+    var pageID:Any? = null; internal set
     internal var delegate:Delegate? = null
     internal var pageType = PageType.DEFAULT
 
@@ -47,8 +43,7 @@ abstract class PageFragment:Fragment()
         animationHandler.post(viewCreateRunnable)
     }
 
-    open fun willCreateAnimation()
-    {
+    open fun willCreateAnimation() {
         val pageActivity = activity as PageActivity<*>
         val size = pageActivity.getPageAreaSize()
         var posX = 0f
@@ -62,14 +57,12 @@ abstract class PageFragment:Fragment()
         view?.translationY = posY
     }
 
-    open fun onCreateAnimation():Long
-    {
+    open fun onCreateAnimation():Long {
         var interpolator:Interpolator? = null
-        when (pageType) {
-            PageType.DEFAULT -> interpolator = LinearInterpolator()
-            PageType.BACK -> interpolator = LinearInterpolator()
-            PageType.POPUP -> interpolator = DecelerateInterpolator()
-
+        interpolator = when (pageType) {
+            PageType.DEFAULT -> LinearInterpolator()
+            PageType.BACK -> LinearInterpolator()
+            PageType.POPUP -> DecelerateInterpolator()
         }
         view?.let {
             it.animate()
@@ -83,9 +76,9 @@ abstract class PageFragment:Fragment()
         delegate?.onCreateAnimation(this)
         return animationDuration
     }
-    protected open fun didCreateAnimation(){}
-    open fun onDestroyAnimation():Long
-    {
+
+    protected open fun didCreateAnimation() {}
+    open fun onDestroyAnimation():Long {
          view?.let {
             var posX = 0f
             var posY = 0f
@@ -118,14 +111,12 @@ abstract class PageFragment:Fragment()
         return animationDuration
     }
 
-    protected open fun didDestroyAnimation()
-    {
+    protected open fun didDestroyAnimation() {
         activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
     }
 
     @CallSuper
-    override fun onDestroyView()
-    {
+    override fun onDestroyView() {
         super.onDestroyView()
         view?.let{
             val parent = it.parent as ViewGroup?
@@ -136,10 +127,9 @@ abstract class PageFragment:Fragment()
         Log.d(PagePresenter.TAG,"onDestroyView")
     }
 
-    open fun onBack():Boolean {return true}
+    open fun onBack():Boolean { return true }
 
-    internal interface Delegate
-    {
+    internal interface Delegate {
         fun onCreateAnimation(v:PageFragment)
     }
 }

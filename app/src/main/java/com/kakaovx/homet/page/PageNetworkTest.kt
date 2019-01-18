@@ -16,7 +16,7 @@ class PageNetworkTest : ApiPageFragment()
     }
 
     override fun init() {
-        button.clicks().subscribe(this::getAllUsers)
+        button.clicks().subscribe(this::getAllUsers).apply { disposables.add(this) }
         hideProgress()
     }
 

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <FrameLayout
+            android:id="@+id/bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/trensparent">
+
+    </FrameLayout>
+
+    <lib.page.PageGestureView
+            android:id="@+id/gestureView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                    android:id="@+id/contents"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#f00">
+                    <TextView
+                            android:id="@+id/txtMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Fragment A"
+                            android:textSize="15sp" />
+
+                    <Button
+                            android:id="@+id/button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Close" />
+                <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:layout_marginTop="100dp"
+                        android:layout_marginBottom="100dp">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                                  android:orientation="vertical">
+                        <TextView
+                                android:text="sdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsads"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:id="@+id/textView2"
+                                android:textSize="36sp"/>
+                    </LinearLayout>
+                </ScrollView>
+
+            </FrameLayout>
+    </lib.page.PageGestureView>
+</FrameLayout>

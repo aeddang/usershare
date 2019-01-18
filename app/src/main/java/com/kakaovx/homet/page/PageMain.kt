@@ -10,18 +10,14 @@ import kotlinx.android.synthetic.main.page_main.*
 
 class PageMain : InjectablePageFragment()
 {
-    override fun getLayoutResId(): Int {
-        return R.layout.page_main
-    }
+    override fun getLayoutResId(): Int { return R.layout.page_main }
 
     override fun inject(fragment: Fragment) {
 
     }
-
     override fun init() {
-        buttonTestA.clicks()
-            .subscribe({ PagePresenter.getInstence<PageID>()?.pageChange(PageID.TEST)})
-            .apply { disposables.add(this) }
+        buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>()?.showNavigation() }
+        buttonTestB.setOnClickListener{ PagePresenter.getInstence<PageID>()?.openPopup(PageID.POPUP_TEST) }
     }
 
 }
