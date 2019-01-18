@@ -22,7 +22,7 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
     private var animation: ViewPropertyAnimator? = null
     private var animationHideRunnable: Runnable = Runnable {didHideAnimation()}
     private var animationShowRunnable: Runnable = Runnable {didShowAnimation()}
-    private var isShow = false
+
 
     @CallSuper
     override fun init() {
@@ -34,17 +34,12 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
         navigationView.delegate = this
         navigationView.contentsView = contentsView
         navigationView.closeType = closeType
-
         this.didHideAnimation()
-        this.navigationView.setGestureClose()
-    }
 
-    fun onToggleNavigation() {
-        if( isShow ) onHideNavigation() else onShowNavigation()
+        this.navigationView.viewTreeObserver.addOnGlobalLayoutListener { this.navigationView.setGestureClose() }
     }
 
     override fun onShowNavigation() {
-        isShow = true
         navigationViewBgView.visibility = View.VISIBLE
         navigationView.visibility = View.VISIBLE
         animation?.cancel()
@@ -53,25 +48,25 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
 
     override fun onHideNavigation() {
         animation?.cancel()
-        isShow = false
         navigationView.onGestureClose()
     }
 
-    override fun onAnimate(view: PageGestureView, pos: Float) {
-        movePageArea(pos - navigationView.contentSize)
+    override fun onAnimate(view: PageGestureView, pct: Float) {
+        movePageArea(pct)
     }
 
     override fun onMove(view: PageGestureView, pct:Float) {
         navigationViewBgView.alpha = pct
-        movePageArea(navigationView.contentSize * pct)
+        movePageArea(pct)
     }
 
-    protected open fun movePageArea(pos:Float) {
+    protected open fun movePageArea(pct:Float) {
+        var pos = navigationView.contentSize * pct
+        pos = if (closeType == Gesture.Type.PAN_RIGHT || closeType == Gesture.Type.PAN_DOWN) -pos else pos
         if (navigationView.isHorizontal) pageArea.translationX = pos else pageArea.translationY = pos
     }
 
     override fun onClose(view: PageGestureView) {
-        isShow = false
         animation?.cancel()
         animation = navigationViewBgView.animate()
         animation?.alpha(0f)?.setDuration(AnimationDuration.SHORT.duration)?.withEndAction(animationHideRunnable)?.start()

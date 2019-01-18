@@ -1,6 +1,8 @@
 package lib.page
 
 class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePresenter.Model<T>) {
+
+
     companion object {
         internal const val TAG = "Page"
         private var currentInstence:Any? = null
@@ -8,20 +10,31 @@ class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePr
             return currentInstence as PagePresenter<T>
         }
     }
+    private var isNavigationShow = false
 
     init {
         currentInstence = this
     }
 
+    fun toggleNavigation() {
+        if( isNavigationShow ) hideNavigation() else showNavigation()
+    }
+
     fun showNavigation() {
+        isNavigationShow = true
         view.onShowNavigation()
     }
 
     fun hideNavigation() {
+        isNavigationShow = false
         view.onHideNavigation()
     }
 
     fun onBack():Boolean {
+        if(isNavigationShow) {
+            hideNavigation()
+            return false
+        }
         val pop:T? = model.getPopup()
         pop?.let {
             closePopup(it)

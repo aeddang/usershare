@@ -10,6 +10,7 @@ import android.view.ViewPropertyAnimator
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
+import android.widget.ScrollView
 import lib.ui.Gesture
 
 const val DURATION_DIV = 3
@@ -25,7 +26,7 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
     private var trigger:Boolean = true
     private var startPosition = 0f
     private var finalGesture = Gesture.Type.NONE
-
+    private  var scroll:ScrollView
     private var animationCloseRunnable: Runnable = Runnable { didCloseAnimation() }
     private var animationReturnRunnable: Runnable = Runnable { didReturnAnimation() }
 
@@ -72,6 +73,7 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         gesture?.let { trigger = it.adjustEvent(event)}
+        if(trigger) return super.onTouchEvent(event)
         return trigger
     }
 
@@ -91,34 +93,38 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
         contentsView.let {startPosition = if(isVertical) it.translationY else it.translationX }
     }
 
-    private fun touchMove(delta:Int) {
-        var p = delta + startPosition
+    private fun getMoveAmount(pos:Float) :Float {
+        var p = pos
         var max = 0
         when(closeType) {
             Gesture.Type.PAN_DOWN -> {
-                max = height
+                max = contentsView.height
                 if (p > max) p = max.toFloat() else if (p < 0f) p = 0f
                 contentsView.translationY = Math.floor(p.toDouble()).toFloat()
             }
             Gesture.Type.PAN_UP -> {
-                max = -height
+                max = -contentsView.height
                 if (p < max) p = max.toFloat() else if (p > 0f) p = 0f
                 contentsView.translationY = Math.floor(p.toDouble()).toFloat()
             }
             Gesture.Type.PAN_RIGHT -> {
-                max = width
+                max = contentsView.width
                 if (p > max) p = max.toFloat() else if (p < 0f) p = 0f
                 contentsView.translationX = Math.floor(p.toDouble()).toFloat()
             }
             Gesture.Type.PAN_LEFT -> {
-                max = -width
+                max = -contentsView.width
                 if (p < max) p = max.toFloat() else if (p > 0f) p = 0f
                 contentsView.translationX = Math.floor(p.toDouble()).toFloat()
             }
             else -> { }
         }
-        val pct = (max - p) / max
-        delegate?.onMove(this,pct)
+        return (max - p) / max
+    }
+
+    private fun touchMove(delta:Int) {
+        val p = delta + startPosition
+        delegate?.onMove(this,getMoveAmount(p))
     }
 
     private fun touchEnd() {
@@ -197,7 +203,7 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
         val range = Math.abs(end - start)
         val pct = animation.animatedValue as Float
         val pos = start + (dr*range*pct)
-        delegate?.onAnimate(this, pos)
+        delegate?.onAnimate(this, getMoveAmount(pos))
     }
 
     protected open fun didReturnAnimation() {
@@ -206,7 +212,7 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
 
     interface Delegate {
         fun onMove(view: PageGestureView, pct:Float){}
-        fun onAnimate(view: PageGestureView, pos:Float){}
+        fun onAnimate(view: PageGestureView, pct:Float){}
         fun onClose(view: PageGestureView){}
         fun onReturn(view: PageGestureView){}
     }
