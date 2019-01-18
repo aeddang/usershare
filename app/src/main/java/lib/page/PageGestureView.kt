@@ -94,28 +94,23 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
     private fun touchMove(delta:Int) {
         var p = delta + startPosition
         var max = 0
-        when(closeType)
-        {
-            Gesture.Type.PAN_DOWN ->
-            {
+        when(closeType) {
+            Gesture.Type.PAN_DOWN -> {
                 max = height
                 if (p > max) p = max.toFloat() else if (p < 0f) p = 0f
                 contentsView.translationY = Math.floor(p.toDouble()).toFloat()
             }
-            Gesture.Type.PAN_UP ->
-            {
+            Gesture.Type.PAN_UP -> {
                 max = -height
                 if (p < max) p = max.toFloat() else if (p > 0f) p = 0f
                 contentsView.translationY = Math.floor(p.toDouble()).toFloat()
             }
-            Gesture.Type.PAN_RIGHT ->
-            {
+            Gesture.Type.PAN_RIGHT -> {
                 max = width
                 if (p > max) p = max.toFloat() else if (p < 0f) p = 0f
                 contentsView.translationX = Math.floor(p.toDouble()).toFloat()
             }
-            Gesture.Type.PAN_LEFT ->
-            {
+            Gesture.Type.PAN_LEFT -> {
                 max = -width
                 if (p < max) p = max.toFloat() else if (p > 0f) p = 0f
                 contentsView.translationX = Math.floor(p.toDouble()).toFloat()

@@ -32,7 +32,7 @@
                 android:id="@+id/contents"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
-                android:background="#ff0">
+                android:background="#ff0" android:layout_gravity="right">
         </FrameLayout>
     </lib.page.PageGestureView>
 </android.support.constraint.ConstraintLayout>

@@ -5,8 +5,7 @@ import android.view.View
 import lib.constant.AnimationDuration
 
 
-abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate
-{
+abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
     private lateinit var gestureView: PageGestureView
     private lateinit var contentsView:View
     private lateinit var backgroundView:View

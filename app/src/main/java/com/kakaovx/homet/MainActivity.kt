@@ -19,7 +19,7 @@ class MainActivity : PageNavigationActivity<PageID>() {
     override fun getNavigationView(): PageGestureView { return navigation }
     override fun getContentsView(): View { return contents }
     override fun getNavigationViewBgView(): View { return navigationBg }
-    override fun getCloseType(): Gesture.Type { return Gesture.Type.PAN_LEFT }
+    override fun getCloseType(): Gesture.Type { return Gesture.Type.PAN_RIGHT }
 
     override fun init() {
         super.init()
@@ -33,34 +33,24 @@ class MainActivity : PageNavigationActivity<PageID>() {
         return true
     }
 
-    override fun <T> getPageByID(id:T): PageFragment
-    {
+    override fun <T> getPageByID(id:T): PageFragment {
         exitCount = 0
-        var page: PageFragment
-        when(id)
-        {
-            PageID.MAIN -> { page = PageMain() }
-            PageID.TEST -> { page = PageNetworkTest() }
-            else -> { page = PageMain() }
+        return when(id) {
+            PageID.MAIN -> { PageMain() }
+            PageID.TEST -> { PageNetworkTest() }
+            else -> { PageMain() }
         }
-        return page
     }
 
-
-    override fun <T> getPopupByID(id:T): PageFragment
-    {
-        var page: PageFragment
-        when(id)
-        {
-            PageID.POPUP_TEST -> { page = PopupTest() }
-            else -> { page = PageMain() }
+    override fun <T> getPopupByID(id:T): PageFragment {
+        return when(id) {
+            PageID.POPUP_TEST -> { PopupTest() }
+            else -> { PageMain() }
         }
-        return page
     }
-
 }
-enum class PageID
-{
+
+enum class PageID {
     MAIN,SUB,TEST,
     POPUP_TEST
 }

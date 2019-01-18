@@ -44,8 +44,6 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
     }
 
     override fun onShowNavigation() {
-
-        Log.i("onShowNavigation" , "onShowNavigation")
         isShow = true
         navigationViewBgView.visibility = View.VISIBLE
         navigationView.visibility = View.VISIBLE
@@ -60,7 +58,7 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
     }
 
     override fun onAnimate(view: PageGestureView, pos: Float) {
-        movePageArea(pos + navigationView.contentSize)
+        movePageArea(pos - navigationView.contentSize)
     }
 
     override fun onMove(view: PageGestureView, pct:Float) {
@@ -69,8 +67,7 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
     }
 
     protected open fun movePageArea(pos:Float) {
-        val areaPos = if ( pos < 0f ) 0f else pos
-        if (navigationView.isHorizontal) pageArea.translationX = areaPos else pageArea.translationY = areaPos
+        if (navigationView.isHorizontal) pageArea.translationX = pos else pageArea.translationY = pos
     }
 
     override fun onClose(view: PageGestureView) {
