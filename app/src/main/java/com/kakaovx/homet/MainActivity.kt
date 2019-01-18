@@ -11,6 +11,8 @@ import lib.page.PageNavigationActivity
 import lib.ui.Gesture
 import kotlinx.android.synthetic.main.activity_main.*
 
+
+
 class MainActivity : PageNavigationActivity<PageID>() {
     private var exitCount = 0
 

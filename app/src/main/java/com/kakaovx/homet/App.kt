@@ -8,6 +8,9 @@ import com.kakaovx.homet.component.app.DaggerAppComponent
 import com.kakaovx.homet.component.network.NetworkModule
 import com.kakaovx.homet.component.preference.PreferenceModule
 
+
+
+
 class App: Application() {
 
     val singleton: AppComponent by lazy {
