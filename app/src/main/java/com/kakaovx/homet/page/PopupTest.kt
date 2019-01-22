@@ -2,7 +2,7 @@ package com.kakaovx.homet.page
 import android.support.v4.app.Fragment
 import android.view.View
 import com.kakaovx.homet.R
-import com.kakaovx.homet.component.ui.InjectablePageGestureFragment
+import com.kakaovx.homet.component.ui.skeleton.injecter.InjectablePageGestureFragment
 import kotlinx.android.synthetic.main.popup_test.*
 import lib.page.PageGestureView
 

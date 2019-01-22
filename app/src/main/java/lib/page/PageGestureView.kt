@@ -10,8 +10,7 @@ import android.view.ViewPropertyAnimator
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
-import android.widget.ScrollView
-import lib.ui.Gesture
+import lib.module.Gesture
 
 const val DURATION_DIV = 3
 open class PageGestureView : FrameLayout, Gesture.Delegate {
@@ -22,14 +21,12 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
     var isHorizontal = false; private set
     var animation: ViewPropertyAnimator? = null; private set
 
-    private var gesture:Gesture? = null
+    private lateinit var gesture:Gesture
     private var trigger:Boolean = true
     private var startPosition = 0f
     private var finalGesture = Gesture.Type.NONE
-    private  var scroll:ScrollView
     private var animationCloseRunnable: Runnable = Runnable { didCloseAnimation() }
     private var animationReturnRunnable: Runnable = Runnable { didReturnAnimation() }
-
     private var _contentSize = 0f
     var contentSize = 0f
         get() {
@@ -57,24 +54,18 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
         animation?.cancel()
         animation = null
         delegate = null
-        gesture?.onDestroy()
-        gesture = null
+        gesture.onDestroy()
     }
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-
-        ev?.let {
-            val action = it.action
-            return action == MotionEvent.ACTION_MOVE
-        }
-        return super.onInterceptTouchEvent(ev)
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        trigger =  gesture.adjustEvent(ev)
+        return !trigger
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        gesture?.let { trigger = it.adjustEvent(event)}
-        if(trigger) return super.onTouchEvent(event)
-        return trigger
+    override fun onTouchEvent(ev: MotionEvent): Boolean {
+        trigger =  gesture.adjustEvent(ev)
+        return true
     }
 
     override fun stateChange(g: Gesture, e: Gesture.Type) {
@@ -169,7 +160,7 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
         animation = contentsView.animate()
                 .translationX(closePosX)
                 .translationY(closePosY)
-                .setInterpolator(DecelerateInterpolator())
+                .setInterpolator(AccelerateInterpolator())
                 .setUpdateListener { this.onUpdateAnimation(it, start, end) }
                 .setDuration(duration)
 
@@ -190,7 +181,7 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
         animation = contentsView.animate()
             .translationX(0f)
             .translationY(0f)
-            .setInterpolator(AccelerateInterpolator())
+            .setInterpolator(DecelerateInterpolator())
             .setUpdateListener{this.onUpdateAnimation(it, start, 0f)}
             .setDuration(duration)
         if (isClosure) animation?.withEndAction(animationReturnRunnable)

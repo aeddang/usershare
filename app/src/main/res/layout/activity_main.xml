@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
-
     <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:id="@+id/area" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/area">
 
+            <com.kakaovx.homet.BottomTab
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/area_bottom" android:layout_gravity="bottom" android:id="@+id/bottomTab">
+            </com.kakaovx.homet.BottomTab>
     </FrameLayout>
+
+
+
     <FrameLayout
             android:id="@+id/navigationBg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/trensparent">
-
     </FrameLayout>
 
     <lib.page.PageGestureView
@@ -32,7 +35,23 @@
                 android:id="@+id/contents"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
-                android:background="#ff0" android:layout_gravity="right">
+                android:background="#ff0"
+                android:layout_gravity="right">
+            <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginBottom="100dp">
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="vertical">
+                        <TextView
+                                android:text="sdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsads"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" android:id="@+id/textView2"
+                                android:textSize="36sp"/>
+                </LinearLayout>
+            </ScrollView>
         </FrameLayout>
     </lib.page.PageGestureView>
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>

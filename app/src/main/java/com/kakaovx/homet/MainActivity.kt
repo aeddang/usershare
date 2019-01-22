@@ -2,18 +2,19 @@ package com.kakaovx.homet
 
 import android.view.View
 import android.widget.Toast
+import com.kakaovx.homet.component.ui.skeleton.view.DivisionTab
 import com.kakaovx.homet.page.PageMain
 import com.kakaovx.homet.page.PageNetworkTest
 import com.kakaovx.homet.page.PopupTest
 import lib.page.PageFragment
 import lib.page.PageGestureView
 import lib.page.PageNavigationActivity
-import lib.ui.Gesture
+import lib.module.Gesture
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 
-class MainActivity : PageNavigationActivity<PageID>() {
+class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
     private var exitCount = 0
 
     override fun getLayoutResId(): Int { return R.layout.activity_main }
@@ -25,7 +26,8 @@ class MainActivity : PageNavigationActivity<PageID>() {
 
     override fun init() {
         super.init()
-        this.pagePresenter.pageChange(PageID.MAIN)
+        pagePresenter.pageChange(PageID.MAIN)
+        bottomTab.delegate = this
     }
 
     override fun onBackPressedAction(): Boolean {
@@ -33,6 +35,9 @@ class MainActivity : PageNavigationActivity<PageID>() {
         exitCount ++
         Toast.makeText(this,R.string.notice_app_exit,Toast.LENGTH_LONG).show()
         return true
+    }
+
+    override fun onSelected(view: DivisionTab, idx:Int) {
     }
 
     override fun <T> getPageByID(id:T): PageFragment {

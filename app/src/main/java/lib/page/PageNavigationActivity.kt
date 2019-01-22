@@ -1,13 +1,14 @@
 package lib.page
 
+import android.animation.Animator
 import android.support.annotation.CallSuper
-import android.util.Log
 import android.view.View
 import android.view.ViewPropertyAnimator
+import android.view.ViewTreeObserver
 import lib.constant.AnimationDuration
-import lib.ui.Gesture
+import lib.module.Gesture
 
-abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.Delegate {
+abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.Delegate, Animator.AnimatorListener {
     private lateinit var navigationView: PageGestureView
     private lateinit var contentsView: View
     private lateinit var navigationViewBgView: View
@@ -18,11 +19,9 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
     abstract fun getCloseType(): Gesture.Type
 
     private lateinit var closeType:Gesture.Type
-
     private var animation: ViewPropertyAnimator? = null
-    private var animationHideRunnable: Runnable = Runnable {didHideAnimation()}
-    private var animationShowRunnable: Runnable = Runnable {didShowAnimation()}
-
+    // private val animationHideRunnable: Runnable = Runnable {didHideAnimation()}
+    // private val animationShowRunnable: Runnable = Runnable {didShowAnimation()}
 
     @CallSuper
     override fun init() {
@@ -34,20 +33,31 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
         navigationView.delegate = this
         navigationView.contentsView = contentsView
         navigationView.closeType = closeType
-        this.didHideAnimation()
 
-        this.navigationView.viewTreeObserver.addOnGlobalLayoutListener { this.navigationView.setGestureClose() }
+        contentsView.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                contentsView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                navigationView.setGestureClose()
+                didHideAnimation()
+            }
+        })
+    }
+
+    @CallSuper
+    override fun onDestroy() {
+        super.onDestroy()
+        removeAnimation()
     }
 
     override fun onShowNavigation() {
         navigationViewBgView.visibility = View.VISIBLE
         navigationView.visibility = View.VISIBLE
-        animation?.cancel()
+        removeAnimation()
         navigationView.onGestureReturn()
     }
 
     override fun onHideNavigation() {
-        animation?.cancel()
+        removeAnimation()
         navigationView.onGestureClose()
     }
 
@@ -67,15 +77,32 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
     }
 
     override fun onClose(view: PageGestureView) {
-        animation?.cancel()
+        removeAnimation()
+        pagePresenter.isNavigationShow = false
         animation = navigationViewBgView.animate()
-        animation?.alpha(0f)?.setDuration(AnimationDuration.SHORT.duration)?.withEndAction(animationHideRunnable)?.start()
+        animation?.setListener(this)
+        animation?.alpha(0f)?.setDuration(AnimationDuration.SHORT.duration)?.start()
     }
 
     override fun onReturn(view: PageGestureView) {
-        animation?.cancel()
+        removeAnimation()
+        pagePresenter.isNavigationShow = true
         animation = navigationViewBgView.animate()
-        animation?.alpha(1f)?.setDuration(AnimationDuration.SHORT.duration)?.withEndAction(animationShowRunnable)?.start()
+        animation?.setListener(this)
+        animation?.alpha(1f)?.setDuration(AnimationDuration.SHORT.duration)?.start()
+    }
+
+    private fun removeAnimation() {
+        animation?.cancel()
+        animation?.setListener(null)
+        animation = null
+    }
+
+    override fun onAnimationStart(animation: Animator) {}
+    override fun onAnimationRepeat(animation: Animator) {}
+    override fun onAnimationCancel(animation: Animator) {}
+    override fun onAnimationEnd(animation: Animator) {
+        if (this.pagePresenter.isNavigationShow) didShowAnimation() else didHideAnimation()
     }
 
     protected open fun didShowAnimation() {}
@@ -83,8 +110,4 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
         navigationViewBgView.visibility = View.GONE
         navigationView.visibility = View.GONE
     }
-
-
-
-
 }

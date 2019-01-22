@@ -27,6 +27,12 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         pageArea = findViewById(getPageAreaId())
     }
 
+    @CallSuper
+    override fun onDestroy() {
+        super.onDestroy()
+        currentPage = null
+    }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         init()

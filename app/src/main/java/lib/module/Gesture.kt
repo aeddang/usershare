@@ -1,4 +1,4 @@
-package lib.ui
+package lib.module
 
 import android.graphics.Point
 import android.view.MotionEvent

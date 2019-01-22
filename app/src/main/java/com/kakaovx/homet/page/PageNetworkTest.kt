@@ -5,7 +5,7 @@ import android.view.View
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.R
 import com.kakaovx.homet.component.network.RxObservableConverter
-import com.kakaovx.homet.component.ui.ApiPageFragment
+import com.kakaovx.homet.component.ui.skeleton.injecter.ApiPageFragment
 import java.util.*
 import kotlinx.android.synthetic.main.page_network.*
 

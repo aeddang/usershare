@@ -10,7 +10,8 @@ class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePr
             return currentInstence as PagePresenter<T>
         }
     }
-    private var isNavigationShow = false
+    var isNavigationShow = false
+        internal set (newValue) { field = newValue }
 
     init {
         currentInstence = this

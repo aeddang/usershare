@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">homeT</string>
     <string name="notice_app_exit">한번 더 누르면 종료됩니다</string>
+
+    <string name="title_A">A</string>
+    <string name="title_B">B</string>
+    <string name="title_C">C</string>
+    <string name="title_D">D</string>
+    <string name="title_E">E</string>
+
 </resources>

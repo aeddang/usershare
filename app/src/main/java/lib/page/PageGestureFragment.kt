@@ -36,14 +36,14 @@ abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
 
     override fun onCreateAnimation(): Long {
         gestureView.onGestureReturn(false)
-        val duration = AnimationDuration.MEDIUM.duration
+        val duration = AnimationDuration.SHORT.duration
         backgroundView.animate().alpha(1f).setDuration(duration).withEndAction(animationCreateRunnable).start()
         return duration
     }
 
     override fun onDestroyAnimation(): Long {
         gestureView.onGestureClose(false)
-        val duration = AnimationDuration.MEDIUM.duration
+        val duration = AnimationDuration.SHORT.duration
         backgroundView.animate().alpha(0f).setDuration(duration).withEndAction(animationDestroyRunnable).start()
         return duration
     }
