@@ -20,11 +20,9 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
 
     private lateinit var closeType:Gesture.Type
     private var animation: ViewPropertyAnimator? = null
-    // private val animationHideRunnable: Runnable = Runnable {didHideAnimation()}
-    // private val animationShowRunnable: Runnable = Runnable {didShowAnimation()}
 
     @CallSuper
-    override fun init() {
+    override fun onCreated() {
         closeType = getCloseType()
         navigationView = getNavigationView()
         contentsView = getContentsView()
@@ -44,8 +42,7 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
     }
 
     @CallSuper
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroied() {
         removeAnimation()
     }
 

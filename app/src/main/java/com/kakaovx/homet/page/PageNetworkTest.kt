@@ -15,7 +15,8 @@ class PageNetworkTest : ApiPageFragment()
         return R.layout.page_network
     }
 
-    override fun init() {
+    override fun onCreated() {
+        super.onCreated()
         button.clicks().subscribe(this::getAllUsers).apply { disposables.add(this) }
         hideProgress()
     }

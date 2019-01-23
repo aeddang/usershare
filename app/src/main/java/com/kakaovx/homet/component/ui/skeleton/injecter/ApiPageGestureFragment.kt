@@ -1,5 +1,6 @@
 package com.kakaovx.homet.component.ui.skeleton.injecter
 
+import android.support.annotation.CallSuper
 import android.support.v4.app.Fragment
 import com.kakaovx.homet.App
 import com.kakaovx.homet.component.network.ApiModule
@@ -12,6 +13,7 @@ abstract class ApiPageGestureFragment : InjectablePageGestureFragment()
     @Inject
     lateinit var api: GitHubApi
 
+    @CallSuper
     override fun inject() {
         context?.run {
             DaggerApiComponent.builder()

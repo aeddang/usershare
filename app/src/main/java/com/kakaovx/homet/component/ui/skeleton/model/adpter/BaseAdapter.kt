@@ -5,15 +5,17 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import com.kakaovx.homet.component.ui.skeleton.view.ListCell
 
-abstract class BaseAdapter<T> (private val datas: Array<T>) : RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
+abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
+
+    lateinit  var datas:Array<T>
 
     class ViewHolder(val cell: ListCell) : RecyclerView.ViewHolder(cell)
 
-    abstract fun getListCell(): ListCell
+    abstract fun getListCell(parent: ViewGroup): ListCell
 
     @CallSuper
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  BaseAdapter.ViewHolder {
-        return ViewHolder(getListCell())
+        return ViewHolder(getListCell(parent))
     }
 
     @CallSuper

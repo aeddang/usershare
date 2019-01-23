@@ -6,19 +6,20 @@ import android.support.annotation.CallSuper
 import io.reactivex.disposables.CompositeDisposable
 import lib.page.PageGestureFragment
 
-abstract class InjectablePageGestureFragment : PageGestureFragment() {
+abstract class InjectablePageGestureFragment : PageGestureFragment() , Injectable{
 
     protected val disposables by lazy { CompositeDisposable() }
-    protected open fun inject(){}
+
 
     @CallSuper
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
+    override fun onCreated() {
+        super.onCreated()
         inject()
+        onSubscribe()
     }
 
     @CallSuper
-    override fun onDestroy() {
+    override fun onDestroied() {
         disposables.clear()
         super.onDestroy()
     }

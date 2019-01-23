@@ -15,7 +15,7 @@ abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
     abstract fun getBackgroundView(): View
 
     @CallSuper
-    override fun init() {
+    override fun onCreated() {
 
         gestureView = getGestureView()
         contentsView = getContentsView()

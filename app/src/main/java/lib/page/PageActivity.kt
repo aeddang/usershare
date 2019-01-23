@@ -8,34 +8,37 @@ import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import com.kakaovx.homet.R
 
-abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, PageFragment.Delegate
+abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, PageFragment.Delegate, Page
 {
     open val pagePresenter = PagePresenter(this, PageModel())
     open var currentPage: PageFragment? = null
         protected set
 
     protected lateinit var pageArea:ViewGroup
-
-    @LayoutRes abstract fun getLayoutResId(): Int
     @IdRes abstract fun getPageAreaId(): Int
-    abstract fun init()
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutResId())
         pageArea = findViewById(getPageAreaId())
+        onCreated()
     }
 
     @CallSuper
     override fun onDestroy() {
         super.onDestroy()
         currentPage = null
+        onDestroied()
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        onDetached()
+    }
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        init()
+        onAttached()
     }
 
     open fun getCurentFragment(): PageFragment? {
@@ -55,11 +58,18 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
     }
 
     abstract fun <T> getPageByID(id:T): PageFragment
+    final override fun onPageStart(id:T) {
+        val willChangePage = getPageByID(id)
+        willChangePage.pageID = id
+        willChangePage.delegate = this
+        willChangePage.pageType = PageFragment.PageType.INIT
+        supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commit()
+    }
     final override fun onPageChange(id:T,isBack:Boolean) {
         val willChangePage = getPageByID(id)
         willChangePage.pageID = id
         willChangePage.delegate = this
-        willChangePage.pageType = if(isBack) PageFragment.PageType.BACK else PageFragment.PageType.DEFAULT
+        willChangePage.pageType = if(isBack) PageFragment.PageType.OUT else PageFragment.PageType.IN
         supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commit()
     }
 

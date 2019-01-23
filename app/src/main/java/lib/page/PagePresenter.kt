@@ -61,6 +61,12 @@ class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePr
         return this
     }
 
+    fun pageStart(id:T):PagePresenter<T> {
+        view.onPageStart(id)
+        model.addHistory(id,true)
+        return this
+    }
+
     fun pageChange(id:T,isHistory:Boolean=true,isBack:Boolean = false):PagePresenter<T> {
         view.onPageChange(id,isBack)
         model.addHistory(id,isHistory)
@@ -68,6 +74,7 @@ class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePr
     }
 
     interface View<T> {
+        fun onPageStart(id:T)
         fun onPageChange(id:T,isBack:Boolean)
         fun onOpenPopup(id:T)
         fun onClosePopup(id:T)

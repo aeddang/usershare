@@ -24,9 +24,9 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
     override fun getNavigationViewBgView(): View { return navigationBg }
     override fun getCloseType(): Gesture.Type { return Gesture.Type.PAN_RIGHT }
 
-    override fun init() {
-        super.init()
-        pagePresenter.pageChange(PageID.MAIN)
+    override fun onCreated() {
+        super.onCreated()
+        pagePresenter.pageStart(PageID.MAIN)
         bottomTab.delegate = this
     }
 
@@ -44,7 +44,7 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
         exitCount = 0
         return when(id) {
             PageID.MAIN -> { PageMain() }
-            PageID.TEST -> { PageNetworkTest() }
+            PageID.SUB -> { PageNetworkTest() }
             else -> { PageMain() }
         }
     }

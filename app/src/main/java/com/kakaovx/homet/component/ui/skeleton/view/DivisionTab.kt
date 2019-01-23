@@ -2,15 +2,14 @@ package com.kakaovx.homet.component.ui.skeleton.view
 
 import android.content.Context
 import android.support.annotation.CallSuper
-import android.support.annotation.LayoutRes
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
+import com.kakaovx.homet.component.ui.skeleton.injecter.InjectableLinearLayout
 
-abstract class DivisionTab : LinearLayout {
-
+abstract class DivisionTab : InjectableLinearLayout  {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
+
     var delegate: Delegate? = null
     var selectedIdx:Int = -1; private set
     protected lateinit var tabs:Array<View>
@@ -27,16 +26,7 @@ abstract class DivisionTab : LinearLayout {
         }
     }
 
-    init {
-        View.inflate(context, getLayoutResId(), this)
-    }
-
-    @LayoutRes
-    abstract fun getLayoutResId(): Int
-
-    @CallSuper
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    override fun onCreated() {
         tabs = getTabMenus()
         tabs.forEach { it.setOnClickListener{view -> selectedTab = view }}
     }

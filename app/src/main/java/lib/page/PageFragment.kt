@@ -14,9 +14,9 @@ import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import lib.constant.AnimationDuration
 
-abstract class PageFragment:Fragment() {
+abstract class PageFragment:Fragment(), Page {
     enum class PageType {
-        DEFAULT,BACK,POPUP
+        INIT, IN, OUT, POPUP
     }
     private var animationDuration = AnimationDuration.SHORT.duration
     private var animationHandler: Handler = Handler()
@@ -25,10 +25,7 @@ abstract class PageFragment:Fragment() {
     protected var animationDestroyRunnable: Runnable = Runnable {didDestroyAnimation()}
     var pageID:Any? = null; internal set
     internal var delegate:Delegate? = null
-    internal var pageType = PageType.DEFAULT
-
-    @LayoutRes protected abstract fun getLayoutResId(): Int
-    abstract fun init()
+    internal var pageType = PageType.INIT
 
     @CallSuper
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,7 +35,7 @@ abstract class PageFragment:Fragment() {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
+        onCreated()
         willCreateAnimation()
         animationHandler.post(viewCreateRunnable)
     }
@@ -48,26 +45,30 @@ abstract class PageFragment:Fragment() {
         val size = pageActivity.getPageAreaSize()
         var posX = 0f
         var posY = 0f
+        var valueAlpha = 1f
         when (pageType) {
-            PageType.DEFAULT -> posX = -size.first
-            PageType.BACK -> posX = size.first
+            PageType.INIT -> valueAlpha = 0f
+            PageType.IN -> posX = -size.first
+            PageType.OUT -> posX = size.first
             PageType.POPUP -> posY = size.second
         }
         view?.translationX = posX
         view?.translationY = posY
+        view?.alpha = valueAlpha
     }
 
     open fun onCreateAnimation():Long {
         var interpolator:Interpolator? = null
-        interpolator = when (pageType) {
-            PageType.DEFAULT -> LinearInterpolator()
-            PageType.BACK -> LinearInterpolator()
+        when (pageType) {
+            PageType.INIT -> DecelerateInterpolator()
+            PageType.IN -> LinearInterpolator()
+            PageType.OUT -> LinearInterpolator()
             PageType.POPUP -> DecelerateInterpolator()
         }
         view?.let {
             it.animate()
             .translationX(0f)
-            .translationY(0f)
+            .translationY(0f).alpha(1f)
             .setInterpolator(interpolator)
             .setDuration(animationDuration)
             .withEndAction(animationCreateRunnable)
@@ -84,12 +85,12 @@ abstract class PageFragment:Fragment() {
             var posY = 0f
             var interpolator:Interpolator? = null
             when (pageType) {
-                PageType.DEFAULT ->
+                PageType.IN, PageType.INIT ->
                 {
                     posX = it.width.toFloat()
                     interpolator = LinearInterpolator()
                 }
-                PageType.BACK ->
+                PageType.OUT ->
                 {
                     posX = -it.width.toFloat()
                     interpolator = LinearInterpolator()
@@ -124,6 +125,7 @@ abstract class PageFragment:Fragment() {
         }
         delegate = null
         animationHandler.removeCallbacks(viewCreateRunnable)
+        onDestroied()
         Log.d(PagePresenter.TAG,"onDestroyView")
     }
 

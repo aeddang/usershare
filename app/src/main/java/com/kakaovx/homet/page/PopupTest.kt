@@ -14,12 +14,12 @@ class PopupTest : InjectablePageGestureFragment()
     override fun getContentsView(): View { return contents }
     override fun getBackgroundView(): View { return bg }
 
-    override fun inject(fragment: Fragment) {
+    override fun inject() {
 
     }
 
-    override fun init() {
-        super.init()
+    override fun onCreated() {
+        super.onCreated()
     }
 
 }
