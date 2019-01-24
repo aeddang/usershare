@@ -3,12 +3,12 @@ package com.kakaovx.homet.component.ui.module
 import android.content.Context
 import com.kakaovx.homet.R
 import com.kakaovx.homet.component.ui.skeleton.view.ListCell
-import kotlinx.android.synthetic.main.cell_banner.view.*
+import kotlinx.android.synthetic.main.cell_image.view.*
 
-class BannerListCell(context:Context): ListCell(context) {
+class ImageListCell(context:Context): ListCell(context) {
 
     override fun getLayoutResId(): Int {
-        return R.layout.cell_banner
+        return R.layout.cell_image
     }
     override fun <String> setData(data:String)
     {

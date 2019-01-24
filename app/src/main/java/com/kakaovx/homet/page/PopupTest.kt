@@ -1,18 +1,18 @@
 package com.kakaovx.homet.page
-import android.support.v4.app.Fragment
 import android.view.View
 import com.kakaovx.homet.R
-import com.kakaovx.homet.component.ui.skeleton.injecter.InjectablePageGestureFragment
+import com.kakaovx.homet.component.ui.skeleton.injecter.InjectablePageDividedGestureFragment
 import kotlinx.android.synthetic.main.popup_test.*
 import lib.page.PageGestureView
 
 
-class PopupTest : InjectablePageGestureFragment()
+class PopupTest : InjectablePageDividedGestureFragment()
 {
     override fun getLayoutResId(): Int { return R.layout.popup_test }
     override fun getGestureView(): PageGestureView { return gestureView }
     override fun getContentsView(): View { return contents }
     override fun getBackgroundView(): View { return bg }
+    override fun getDividedView(): View { return divided }
 
     override fun inject() {
 

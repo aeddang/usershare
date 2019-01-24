@@ -17,8 +17,8 @@ class AdapterModule {
     }
 }
 
-class BannerAdapter: SingleAdapter<String>(10, true){
+class BannerAdapter: SingleAdapter<String>(10, true) {
     override fun getListCell(parent: ViewGroup): ListCell {
-        return BannerListCell(parent.context)
+        return ImageListCell(parent.context)
     }
 }

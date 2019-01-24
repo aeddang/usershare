@@ -34,20 +34,26 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Close" />
-                <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" android:layout_marginTop="100dp"
-                        android:layout_marginBottom="100dp">
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                                  android:orientation="vertical">
-                        <TextView
-                                android:text="sdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsads"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:id="@+id/textView2"
-                                android:textSize="36sp"/>
-                    </LinearLayout>
-                </ScrollView>
 
             </FrameLayout>
     </lib.page.PageGestureView>
+    <FrameLayout
+            android:id="@+id/divided"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="#f00" android:layout_gravity="bottom">
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+        >
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="vertical">
+                <TextView
+                        android:text="sdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadssdsasdsdsadsadsdsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsadsads"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/textView2"
+                        android:textSize="36sp"/>
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 </FrameLayout>

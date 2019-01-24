@@ -1,7 +1,5 @@
 package com.kakaovx.homet.component.ui.skeleton.injecter
 
-import android.content.Context
-import android.support.v4.app.Fragment
 import android.support.annotation.CallSuper
 import io.reactivex.disposables.CompositeDisposable
 import lib.page.PageGestureFragment

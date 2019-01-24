@@ -3,13 +3,13 @@ package com.kakaovx.homet.component.ui.skeleton.model.adpter
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.annotation.Size
 import com.kakaovx.homet.component.ui.skeleton.model.data.InfinityPaginationData
 import com.kakaovx.homet.component.ui.skeleton.view.ListCell
 
 abstract class BaseAdapter<T>(pageSize:Int,val isViewMore:Boolean = false) : RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
     class ViewHolder(val cell: ListCell) : RecyclerView.ViewHolder(cell)
 
+    var delegate: BaseAdapter.Delegate? = null
     private var total = 0
     private var isBusy = false
     protected var paginationData:InfinityPaginationData<T> = InfinityPaginationData(pageSize)
@@ -74,5 +74,9 @@ abstract class BaseAdapter<T>(pageSize:Int,val isViewMore:Boolean = false) : Rec
             isBusy = true
             viewMore(this, paginationData.currentPage, paginationData.pageSize)
         }
+    }
+
+    interface Delegate {
+        fun viewMore(page:Int, size:Int){}
     }
 }
