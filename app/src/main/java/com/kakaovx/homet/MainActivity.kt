@@ -1,12 +1,12 @@
 package com.kakaovx.homet
 
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.kakaovx.homet.component.ui.skeleton.view.DivisionTab
 import com.kakaovx.homet.page.PageMain
 import com.kakaovx.homet.page.PageNetworkTest
 import com.kakaovx.homet.page.PopupTest
+import com.kakaovx.homet.util.Log
 import lib.page.PageFragment
 import lib.page.PageGestureView
 import lib.page.PageNavigationActivity
@@ -16,6 +16,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
+
+    private val TAG = javaClass.simpleName
+
     private var exitCount = 0
 
     override fun getLayoutResId(): Int { return R.layout.activity_main }
@@ -41,7 +44,7 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
     }
 
     override fun onSelected(view: DivisionTab, idx:Int) {
-        Log.i("onSelected", "onSelected" + idx.toString())
+        Log.i(TAG, "onSelected" + idx.toString())
     }
 
     override fun <T> getPageByID(id:T): PageFragment {

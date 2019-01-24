@@ -6,8 +6,10 @@ import lib.page.PagePresenter
 import kotlinx.android.synthetic.main.page_main.*
 
 
-class PageMain : InjectablePageFragment()
-{
+class PageMain : InjectablePageFragment() {
+
+    private val TAG = javaClass.simpleName
+
     override fun getLayoutResId(): Int { return R.layout.page_main }
 
     override fun inject() {

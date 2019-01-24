@@ -6,8 +6,11 @@ import kotlinx.android.synthetic.main.popup_test.*
 import lib.page.PageGestureView
 
 
-class PopupTest : InjectablePageDividedGestureFragment()
-{
+
+class PopupTest : InjectablePageDividedGestureFragment() {
+
+    private val TAG = javaClass.simpleName
+    
     override fun getLayoutResId(): Int { return R.layout.popup_test }
     override fun getGestureView(): PageGestureView { return gestureView }
     override fun getContentsView(): View { return contents }

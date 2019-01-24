@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kakaovx.homet.BuildConfig
 import com.kakaovx.homet.component.network.error.Rx2ErrorHandlingCallAdapterFactory
+import com.kakaovx.homet.util.Log
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
@@ -22,6 +23,8 @@ private const val READ_TIMEOUT: Long = 30
 
 @Module
 class NetworkModule {
+
+    private val TAG = javaClass.simpleName
 
     private val baseUrl: String = "https://api.github.com"
 
@@ -41,7 +44,15 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(cache: Cache, interceptor: Interceptor): OkHttpClient {
-        val logger = HttpLoggingInterceptor()
+        val logger = HttpLoggingInterceptor(
+            HttpLoggingInterceptor.Logger { message ->
+                var parse_message = message
+                Log.d(TAG, parse_message)
+                if (parse_message.contains("END")) {
+                    Log.d(TAG, "\n")
+                    parse_message += "\n"
+                }
+            })
         if (BuildConfig.DEBUG) {
             logger.level = HttpLoggingInterceptor.Level.BODY
         }
