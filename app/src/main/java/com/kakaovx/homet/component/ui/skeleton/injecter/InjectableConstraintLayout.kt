@@ -35,6 +35,6 @@ abstract class InjectableConstraintLayout : ConstraintLayout, Injectable, Page {
         onDetached()
     }
 
-    final override fun onDetached() {}
+    final override fun onDestroied() {}
 
 }

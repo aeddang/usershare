@@ -41,9 +41,10 @@ class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePr
             closePopup(it)
             return false
         }
-        val page:T? = model.getHistory()
+        val tuple = model.getHistory()
+        val page:T? = tuple?.first
         page?.let{
-            pageChange(it,false,true)
+            pageChange(it,tuple.second!!,false,true)
             return false
         }
         return true
@@ -56,35 +57,41 @@ class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePr
     }
 
     fun openPopup(id:T):PagePresenter<T> {
-        view.onOpenPopup(id)
+        return openPopup(id,HashMap())
+    }
+    fun openPopup(id:T,param:Map<String, Any>):PagePresenter<T> {
+        view.onOpenPopup(id,param)
         model.addPopup(id)
         return this
     }
 
     fun pageStart(id:T):PagePresenter<T> {
         view.onPageStart(id)
-        model.addHistory(id,true)
+        model.addHistory(id,HashMap(),true)
         return this
     }
 
     fun pageChange(id:T,isHistory:Boolean=true,isBack:Boolean = false):PagePresenter<T> {
-        view.onPageChange(id,isBack)
-        model.addHistory(id,isHistory)
+        return pageChange(id, HashMap(), isHistory, isBack)
+    }
+    fun pageChange(id:T,param:Map<String, Any>,isHistory:Boolean=true,isBack:Boolean = false):PagePresenter<T> {
+        view.onPageChange(id,param,isBack)
+        model.addHistory(id,param,isHistory)
         return this
     }
 
     interface View<T> {
         fun onPageStart(id:T)
-        fun onPageChange(id:T,isBack:Boolean)
-        fun onOpenPopup(id:T)
+        fun onPageChange(id:T,param:Map<String, Any>, isBack:Boolean)
+        fun onOpenPopup(id:T, param:Map<String, Any>)
         fun onClosePopup(id:T)
         fun onShowNavigation(){}
         fun onHideNavigation(){}
     }
 
     interface Model<T> {
-        fun addHistory(id:T,isHistory:Boolean)
-        fun getHistory():T?
+        fun addHistory(id:T, param:Map<String, Any>, isHistory:Boolean)
+        fun getHistory():Pair<T?, Map<String, Any>?>?
         fun clearAllHistory()
         fun removePopup(id:T)
         fun addPopup(id:T)

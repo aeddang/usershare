@@ -1,5 +1,4 @@
 package com.kakaovx.homet.page
-import android.support.v4.app.Fragment
 import com.kakaovx.homet.PageID
 import com.kakaovx.homet.R
 import com.kakaovx.homet.component.ui.skeleton.injecter.InjectablePageFragment
@@ -20,6 +19,10 @@ class PageMain : InjectablePageFragment()
         buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>()?.pageChange(PageID.MAIN) }
         buttonTestB.setOnClickListener{ PagePresenter.getInstence<PageID>()?.pageChange(PageID.SUB) }
         buttonTestC.setOnClickListener{ PagePresenter.getInstence<PageID>()?.openPopup(PageID.POPUP_TEST) }
+    }
+
+    override fun onDestroied() {
+        super.onDestroied()
     }
 
 }

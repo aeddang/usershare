@@ -19,6 +19,7 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
     lateinit var contentsView:View
     var isVertical = false; private set
     var isHorizontal = false; private set
+    var isClosed = false; private set
     var animation: ViewPropertyAnimator? = null; private set
 
     private lateinit var gesture:Gesture
@@ -28,6 +29,8 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
     private var animationCloseRunnable: Runnable = Runnable { didCloseAnimation() }
     private var animationReturnRunnable: Runnable = Runnable { didReturnAnimation() }
     private var _contentSize = 0f
+
+
     var contentSize = 0f
         get() {
         if (_contentSize != 0f) return _contentSize
@@ -147,6 +150,7 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
     }
 
     open fun onGestureClose(isClosure:Boolean = true):Long {
+        isClosed = true
         val closePosX = getClosePos().first
         val closePosY = getClosePos().second
 
@@ -173,6 +177,7 @@ open class PageGestureView : FrameLayout, Gesture.Delegate {
     }
 
     open fun onGestureReturn(isClosure:Boolean = true):Long {
+        isClosed = false
         val start = if (isVertical) contentsView.translationY else contentsView.translationX
         var duration = if (isVertical) Math.abs(contentsView.translationY).toLong() else Math.abs(contentsView.translationX).toLong()
         duration /= DURATION_DIV

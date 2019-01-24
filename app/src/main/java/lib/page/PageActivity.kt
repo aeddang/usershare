@@ -65,11 +65,12 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         willChangePage.pageType = PageFragment.PageType.INIT
         supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commit()
     }
-    final override fun onPageChange(id:T,isBack:Boolean) {
+    final override fun onPageChange(id:T, param:Map<String, Any>, isBack:Boolean) {
         val willChangePage = getPageByID(id)
         willChangePage.pageID = id
         willChangePage.delegate = this
         willChangePage.pageType = if(isBack) PageFragment.PageType.OUT else PageFragment.PageType.IN
+        willChangePage.setParam(param)
         supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commit()
     }
 
@@ -83,15 +84,16 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
     }
 
     abstract fun <T> getPopupByID(id:T): PageFragment
-    final override fun onOpenPopup(id:T) {
+    final override fun onOpenPopup(id:T, param:Map<String, Any>) {
         val popup = getPopupByID(id)
         popup.pageID = id
         popup.pageType = PageFragment.PageType.POPUP
+        popup.setParam(param)
         supportFragmentManager.beginTransaction().add(getPageAreaId(),popup,id.toString()).commit()
     }
 
     final override fun onClosePopup(id:T) {
         val popup = supportFragmentManager.findFragmentByTag(id.toString()) as PageFragment
-        popup.onDestroyAnimation()
+        popup.onClosePopupAnimation()
     }
 }

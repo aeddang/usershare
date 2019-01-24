@@ -35,5 +35,5 @@ abstract class InjectableFrameLayout : FrameLayout, Injectable, Page {
         onDetached()
     }
 
-    final override fun onDetached() {}
+    final override fun onDestroied() {}
 }

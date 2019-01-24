@@ -41,6 +41,12 @@ abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
         return duration
     }
 
+    override fun onClosePopupAnimation():Long {
+        if(gestureView.isClosed) return onDestroyAnimation()
+        gestureView.onGestureClose(true)
+        return 0L
+    }
+
     override fun onDestroyAnimation(): Long {
         gestureView.onGestureClose(false)
         val duration = AnimationDuration.SHORT.duration

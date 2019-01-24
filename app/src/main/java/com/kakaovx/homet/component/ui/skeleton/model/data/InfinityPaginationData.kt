@@ -13,7 +13,7 @@ data class InfinityPaginationData<T>(val pageSize:Int = 10) {
         datas = ArrayList()
     }
 
-    fun addAll(addDatas:ArrayList<T>): Int {
+    fun addAll(addDatas:Array<T>): Int {
         datas.addAll(addDatas)
         if(addDatas.size < pageSize) isPageable = false
         return datas.size

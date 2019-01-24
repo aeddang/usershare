@@ -1,5 +1,6 @@
 package com.kakaovx.homet
 
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.kakaovx.homet.component.ui.skeleton.view.DivisionTab
@@ -29,7 +30,9 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
         pagePresenter.pageStart(PageID.MAIN)
         bottomTab.delegate = this
     }
-
+    private fun resetBackPressedAction() {
+        exitCount = 0
+    }
     override fun onBackPressedAction(): Boolean {
         if(exitCount == 1) return false
         exitCount ++
@@ -38,10 +41,11 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
     }
 
     override fun onSelected(view: DivisionTab, idx:Int) {
+        Log.i("onSelected", "onSelected" + idx.toString())
     }
 
     override fun <T> getPageByID(id:T): PageFragment {
-        exitCount = 0
+        resetBackPressedAction()
         return when(id) {
             PageID.MAIN -> { PageMain() }
             PageID.SUB -> { PageNetworkTest() }
@@ -50,6 +54,7 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
     }
 
     override fun <T> getPopupByID(id:T): PageFragment {
+        resetBackPressedAction()
         return when(id) {
             PageID.POPUP_TEST -> { PopupTest() }
             else -> { PageMain() }

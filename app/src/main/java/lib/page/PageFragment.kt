@@ -77,8 +77,11 @@ abstract class PageFragment:Fragment(), Page {
         delegate?.onCreateAnimation(this)
         return animationDuration
     }
-
     protected open fun didCreateAnimation() {}
+
+    open fun onClosePopupAnimation():Long {
+        return onDestroyAnimation()
+    }
     open fun onDestroyAnimation():Long {
          view?.let {
             var posX = 0f
@@ -111,7 +114,6 @@ abstract class PageFragment:Fragment(), Page {
         }
         return animationDuration
     }
-
     protected open fun didDestroyAnimation() {
         activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
     }
@@ -129,6 +131,8 @@ abstract class PageFragment:Fragment(), Page {
         Log.d(PagePresenter.TAG,"onDestroyView")
     }
 
+
+    open fun setParam(param:Map<String,Any>) {}
     open fun onBack():Boolean { return true }
 
     internal interface Delegate {
