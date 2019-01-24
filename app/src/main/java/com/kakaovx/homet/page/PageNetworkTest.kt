@@ -1,6 +1,6 @@
 package com.kakaovx.homet.page
 
-import android.util.Log
+import com.kakaovx.homet.util.Log
 import android.view.View
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.R
@@ -9,8 +9,10 @@ import com.kakaovx.homet.component.ui.skeleton.injecter.ApiPageFragment
 import java.util.*
 import kotlinx.android.synthetic.main.page_network.*
 
-class PageNetworkTest : ApiPageFragment()
-{
+class PageNetworkTest : ApiPageFragment() {
+
+    private val TAG = javaClass.simpleName
+
     override fun getLayoutResId(): Int {
         return R.layout.page_network
     }
@@ -22,12 +24,12 @@ class PageNetworkTest : ApiPageFragment()
     }
 
     private fun handleComplete(data: Objects) {
-        Log.i("handleComplete","complete")
+        Log.i(TAG, "handleComplete")
         hideProgress()
     }
 
     private fun handleError(err: Throwable) {
-        Log.i("handleError",err.toString())
+        Log.i(TAG, "handleError ($err)")
         hideProgress()
     }
     private fun showProgress() {
