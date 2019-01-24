@@ -5,8 +5,8 @@ class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePr
 
     companion object {
         internal const val TAG = "Page"
-        private var currentInstence:Any? = null
-        fun <T> getInstence(): PagePresenter<T>? {
+        private  lateinit var currentInstence:Any
+        fun <T> getInstence(): PagePresenter<T> {
             return currentInstence as PagePresenter<T>
         }
     }
@@ -30,6 +30,8 @@ class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePr
         isNavigationShow = false
         view.onHideNavigation()
     }
+
+
 
     fun onBack():Boolean {
         if(isNavigationShow) {

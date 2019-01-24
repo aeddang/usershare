@@ -5,7 +5,7 @@ import com.kakaovx.homet.component.ui.BannerList
 import dagger.Component
 
 @ComponentScope
-@Component( modules = [AdapterModule::class])
-interface AdapterComponent {
+@Component( modules = [AdapterModule::class, LayoutManagerModule::class])
+interface ListComponent {
     fun inject(context: BannerList)
 }

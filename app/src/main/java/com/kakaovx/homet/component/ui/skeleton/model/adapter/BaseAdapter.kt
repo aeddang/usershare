@@ -1,18 +1,26 @@
-package com.kakaovx.homet.component.ui.skeleton.model.adpter
+package com.kakaovx.homet.component.ui.skeleton.model.adapter
 
+import android.os.Handler
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import com.kakaovx.homet.component.ui.skeleton.model.data.InfinityPaginationData
 import com.kakaovx.homet.component.ui.skeleton.view.ListCell
 
-abstract class BaseAdapter<T>(pageSize:Int,val isViewMore:Boolean = false) : RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
+abstract class BaseAdapter<T>(pageSize:Int, private val isViewMore:Boolean = false) : RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
     class ViewHolder(val cell: ListCell) : RecyclerView.ViewHolder(cell)
 
     var delegate: BaseAdapter.Delegate? = null
+    private var viewMoreHandler: Handler = Handler()
+    private var viewMoreRunnable: Runnable = Runnable {delegate?.viewMore(paginationData.currentPage, paginationData.pageSize)}
     private var total = 0
     private var isBusy = false
     protected var paginationData:InfinityPaginationData<T> = InfinityPaginationData(pageSize)
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        delegate = null
+        viewMoreHandler.removeCallbacks(viewMoreRunnable)
+    }
 
     fun setDatas(datas:Array<T>) {
         paginationData.reset()
@@ -21,8 +29,9 @@ abstract class BaseAdapter<T>(pageSize:Int,val isViewMore:Boolean = false) : Rec
     }
 
     fun addDatas(datas:Array<T>) {
+        val idx = paginationData.datas.size
         paginationData.addAll(datas)
-        notifyItemRangeInserted(paginationData.datas.size, datas.size)
+        notifyItemRangeInserted(idx, datas.size)
     }
 
     fun insertData(data:T,idx:Int = -1) {
@@ -54,13 +63,13 @@ abstract class BaseAdapter<T>(pageSize:Int,val isViewMore:Boolean = false) : Rec
         notifyDataSetChanged()
     }
 
-    abstract fun getListCell(parent: ViewGroup): ListCell
-    protected fun viewMore(adapter:BaseAdapter<T>, page:Int, size:Int){}
     @CallSuper
-    protected fun viewMoreComplete(datas:Array<T>) {
+    open fun viewMoreComplete(datas:Array<T>) {
         addDatas(datas)
         isBusy = false
     }
+
+    abstract fun getListCell(parent: ViewGroup): ListCell
 
     override fun getItemCount():Int {
         total = paginationData.datas.size
@@ -70,9 +79,10 @@ abstract class BaseAdapter<T>(pageSize:Int,val isViewMore:Boolean = false) : Rec
     @CallSuper
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.cell.setData(paginationData.datas[position])
-        if(position == total && isViewMore && paginationData.isPageable && !isBusy) {
+        if(position == total-1 && isViewMore && paginationData.isPageable && !isBusy) {
             isBusy = true
-            viewMore(this, paginationData.currentPage, paginationData.pageSize)
+            paginationData.next()
+            viewMoreHandler.post(viewMoreRunnable)
         }
     }
 

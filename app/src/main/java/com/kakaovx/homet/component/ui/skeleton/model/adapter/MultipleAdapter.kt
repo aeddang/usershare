@@ -1,4 +1,4 @@
-package com.kakaovx.homet.component.ui.skeleton.model.adpter
+package com.kakaovx.homet.component.ui.skeleton.model.adapter
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 
