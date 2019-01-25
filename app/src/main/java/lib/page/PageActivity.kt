@@ -3,10 +3,9 @@ package lib.page
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
-import com.kakaovx.homet.R
+
 
 abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, PageFragment.Delegate, Page
 {
@@ -32,10 +31,13 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         onDestroied()
     }
 
+    @CallSuper
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         onDetached()
     }
+
+    @CallSuper
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         onAttached()

@@ -25,7 +25,6 @@ private const val READ_TIMEOUT: Long = 30
 class NetworkModule {
 
     private val TAG = javaClass.simpleName
-
     private val baseUrl: String = "https://api.github.com"
 
     @Provides
