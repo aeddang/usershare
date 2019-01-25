@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.ui.skeleton.view
+package com.kakaovx.homet.user.component.ui.view
 
 import android.content.Context
 import com.kakaovx.homet.user.R

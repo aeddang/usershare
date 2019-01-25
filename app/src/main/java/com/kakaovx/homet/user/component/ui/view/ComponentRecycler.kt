@@ -1,13 +1,14 @@
-package com.kakaovx.homet.user.component.ui.skeleton.view
+package com.kakaovx.homet.user.component.ui.view
+
 import android.content.Context
 import android.util.AttributeSet
 import com.kakaovx.homet.user.component.ui.module.ComponentAdapter
 import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.injecter.RecyclerFrameLayout
-import kotlinx.android.synthetic.main.ui_recycler_list.view.*
+import kotlinx.android.synthetic.main.ui_recycler.view.*
 import javax.inject.Inject
 
-class ComponentList: RecyclerFrameLayout {
+class ComponentRecycler: RecyclerFrameLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
@@ -15,7 +16,7 @@ class ComponentList: RecyclerFrameLayout {
     @Inject lateinit var viewManager: VerticalLinearLayoutManager
 
     override fun onCreated() {
-        component.inject(this@ComponentList)
+        component.inject(this@ComponentRecycler)
 
         viewAdapter.delegate = this
         recyclerView.layoutManager = viewManager

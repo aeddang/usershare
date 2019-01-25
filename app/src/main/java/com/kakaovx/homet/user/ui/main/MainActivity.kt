@@ -6,6 +6,7 @@ import com.kakaovx.homet.lib.module.Gesture
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PageGestureView
 import com.kakaovx.homet.lib.page.PageNavigationActivity
+import com.kakaovx.homet.user.page.PageSub
 import com.kakaovx.homet.user.component.ui.skeleton.view.DivisionTab
 import com.kakaovx.homet.user.page.PageMain
 import com.kakaovx.homet.user.page.PageNetworkTest
@@ -50,7 +51,10 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
         resetBackPressedAction()
         return when(id) {
             PageID.MAIN -> { PageMain() }
-            PageID.SUB -> { PageNetworkTest() }
+            PageID.SUB -> {
+                PageSub()
+            }
+            PageID.TEST -> { PageNetworkTest() }
             else -> { PageMain() }
         }
     }

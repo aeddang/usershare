@@ -1,8 +1,12 @@
-package com.kakaovx.homet.user.component.ui.module
+package com.kakaovx.homet.user.component.ui.component
 
+import com.kakaovx.homet.user.component.ui.view.BannerRecycler
 import com.kakaovx.homet.user.component.ui.view.ComponentRecycler
 import com.kakaovx.homet.user.component.annotation.ComponentScope
-import com.kakaovx.homet.user.component.ui.view.BannerRecycler
+import com.kakaovx.homet.user.component.ui.module.AdapterModule
+import com.kakaovx.homet.user.component.ui.module.AdapterUtil
+import com.kakaovx.homet.user.component.ui.module.LayoutManagerModule
+import com.kakaovx.homet.user.component.ui.module.LayoutManagerUtil
 import dagger.Component
 
 @ComponentScope

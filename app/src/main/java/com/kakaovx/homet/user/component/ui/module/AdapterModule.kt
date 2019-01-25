@@ -5,7 +5,7 @@ import com.kakaovx.homet.user.component.annotation.ComponentScope
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.MultipleAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.SingleAdapter
-import com.kakaovx.homet.user.component.ui.skeleton.view.BannerListCell
+import com.kakaovx.homet.user.component.ui.view.BannerListCell
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListCell
 import dagger.Module
 import dagger.Provides

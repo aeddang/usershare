@@ -51,7 +51,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
 
     abstract fun onBackPressedAction(): Boolean
     override fun onBackPressed() {
-        getCurentFragment()?.let{ if(!it.onBack())return }
+        getCurentFragment()?.let{ if(!it.isBackAble())return }
         if(!pagePresenter.onBack()) return
         if(onBackPressedAction()) return
         super.onBackPressed()
