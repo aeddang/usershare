@@ -29,10 +29,13 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         onDestroied()
     }
 
+    @CallSuper
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         onDetached()
     }
+
+    @CallSuper
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         onAttached()

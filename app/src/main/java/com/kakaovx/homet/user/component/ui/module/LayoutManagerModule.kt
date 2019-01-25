@@ -9,19 +9,26 @@ import dagger.Provides
 
 @Module
 class LayoutManagerModule (private val context:Context){
+    @Provides
+    @ComponentScope
+    fun provideLayoutManagerUtil(): LayoutManagerUtil {
+        return LayoutManagerUtil(10)
+    }
 
     @Provides
     @ComponentScope
-    fun provideHorizontalLinearLayoutManager(): HorizontalLinearLayoutManager {
+    fun provideHorizontalLinearLayoutManager(layoutManagerUtil:LayoutManagerUtil): HorizontalLinearLayoutManager {
         return HorizontalLinearLayoutManager(context)
     }
 
     @Provides
     @ComponentScope
-    fun provideVerticalLinearLayoutManager(): VerticalLinearLayoutManager {
+    fun provideVerticalLinearLayoutManager(layoutManagerUtil:LayoutManagerUtil): VerticalLinearLayoutManager {
         return VerticalLinearLayoutManager(context)
     }
 
 }
+data class LayoutManagerUtil(val size:Int)
+
 class HorizontalLinearLayoutManager(context: Context): SpanningLinearLayoutManager(context,  LinearLayoutManager.HORIZONTAL, false)
 class VerticalLinearLayoutManager(context: Context): SpanningLinearLayoutManager(context,  LinearLayoutManager.VERTICAL, false)

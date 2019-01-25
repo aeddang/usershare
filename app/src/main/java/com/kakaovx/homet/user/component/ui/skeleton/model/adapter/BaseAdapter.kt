@@ -1,13 +1,12 @@
 package com.kakaovx.homet.user.component.ui.skeleton.model.adapter
 
 import android.os.Handler
+import android.support.annotation.CallSuper
 import android.support.v7.widget.RecyclerView
-import android.view.ViewGroup
-import androidx.annotation.CallSuper
 import com.kakaovx.homet.user.component.ui.skeleton.model.data.InfinityPaginationData
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListCell
 
-abstract class BaseAdapter<T>(pageSize:Int, private val isViewMore:Boolean = false) : RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
+abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:Int = -1) : RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
     class ViewHolder(val cell: ListCell) : RecyclerView.ViewHolder(cell)
 
     var delegate: BaseAdapter.Delegate? = null
@@ -17,6 +16,7 @@ abstract class BaseAdapter<T>(pageSize:Int, private val isViewMore:Boolean = fal
     private var isBusy = false
     protected var paginationData:InfinityPaginationData<T> = InfinityPaginationData(pageSize)
 
+    @CallSuper
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         delegate = null
         viewMoreHandler.removeCallbacks(viewMoreRunnable)
@@ -68,8 +68,6 @@ abstract class BaseAdapter<T>(pageSize:Int, private val isViewMore:Boolean = fal
         addDatas(datas)
         isBusy = false
     }
-
-    abstract fun getListCell(parent: ViewGroup): ListCell
 
     override fun getItemCount():Int {
         total = paginationData.datas.size

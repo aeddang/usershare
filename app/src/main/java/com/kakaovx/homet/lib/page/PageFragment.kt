@@ -1,5 +1,6 @@
 package com.kakaovx.homet.lib.page
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.CallSuper
@@ -37,6 +38,18 @@ abstract class PageFragment:Fragment(), Page {
         onCreated()
         willCreateAnimation()
         animationHandler.post(viewCreateRunnable)
+    }
+
+    @CallSuper
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        onAttached()
+    }
+
+    @CallSuper
+    override fun onDetach() {
+        super.onDetach()
+        onDetached()
     }
 
     open fun willCreateAnimation() {
