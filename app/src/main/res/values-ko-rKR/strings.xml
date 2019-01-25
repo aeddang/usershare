@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kakao 홈 트레이닝</string>
+    <string name="notice_app_exit">한번 더 누르면 종료됩니다</string>
+    <string name="title_A">가</string>
+    <string name="title_B">나</string>
+    <string name="title_C">다</string>
+    <string name="title_D">라</string>
+    <string name="title_E">마</string>
+    <string name="company">카카오VX</string>
+</resources>

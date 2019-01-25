@@ -18,9 +18,9 @@
             android:layout_width="match_parent"
             android:id="@+id/buttonTestC" android:layout_weight="1" android:layout_height="wrap_content"/>
 
-    <com.kakaovx.homet.component.ui.BannerList android:layout_width="match_parent"
+    <com.kakaovx.homet.user.component.ui.BannerList android:layout_width="match_parent"
                                                android:layout_height="300dp"
     >
 
-    </com.kakaovx.homet.component.ui.BannerList>
+    </com.kakaovx.homet.user.component.ui.BannerList>
 </LinearLayout>

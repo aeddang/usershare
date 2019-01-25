@@ -4,17 +4,19 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".ui.main.MainActivity">
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/area">
 
-            <com.kakaovx.homet.BottomTab
+            <com.kakaovx.homet.user.BottomTab
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/area_bottom" android:layout_gravity="bottom" android:id="@+id/bottomTab">
-            </com.kakaovx.homet.BottomTab>
+                    android:layout_height="@dimen/area_bottom"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/bottomTab">
+            </com.kakaovx.homet.user.BottomTab>
     </FrameLayout>
 
 
@@ -23,10 +25,10 @@
             android:id="@+id/navigationBg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/trensparent">
+            android:background="@color/transparent">
     </FrameLayout>
 
-    <lib.page.PageGestureView
+    <com.kakaovx.homet.lib.page.PageGestureView
             android:id="@+id/navigation"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -38,5 +40,5 @@
                 android:background="#ff0"
                 android:layout_gravity="right">
         </FrameLayout>
-    </lib.page.PageGestureView>
+    </com.kakaovx.homet.lib.page.PageGestureView>
 </FrameLayout>
