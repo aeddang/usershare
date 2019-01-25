@@ -5,6 +5,7 @@ import android.widget.Toast
 import com.kakaovx.homet.component.ui.skeleton.view.DivisionTab
 import com.kakaovx.homet.page.PageMain
 import com.kakaovx.homet.page.PageNetworkTest
+import com.kakaovx.homet.page.PageSub
 import com.kakaovx.homet.page.PopupTest
 import com.kakaovx.homet.util.Log
 import lib.page.PageFragment
@@ -51,7 +52,8 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
         resetBackPressedAction()
         return when(id) {
             PageID.MAIN -> { PageMain() }
-            PageID.SUB -> { PageNetworkTest() }
+            PageID.SUB -> { PageSub() }
+            PageID.TEST -> { PageNetworkTest() }
             else -> { PageMain() }
         }
     }

@@ -14,12 +14,12 @@
             android:layout_width="match_parent"
             android:id="@+id/buttonTestB" android:layout_height="wrap_content"/>
 
-    <com.kakaovx.homet.component.ui.view.BannerList
+    <com.kakaovx.homet.component.ui.view.BannerRecycler
             android:layout_width="match_parent"
-            android:layout_height="100dp" android:id="@+id/bannerList">
-    </com.kakaovx.homet.component.ui.view.BannerList>
-    <com.kakaovx.homet.component.ui.view.ComponentList
+            android:layout_height="100dp" android:id="@+id/listBanner">
+    </com.kakaovx.homet.component.ui.view.BannerRecycler>
+    <com.kakaovx.homet.component.ui.view.ComponentRecycler
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/componentList">
-    </com.kakaovx.homet.component.ui.view.ComponentList>
+            android:layout_height="match_parent" android:id="@+id/listComponent">
+    </com.kakaovx.homet.component.ui.view.ComponentRecycler>
 </LinearLayout>

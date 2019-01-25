@@ -4,26 +4,25 @@ import android.content.Context
 import android.support.annotation.CallSuper
 import android.util.AttributeSet
 import com.kakaovx.homet.R
-import com.kakaovx.homet.component.ui.component.DaggerRecyclerComponent
-import com.kakaovx.homet.component.ui.component.RecyclerComponent
+import com.kakaovx.homet.component.ui.component.DaggerViewPagerComponent
+import com.kakaovx.homet.component.ui.component.ViewPagerComponent
 import com.kakaovx.homet.component.ui.module.*
 import com.kakaovx.homet.component.ui.skeleton.model.adapter.BaseAdapter
 
-abstract class RecyclerFrameLayout : InjectableFrameLayout, BaseAdapter.Delegate {
+abstract class ViewPagerFrameLayout : InjectableFrameLayout, BaseAdapter.Delegate {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-    lateinit var component: RecyclerComponent
+    lateinit var component: ViewPagerComponent
 
     override fun getLayoutResId(): Int {
-        return R.layout.ui_recycler
+        return R.layout.ui_viewpager
     }
 
     @CallSuper
     override fun inject() {
-        component = DaggerRecyclerComponent.builder()
-            .adapterModule(AdapterModule())
-            .layoutManagerModule(LayoutManagerModule(context))
+        component = DaggerViewPagerComponent.builder()
+            .pagerAdapterModule(PagerAdapterModule())
             .build()
     }
 

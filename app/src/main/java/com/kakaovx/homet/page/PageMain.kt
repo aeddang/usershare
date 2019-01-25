@@ -18,7 +18,7 @@ class PageMain : InjectablePageFragment() {
 
     override fun onCreated() {
         super.onCreated()
-        buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>()?.pageChange(PageID.MAIN) }
+        buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>()?.pageChange(PageID.TEST) }
         buttonTestB.setOnClickListener{ PagePresenter.getInstence<PageID>()?.pageChange(PageID.SUB) }
         //buttonTestC.setOnClickListener{ PagePresenter.getInstence<PageID>()?.openPopup(PageID.POPUP_TEST) }
     }

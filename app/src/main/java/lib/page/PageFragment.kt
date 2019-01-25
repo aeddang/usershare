@@ -146,7 +146,7 @@ abstract class PageFragment:Fragment(), Page {
 
 
     open fun setParam(param:Map<String,Any>) {}
-    open fun onBack():Boolean { return true }
+    open fun isBackAble():Boolean { return true }
 
     internal interface Delegate {
         fun onCreateAnimation(v:PageFragment)

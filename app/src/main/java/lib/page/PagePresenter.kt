@@ -31,8 +31,6 @@ class PagePresenter<T>(val view: PagePresenter.View<T>,private val model: PagePr
         view.onHideNavigation()
     }
 
-
-
     fun onBack():Boolean {
         if(isNavigationShow) {
             hideNavigation()
