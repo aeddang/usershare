@@ -6,6 +6,7 @@ import com.kakaovx.homet.user.component.ui.skeleton.injecter.ApiPageDividedGestu
 import com.kakaovx.homet.user.component.ui.skeleton.injecter.ApiPageFragment
 import com.kakaovx.homet.user.component.ui.skeleton.injecter.ApiPageGestureFragment
 import com.kakaovx.homet.user.ui.splash.SplashFragment
+import com.kakaovx.homet.user.component.network.module.ApiModule
 import dagger.Component
 
 @PageScope

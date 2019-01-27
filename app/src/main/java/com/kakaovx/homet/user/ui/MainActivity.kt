@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.ui.main
+package com.kakaovx.homet.user.ui
 
 import android.view.View
 import android.widget.Toast
@@ -6,11 +6,7 @@ import com.kakaovx.homet.lib.module.Gesture
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PageGestureView
 import com.kakaovx.homet.lib.page.PageNavigationActivity
-import com.kakaovx.homet.user.page.PageSub
 import com.kakaovx.homet.user.component.ui.skeleton.view.DivisionTab
-import com.kakaovx.homet.user.page.PageMain
-import com.kakaovx.homet.user.page.PageNetworkTest
-import com.kakaovx.homet.user.page.PopupTest
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
@@ -49,26 +45,12 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
 
     override fun <T> getPageByID(id:T): PageFragment {
         resetBackPressedAction()
-        return when(id) {
-            PageID.MAIN -> { PageMain() }
-            PageID.SUB -> {
-                PageSub()
-            }
-            PageID.TEST -> { PageNetworkTest() }
-            else -> { PageMain() }
-        }
+        return PageFactory.getInstence().getPageByID(id as PageID)
     }
 
     override fun <T> getPopupByID(id:T): PageFragment {
         resetBackPressedAction()
-        return when(id) {
-            PageID.POPUP_TEST -> { PopupTest() }
-            else -> { PageMain() }
-        }
+        return PageFactory.getInstence().getPageByID(id as PageID)
     }
 }
 
-enum class PageID {
-    MAIN,SUB,TEST,
-    POPUP_TEST
-}

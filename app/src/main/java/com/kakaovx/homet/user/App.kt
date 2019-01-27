@@ -6,7 +6,7 @@ import com.facebook.stetho.Stetho
 import com.kakaovx.homet.user.component.app.AppComponent
 import com.kakaovx.homet.user.component.app.AppModule
 import com.kakaovx.homet.user.component.app.DaggerAppComponent
-import com.kakaovx.homet.user.component.network.NetworkModule
+import com.kakaovx.homet.user.component.network.module.NetworkModule
 import com.kakaovx.homet.user.component.preference.PreferenceModule
 import com.kakaovx.homet.user.util.AppFeature
 import com.kakaovx.homet.user.util.Log

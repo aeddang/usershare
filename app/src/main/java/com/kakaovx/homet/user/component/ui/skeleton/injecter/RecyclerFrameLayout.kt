@@ -4,7 +4,8 @@ import android.content.Context
 import android.support.annotation.CallSuper
 import android.util.AttributeSet
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.ui.module.RecyclerComponent
+import com.kakaovx.homet.user.component.ui.component.DaggerRecyclerComponent
+import com.kakaovx.homet.user.component.ui.component.RecyclerComponent
 import com.kakaovx.homet.user.component.ui.module.*
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
 

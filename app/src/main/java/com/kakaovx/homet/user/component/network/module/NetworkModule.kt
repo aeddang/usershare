@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.network
+package com.kakaovx.homet.user.component.network.module
 
 import android.app.Application
 import com.google.gson.Gson

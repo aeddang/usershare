@@ -1,6 +1,6 @@
 package com.kakaovx.homet.user.component.app
 
-import com.kakaovx.homet.user.component.network.NetworkModule
+import com.kakaovx.homet.user.component.network.module.NetworkModule
 import com.kakaovx.homet.user.component.preference.PreferenceModule
 import com.kakaovx.homet.user.component.preference.SettingPreference
 import dagger.Component

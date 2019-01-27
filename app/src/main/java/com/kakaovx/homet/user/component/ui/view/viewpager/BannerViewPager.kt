@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.ui.view
+package com.kakaovx.homet.user.component.ui.view.viewpager
 
 import android.content.Context
 import android.util.AttributeSet

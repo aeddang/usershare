@@ -1,7 +1,8 @@
-package com.kakaovx.homet.user
+package com.kakaovx.homet.user.component.ui.view.tab
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.view.DivisionTab
 import kotlinx.android.synthetic.main.ui_bottom_tab.view.*
 

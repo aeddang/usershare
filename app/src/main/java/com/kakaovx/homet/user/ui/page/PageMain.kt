@@ -1,6 +1,5 @@
-package com.kakaovx.homet.user.page
-
-import com.kakaovx.homet.user.ui.main.PageID
+package com.kakaovx.homet.user.ui.page
+import com.kakaovx.homet.user.ui.PageID
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.injecter.InjectablePageFragment
 import com.kakaovx.homet.lib.page.PagePresenter
@@ -19,8 +18,10 @@ class PageMain : InjectablePageFragment() {
 
     override fun onCreated() {
         super.onCreated()
-        buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>()?.pageChange(PageID.TEST) }
-        buttonTestB.setOnClickListener{ PagePresenter.getInstence<PageID>()?.pageChange(PageID.SUB) }
+        buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>()?.pageChange(
+            PageID.TEST) }
+        buttonTestB.setOnClickListener{ PagePresenter.getInstence<PageID>()?.pageChange(
+            PageID.SUB) }
         //buttonTestC.setOnClickListener{ PagePresenter.getInstence<PageID>()?.openPopup(PageID.POPUP_TEST) }
     }
 

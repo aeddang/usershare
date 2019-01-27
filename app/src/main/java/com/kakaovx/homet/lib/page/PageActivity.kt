@@ -70,7 +70,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         willChangePage.pageID = id
         willChangePage.delegate = this
         willChangePage.pageType = if(isBack) PageFragment.PageType.OUT else PageFragment.PageType.IN
-        willChangePage.setParam(param)
+        if( !param.isEmpty()) willChangePage.setParam(param)
         supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commit()
     }
 
@@ -88,7 +88,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         val popup = getPopupByID(id)
         popup.pageID = id
         popup.pageType = PageFragment.PageType.POPUP
-        popup.setParam(param)
+        if( !param.isEmpty()) popup.setParam(param)
         supportFragmentManager.beginTransaction().add(getPageAreaId(),popup,id.toString()).commit()
     }
 

@@ -144,7 +144,7 @@ abstract class PageFragment:Fragment(), Page {
     }
 
 
-    open fun setParam(param:Map<String,Any>) {}
+    open fun setParam(param:Map<String,Any>):PageFragment { return this }
     open fun isBackAble():Boolean { return true }
 
     internal interface Delegate {

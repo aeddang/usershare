@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.main.MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="com.kakaovx.homet.user.action.HOMET_MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>

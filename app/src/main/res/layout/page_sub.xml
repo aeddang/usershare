@@ -9,8 +9,8 @@
             android:layout_width="match_parent"
             android:id="@+id/buttonBack" android:layout_height="wrap_content"/>
 
-    <com.kakaovx.homet.user.component.ui.view.BannerViewPager
+    <com.kakaovx.homet.user.component.ui.view.viewpager.BannerViewPager
             android:layout_width="match_parent"
             android:layout_height="300dp" android:id="@+id/pagerBanner">
-    </com.kakaovx.homet.user.component.ui.view.BannerViewPager>
+    </com.kakaovx.homet.user.component.ui.view.viewpager.BannerViewPager>
 </LinearLayout>

@@ -3,6 +3,9 @@ package com.kakaovx.homet.user.component.ui.skeleton.model.adapter
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
+import android.support.v4.view.ViewPager
+
+
 
 abstract class BaseViewPagerAdapter<V:View,T>: PagerAdapter() {
 
@@ -16,8 +19,14 @@ abstract class BaseViewPagerAdapter<V:View,T>: PagerAdapter() {
         return this
     }
 
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        //super.destroyItem(container, position, `object`)
+        container.removeView(`object` as View)
+    }
     override fun instantiateItem(container: ViewGroup, position: Int):V {
-        return getPageView(container, position)
+        val v = getPageView(container, position)
+        container.addView(v)
+        return v
     }
 
     override fun isViewFromObject(view: View, key: Any): Boolean {
