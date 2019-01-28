@@ -18,10 +18,7 @@ class RetrofitException(override val message: String?,
     }
 
     fun <T> getErrorBodyAs(type: Class<T>): T? {
-        if (retrofit == null || response == null || response.errorBody() == null) {
-            return null
-        }
-
+        if (retrofit == null || response == null || response.errorBody() == null) return null
         val converter: Converter<ResponseBody, T> = retrofit.responseBodyConverter(type, arrayOf())
         return converter.convert(response.errorBody())
     }
