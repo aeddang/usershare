@@ -5,6 +5,7 @@ import android.view.View
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.network.RxObservableConverter
+import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.ui.skeleton.injecter.ApiPageFragment
 import kotlinx.android.synthetic.main.page_network.*
 import java.util.*
@@ -23,8 +24,8 @@ class PageNetworkTest : ApiPageFragment() {
         hideProgress()
     }
 
-    private fun handleComplete(data: Objects) {
-        Log.i(TAG, "handleComplete")
+    private fun handleComplete(data: ApiResponse) {
+        Log.i(TAG, "handleComplete"+ data.toString())
         hideProgress()
     }
 
@@ -42,6 +43,7 @@ class PageNetworkTest : ApiPageFragment() {
 
     fun getAllUsers(v: Unit) {
         val params: MutableMap<String, String> = mutableMapOf()
+        params["q"] = "apple"
         api.searchRepositories(params)
         showProgress()
 

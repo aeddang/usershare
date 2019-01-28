@@ -7,10 +7,16 @@ import com.kakaovx.homet.user.component.ui.skeleton.injecter.ApiPageFragment
 import com.kakaovx.homet.user.component.ui.skeleton.injecter.ApiPageGestureFragment
 import com.kakaovx.homet.user.ui.splash.SplashFragment
 import com.kakaovx.homet.user.component.network.module.ApiModule
+import com.kakaovx.homet.user.component.network.module.ViewModelModule
 import dagger.Component
 
 @PageScope
-@Component(dependencies = [AppComponent::class], modules = [ApiModule::class])
+@Component(dependencies = [AppComponent::class],
+            modules = [
+                ApiModule::class,
+                ViewModelModule::class
+            ])
+
 interface ApiComponent {
     fun inject(context: ApiPageDividedGestureFragment)
     fun inject(context: ApiPageGestureFragment)

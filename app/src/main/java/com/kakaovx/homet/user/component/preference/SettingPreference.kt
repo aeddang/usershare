@@ -1,7 +1,6 @@
 package com.kakaovx.homet.user.component.preference
 
 import android.content.Context
-import com.kakaovx.homet.user.constant.PreferenceName
 
 private const val PUSH_ENABLE = "push_enable"
 

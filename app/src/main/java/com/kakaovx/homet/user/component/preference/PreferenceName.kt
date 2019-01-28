@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.constant
+package com.kakaovx.homet.user.component.preference
 
 class PreferenceName {
     companion object {
