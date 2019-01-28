@@ -10,10 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.kakaovx.homet.user.App
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.network.module.ApiModule
-import com.kakaovx.homet.user.component.network.DaggerApiComponent
+import com.kakaovx.homet.user.component.di.api.ApiModule
+import com.kakaovx.homet.user.component.di.api.DaggerApiComponent
 import com.kakaovx.homet.user.component.network.api.GitHubApi
-import com.kakaovx.homet.user.util.AppConst
+import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.homet.user.util.plusAssign

@@ -5,6 +5,8 @@ class PagePresenter<T>(val view: View<T>, private val model: Model<T>) {
     companion object {
         internal const val TAG = "Page"
         private  lateinit var currentInstence:Any
+
+        @Suppress("UNCHECKED_CAST")
         fun <T> getInstence(): PagePresenter<T> {
             return currentInstence as PagePresenter<T>
         }

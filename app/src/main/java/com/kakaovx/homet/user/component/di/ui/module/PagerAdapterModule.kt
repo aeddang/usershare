@@ -1,10 +1,10 @@
-package com.kakaovx.homet.user.component.ui.module
+package com.kakaovx.homet.user.component.di.ui.module
 
 import android.view.ViewGroup
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseViewPagerAdapter
 import com.kakaovx.homet.user.component.annotation.ComponentScope
-import com.kakaovx.homet.user.component.ui.skeleton.view.ListCell
-import com.kakaovx.homet.user.component.ui.view.cell.ImageListCell
+import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
+import com.kakaovx.homet.user.component.ui.view.item.ImageListItem
 
 import dagger.Module
 import dagger.Provides
@@ -28,9 +28,9 @@ class PagerAdapterModule {
 data class PagerAdapterUtil(val size:Int)
 
 
-class BannerPagerAdapter: BaseViewPagerAdapter<ListCell, String>() {
-    override fun getPageView(container: ViewGroup, position: Int): ListCell {
-        return ImageListCell(container.context)
+class BannerPagerAdapter: BaseViewPagerAdapter<ListItem, String>() {
+    override fun getPageView(container: ViewGroup, position: Int): ListItem {
+        return ImageListItem(container.context)
     }
 
 }

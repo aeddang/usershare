@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.api.GitHubApi
+import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.util.Log
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,7 +20,7 @@ class SplashViewModel(private val restApi: GitHubApi) : ViewModel() {
     val response: MutableLiveData<Boolean> = MutableLiveData()
     val autoLoginResponse: MutableLiveData<Boolean> = MutableLiveData()
 
-    private fun handleComplete(data: Objects) {
+    private fun handleComplete(data: ApiResponse) {
         Log.i(TAG, "handleComplete")
         response.value = true
     }

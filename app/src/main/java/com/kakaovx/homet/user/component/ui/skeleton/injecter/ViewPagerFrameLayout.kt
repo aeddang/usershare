@@ -4,9 +4,9 @@ import android.content.Context
 import android.support.annotation.CallSuper
 import android.util.AttributeSet
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.ui.component.DaggerViewPagerComponent
-import com.kakaovx.homet.user.component.ui.component.ViewPagerComponent
-import com.kakaovx.homet.user.component.ui.module.PagerAdapterModule
+import com.kakaovx.homet.user.component.di.ui.component.DaggerViewPagerComponent
+import com.kakaovx.homet.user.component.di.ui.component.ViewPagerComponent
+import com.kakaovx.homet.user.component.di.ui.module.PagerAdapterModule
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
 
 abstract class ViewPagerFrameLayout : InjectableFrameLayout, BaseAdapter.Delegate {

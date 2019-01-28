@@ -29,6 +29,11 @@ class MainActivity : PageNavigationActivity<PageID>(), DivisionTab.Delegate {
         pagePresenter.pageStart(PageID.MAIN)
         bottomTab.delegate = this
     }
+
+    override fun onDestroied() {
+        super.onDestroied()
+    }
+
     private fun resetBackPressedAction() {
         exitCount = 0
     }

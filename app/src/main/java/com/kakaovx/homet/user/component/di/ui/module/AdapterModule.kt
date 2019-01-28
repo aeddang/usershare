@@ -1,13 +1,13 @@
-package com.kakaovx.homet.user.component.ui.module
+package com.kakaovx.homet.user.component.di.ui.module
 
 import android.view.ViewGroup
 import com.kakaovx.homet.user.component.annotation.ComponentScope
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.MultipleAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.SingleAdapter
-import com.kakaovx.homet.user.component.ui.view.cell.BannerListCell
-import com.kakaovx.homet.user.component.ui.skeleton.view.ListCell
-import com.kakaovx.homet.user.component.ui.view.cell.ImageListCell
+import com.kakaovx.homet.user.component.ui.view.item.BannerListItem
+import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
+import com.kakaovx.homet.user.component.ui.view.item.ImageListItem
 import dagger.Module
 import dagger.Provides
 
@@ -35,17 +35,17 @@ class AdapterModule {
 data class AdapterUtil(val size:Int)
 
 class BannerAdapter: SingleAdapter<String>(true,10) {
-    override fun getListCell(parent: ViewGroup): ListCell {
-        return ImageListCell(parent.context)
+    override fun getListCell(parent: ViewGroup): ListItem {
+        return ImageListItem(parent.context)
     }
 }
 
 class ComponentAdapter: MultipleAdapter<String>() {
     override fun getViewHolder(parent: ViewGroup, viewType: Int): BaseAdapter.ViewHolder {
         return when(viewType) {
-            0 -> { ViewHolder(ImageListCell(parent.context)) }
-            1 -> { ViewHolder(BannerListCell(parent.context)) }
-            else -> { ViewHolder(ImageListCell(parent.context)) }
+            0 -> { ViewHolder(ImageListItem(parent.context)) }
+            1 -> { ViewHolder(BannerListItem(parent.context)) }
+            else -> { ViewHolder(ImageListItem(parent.context)) }
         }
     }
     override fun getViewType( position: Int): Int {

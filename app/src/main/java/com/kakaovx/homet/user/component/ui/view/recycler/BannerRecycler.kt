@@ -2,8 +2,8 @@ package com.kakaovx.homet.user.component.ui.view.recycler
 
 import android.content.Context
 import android.util.AttributeSet
-import com.kakaovx.homet.user.component.ui.module.BannerAdapter
-import com.kakaovx.homet.user.component.ui.module.HorizontalLinearLayoutManager
+import com.kakaovx.homet.user.component.di.ui.module.BannerAdapter
+import com.kakaovx.homet.user.component.di.ui.module.HorizontalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.injecter.RecyclerFrameLayout
 import kotlinx.android.synthetic.main.ui_recycler.view.*
 import javax.inject.Inject

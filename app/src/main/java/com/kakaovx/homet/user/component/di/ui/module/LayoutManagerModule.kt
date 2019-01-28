@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.ui.module
+package com.kakaovx.homet.user.component.di.ui.module
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
