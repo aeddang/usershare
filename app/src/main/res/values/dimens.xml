@@ -1,0 +1,17 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="area_header">50dp</dimen>
+    <dimen name="area_bottom">50dp</dimen>
+
+    <dimen name="margin_ultra">25dp</dimen>
+    <dimen name="margin_big">20dp</dimen>
+    <dimen name="margin_mid">15dp</dimen>
+    <dimen name="margin_small">10dp</dimen>
+    <dimen name="margin_tiny">5dp</dimen>
+
+    <dimen name="font_ultra">45dp</dimen>
+    <dimen name="font_big">20dp</dimen>
+    <dimen name="font_mid">15dp</dimen>
+    <dimen name="font_small">12dp</dimen>
+    <dimen name="font_tiny">10dp</dimen>
+</resources>
