@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.support.v7.app.AppCompatActivity
+import com.kakaovx.homet.user.constant.AppFeature
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 

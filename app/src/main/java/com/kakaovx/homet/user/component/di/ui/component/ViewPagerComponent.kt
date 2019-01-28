@@ -1,9 +1,9 @@
-package com.kakaovx.homet.user.component.ui.component
+package com.kakaovx.homet.user.component.di.ui.component
 
 import com.kakaovx.homet.user.component.ui.view.viewpager.BannerViewPager
 import com.kakaovx.homet.user.component.annotation.ComponentScope
-import com.kakaovx.homet.user.component.ui.module.PagerAdapterModule
-import com.kakaovx.homet.user.component.ui.module.PagerAdapterUtil
+import com.kakaovx.homet.user.component.di.ui.module.PagerAdapterModule
+import com.kakaovx.homet.user.component.di.ui.module.PagerAdapterUtil
 import dagger.Component
 
 @ComponentScope

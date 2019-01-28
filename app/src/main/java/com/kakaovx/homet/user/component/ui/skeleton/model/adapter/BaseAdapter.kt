@@ -4,10 +4,10 @@ import android.os.Handler
 import android.support.annotation.CallSuper
 import android.support.v7.widget.RecyclerView
 import com.kakaovx.homet.user.component.ui.skeleton.model.data.InfinityPaginationData
-import com.kakaovx.homet.user.component.ui.skeleton.view.ListCell
+import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
 
 abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:Int = -1) : RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
-    class ViewHolder(val cell: ListCell) : RecyclerView.ViewHolder(cell)
+    class ViewHolder(val item: ListItem) : RecyclerView.ViewHolder(item)
 
     var delegate: BaseAdapter.Delegate? = null
     private var viewMoreHandler: Handler = Handler()
@@ -76,7 +76,7 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
 
     @CallSuper
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.cell.setData(paginationData.datas[position])
+        holder.item.setData(paginationData.datas[position])
         if(position == total-1 && isViewMore && paginationData.isPageable && !isBusy) {
             isBusy = true
             paginationData.next()

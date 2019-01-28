@@ -1,11 +1,11 @@
-package com.kakaovx.homet.user.component.network.module
+package com.kakaovx.homet.user.component.di.api
 
 import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kakaovx.homet.user.component.network.error.Rx2ErrorHandlingCallAdapterFactory
-import com.kakaovx.homet.user.util.AppConst
-import com.kakaovx.homet.user.util.AppFeature
+import com.kakaovx.homet.user.constant.AppFeature
+import com.kakaovx.homet.user.constant.NetworkConst
 import com.kakaovx.homet.user.util.Log
 import dagger.Module
 import dagger.Provides
@@ -18,16 +18,17 @@ import java.net.CookiePolicy
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-private const val CONNECT_TIMEOUT: Long = 30
-private const val WRITE_TIMEOUT: Long = 30
-private const val READ_TIMEOUT: Long = 30
+
 
 @Module
 class NetworkModule {
 
+    private val CONNECT_TIMEOUT: Long = 30
+    private val WRITE_TIMEOUT: Long = 30
+    private val READ_TIMEOUT: Long = 30
     private val TAG = javaClass.simpleName
 
-    private val baseUrl: String = AppConst.HOMET_DEFAULT_REST_ADDRESS
+    private val baseUrl: String = NetworkConst.HOMET_DEFAULT_REST_ADDRESS
 
     @Provides
     @Singleton

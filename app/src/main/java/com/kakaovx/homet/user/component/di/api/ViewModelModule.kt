@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.network.module
+package com.kakaovx.homet.user.component.di.api
 
 import com.kakaovx.homet.user.component.annotation.PageScope
 import com.kakaovx.homet.user.component.network.api.GitHubApi

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 
 import com.kakaovx.homet.user.component.ui.skeleton.injecter.ViewPagerFrameLayout
-import com.kakaovx.homet.user.component.ui.module.BannerPagerAdapter
+import com.kakaovx.homet.user.component.di.ui.module.BannerPagerAdapter
 import kotlinx.android.synthetic.main.ui_viewpager.view.*
 import javax.inject.Inject
 

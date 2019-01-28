@@ -1,7 +1,6 @@
-package com.kakaovx.homet.user.component.app
+package com.kakaovx.homet.user.component.di.app
 
-import com.kakaovx.homet.user.component.network.module.NetworkModule
-import com.kakaovx.homet.user.component.preference.PreferenceModule
+import com.kakaovx.homet.user.component.di.api.NetworkModule
 import com.kakaovx.homet.user.component.preference.SettingPreference
 import dagger.Component
 import retrofit2.Retrofit

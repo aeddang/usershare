@@ -1,5 +1,8 @@
 package com.kakaovx.homet.user.util
 
+import com.kakaovx.homet.user.constant.AppConst
+import com.kakaovx.homet.user.constant.AppFeature
+
 object Log {
 
     fun i(tag: String, vararg objects: Any) {
