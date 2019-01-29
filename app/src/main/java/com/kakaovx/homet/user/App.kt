@@ -1,30 +1,20 @@
 package com.kakaovx.homet.user
 
-import android.app.Application
-import android.content.Context
 import com.facebook.stetho.Stetho
-import com.kakaovx.homet.user.component.di.component.AppComponent
 import com.kakaovx.homet.user.component.di.component.DaggerAppComponent
-import com.kakaovx.homet.user.component.di.module.AppModule
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.Log
 import com.squareup.leakcanary.LeakCanary
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
 
-class App: Application() {
+class App: DaggerApplication() {
 
     private val TAG = javaClass.simpleName
 
-    val singleton: AppComponent by lazy {
-        DaggerAppComponent.builder()
-            .appModule(AppModule(this))
-            .build()
-    }
-
-    companion object {
-        fun getAppComponent(context: Context): AppComponent {
-            return (context.applicationContext as App).singleton
-        }
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent.builder().application(this).build()
     }
 
     override fun onCreate() {

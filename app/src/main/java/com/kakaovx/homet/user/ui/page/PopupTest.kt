@@ -24,7 +24,7 @@ class PopupTest : ApiPageDividedGestureFragment() {
 
     override fun onCreated() {
         super.onCreated()
-        viewModel = ViewModelProviders.of(this, api.apiFactory)[GithubModel::class.java]
+        viewModel = ViewModelProviders.of(this, apiModelFactory)[GithubModel::class.java]
 
         viewModel.getSearchRepositories().subscribe(
             this::handleComplete,
@@ -33,7 +33,7 @@ class PopupTest : ApiPageDividedGestureFragment() {
     }
 
     private fun handleComplete(data: ApiResponse) {
-        Log.i(TAG, "handleComplete"+ data.toString())
+        Log.i(TAG, "handleComplete ($data)")
     }
 
     private fun handleError(err: Throwable) {

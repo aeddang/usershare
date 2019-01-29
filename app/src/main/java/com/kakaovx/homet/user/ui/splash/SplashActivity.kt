@@ -1,11 +1,11 @@
 package com.kakaovx.homet.user.ui.splash
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.util.Log
+import dagger.android.support.DaggerAppCompatActivity
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : DaggerAppCompatActivity() {
 
     val TAG = javaClass.simpleName
 

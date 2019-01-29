@@ -3,10 +3,10 @@ package com.kakaovx.homet.lib.page
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.IdRes
-import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
+import dagger.android.support.DaggerAppCompatActivity
 
-abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, PageFragment.Delegate, Page {
+abstract class PageActivity<T> : DaggerAppCompatActivity(), PagePresenter.View<T>, PageFragment.Delegate, Page {
     open val pagePresenter = PagePresenter(this, PageModel())
     open var currentPage: PageFragment? = null
         protected set

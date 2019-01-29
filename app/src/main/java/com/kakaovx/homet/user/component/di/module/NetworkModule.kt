@@ -32,20 +32,17 @@ class NetworkModule {
     private val baseUrl: String = NetworkConst.HOMET_DEFAULT_REST_ADDRESS
 
     @Provides
-    @PageScope
     fun provideCache(application: Application): Cache {
         val cacheSize = 10 * 1024 * 1024 // 10MB
         return Cache(application.cacheDir, cacheSize.toLong())
     }
 
     @Provides
-    @PageScope
     fun provideGs(): Gson {
         return GsonBuilder().create()
     }
 
     @Provides
-    @PageScope
     fun provideOkHttpClient(cache: Cache, interceptor: Interceptor): OkHttpClient {
         val logger = HttpLoggingInterceptor(
             HttpLoggingInterceptor.Logger { message ->
@@ -72,7 +69,6 @@ class NetworkModule {
     }
 
     @Provides
-    @PageScope
     fun provideRetrofit(gs: Gson, client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addCallAdapterFactory(Rx2ErrorHandlingCallAdapterFactory.create())
@@ -83,7 +79,6 @@ class NetworkModule {
     }
 
     @Provides
-    @PageScope
     fun provideInterceptor(): Interceptor {
         return Interceptor {
             val builder: Request.Builder = it.request().newBuilder()
@@ -93,7 +88,6 @@ class NetworkModule {
     }
 
     @Provides
-    @PageScope
     fun provideRestApi(retrofit: Retrofit): RestfulApi {
         return retrofit.create(RestfulApi::class.java)
     }

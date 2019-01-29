@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.CallSuper
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +12,9 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import com.kakaovx.homet.lib.constant.AnimationDuration
+import dagger.android.support.DaggerFragment
 
-abstract class PageFragment:Fragment(), Page {
+abstract class PageFragment:DaggerFragment(), Page {
     enum class PageType {
         INIT, IN, OUT, POPUP
     }

@@ -4,25 +4,19 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kakaovx.homet.user.App
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.api.Api
-import com.kakaovx.homet.user.component.di.component.DaggerApiComponent
-import com.kakaovx.homet.user.component.di.module.ApiModule
-import com.kakaovx.homet.user.component.di.module.NetworkModule
-import com.kakaovx.homet.user.component.di.module.PreferenceModule
-import com.kakaovx.homet.user.component.di.module.ViewModelModule
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.homet.user.util.plusAssign
+import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class SplashFragment : Fragment() {
+class SplashFragment : DaggerFragment() {
 
     val TAG = javaClass.simpleName
 
@@ -63,16 +57,16 @@ class SplashFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated()")
 
-        context?.run {
-            DaggerApiComponent.builder()
-                .appComponent(App.getAppComponent(this))
-                .apiModule(ApiModule())
-                .networkModule(NetworkModule())
-                .preferenceModule(PreferenceModule())
-                .viewModelModule(ViewModelModule())
-                .build()
-                .inject(this@SplashFragment)
-        }
+//        context?.run {
+//            DaggerApiComponent.builder()
+//                .appComponent(App.getAppComponent(this))
+//                .apiModule(ApiModule())
+//                .networkModule(NetworkModule())
+//                .preferenceModule(PreferenceModule())
+//                .viewModelModule(ViewModelModule())
+//                .build()
+//                .inject(this@SplashFragment)
+//        }
 
         viewModel = ViewModelProviders.of(this, SplashViewModelFactory(api.restApi))[SplashViewModel::class.java]
 
