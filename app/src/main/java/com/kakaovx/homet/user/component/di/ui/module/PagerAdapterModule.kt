@@ -2,7 +2,7 @@ package com.kakaovx.homet.user.component.di.ui.module
 
 import android.view.ViewGroup
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseViewPagerAdapter
-import com.kakaovx.homet.user.component.annotation.ComponentScope
+import com.kakaovx.homet.user.component.di.annotation.ComponentScope
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
 import com.kakaovx.homet.user.component.ui.view.item.ImageListItem
 

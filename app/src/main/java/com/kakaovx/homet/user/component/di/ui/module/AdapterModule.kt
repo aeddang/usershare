@@ -1,7 +1,7 @@
 package com.kakaovx.homet.user.component.di.ui.module
 
 import android.view.ViewGroup
-import com.kakaovx.homet.user.component.annotation.ComponentScope
+import com.kakaovx.homet.user.component.di.annotation.ComponentScope
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.MultipleAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.SingleAdapter

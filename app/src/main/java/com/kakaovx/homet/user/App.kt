@@ -3,11 +3,9 @@ package com.kakaovx.homet.user
 import android.app.Application
 import android.content.Context
 import com.facebook.stetho.Stetho
-import com.kakaovx.homet.user.component.di.app.AppComponent
-import com.kakaovx.homet.user.component.di.app.AppModule
-import com.kakaovx.homet.user.component.di.app.DaggerAppComponent
-import com.kakaovx.homet.user.component.di.api.NetworkModule
-import com.kakaovx.homet.user.component.di.app.PreferenceModule
+import com.kakaovx.homet.user.component.di.component.AppComponent
+import com.kakaovx.homet.user.component.di.component.DaggerAppComponent
+import com.kakaovx.homet.user.component.di.module.AppModule
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.Log
 import com.squareup.leakcanary.LeakCanary
@@ -20,8 +18,6 @@ class App: Application() {
     val singleton: AppComponent by lazy {
         DaggerAppComponent.builder()
             .appModule(AppModule(this))
-            .networkModule(NetworkModule())
-            .preferenceModule(PreferenceModule(this))
             .build()
     }
 

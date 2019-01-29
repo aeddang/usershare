@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.annotation
+package com.kakaovx.homet.user.component.di.annotation
 
 import javax.inject.Scope
 

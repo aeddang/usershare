@@ -20,13 +20,13 @@ class PopupTest : ApiPageDividedGestureFragment() {
     override fun getBackgroundView(): View { return bg }
     override fun getDividedView(): View { return divided }
 
-    private lateinit var api: GithubModel
+    private lateinit var viewModel: GithubModel
 
     override fun onCreated() {
         super.onCreated()
-        api = ViewModelProviders.of(this, apiFactory)[GithubModel::class.java]
+        viewModel = ViewModelProviders.of(this, api.apiFactory)[GithubModel::class.java]
 
-        api.getSearchRepositories().subscribe(
+        viewModel.getSearchRepositories().subscribe(
             this::handleComplete,
             this::handleError
         ).apply { disposables.add(this) }
