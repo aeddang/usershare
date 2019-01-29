@@ -2,7 +2,7 @@ package com.kakaovx.homet.user.component.di.ui.module
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
-import com.kakaovx.homet.user.component.annotation.ComponentScope
+import com.kakaovx.homet.user.component.di.annotation.ComponentScope
 import com.kakaovx.homet.user.component.ui.skeleton.model.layoutmanager.SpanningLinearLayoutManager
 import dagger.Module
 import dagger.Provides

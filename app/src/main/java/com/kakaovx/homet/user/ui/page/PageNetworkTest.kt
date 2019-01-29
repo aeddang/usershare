@@ -1,14 +1,13 @@
 package com.kakaovx.homet.user.ui.page
 
-import com.kakaovx.homet.user.util.Log
 import android.view.View
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.network.RxObservableConverter
 import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.ui.skeleton.injecter.ApiPageFragment
+import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.page_network.*
-import java.util.*
 
 class PageNetworkTest : ApiPageFragment() {
 
@@ -43,11 +42,12 @@ class PageNetworkTest : ApiPageFragment() {
 
     fun getAllUsers(v: Unit) {
         val params: MutableMap<String, String> = mutableMapOf()
+        val restApi = api.restApi
         params["q"] = "apple"
-        api.searchRepositories(params)
+        restApi.searchRepositories(params)
         showProgress()
 
-        RxObservableConverter.forNetwork(api.searchRepositories(params))
+        RxObservableConverter.forNetwork(restApi.searchRepositories(params))
         .subscribe(
             this::handleComplete,
             this::handleError

@@ -10,9 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.kakaovx.homet.user.App
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.di.api.ApiModule
-import com.kakaovx.homet.user.component.di.api.DaggerApiComponent
-import com.kakaovx.homet.user.component.network.api.GitHubApi
+import com.kakaovx.homet.user.component.api.Api
+import com.kakaovx.homet.user.component.di.component.DaggerApiComponent
+import com.kakaovx.homet.user.component.di.module.ApiModule
+import com.kakaovx.homet.user.component.di.module.NetworkModule
+import com.kakaovx.homet.user.component.di.module.PreferenceModule
+import com.kakaovx.homet.user.component.di.module.ViewModelModule
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.Log
@@ -26,11 +29,9 @@ class SplashFragment : Fragment() {
     private val viewDisposable = AppFragmentAutoClearedDisposable(this)
 
     @Inject
-    lateinit var api: GitHubApi
+    lateinit var api: Api
 
-    lateinit var viewModelFactory: SplashViewModelFactory
-    lateinit var viewModel: SplashViewModel
-
+    private lateinit var viewModel: SplashViewModel
     private val autoLogin = true
 
     companion object {
@@ -64,24 +65,28 @@ class SplashFragment : Fragment() {
 
         context?.run {
             DaggerApiComponent.builder()
-                .appComponent(App.getAppComponent(this)).apiModule(ApiModule())
-                .build().inject(this@SplashFragment)
+                .appComponent(App.getAppComponent(this))
+                .apiModule(ApiModule())
+                .networkModule(NetworkModule())
+                .preferenceModule(PreferenceModule())
+                .viewModelModule(ViewModelModule())
+                .build()
+                .inject(this@SplashFragment)
         }
 
-        viewModelFactory = SplashViewModelFactory(api)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[SplashViewModel::class.java]
+        viewModel = ViewModelProviders.of(this, SplashViewModelFactory(api.restApi))[SplashViewModel::class.java]
 
         lifecycle += viewDisposable
         viewDisposable += viewModel.startLogin(autoLogin)
 
-        viewModel.autoLoginResponse.observe(this, Observer { it ->
+        viewModel.autoLoginResponse.observe(this, Observer {
             when (it) {
                 true -> viewDisposable += viewModel.startLoginProcess()
                 false -> viewModel.startLoginForm()
             }
         })
 
-        viewModel.response.observe(this, Observer { it ->
+        viewModel.response.observe(this, Observer {
             when (it) {
                 true -> routeToMainPage()
                 false -> showLoginForm()
