@@ -48,6 +48,11 @@ abstract class DivisionTab<T> : RxLinearLayout {
         }}
     }
 
+    override fun onDetached() {
+        super.onDetached()
+        delegate = null
+    }
+
     interface Delegate <T> {
         fun onSelected(view:DivisionTab<T>, idx:Int){}
         fun onSelected(view:DivisionTab<T>, id:T){}

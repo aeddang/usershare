@@ -12,8 +12,8 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
     open val pagePresenter = PagePresenter(this, PageModel())
     open var currentPage: PageFragment? = null
         protected set
-
     protected lateinit var pageArea:ViewGroup
+
     @IdRes abstract fun getPageAreaId(): Int
     @StringRes abstract fun getPageExitMsg(): Int
 
@@ -32,6 +32,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
     override fun onDestroy() {
         super.onDestroy()
         currentPage = null
+        pagePresenter.onDestroy()
         onDestroyed()
     }
 

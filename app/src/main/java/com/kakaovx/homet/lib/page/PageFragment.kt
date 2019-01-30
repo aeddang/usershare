@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewPropertyAnimator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
@@ -19,13 +20,13 @@ abstract class PageFragment:Fragment(), Page {
         INIT, IN, OUT, POPUP
     }
     private var animationDuration = AnimationDuration.SHORT.duration
-    private var animationHandler: Handler = Handler()
     private var viewCreateRunnable: Runnable = Runnable {onCreateAnimation()}
     protected var animationCreateRunnable: Runnable = Runnable {didCreateAnimation()}
     protected var animationDestroyRunnable: Runnable = Runnable {didDestroyAnimation()}
     var pageID:Any? = null; internal set
     internal var delegate:Delegate? = null
     internal var pageType = PageType.INIT
+    private var animation: ViewPropertyAnimator? = null
 
     @CallSuper
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,7 +39,7 @@ abstract class PageFragment:Fragment(), Page {
         super.onViewCreated(view, savedInstanceState)
         onCreated()
         willCreateAnimation()
-        animationHandler.post(viewCreateRunnable)
+        onCreateAnimation()
     }
 
     @CallSuper
@@ -78,9 +79,10 @@ abstract class PageFragment:Fragment(), Page {
             PageType.OUT -> LinearInterpolator()
             PageType.POPUP -> DecelerateInterpolator()
         }
+        animation?.cancel()
         view?.let {
-            it.animate()
-            .translationX(0f)
+            animation = it.animate()
+            animation!!.translationX(0f)
             .translationY(0f).alpha(1f)
             .setInterpolator(interpolator)
             .setDuration(animationDuration)
@@ -96,7 +98,8 @@ abstract class PageFragment:Fragment(), Page {
         return onDestroyAnimation()
     }
     open fun onDestroyAnimation():Long {
-         view?.let {
+        animation?.cancel()
+        view?.let {
             var posX = 0f
             var posY = 0f
             var interpolator:Interpolator? = null
@@ -117,8 +120,8 @@ abstract class PageFragment:Fragment(), Page {
                     interpolator = DecelerateInterpolator()
                 }
             }
-            it.animate()
-                .translationX(posX)
+            animation = it.animate()
+            animation!!.translationX(posX)
                 .translationY(posY)
                 .setInterpolator(interpolator)
                 .setDuration(animationDuration)
@@ -138,8 +141,9 @@ abstract class PageFragment:Fragment(), Page {
             val parent = it.parent as ViewGroup?
             parent?.removeView(it)
         }
+        animation?.cancel()
+        animation = null
         delegate = null
-        animationHandler.removeCallbacks(viewCreateRunnable)
         onDestroyed()
         Log.d(PagePresenter.TAG,"onDestroyView")
     }

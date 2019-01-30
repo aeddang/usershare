@@ -1,6 +1,6 @@
 package com.kakaovx.homet.lib.page
 
-class PagePresenter<T>(val view: View<T>, private val model: Model<T>) {
+class PagePresenter<T>(val view: View<T>, internal val model: Model<T>) {
 
     companion object {
         internal const val TAG = "Page"
@@ -11,6 +11,11 @@ class PagePresenter<T>(val view: View<T>, private val model: Model<T>) {
             return currentInstence as PagePresenter<T>
         }
     }
+
+    internal fun onDestroy() {
+        model.onDestroy()
+    }
+
     var isNavigationShow = false
         internal set (newValue) { field = newValue }
 
@@ -97,6 +102,7 @@ class PagePresenter<T>(val view: View<T>, private val model: Model<T>) {
         fun removePopup(id:T)
         fun addPopup(id:T)
         fun getPopup():T?
+        fun onDestroy()
     }
 }
 

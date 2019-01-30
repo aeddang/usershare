@@ -10,6 +10,11 @@ class PageModel<T> : PagePresenter.Model<T> {
     private val params = Stack<Map<String, Any>>()
     private val popups = ArrayList<T>()
 
+    override fun onDestroy() {
+        currentHistoryStack = null
+        currentParamStack = null
+    }
+
     override fun addHistory(id: T, param:Map<String, Any>, isHistory:Boolean) {
         if(isHistory) {
             currentHistoryStack?.let { historys.push(it) }

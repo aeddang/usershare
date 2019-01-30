@@ -2,6 +2,7 @@ package com.kakaovx.homet.user.ui
 
 import com.kakaovx.homet.lib.page.PageActivity
 import com.kakaovx.homet.lib.page.PageFragment
+import com.kakaovx.homet.user.App
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.component.ui.skeleton.view.DivisionTab
@@ -27,6 +28,12 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
         pagePresenter.pageStart(PageID.MAIN)
         bottomTab.delegate = this
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        App.getRefWatcher(this).watch(this)
+    }
+
     override fun onSelected(view:DivisionTab<PageID>, id:PageID) {
         pagePresenter.pageChange(id)
     }
