@@ -1,7 +1,9 @@
 package com.kakaovx.homet.user.component.di.annotation
 
-import javax.inject.Scope
+import javax.inject.Qualifier
 
-@Scope
+@Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ComponentScope
+annotation class ComponentScope(
+    val value: String = ""
+)

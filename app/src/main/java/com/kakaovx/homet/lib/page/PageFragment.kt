@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.CallSuper
+import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,8 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import com.kakaovx.homet.lib.constant.AnimationDuration
-import dagger.android.support.DaggerFragment
 
-abstract class PageFragment:DaggerFragment(), Page {
+abstract class PageFragment:Fragment(), Page {
     enum class PageType {
         INIT, IN, OUT, POPUP
     }
@@ -31,6 +31,7 @@ abstract class PageFragment:DaggerFragment(), Page {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayoutResId(), container, false)
     }
+
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -139,7 +140,7 @@ abstract class PageFragment:DaggerFragment(), Page {
         }
         delegate = null
         animationHandler.removeCallbacks(viewCreateRunnable)
-        onDestroied()
+        onDestroyed()
         Log.d(PagePresenter.TAG,"onDestroyView")
     }
 

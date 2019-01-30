@@ -1,8 +1,10 @@
 package com.kakaovx.homet.user.ui
 
 import com.kakaovx.homet.lib.page.PageFragment
-import com.kakaovx.homet.lib.page.PagePresenter
-import com.kakaovx.homet.user.ui.page.*
+import com.kakaovx.homet.user.ui.page.PageMain
+import com.kakaovx.homet.user.ui.page.PageSub
+import com.kakaovx.homet.user.ui.page.PageViewPager
+import com.kakaovx.homet.user.ui.page.PopupTest
 
 class PageFactory{
 
@@ -18,27 +20,26 @@ class PageFactory{
         PageFactory.currentInstence = this
     }
 
+
     fun getPageByID(id:PageID): PageFragment {
         return when(id) {
             PageID.MAIN -> { PageMain() }
-
-            PageID.SUB -> { PageNetworkTest() }
-
+            PageID.SUB -> { PageSub() }
             PageID.TEST -> {
                 val param = HashMap<String,Any>()
                 param[ParamType.PAGES.key] = arrayOf(PageID.SUB,PageID.SUB,PageID.SUB)
                 PageViewPager().setParam(param)}
-
             PageID.POPUP_TEST -> { PopupTest() }
-
             else -> { PageMain() }
         }
     }
 }
 
-enum class PageID {
-    MAIN,SUB,TEST,
-    POPUP_TEST
+enum class PageID(val title:String) {
+    MAIN("home"),
+    SUB("sub"),
+    TEST("test"),
+    POPUP_TEST("popuptest")
 }
 
 enum class ParamType(val key:String) {

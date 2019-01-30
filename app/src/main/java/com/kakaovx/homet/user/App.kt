@@ -1,20 +1,29 @@
 package com.kakaovx.homet.user
-
+import android.support.v4.app.Fragment
 import com.facebook.stetho.Stetho
-import com.kakaovx.homet.user.component.di.component.DaggerAppComponent
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.Log
 import com.squareup.leakcanary.LeakCanary
+import com.kakaovx.homet.user.component.di.DaggerAppComponent
+import dagger.android.*
+import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.DispatchingAndroidInjector
+import javax.inject.Inject
 import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
 
-
-class App: DaggerApplication() {
+class App: DaggerApplication() , HasSupportFragmentInjector {
 
     private val TAG = javaClass.simpleName
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder().application(this).build()
+    @Inject
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+
+    override fun applicationInjector(): AndroidInjector<out App> {
+        return DaggerAppComponent.builder().create(this)
+    }
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+        return fragmentInjector
     }
 
     override fun onCreate() {
@@ -22,11 +31,7 @@ class App: DaggerApplication() {
 
         if (AppFeature.APP_MEMORY_DEBUG) {
             Log.d(TAG, "Start Memory Debug")
-            if (LeakCanary.isInAnalyzerProcess(this)) {
-                // This process is dedicated to LeakCanary for heap analysis.
-                // You should not init your app in this process.
-                return
-            }
+            if (LeakCanary.isInAnalyzerProcess(this)) return
             LeakCanary.install(this)
         }
 
