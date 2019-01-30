@@ -8,14 +8,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kakaovx.homet.user.App
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.network.api.GitHubApi
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.homet.user.util.plusAssign
-import dagger.android.AndroidInjection
+import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 class SplashFragment : Fragment() {
@@ -24,8 +22,7 @@ class SplashFragment : Fragment() {
 
     private val viewDisposable = AppFragmentAutoClearedDisposable(this)
 
-
-
+    @Inject
     lateinit var viewModelFactory: SplashViewModelFactory
     lateinit var viewModel: SplashViewModel
 
@@ -61,33 +58,26 @@ class SplashFragment : Fragment() {
         Log.d(TAG, "onActivityCreated()")
         routeToMainPage()
 
-        /*
-        context?.run {
-            DaggerApiComponent.builder()
-                .appComponent(App.getAppComponent(this)).apiModule(ApiModule())
-                .build().inject(this@SplashFragment)
-        }
+        AndroidSupportInjection.inject(this)
 
-        viewModelFactory = SplashViewModelFactory(api)
         viewModel = ViewModelProviders.of(this, viewModelFactory)[SplashViewModel::class.java]
 
         lifecycle += viewDisposable
         viewDisposable += viewModel.startLogin(autoLogin)
 
-        viewModel.autoLoginResponse.observe(this, Observer { it ->
+        viewModel.autoLoginResponse.observe(this, Observer {
             when (it) {
                 true -> viewDisposable += viewModel.startLoginProcess()
                 false -> viewModel.startLoginForm()
             }
         })
 
-        viewModel.response.observe(this, Observer { it ->
+        viewModel.response.observe(this, Observer {
             when (it) {
                 true -> routeToMainPage()
                 false -> showLoginForm()
             }
         })
-        */
     }
 
     override fun onDestroy() {

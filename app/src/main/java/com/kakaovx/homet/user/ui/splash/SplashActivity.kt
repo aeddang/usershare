@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.util.Log
+import dagger.android.AndroidInjection
 
 class SplashActivity : AppCompatActivity() {
 
@@ -12,6 +13,9 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate")
+
+        AndroidInjection.inject(this)
+
         setContentView(R.layout.splash_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

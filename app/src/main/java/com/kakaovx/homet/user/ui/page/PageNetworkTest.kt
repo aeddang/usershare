@@ -23,7 +23,7 @@ class PageNetworkTest : RxPageFragment() {
     }
 
     private fun handleComplete(data: ApiResponse) {
-        Log.i(TAG, "handleComplete"+ data.toString())
+        Log.i(TAG, "handleComplete ($data)")
         hideProgress()
     }
 

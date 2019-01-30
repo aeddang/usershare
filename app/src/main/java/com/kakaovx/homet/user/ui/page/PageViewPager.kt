@@ -1,6 +1,5 @@
 package com.kakaovx.homet.user.ui.page
 
-import com.kakaovx.homet.user.component.network.api.GitHubApi
 import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.preference.SettingPreference
 import com.kakaovx.homet.user.component.ui.module.PagePagerAdapter
@@ -27,7 +26,7 @@ class PageViewPager : ViewPagerPageFragment() {
     }
 
     private fun handleComplete(data: ApiResponse) {
-        Log.i(TAG, "handleComplete"+ data.toString())
+        Log.i(TAG, "handleComplete ($data)")
     }
 
     private fun handleError(err: Throwable) {

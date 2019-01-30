@@ -42,7 +42,7 @@ abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.D
     }
 
     @CallSuper
-    override fun onDestroied() {
+    override fun onDestroyed() {
         removeAnimation()
     }
 

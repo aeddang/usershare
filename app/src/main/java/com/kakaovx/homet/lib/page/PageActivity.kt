@@ -32,7 +32,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
     override fun onDestroy() {
         super.onDestroy()
         currentPage = null
-        onDestroied()
+        onDestroyed()
     }
 
     @CallSuper

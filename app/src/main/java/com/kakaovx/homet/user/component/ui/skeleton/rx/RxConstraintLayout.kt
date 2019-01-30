@@ -8,7 +8,7 @@ import android.view.View
 import com.kakaovx.homet.lib.page.Page
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class RxConstraintLayout : ConstraintLayout, rx, Page {
+abstract class RxConstraintLayout : ConstraintLayout, Rx, Page {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -36,6 +36,6 @@ abstract class RxConstraintLayout : ConstraintLayout, rx, Page {
         onDetached()
     }
 
-    final override fun onDestroied() {}
+    final override fun onDestroyed() {}
 
 }

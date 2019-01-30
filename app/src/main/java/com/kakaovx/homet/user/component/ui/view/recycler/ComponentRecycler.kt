@@ -3,13 +3,12 @@ package com.kakaovx.homet.user.component.ui.view.recycler
 import android.content.Context
 import android.util.AttributeSet
 import com.kakaovx.homet.user.component.network.RxObservableConverter
-import com.kakaovx.homet.user.component.network.api.GitHubApi
+import com.kakaovx.homet.user.component.network.api.RestfulApi
 import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.ui.module.ComponentAdapter
 import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.view.RecyclerFrameLayout
 import com.kakaovx.homet.user.util.Log
-import io.reactivex.Observable
 import kotlinx.android.synthetic.main.ui_recycler.view.*
 
 class ComponentRecycler: RecyclerFrameLayout {
@@ -24,7 +23,7 @@ class ComponentRecycler: RecyclerFrameLayout {
         recyclerView.adapter = ComponentAdapter().setDatas(arrayOf("AAA","BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
     }
 
-    override fun injectApi(api: GitHubApi) {
+    override fun injectApi(api: RestfulApi) {
 
         val params: MutableMap<String, String> = mutableMapOf()
         params["q"] = "apple"
@@ -37,9 +36,8 @@ class ComponentRecycler: RecyclerFrameLayout {
             ).apply { disposables?.add(this) }
     }
 
-
     private fun handleComplete(data: ApiResponse) {
-        Log.i(TAG, "handleComplete"+ data.toString())
+        Log.i(TAG, "handleComplete ($data)")
     }
 
     private fun handleError(err: Throwable) {

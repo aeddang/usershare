@@ -3,6 +3,7 @@ package com.kakaovx.homet.user.component.di.app
 import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.kakaovx.homet.user.component.network.api.RestfulApi
 import com.kakaovx.homet.user.component.network.error.Rx2ErrorHandlingCallAdapterFactory
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.constant.NetworkConst
@@ -16,8 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.net.CookieManager
 import java.net.CookiePolicy
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
-
 
 
 @Module
@@ -31,20 +30,17 @@ class NetworkModule {
     private val baseUrl: String = NetworkConst.HOMET_DEFAULT_REST_ADDRESS
 
     @Provides
-    @Singleton
-    fun provideCache(app: Application): Cache {
+    fun provideCache(application: Application): Cache {
         val cacheSize = 10 * 1024 * 1024 // 10MB
-        return Cache(app.cacheDir, cacheSize.toLong())
+        return Cache(application.cacheDir, cacheSize.toLong())
     }
 
     @Provides
-    @Singleton
     fun provideGs(): Gson {
         return GsonBuilder().create()
     }
 
     @Provides
-    @Singleton
     fun provideOkHttpClient(cache: Cache, interceptor: Interceptor): OkHttpClient {
         val logger = HttpLoggingInterceptor(
             HttpLoggingInterceptor.Logger { message ->
@@ -71,7 +67,6 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
     fun provideRetrofit(gs: Gson, client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addCallAdapterFactory(Rx2ErrorHandlingCallAdapterFactory.create())
@@ -82,12 +77,16 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
     fun provideInterceptor(): Interceptor {
         return Interceptor {
             val builder: Request.Builder = it.request().newBuilder()
             builder.header("User-Agent", "Android")
             it.proceed(builder.build())
         }
+    }
+
+    @Provides
+    fun provideRestApi(retrofit: Retrofit): RestfulApi {
+        return retrofit.create(RestfulApi::class.java)
     }
 }

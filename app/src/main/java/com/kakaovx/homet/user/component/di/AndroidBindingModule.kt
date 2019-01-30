@@ -1,13 +1,14 @@
 package com.kakaovx.homet.user.component.di
 
-import com.kakaovx.homet.lib.page.PageFragment
-import com.kakaovx.homet.user.component.annotation.ActivityScope
-import com.kakaovx.homet.user.component.annotation.PageScope
-import com.kakaovx.homet.user.component.di.page.ApiModule
+import com.kakaovx.homet.user.component.di.annotation.ActivityScope
+import com.kakaovx.homet.user.component.di.annotation.PageScope
 import com.kakaovx.homet.user.component.di.page.*
+import com.kakaovx.homet.user.component.di.page.viewmodel.SplashFragmentModule
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.page.PageMain
 import com.kakaovx.homet.user.ui.page.PageViewPager
+import com.kakaovx.homet.user.ui.splash.SplashActivity
+import com.kakaovx.homet.user.ui.splash.SplashFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -16,19 +17,28 @@ internal abstract class AndroidBindingModule {
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [])
-    internal abstract fun mainActivity(): MainActivity
+    internal abstract fun bindSplashActivity(): SplashActivity
 
     @PageScope
     @ContributesAndroidInjector(modules = [
         FragmentModule::class,
-        ApiModule::class
+        SplashFragmentModule::class
+    ])
+    internal abstract fun bindSplashFragment(): SplashFragment
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [])
+    internal abstract fun mainActivity(): MainActivity
+
+    @PageScope
+    @ContributesAndroidInjector(modules = [
+        FragmentModule::class
     ])
     internal abstract fun pageMain(): PageMain
 
     @PageScope
     @ContributesAndroidInjector(modules = [
         FragmentModule::class,
-        ApiModule::class,
         AdapterModule::class,
         LayoutManagerModule::class,
         PagePagerAdapterModule::class,

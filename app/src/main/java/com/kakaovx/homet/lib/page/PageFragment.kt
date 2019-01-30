@@ -140,7 +140,7 @@ abstract class PageFragment:Fragment(), Page {
         }
         delegate = null
         animationHandler.removeCallbacks(viewCreateRunnable)
-        onDestroied()
+        onDestroyed()
         Log.d(PagePresenter.TAG,"onDestroyView")
     }
 

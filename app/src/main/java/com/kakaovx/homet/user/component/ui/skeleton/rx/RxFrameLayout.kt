@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import com.kakaovx.homet.lib.page.Page
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class RxFrameLayout : FrameLayout, rx, Page {
+abstract class RxFrameLayout : FrameLayout, Rx, Page {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -35,5 +35,5 @@ abstract class RxFrameLayout : FrameLayout, rx, Page {
         onDetached()
     }
 
-    final override fun onDestroied() {}
+    final override fun onDestroyed() {}
 }

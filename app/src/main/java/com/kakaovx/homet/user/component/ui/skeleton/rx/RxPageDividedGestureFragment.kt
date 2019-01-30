@@ -4,7 +4,7 @@ import android.support.annotation.CallSuper
 import com.kakaovx.homet.lib.page.PageDividedGestureFragment
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class RxPageDividedGestureFragment : PageDividedGestureFragment(), rx {
+abstract class RxPageDividedGestureFragment : PageDividedGestureFragment(), Rx {
 
     protected val disposables by lazy { CompositeDisposable() }
 
@@ -16,7 +16,7 @@ abstract class RxPageDividedGestureFragment : PageDividedGestureFragment(), rx {
 
 
     @CallSuper
-    override fun onDestroied() {
+    override fun onDestroyed() {
         disposables.clear()
         super.onDestroy()
     }

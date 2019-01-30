@@ -4,7 +4,7 @@ import android.support.annotation.CallSuper
 import com.kakaovx.homet.lib.page.PageFragment
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class RxPageFragment : PageFragment() , rx{
+abstract class RxPageFragment : PageFragment() , Rx {
 
     protected val disposables by lazy { CompositeDisposable() }
 
@@ -14,7 +14,7 @@ abstract class RxPageFragment : PageFragment() , rx{
     }
 
     @CallSuper
-    override fun onDestroied() {
+    override fun onDestroyed() {
         disposables.clear()
         super.onDestroy()
     }

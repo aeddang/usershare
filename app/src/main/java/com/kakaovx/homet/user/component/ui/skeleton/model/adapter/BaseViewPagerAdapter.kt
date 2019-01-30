@@ -3,8 +3,6 @@ package com.kakaovx.homet.user.component.ui.skeleton.model.adapter
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
-import android.support.v4.view.ViewPager
-
 
 
 abstract class BaseViewPagerAdapter<V:View,T>: PagerAdapter() {

@@ -21,6 +21,7 @@ class App: DaggerApplication() , HasSupportFragmentInjector {
     override fun applicationInjector(): AndroidInjector<out App> {
         return DaggerAppComponent.builder().create(this)
     }
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return fragmentInjector
     }

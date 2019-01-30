@@ -8,5 +8,5 @@ interface Page {
     fun onCreated(){}
     fun onAttached(){}
     fun onDetached(){}
-    fun onDestroied(){}
+    fun onDestroyed(){}
 }

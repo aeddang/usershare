@@ -1,8 +1,10 @@
 package com.kakaovx.homet.user.ui
 
 import com.kakaovx.homet.lib.page.PageFragment
-import com.kakaovx.homet.lib.page.PagePresenter
-import com.kakaovx.homet.user.ui.page.*
+import com.kakaovx.homet.user.ui.page.PageMain
+import com.kakaovx.homet.user.ui.page.PageSub
+import com.kakaovx.homet.user.ui.page.PageViewPager
+import com.kakaovx.homet.user.ui.page.PopupTest
 
 class PageFactory{
 

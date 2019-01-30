@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import com.kakaovx.homet.lib.page.Page
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class RxLinearLayout : LinearLayout, rx, Page {
+abstract class RxLinearLayout : LinearLayout, Rx, Page {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -35,5 +35,5 @@ abstract class RxLinearLayout : LinearLayout, rx, Page {
         onDetached()
     }
 
-    final override fun onDestroied() {}
+    final override fun onDestroyed() {}
 }

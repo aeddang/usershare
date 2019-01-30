@@ -34,7 +34,7 @@ class PopupTest : RxPageDividedGestureFragment() {
     }
 
     private fun handleComplete(data: ApiResponse) {
-        Log.i(TAG, "handleComplete"+ data.toString())
+        Log.i(TAG, "handleComplete ($data)")
     }
 
     private fun handleError(err: Throwable) {

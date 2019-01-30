@@ -3,19 +3,20 @@ package com.kakaovx.homet.user.ui.splash
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.network.RetryPolicy
-import com.kakaovx.homet.user.component.network.api.GitHubApi
 import com.kakaovx.homet.user.component.network.model.ApiResponse
+import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.util.Log
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 import java.util.concurrent.TimeUnit
 
-class SplashViewModel(private val restApi: GitHubApi) : ViewModel() {
+class SplashViewModel(repo: Repository) : ViewModel() {
 
     val TAG = javaClass.simpleName
+
+    private val restApi = repo.restApi
 
     val response: MutableLiveData<Boolean> = MutableLiveData()
     val autoLoginResponse: MutableLiveData<Boolean> = MutableLiveData()
