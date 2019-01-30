@@ -1,6 +1,6 @@
 package com.kakaovx.homet.user.constant
 
-object NetworkConst {
+object ApiConst {
 
     /**
      * Rest Api Info

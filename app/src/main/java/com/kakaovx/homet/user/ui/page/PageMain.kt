@@ -22,7 +22,6 @@ class PageMain : RxPageFragment() {
         super.onCreated()
         AndroidSupportInjection.inject(this)
         listComponent.injectApi(repository.restApi)
-
         buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>().pageChange(
             PageID.TEST) }
         buttonTestB.setOnClickListener{ PagePresenter.getInstence<PageID>().pageChange(

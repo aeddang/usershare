@@ -23,7 +23,6 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     override fun onCreated() {
         super.onCreated()
         AndroidInjection.inject(this)
-
         repository.setting.isPushEnable()
         pagePresenter.pageStart(PageID.MAIN)
         bottomTab.delegate = this

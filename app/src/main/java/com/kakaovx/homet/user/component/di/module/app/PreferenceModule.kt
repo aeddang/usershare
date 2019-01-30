@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.di.app
+package com.kakaovx.homet.user.component.di.module.app
 
 import android.app.Application
 import com.kakaovx.homet.user.component.preference.SettingPreference

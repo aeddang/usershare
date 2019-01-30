@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.di.app
+package com.kakaovx.homet.user.component.di.module.app
 
 import com.kakaovx.homet.user.component.network.api.RestfulApi
 import com.kakaovx.homet.user.component.preference.SettingPreference

@@ -1,10 +1,10 @@
 package com.kakaovx.homet.user.component.di
 
 import com.kakaovx.homet.user.App
-import com.kakaovx.homet.user.component.di.app.AppModule
-import com.kakaovx.homet.user.component.di.app.NetworkModule
-import com.kakaovx.homet.user.component.di.app.PreferenceModule
-import com.kakaovx.homet.user.component.di.app.RepositoryModule
+import com.kakaovx.homet.user.component.di.module.app.AppModule
+import com.kakaovx.homet.user.component.di.module.app.NetworkModule
+import com.kakaovx.homet.user.component.di.module.app.PreferenceModule
+import com.kakaovx.homet.user.component.di.module.app.RepositoryModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule

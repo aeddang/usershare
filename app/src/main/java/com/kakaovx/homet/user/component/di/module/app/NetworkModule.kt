@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.di.app
+package com.kakaovx.homet.user.component.di.module.app
 
 import android.app.Application
 import com.google.gson.Gson
@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder
 import com.kakaovx.homet.user.component.network.api.RestfulApi
 import com.kakaovx.homet.user.component.network.error.Rx2ErrorHandlingCallAdapterFactory
 import com.kakaovx.homet.user.constant.AppFeature
-import com.kakaovx.homet.user.constant.NetworkConst
+import com.kakaovx.homet.user.constant.ApiConst
 import com.kakaovx.homet.user.util.Log
 import dagger.Module
 import dagger.Provides
@@ -27,7 +27,7 @@ class NetworkModule {
     private val READ_TIMEOUT: Long = 30
     private val TAG = javaClass.simpleName
 
-    private val baseUrl: String = NetworkConst.HOMET_DEFAULT_REST_ADDRESS
+    private val baseUrl: String = ApiConst.HOMET_DEFAULT_REST_ADDRESS
 
     @Provides
     fun provideCache(application: Application): Cache {
