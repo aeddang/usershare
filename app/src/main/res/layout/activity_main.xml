@@ -10,13 +10,13 @@
             android:layout_height="match_parent"
             android:id="@+id/area">
 
-            <com.kakaovx.homet.user.ui.view.tab.BottomTab
+            <com.kakaovx.homet.user.component.ui.view.tab.BottomTab
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/area_bottom"
                     android:layout_gravity="bottom"
                     android:id="@+id/bottomTab">
-            </com.kakaovx.homet.user.ui.view.tab.BottomTab>
+            </com.kakaovx.homet.user.component.ui.view.tab.BottomTab>
     </FrameLayout>
 
 

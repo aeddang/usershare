@@ -11,35 +11,27 @@ import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 import dagger.android.AndroidInjector
 
-
-
-
 class App: DaggerApplication() , HasSupportFragmentInjector {
-
 
     private val TAG = javaClass.simpleName
 
     @Inject
-    lateinit var mFragmentInjector: DispatchingAndroidInjector<Fragment>
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun applicationInjector(): AndroidInjector<out App> {
         return DaggerAppComponent.builder().create(this)
     }
-
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
-        return mFragmentInjector
+        return fragmentInjector
     }
+
 
     override fun onCreate() {
         super.onCreate()
 
         if (AppFeature.APP_MEMORY_DEBUG) {
             Log.d(TAG, "Start Memory Debug")
-            if (LeakCanary.isInAnalyzerProcess(this)) {
-                // This process is dedicated to LeakCanary for heap analysis.
-                // You should not init your app in this process.
-                return
-            }
+            if (LeakCanary.isInAnalyzerProcess(this)) return
             LeakCanary.install(this)
         }
 

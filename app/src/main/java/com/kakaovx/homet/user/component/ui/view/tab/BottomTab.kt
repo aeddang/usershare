@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.ui.view.tab
+package com.kakaovx.homet.user.component.ui.view.tab
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View

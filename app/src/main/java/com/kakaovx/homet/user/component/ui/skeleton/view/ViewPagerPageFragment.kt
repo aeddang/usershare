@@ -2,11 +2,11 @@ package com.kakaovx.homet.user.component.ui.skeleton.view
 
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.ui.skeleton.injecter.InjectablePageFragment
+import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.ui.PageID
 import com.kakaovx.homet.user.ui.ParamType
 
-abstract class ViewPagerPageFragment : InjectablePageFragment() {
+abstract class ViewPagerPageFragment : RxPageFragment() {
 
     protected lateinit var pages:Array<PageID>
 

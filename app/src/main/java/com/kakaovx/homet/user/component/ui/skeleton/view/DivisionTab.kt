@@ -3,9 +3,9 @@ package com.kakaovx.homet.user.component.ui.skeleton.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import com.kakaovx.homet.user.component.ui.skeleton.injecter.InjectableLinearLayout
+import com.kakaovx.homet.user.component.ui.skeleton.rx.RxLinearLayout
 
-abstract class DivisionTab<T> : InjectableLinearLayout {
+abstract class DivisionTab<T> : RxLinearLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
@@ -39,6 +39,7 @@ abstract class DivisionTab<T> : InjectableLinearLayout {
     }
 
     override fun onCreated() {
+        datas = getIDDatas()
         tabs = getTabMenus()
         tabs.forEach { it.setOnClickListener{view ->
             selectedTab = view

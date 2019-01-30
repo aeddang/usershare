@@ -5,10 +5,10 @@ import android.view.View
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.network.model.ApiResponse
-import com.kakaovx.homet.user.component.ui.skeleton.injecter.InjectablePageFragment
+import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import kotlinx.android.synthetic.main.page_network.*
 
-class PageNetworkTest : InjectablePageFragment() {
+class PageNetworkTest : RxPageFragment() {
 
     private val TAG = javaClass.simpleName
 

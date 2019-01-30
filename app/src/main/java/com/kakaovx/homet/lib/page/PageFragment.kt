@@ -13,7 +13,6 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import com.kakaovx.homet.lib.constant.AnimationDuration
-import dagger.android.support.AndroidSupportInjection
 
 abstract class PageFragment:Fragment(), Page {
     enum class PageType {

@@ -1,16 +1,15 @@
 package com.kakaovx.homet.user.ui.page
 
-import android.arch.lifecycle.ViewModelProviders
 import android.view.View
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.lib.page.PageGestureView
 import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.network.viewmodel.GithubModel
-import com.kakaovx.homet.user.component.ui.skeleton.injecter.InjectablePageDividedGestureFragment
+import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageDividedGestureFragment
 import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.popup_test.*
 
-class PopupTest : InjectablePageDividedGestureFragment() {
+class PopupTest : RxPageDividedGestureFragment() {
 
     private val TAG = javaClass.simpleName
 

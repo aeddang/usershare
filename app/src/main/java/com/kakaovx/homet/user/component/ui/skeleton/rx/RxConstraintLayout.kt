@@ -1,14 +1,14 @@
-package com.kakaovx.homet.user.component.ui.skeleton.injecter
+package com.kakaovx.homet.user.component.ui.skeleton.rx
 
 import android.content.Context
 import android.support.annotation.CallSuper
+import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
 import com.kakaovx.homet.lib.page.Page
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class InjectableLinearLayout : LinearLayout, Inject, Page {
+abstract class RxConstraintLayout : ConstraintLayout, rx, Page {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -25,8 +25,8 @@ abstract class InjectableLinearLayout : LinearLayout, Inject, Page {
         disposables = CompositeDisposable()
         onAttached()
         onSubscribe()
-        onInject()
     }
+
 
     @CallSuper
     override fun onDetachedFromWindow() {
@@ -37,4 +37,5 @@ abstract class InjectableLinearLayout : LinearLayout, Inject, Page {
     }
 
     final override fun onDestroied() {}
+
 }
