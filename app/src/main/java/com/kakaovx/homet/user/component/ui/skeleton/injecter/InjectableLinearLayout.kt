@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import com.kakaovx.homet.lib.page.Page
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class InjectableLinearLayout : LinearLayout, Injectable, Page {
+abstract class InjectableLinearLayout : LinearLayout, Inject, Page {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -16,7 +16,6 @@ abstract class InjectableLinearLayout : LinearLayout, Injectable, Page {
 
     init {
         View.inflate(context, getLayoutResId(), this)
-        inject()
         onCreated()
     }
 
@@ -26,6 +25,7 @@ abstract class InjectableLinearLayout : LinearLayout, Injectable, Page {
         disposables = CompositeDisposable()
         onAttached()
         onSubscribe()
+        onInject()
     }
 
     @CallSuper

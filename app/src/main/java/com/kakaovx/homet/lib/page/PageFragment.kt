@@ -13,6 +13,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import com.kakaovx.homet.lib.constant.AnimationDuration
+import dagger.android.support.AndroidSupportInjection
 
 abstract class PageFragment:Fragment(), Page {
     enum class PageType {
@@ -31,6 +32,7 @@ abstract class PageFragment:Fragment(), Page {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayoutResId(), container, false)
     }
+
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

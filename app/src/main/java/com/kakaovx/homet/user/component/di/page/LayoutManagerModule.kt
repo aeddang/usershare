@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.di.ui.module
+package com.kakaovx.homet.user.component.di.page
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
@@ -8,27 +8,19 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class LayoutManagerModule (private val context:Context){
-    @Provides
-    @ComponentScope
-    fun provideLayoutManagerUtil(): LayoutManagerUtil {
-        return LayoutManagerUtil(10)
-    }
+class LayoutManagerModule{
 
     @Provides
-    @ComponentScope
-    fun provideHorizontalLinearLayoutManager(layoutManagerUtil:LayoutManagerUtil): HorizontalLinearLayoutManager {
+    fun provideHorizontalLinearLayoutManager(context:Context): HorizontalLinearLayoutManager {
         return HorizontalLinearLayoutManager(context)
     }
 
     @Provides
-    @ComponentScope
-    fun provideVerticalLinearLayoutManager(layoutManagerUtil:LayoutManagerUtil): VerticalLinearLayoutManager {
+    fun provideVerticalLinearLayoutManager(context:Context): VerticalLinearLayoutManager {
         return VerticalLinearLayoutManager(context)
     }
 
 }
-data class LayoutManagerUtil(val size:Int)
 
 class HorizontalLinearLayoutManager(context: Context): SpanningLinearLayoutManager(context,  LinearLayoutManager.HORIZONTAL, false)
 class VerticalLinearLayoutManager(context: Context): SpanningLinearLayoutManager(context,  LinearLayoutManager.VERTICAL, false)

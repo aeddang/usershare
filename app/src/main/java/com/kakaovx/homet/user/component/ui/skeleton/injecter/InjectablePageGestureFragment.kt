@@ -2,9 +2,10 @@ package com.kakaovx.homet.user.component.ui.skeleton.injecter
 
 import android.support.annotation.CallSuper
 import com.kakaovx.homet.lib.page.PageGestureFragment
+import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class InjectablePageGestureFragment : PageGestureFragment() , Injectable {
+abstract class InjectablePageGestureFragment : PageGestureFragment(), Inject {
 
     protected val disposables by lazy { CompositeDisposable() }
 
@@ -12,8 +13,8 @@ abstract class InjectablePageGestureFragment : PageGestureFragment() , Injectabl
     @CallSuper
     override fun onCreated() {
         super.onCreated()
-        inject()
         onSubscribe()
+        onInject()
     }
 
     @CallSuper

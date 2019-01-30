@@ -14,13 +14,13 @@
             android:layout_width="match_parent"
             android:id="@+id/buttonTestB" android:layout_height="wrap_content"/>
 
-    <com.kakaovx.homet.user.component.ui.view.recycler.BannerRecycler
+    <com.kakaovx.homet.user.ui.view.recycler.BannerRecycler
             android:layout_width="match_parent"
             android:layout_height="100dp" android:id="@+id/listBanner">
-    </com.kakaovx.homet.user.component.ui.view.recycler.BannerRecycler>
+    </com.kakaovx.homet.user.ui.view.recycler.BannerRecycler>
 
-    <com.kakaovx.homet.user.component.ui.view.recycler.ComponentRecycler
+    <com.kakaovx.homet.user.ui.view.recycler.ComponentRecycler
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:id="@+id/listComponent">
-    </com.kakaovx.homet.user.component.ui.view.recycler.ComponentRecycler>
+    </com.kakaovx.homet.user.ui.view.recycler.ComponentRecycler>
 </LinearLayout>

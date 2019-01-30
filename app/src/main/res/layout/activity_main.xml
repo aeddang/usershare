@@ -10,35 +10,14 @@
             android:layout_height="match_parent"
             android:id="@+id/area">
 
-            <com.kakaovx.homet.user.component.ui.view.tab.BottomTab
+            <com.kakaovx.homet.user.ui.view.tab.BottomTab
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/area_bottom"
                     android:layout_gravity="bottom"
                     android:id="@+id/bottomTab">
-            </com.kakaovx.homet.user.component.ui.view.tab.BottomTab>
+            </com.kakaovx.homet.user.ui.view.tab.BottomTab>
     </FrameLayout>
 
 
-
-    <FrameLayout
-            android:id="@+id/navigationBg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/transparent">
-    </FrameLayout>
-
-    <com.kakaovx.homet.lib.page.PageGestureView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <FrameLayout
-                android:id="@+id/contents"
-                android:layout_width="300dp"
-                android:layout_height="match_parent"
-                android:background="#ff0"
-                android:layout_gravity="right">
-        </FrameLayout>
-    </com.kakaovx.homet.lib.page.PageGestureView>
 </FrameLayout>

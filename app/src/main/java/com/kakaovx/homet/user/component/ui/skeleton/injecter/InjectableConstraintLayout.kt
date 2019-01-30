@@ -6,9 +6,10 @@ import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
 import com.kakaovx.homet.lib.page.Page
+import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class InjectableConstraintLayout : ConstraintLayout, Injectable, Page {
+abstract class InjectableConstraintLayout : ConstraintLayout, Inject, Page {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -16,7 +17,6 @@ abstract class InjectableConstraintLayout : ConstraintLayout, Injectable, Page {
 
     init {
         View.inflate(context, getLayoutResId(), this)
-        inject()
         onCreated()
     }
 
@@ -26,7 +26,9 @@ abstract class InjectableConstraintLayout : ConstraintLayout, Injectable, Page {
         disposables = CompositeDisposable()
         onAttached()
         onSubscribe()
+        onInject()
     }
+
 
     @CallSuper
     override fun onDetachedFromWindow() {

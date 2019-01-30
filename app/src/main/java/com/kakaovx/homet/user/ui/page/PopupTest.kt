@@ -6,11 +6,11 @@ import com.kakaovx.homet.user.R
 import com.kakaovx.homet.lib.page.PageGestureView
 import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.network.viewmodel.GithubModel
-import com.kakaovx.homet.user.component.ui.skeleton.injecter.ApiPageDividedGestureFragment
+import com.kakaovx.homet.user.component.ui.skeleton.injecter.InjectablePageDividedGestureFragment
 import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.popup_test.*
 
-class PopupTest : ApiPageDividedGestureFragment() {
+class PopupTest : InjectablePageDividedGestureFragment() {
 
     private val TAG = javaClass.simpleName
 
@@ -24,12 +24,14 @@ class PopupTest : ApiPageDividedGestureFragment() {
 
     override fun onCreated() {
         super.onCreated()
-        api = ViewModelProviders.of(this, apiFactory)[GithubModel::class.java]
+        /*
+        //api = ViewModelProviders.of(this, apiFactory)[GithubModel::class.java]
 
         api.getSearchRepositories().subscribe(
             this::handleComplete,
             this::handleError
         ).apply { disposables.add(this) }
+        */
     }
 
     private fun handleComplete(data: ApiResponse) {

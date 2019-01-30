@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.di.api
+package com.kakaovx.homet.user.component.di.app
 
 import android.app.Application
 import com.google.gson.Gson
@@ -32,9 +32,9 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideCache(application: Application): Cache {
+    fun provideCache(app: Application): Cache {
         val cacheSize = 10 * 1024 * 1024 // 10MB
-        return Cache(application.cacheDir, cacheSize.toLong())
+        return Cache(app.cacheDir, cacheSize.toLong())
     }
 
     @Provides

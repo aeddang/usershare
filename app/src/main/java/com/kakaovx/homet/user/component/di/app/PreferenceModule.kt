@@ -7,12 +7,11 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class PreferenceModule(private val app: Application) {
+class PreferenceModule{
 
     @Provides
     @Singleton
-    fun provideSettingPreference(): SettingPreference {
+    fun provideSettingPreference(app: Application): SettingPreference {
         return SettingPreference(app)
     }
-
 }

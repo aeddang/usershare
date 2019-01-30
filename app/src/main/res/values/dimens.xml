@@ -3,6 +3,8 @@
     <dimen name="area_header">50dp</dimen>
     <dimen name="area_bottom">50dp</dimen>
 
+    <dimen name="tabs_height">50dp</dimen>
+
     <dimen name="margin_ultra">25dp</dimen>
     <dimen name="margin_big">20dp</dimen>
     <dimen name="margin_mid">15dp</dimen>

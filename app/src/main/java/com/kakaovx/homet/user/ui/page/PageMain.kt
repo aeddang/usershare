@@ -12,10 +12,6 @@ class PageMain : InjectablePageFragment() {
 
     override fun getLayoutResId(): Int { return R.layout.page_main }
 
-    override fun inject() {
-
-    }
-
     override fun onCreated() {
         super.onCreated()
         buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>().pageChange(

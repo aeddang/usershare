@@ -13,17 +13,9 @@ class PageSub : InjectablePageFragment() {
 
     override fun getLayoutResId(): Int { return R.layout.page_sub }
 
-    override fun inject() {
-
-    }
 
     override fun onCreated() {
         super.onCreated()
         buttonBack.setOnClickListener{ PagePresenter.getInstence<PageID>().onBack() }
     }
-
-    override fun onDestroied() {
-        super.onDestroied()
-    }
-
 }

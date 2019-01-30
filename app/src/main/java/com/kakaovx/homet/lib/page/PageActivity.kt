@@ -3,8 +3,10 @@ package com.kakaovx.homet.lib.page
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.IdRes
+import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
+import android.widget.Toast
 
 abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, PageFragment.Delegate, Page {
     open val pagePresenter = PagePresenter(this, PageModel())
@@ -13,10 +15,14 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
 
     protected lateinit var pageArea:ViewGroup
     @IdRes abstract fun getPageAreaId(): Int
+    @StringRes abstract fun getPageExitMsg(): Int
+
+    private var exitCount = 0
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(getLayoutResId())
         pageArea = findViewById(getPageAreaId())
         onCreated()
@@ -49,7 +55,16 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         return Pair(pageArea.width.toFloat(),pageArea.height.toFloat())
     }
 
-    abstract fun onBackPressedAction(): Boolean
+    protected fun resetBackPressedAction() {
+        exitCount = 0
+    }
+
+    protected fun onBackPressedAction(): Boolean {
+        if(exitCount == 1) return false
+        exitCount ++
+        Toast.makeText(this,getPageExitMsg(),Toast.LENGTH_LONG).show()
+        return true
+    }
     override fun onBackPressed() {
         getCurentFragment()?.let{ if(!it.isBackAble())return }
         if(!pagePresenter.onBack()) return
@@ -57,8 +72,9 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         super.onBackPressed()
     }
 
-    abstract fun <T> getPageByID(id:T): PageFragment
+    abstract fun getPageByID(id:T): PageFragment
     final override fun onPageStart(id:T) {
+        resetBackPressedAction()
         val willChangePage = getPageByID(id)
         willChangePage.pageID = id
         willChangePage.delegate = this
@@ -66,6 +82,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commit()
     }
     final override fun onPageChange(id:T, param:Map<String, Any>, isBack:Boolean) {
+        resetBackPressedAction()
         val willChangePage = getPageByID(id)
         willChangePage.pageID = id
         willChangePage.delegate = this
@@ -83,8 +100,9 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         currentPage = v
     }
 
-    abstract fun <T> getPopupByID(id:T): PageFragment
+    abstract fun getPopupByID(id:T): PageFragment
     final override fun onOpenPopup(id:T, param:Map<String, Any>) {
+        resetBackPressedAction()
         val popup = getPopupByID(id)
         popup.pageID = id
         popup.pageType = PageFragment.PageType.POPUP

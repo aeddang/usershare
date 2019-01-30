@@ -4,13 +4,11 @@ import com.kakaovx.homet.user.util.Log
 import android.view.View
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.network.RxObservableConverter
 import com.kakaovx.homet.user.component.network.model.ApiResponse
-import com.kakaovx.homet.user.component.ui.skeleton.injecter.ApiPageFragment
+import com.kakaovx.homet.user.component.ui.skeleton.injecter.InjectablePageFragment
 import kotlinx.android.synthetic.main.page_network.*
-import java.util.*
 
-class PageNetworkTest : ApiPageFragment() {
+class PageNetworkTest : InjectablePageFragment() {
 
     private val TAG = javaClass.simpleName
 
@@ -42,6 +40,7 @@ class PageNetworkTest : ApiPageFragment() {
     }
 
     fun getAllUsers(v: Unit) {
+        /*
         val params: MutableMap<String, String> = mutableMapOf()
         params["q"] = "apple"
         api.searchRepositories(params)
@@ -52,5 +51,6 @@ class PageNetworkTest : ApiPageFragment() {
             this::handleComplete,
             this::handleError
         ).apply { disposables.add(this) }
+        */
     }
 }

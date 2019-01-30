@@ -4,7 +4,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.kakaovx.homet.lib.page.PageFragment
 
-abstract class BasePagePagerAdapter<T>(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager) {
+abstract class BasePagePagerAdapter<T>(fragmentManager: FragmentManager?): FragmentPagerAdapter(fragmentManager) {
 
     lateinit var pages: Array<T>
 

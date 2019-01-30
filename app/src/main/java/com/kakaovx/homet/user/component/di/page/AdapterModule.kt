@@ -1,38 +1,31 @@
-package com.kakaovx.homet.user.component.di.ui.module
+package com.kakaovx.homet.user.component.di.page
 
 import android.view.ViewGroup
-import com.kakaovx.homet.user.component.annotation.ComponentScope
+import com.kakaovx.homet.user.component.annotation.PageScope
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.MultipleAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.SingleAdapter
-import com.kakaovx.homet.user.component.ui.view.item.BannerListItem
+import com.kakaovx.homet.user.ui.view.item.BannerListItem
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
-import com.kakaovx.homet.user.component.ui.view.item.ImageListItem
+import com.kakaovx.homet.user.ui.view.item.ImageListItem
 import dagger.Module
 import dagger.Provides
 
 @Module
 class AdapterModule {
-    @Provides
-    @ComponentScope
-    fun provideAdapterUtil(): AdapterUtil {
-        return AdapterUtil(10)
-    }
 
     @Provides
-    @ComponentScope
-    fun provideBannerAdapter(adapterUtil: AdapterUtil): BannerAdapter {
+    @PageScope
+    fun provideBannerAdapter(): BannerAdapter {
         return BannerAdapter()
     }
 
     @Provides
-    @ComponentScope
-    fun provideComponentAdapter(adapterUtil: AdapterUtil): ComponentAdapter {
+    @PageScope
+    fun provideComponentAdapter(): ComponentAdapter {
         return ComponentAdapter()
     }
 }
-
-data class AdapterUtil(val size:Int)
 
 class BannerAdapter: SingleAdapter<String>(true,10) {
     override fun getListCell(parent: ViewGroup): ListItem {

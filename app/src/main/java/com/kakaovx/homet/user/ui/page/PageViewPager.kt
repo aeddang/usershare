@@ -1,47 +1,42 @@
 package com.kakaovx.homet.user.ui.page
 
-import android.support.v4.app.FragmentManager
-import com.kakaovx.homet.lib.page.PageFragment
-import com.kakaovx.homet.user.R
-
-import com.kakaovx.homet.user.component.ui.skeleton.injecter.InjectablePageFragment
-import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BasePagePagerAdapter
-import com.kakaovx.homet.user.ui.PageFactory
-import com.kakaovx.homet.user.ui.PageID
-import com.kakaovx.homet.user.ui.ParamType
+import com.kakaovx.homet.user.component.di.page.PagePagerAdapter
+import com.kakaovx.homet.user.component.network.api.GitHubApi
+import com.kakaovx.homet.user.component.network.model.ApiResponse
+import com.kakaovx.homet.user.component.preference.SettingPreference
+import com.kakaovx.homet.user.component.ui.skeleton.view.ViewPagerPageFragment
+import com.kakaovx.homet.user.util.Log
+import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.page_viewpager.*
 
 
-class PageViewPager : InjectablePageFragment() {
+class PageViewPager : ViewPagerPageFragment() {
 
     private val TAG = javaClass.simpleName
-    private lateinit var pages:Array<PageID>
-    override fun getLayoutResId(): Int { return R.layout.page_viewpager }
-    override open fun setParam(param:Map<String,Any>): PageFragment {
-        pages = param[ParamType.PAGES.key] as Array<PageID>
-        return this
-    }
-    override fun inject() {
-    }
+
+    @Inject lateinit var viewAdapter: PagePagerAdapter
+    @Inject lateinit var api:GitHubApi
+    @Inject lateinit var setting: SettingPreference
 
     override fun onCreated() {
         super.onCreated()
-        fragmentManager?.let {
-            val adapt = PagePagerAdapter(it).setDatas(pages)
-            viewPager.adapter = adapt
-        }
     }
 
-    override fun onDestroied() {
-        super.onDestroied()
+    override fun onInject() {
+        AndroidSupportInjection.inject(this)
+        val adapt = viewAdapter.setDatas(pages)
+        viewPager.adapter = adapt
+        recyclerTabLayout.setUpWithViewPager(viewPager)
     }
 
-    class PagePagerAdapter(fragmentManager: FragmentManager): BasePagePagerAdapter<PageID>(fragmentManager) {
-        override fun getPageFragment(position: Int): PageFragment {
-            return PageFactory.getInstence().getPageByID(pages[position])
-        }
+    private fun handleComplete(data: ApiResponse) {
+        Log.i(TAG, "handleComplete"+ data.toString())
     }
 
+    private fun handleError(err: Throwable) {
+        Log.i(TAG, "handleError ($err)")
+    }
 }
 
 
