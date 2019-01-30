@@ -56,7 +56,6 @@ class SplashFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated()")
-        routeToMainPage()
 
         AndroidSupportInjection.inject(this)
 
