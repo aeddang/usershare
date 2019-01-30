@@ -1,14 +1,16 @@
 package com.kakaovx.homet.user.component.di.app
-
 import android.app.Application
+import android.content.Context
+import com.kakaovx.homet.user.App
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import dagger.android.AndroidInjector
+import dagger.multibindings.ClassKey
+import dagger.multibindings.IntoMap
 
 @Module
-class AppModule(private val app: Application) {
+abstract class AppModule {
 
-    @Provides
-    @Singleton
-    fun provideApp() = app
+    @Binds
+    internal abstract fun application(app: App): Application
 }

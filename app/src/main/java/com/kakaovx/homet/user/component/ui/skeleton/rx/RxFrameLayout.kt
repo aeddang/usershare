@@ -1,14 +1,14 @@
-package com.kakaovx.homet.user.component.ui.skeleton.injecter
+package com.kakaovx.homet.user.component.ui.skeleton.rx
 
 import android.content.Context
 import android.support.annotation.CallSuper
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import com.kakaovx.homet.lib.page.Page
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class InjectableLinearLayout : LinearLayout, Injectable, Page {
+abstract class RxFrameLayout : FrameLayout, rx, Page {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -16,7 +16,6 @@ abstract class InjectableLinearLayout : LinearLayout, Injectable, Page {
 
     init {
         View.inflate(context, getLayoutResId(), this)
-        inject()
         onCreated()
     }
 

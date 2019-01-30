@@ -22,10 +22,11 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
         viewMoreHandler.removeCallbacks(viewMoreRunnable)
     }
 
-    fun setDatas(datas:Array<T>) {
+    fun setDatas(datas:Array<T>): RecyclerView.Adapter<BaseAdapter.ViewHolder>{
         paginationData.reset()
         paginationData.addAll(datas)
         notifyDataSetChanged()
+        return this
     }
 
     fun addDatas(datas:Array<T>) {

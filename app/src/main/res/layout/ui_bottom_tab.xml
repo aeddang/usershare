@@ -6,7 +6,8 @@
             android:text="@string/title_A"
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:id="@+id/button0" android:layout_weight="1"
-            android:background="@color/colorPrimary" tools:ignore="ButtonStyle" android:src="@mipmap/ic_launcher"/>
+            android:background="@color/colorPrimary" tools:ignore="ButtonStyle" android:src="@mipmap/ic_launcher"
+    />
     <ImageButton
             android:text="@string/title_B"
             android:layout_width="match_parent"

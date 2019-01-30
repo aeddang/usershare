@@ -10,13 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.kakaovx.homet.user.App
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.di.api.ApiModule
-import com.kakaovx.homet.user.component.di.api.DaggerApiComponent
 import com.kakaovx.homet.user.component.network.api.GitHubApi
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.homet.user.util.plusAssign
+import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class SplashFragment : Fragment() {
@@ -25,8 +24,7 @@ class SplashFragment : Fragment() {
 
     private val viewDisposable = AppFragmentAutoClearedDisposable(this)
 
-    @Inject
-    lateinit var api: GitHubApi
+
 
     lateinit var viewModelFactory: SplashViewModelFactory
     lateinit var viewModel: SplashViewModel
@@ -61,7 +59,9 @@ class SplashFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated()")
+        routeToMainPage()
 
+        /*
         context?.run {
             DaggerApiComponent.builder()
                 .appComponent(App.getAppComponent(this)).apiModule(ApiModule())
@@ -87,6 +87,7 @@ class SplashFragment : Fragment() {
                 false -> showLoginForm()
             }
         })
+        */
     }
 
     override fun onDestroy() {

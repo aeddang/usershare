@@ -32,6 +32,7 @@ abstract class PageFragment:Fragment(), Page {
         return inflater.inflate(getLayoutResId(), container, false)
     }
 
+
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

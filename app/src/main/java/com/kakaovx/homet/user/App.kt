@@ -1,46 +1,37 @@
 package com.kakaovx.homet.user
-
-import android.app.Application
-import android.content.Context
+import android.support.v4.app.Fragment
 import com.facebook.stetho.Stetho
-import com.kakaovx.homet.user.component.di.app.AppComponent
-import com.kakaovx.homet.user.component.di.app.AppModule
-import com.kakaovx.homet.user.component.di.app.DaggerAppComponent
-import com.kakaovx.homet.user.component.di.api.NetworkModule
-import com.kakaovx.homet.user.component.di.app.PreferenceModule
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.Log
 import com.squareup.leakcanary.LeakCanary
+import com.kakaovx.homet.user.component.di.DaggerAppComponent
+import dagger.android.*
+import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.DispatchingAndroidInjector
+import javax.inject.Inject
+import dagger.android.AndroidInjector
 
-
-class App: Application() {
+class App: DaggerApplication() , HasSupportFragmentInjector {
 
     private val TAG = javaClass.simpleName
 
-    val singleton: AppComponent by lazy {
-        DaggerAppComponent.builder()
-            .appModule(AppModule(this))
-            .networkModule(NetworkModule())
-            .preferenceModule(PreferenceModule(this))
-            .build()
+    @Inject
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+
+    override fun applicationInjector(): AndroidInjector<out App> {
+        return DaggerAppComponent.builder().create(this)
+    }
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+        return fragmentInjector
     }
 
-    companion object {
-        fun getAppComponent(context: Context): AppComponent {
-            return (context.applicationContext as App).singleton
-        }
-    }
 
     override fun onCreate() {
         super.onCreate()
 
         if (AppFeature.APP_MEMORY_DEBUG) {
             Log.d(TAG, "Start Memory Debug")
-            if (LeakCanary.isInAnalyzerProcess(this)) {
-                // This process is dedicated to LeakCanary for heap analysis.
-                // You should not init your app in this process.
-                return
-            }
+            if (LeakCanary.isInAnalyzerProcess(this)) return
             LeakCanary.install(this)
         }
 
