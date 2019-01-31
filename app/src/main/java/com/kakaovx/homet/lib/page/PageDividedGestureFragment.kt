@@ -27,6 +27,7 @@ abstract class PageDividedGestureFragment:PageGestureFragment(), ViewTreeObserve
     }
 
     override fun onGlobalLayout() {
+        dividedView.viewTreeObserver.removeOnGlobalLayoutListener(this)
         onDividedView()
     }
 
