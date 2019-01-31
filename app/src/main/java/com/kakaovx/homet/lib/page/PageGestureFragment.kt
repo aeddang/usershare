@@ -62,7 +62,7 @@ abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
 
     override fun onClose(view: PageGestureView) {
         pageID?.let {
-            PagePresenter.getInstence<Any>().closePopup(it)
+            PagePresenter.getInstance<Any>().closePopup(it)
             return
         }
         onDestroyAnimation()

@@ -2,24 +2,26 @@ package com.kakaovx.homet.user.ui
 
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.user.ui.page.*
+import com.kakaovx.homet.user.ui.page.PageSplash
 
-class PageFactory{
+class PageFactory {
 
     companion object {
-        private  var currentInstence:PageFactory? = null
-        fun getInstence():PageFactory {
-            if(currentInstence == null) currentInstence = PageFactory()
-            return currentInstence!!
+        private  var currentInstance:PageFactory? = null
+        fun getInstance():PageFactory {
+            if(currentInstance == null) currentInstance = PageFactory()
+            return currentInstance!!
         }
     }
 
     init {
-        PageFactory.currentInstence = this
+        PageFactory.currentInstance = this
     }
 
 
     fun getPageByID(id:PageID): PageFragment {
         return when(id) {
+            PageID.SPLASH -> { PageSplash() }
             PageID.MAIN -> { PageMain() }
             PageID.SUB -> { PageSub() }
             PageID.NETWORK -> { PageNetworkTest() }
@@ -35,6 +37,7 @@ class PageFactory{
 }
 
 enum class PageID(val title:String) {
+    SPLASH("splash"),
     MAIN("home"),
     SUB("sub"),
     NETWORK("network"),

@@ -4,16 +4,16 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
 
     companion object {
         internal const val TAG = "Page"
-        private  var currentInstence:Any? = null
+        private  var currentInstance:Any? = null
         @Suppress("UNCHECKED_CAST")
-        fun <T> getInstence(): Presenter<T> {
-            return currentInstence as PagePresenter<T>
+        fun <T> getInstance(): Presenter<T> {
+            return currentInstance as PagePresenter<T>
         }
     }
 
     fun onDestroy() {
         model.onDestroy()
-        currentInstence = null
+        currentInstance = null
         view = null
     }
 
@@ -21,7 +21,7 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
         internal set (newValue) { field = newValue }
 
     init {
-        currentInstence = this
+        currentInstance = this
     }
 
     override fun toggleNavigation() {

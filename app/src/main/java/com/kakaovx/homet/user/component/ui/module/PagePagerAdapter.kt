@@ -10,7 +10,7 @@ import com.kakaovx.homet.user.ui.PageID
 
 class PagePagerAdapter(fragmentManager: FragmentManager): BasePageStatePagerAdapter<PageID>(fragmentManager) {
     override fun getPageFragment(position: Int): PageFragment {
-        return PageFactory.getInstence().getPageByID(pages[position])
+        return PageFactory.getInstance().getPageByID(pages[position])
     }
     override fun getPageTitle(position: Int): CharSequence? {
         return pages[position].title

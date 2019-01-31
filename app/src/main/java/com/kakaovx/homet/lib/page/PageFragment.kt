@@ -2,7 +2,6 @@ package com.kakaovx.homet.lib.page
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.support.annotation.CallSuper
 import android.support.v4.app.Fragment
 import android.util.Log
