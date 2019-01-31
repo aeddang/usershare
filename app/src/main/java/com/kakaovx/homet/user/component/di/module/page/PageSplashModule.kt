@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class SplashFragmentModule {
+class PageSplashModule {
 
     @Provides
     @PageScope

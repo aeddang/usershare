@@ -1,41 +1,53 @@
 package com.kakaovx.homet.user.ui.splash
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import com.kakaovx.homet.lib.page.PageActivity
+import com.kakaovx.homet.lib.page.PageFragment
+import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.ui.PageFactory
+import com.kakaovx.homet.user.ui.PageID
 import com.kakaovx.homet.user.util.Log
-import dagger.android.AndroidInjection
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : PageActivity<PageID>() {
 
     val TAG = javaClass.simpleName
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate")
-
-        AndroidInjection.inject(this)
-
-        setContentView(R.layout.splash_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, SplashFragment.newInstance())
-                .commitNow()
-        }
+    override fun onCreated() {
+        Log.d(TAG, "onCreated")
+        PagePresenter.getInstance<PageID>().pageStart(PageID.SPLASH)
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume")
+    override fun onDestroyed() {
+        Log.d(TAG, "onDestroyed")
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause")
+    override fun getPageAreaId(): Int {
+        Log.d(TAG, "getPageAreaId()")
+        return R.id.container
     }
 
-    override fun onDestroy() {
-        Log.d(TAG, "onDestroy")
-        super.onDestroy()
+    override fun getPageExitMsg(): Int {
+        Log.d(TAG, "getPageExitMsg()")
+        return R.string.notice_app_exit
+    }
+
+    override fun getHomes(): Array<PageID> {
+        Log.d(TAG, "getHomes()")
+        return arrayOf(PageID.SPLASH)
+    }
+
+    override fun getPageByID(id: PageID): PageFragment {
+        Log.d(TAG, "getPageByID()")
+        return PageFactory.getInstance().getPageByID(id)
+    }
+
+    override fun getPopupByID(id: PageID): PageFragment {
+        Log.d(TAG, "getPopupByID()")
+        return PageFactory.getInstance().getPageByID(id)
+    }
+
+    override fun getLayoutResId(): Int {
+        Log.d(TAG, "getLayoutResId()")
+        return R.layout.activity_splash
     }
 }
