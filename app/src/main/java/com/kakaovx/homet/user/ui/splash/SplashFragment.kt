@@ -59,6 +59,9 @@ class SplashFragment : Fragment() {
 
         AndroidSupportInjection.inject(this)
 
+        routeToMainPage()
+        return
+
         viewModel = ViewModelProviders.of(this, viewModelFactory)[SplashViewModel::class.java]
 
         lifecycle += viewDisposable

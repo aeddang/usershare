@@ -8,21 +8,24 @@ import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import android.widget.Toast
 
-abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, PageFragment.Delegate, Page {
-    open val pagePresenter = PagePresenter(this, PageModel())
+abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Delegate, Page {
+    open lateinit var pagePresenter: PagePresenter<T>
     open var currentPage: PageFragment? = null
         protected set
     protected lateinit var pageArea:ViewGroup
 
     @IdRes abstract fun getPageAreaId(): Int
     @StringRes abstract fun getPageExitMsg(): Int
+    abstract fun getHomes():Array<T>
 
     private var exitCount = 0
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val model = PageModel<T>()
+        model.homes = getHomes()
+        pagePresenter = PagePresenter(this, model)
         setContentView(getLayoutResId())
         pageArea = findViewById(getPageAreaId())
         onCreated()
@@ -80,7 +83,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         willChangePage.pageID = id
         willChangePage.delegate = this
         willChangePage.pageType = PageFragment.PageType.INIT
-        supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commit()
+        supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commitNow()
     }
     final override fun onPageChange(id:T, param:Map<String, Any>, isBack:Boolean) {
         resetBackPressedAction()
@@ -89,7 +92,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         willChangePage.delegate = this
         willChangePage.pageType = if(isBack) PageFragment.PageType.OUT else PageFragment.PageType.IN
         if( !param.isEmpty()) willChangePage.setParam(param)
-        supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commit()
+        supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commitNow()
     }
 
     override fun onCreateAnimation(v:PageFragment) {
@@ -108,7 +111,7 @@ abstract class PageActivity<T> : AppCompatActivity(), PagePresenter.View<T>, Pag
         popup.pageID = id
         popup.pageType = PageFragment.PageType.POPUP
         if( !param.isEmpty()) popup.setParam(param)
-        supportFragmentManager.beginTransaction().add(getPageAreaId(),popup,id.toString()).commit()
+        supportFragmentManager.beginTransaction().add(getPageAreaId(),popup,id.toString()).commitNow()
     }
 
     final override fun onClosePopup(id:T) {

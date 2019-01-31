@@ -15,9 +15,15 @@ class PageViewPager : ViewPagerPageFragment() {
 
     override fun onCreated() {
         super.onCreated()
+
         val adapt = PagePagerAdapter(fragmentManager).setDatas(pages)
         viewPager.adapter = adapt
         recyclerTabLayout.setUpWithViewPager(viewPager)
+
+    }
+
+    override fun onDestroyed() {
+        super.onDestroyed()
     }
 
 }

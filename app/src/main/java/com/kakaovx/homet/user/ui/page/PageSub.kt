@@ -16,6 +16,6 @@ class PageSub : RxPageFragment() {
 
     override fun onCreated() {
         super.onCreated()
-        buttonBack.setOnClickListener{ PagePresenter.getInstence<PageID>().onBack() }
+        buttonBack.setOnClickListener{ PagePresenter.getInstence<PageID>().goBack()}
     }
 }

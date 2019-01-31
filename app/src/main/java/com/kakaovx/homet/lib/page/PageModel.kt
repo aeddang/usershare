@@ -3,16 +3,21 @@ package com.kakaovx.homet.lib.page
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PageModel<T> : PagePresenter.Model<T> {
+class PageModel<T> : Model<T> {
     private var currentHistoryStack:T? = null
     private var currentParamStack:Map<String, Any>? = null
     private val historys = Stack<T>()
     private val params = Stack<Map<String, Any>>()
     private val popups = ArrayList<T>()
+    internal lateinit var homes: Array<T>
 
     override fun onDestroy() {
         currentHistoryStack = null
         currentParamStack = null
+    }
+
+    override fun getHome():T {
+        return homes[0]
     }
 
     override fun addHistory(id: T, param:Map<String, Any>, isHistory:Boolean) {
@@ -20,6 +25,7 @@ class PageModel<T> : PagePresenter.Model<T> {
             currentHistoryStack?.let { historys.push(it) }
             currentParamStack?.let { params.push(it) }
         }
+        if(homes.indexOf(id) != -1) clearAllHistory()
         currentHistoryStack = id
         currentParamStack = param
     }

@@ -20,17 +20,11 @@ class PageMain : RxPageFragment() {
 
     override fun onCreated() {
         super.onCreated()
-        AndroidSupportInjection.inject(this)
-        listComponent.injectApi(repository.restApi)
-        buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>().pageChange(
-            PageID.TEST) }
-        buttonTestB.setOnClickListener{ PagePresenter.getInstence<PageID>().pageChange(
-            PageID.SUB) }
-        //buttonTestC.setOnClickListener{ PagePresenter.getInstence<PageID>().openPopup(PageID.POPUP_TEST) }
-    }
+        //AndroidSupportInjection.inject(this)
+        //listComponent.injectApi(repository.restApi)
 
-    override fun onDestroyed() {
-        super.onDestroyed()
+        buttonTestA.setOnClickListener{ PagePresenter.getInstence<PageID>().pageChange( PageID.TEST) }
+        buttonTestB.setOnClickListener{ PagePresenter.getInstence<PageID>().pageChange( PageID.SUB) }
     }
 
 }

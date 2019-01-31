@@ -1,10 +1,7 @@
 package com.kakaovx.homet.user.ui
 
 import com.kakaovx.homet.lib.page.PageFragment
-import com.kakaovx.homet.user.ui.page.PageMain
-import com.kakaovx.homet.user.ui.page.PageSub
-import com.kakaovx.homet.user.ui.page.PageViewPager
-import com.kakaovx.homet.user.ui.page.PopupTest
+import com.kakaovx.homet.user.ui.page.*
 
 class PageFactory{
 
@@ -25,10 +22,13 @@ class PageFactory{
         return when(id) {
             PageID.MAIN -> { PageMain() }
             PageID.SUB -> { PageSub() }
+            PageID.TEST -> { PageNetworkTest() }
+            /*
             PageID.TEST -> {
                 val param = HashMap<String,Any>()
                 param[ParamType.PAGES.key] = arrayOf(PageID.SUB,PageID.SUB,PageID.SUB)
                 PageViewPager().setParam(param)}
+                */
             PageID.POPUP_TEST -> { PopupTest() }
             else -> { PageMain() }
         }

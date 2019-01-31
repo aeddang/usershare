@@ -24,7 +24,7 @@ class ComponentRecycler: RecyclerFrameLayout {
     }
 
     override fun injectApi(api: RestfulApi) {
-
+        return
         val params: MutableMap<String, String> = mutableMapOf()
         params["q"] = "apple"
         api.searchRepositories(params)
@@ -37,10 +37,10 @@ class ComponentRecycler: RecyclerFrameLayout {
     }
 
     private fun handleComplete(data: ApiResponse) {
-        Log.i(TAG, "handleComplete ($data)")
+       // Log.i(TAG, "handleComplete ($data)")
     }
 
     private fun handleError(err: Throwable) {
-        Log.i(TAG, "handleError ($err)")
+        //Log.i(TAG, "handleError ($err)")
     }
 }

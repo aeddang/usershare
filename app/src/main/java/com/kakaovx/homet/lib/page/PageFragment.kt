@@ -14,6 +14,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import com.kakaovx.homet.lib.constant.AnimationDuration
+import com.kakaovx.homet.user.App
 
 abstract class PageFragment:Fragment(), Page {
     enum class PageType {
@@ -130,8 +131,10 @@ abstract class PageFragment:Fragment(), Page {
         }
         return animationDuration
     }
+
     protected open fun didDestroyAnimation() {
-        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        Log.d(PagePresenter.TAG,"didDestroyAnimation")
+        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commitNow()
     }
 
     @CallSuper

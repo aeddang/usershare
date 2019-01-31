@@ -1,19 +1,20 @@
 package com.kakaovx.homet.lib.page
 
-class PagePresenter<T>(val view: View<T>, internal val model: Model<T>) {
+class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presenter<T> {
 
     companion object {
         internal const val TAG = "Page"
-        private  lateinit var currentInstence:Any
-
+        private  var currentInstence:Any? = null
         @Suppress("UNCHECKED_CAST")
-        fun <T> getInstence(): PagePresenter<T> {
+        fun <T> getInstence(): Presenter<T> {
             return currentInstence as PagePresenter<T>
         }
     }
 
-    internal fun onDestroy() {
+    fun onDestroy() {
         model.onDestroy()
+        currentInstence = null
+        view = null
     }
 
     var isNavigationShow = false
@@ -23,21 +24,25 @@ class PagePresenter<T>(val view: View<T>, internal val model: Model<T>) {
         currentInstence = this
     }
 
-    fun toggleNavigation() {
+    override fun toggleNavigation() {
         if( isNavigationShow ) hideNavigation() else showNavigation()
     }
 
-    fun showNavigation() {
+    override fun showNavigation() {
         isNavigationShow = true
-        view.onShowNavigation()
+        view?.onShowNavigation()
     }
 
-    fun hideNavigation() {
+    override fun hideNavigation() {
         isNavigationShow = false
-        view.onHideNavigation()
+        view?.onHideNavigation()
+    }
+    override fun goHome(){
+        pageChange(model.getHome(),true, false)
     }
 
-    fun onBack():Boolean {
+    override fun goBack(){ onBack() }
+    internal fun onBack():Boolean {
         if(isNavigationShow) {
             hideNavigation()
             return false
@@ -50,61 +55,46 @@ class PagePresenter<T>(val view: View<T>, internal val model: Model<T>) {
         val tuple = model.getHistory()
         val page:T? = tuple?.first
         page?.let{
-            pageChange(it,tuple.second!!,false,true)
+            pageChange(it,tuple.second!!,false)
             return false
         }
         return true
     }
 
-    fun closePopup(id:T): PagePresenter<T> {
+    override fun closePopup(id:T): PagePresenter<T> {
         model.removePopup(id)
-        view.onClosePopup(id)
+        view?.onClosePopup(id)
         return this
     }
 
-    fun openPopup(id:T): PagePresenter<T> {
+    override fun openPopup(id:T): PagePresenter<T> {
         return openPopup(id,HashMap())
     }
-    fun openPopup(id:T,param:Map<String, Any>): PagePresenter<T> {
-        view.onOpenPopup(id,param)
+
+    override fun openPopup(id:T,param:Map<String, Any>): PagePresenter<T> {
+        view?.onOpenPopup(id,param)
         model.addPopup(id)
         return this
     }
 
-    fun pageStart(id:T): PagePresenter<T> {
-        view.onPageStart(id)
+    override fun pageStart(id:T): PagePresenter<T> {
+        view?.onPageStart(id)
         model.addHistory(id,HashMap(),true)
         return this
     }
 
-    fun pageChange(id:T,isHistory:Boolean=true,isBack:Boolean = false): PagePresenter<T> {
+    override fun pageChange(id:T,isHistory:Boolean,isBack:Boolean): PagePresenter<T> {
         return pageChange(id, HashMap(), isHistory, isBack)
     }
-    fun pageChange(id:T,param:Map<String, Any>,isHistory:Boolean=true,isBack:Boolean = false): PagePresenter<T> {
-        view.onPageChange(id,param,isBack)
+    override fun pageChange(id:T,param:Map<String, Any>,isHistory:Boolean,isBack:Boolean): PagePresenter<T> {
+        view?.onPageChange(id,param,isBack)
         model.addHistory(id,param,isHistory)
         return this
     }
 
-    interface View<T> {
-        fun onPageStart(id:T)
-        fun onPageChange(id:T,param:Map<String, Any>, isBack:Boolean)
-        fun onOpenPopup(id:T, param:Map<String, Any>)
-        fun onClosePopup(id:T)
-        fun onShowNavigation(){}
-        fun onHideNavigation(){}
-    }
 
-    interface Model<T> {
-        fun addHistory(id:T, param:Map<String, Any>, isHistory:Boolean)
-        fun getHistory():Pair<T?, Map<String, Any>?>?
-        fun clearAllHistory()
-        fun removePopup(id:T)
-        fun addPopup(id:T)
-        fun getPopup():T?
-        fun onDestroy()
-    }
 }
+
 
 
 
