@@ -1,4 +1,5 @@
 package com.kakaovx.homet.user.ui.page
+import android.util.Log
 import com.kakaovx.homet.user.ui.PageID
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
@@ -17,6 +18,10 @@ class PageMain : RxPageFragment() {
     lateinit var repository: Repository
 
     override fun getLayoutResId(): Int { return R.layout.page_main }
+
+    override fun onDestroyed() {
+        super.onDestroyed()
+    }
 
     override fun onCreated() {
         super.onCreated()

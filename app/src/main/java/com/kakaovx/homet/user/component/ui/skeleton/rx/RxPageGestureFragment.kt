@@ -8,7 +8,6 @@ abstract class RxPageGestureFragment : PageGestureFragment(), Rx {
 
     protected val disposables by lazy { CompositeDisposable() }
 
-
     @CallSuper
     override fun onCreated() {
         super.onCreated()

@@ -22,13 +22,12 @@ class PageFactory{
         return when(id) {
             PageID.MAIN -> { PageMain() }
             PageID.SUB -> { PageSub() }
-            PageID.TEST -> { PageNetworkTest() }
-            /*
+            PageID.NETWORK -> { PageNetworkTest() }
             PageID.TEST -> {
                 val param = HashMap<String,Any>()
-                param[ParamType.PAGES.key] = arrayOf(PageID.SUB,PageID.SUB,PageID.SUB)
+                param[ParamType.PAGES.key] = arrayOf(PageID.NETWORK,PageID.SUB,PageID.POPUP_TEST)
                 PageViewPager().setParam(param)}
-                */
+
             PageID.POPUP_TEST -> { PopupTest() }
             else -> { PageMain() }
         }
@@ -38,6 +37,7 @@ class PageFactory{
 enum class PageID(val title:String) {
     MAIN("home"),
     SUB("sub"),
+    NETWORK("network"),
     TEST("test"),
     POPUP_TEST("popuptest")
 }

@@ -24,11 +24,14 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     lateinit var repository: Repository
 
     override fun onCreated() {
-        super.onCreated()
         AndroidInjection.inject(this)
         repository.setting.isPushEnable()
         PagePresenter.getInstence<PageID>().pageStart(PageID.MAIN)
         bottomTab.delegate = this
+    }
+
+    override fun onDestroyed() {
+
     }
 
 

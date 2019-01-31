@@ -15,10 +15,13 @@ abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
 
     @CallSuper
     override fun onCreated() {
-
         gestureView = getGestureView()
         contentsView = getContentsView()
         backgroundView = getBackgroundView()
+    }
+
+    @CallSuper
+    override fun onDestroyed() {
     }
 
     override fun willCreateAnimation() {

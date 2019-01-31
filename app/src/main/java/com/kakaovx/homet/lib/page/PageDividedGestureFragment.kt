@@ -1,10 +1,12 @@
 package com.kakaovx.homet.lib.page
 
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.annotation.CallSuper
+import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.popup_test.*
 
-abstract class PageDividedGestureFragment:PageGestureFragment() {
+abstract class PageDividedGestureFragment:PageGestureFragment(), ViewTreeObserver.OnGlobalLayoutListener {
 
     private lateinit var dividedView:View
     protected var positionOffset = 0f
@@ -15,7 +17,17 @@ abstract class PageDividedGestureFragment:PageGestureFragment() {
         super.onCreated()
         dividedView = getDividedView()
         dividedView.alpha = 0f
-        dividedView.viewTreeObserver.addOnGlobalLayoutListener { onDividedView() }
+        dividedView.viewTreeObserver.addOnGlobalLayoutListener(this)
+    }
+
+    @CallSuper
+    override fun onDestroyed() {
+        super.onDestroyed()
+        dividedView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+    }
+
+    override fun onGlobalLayout() {
+        onDividedView()
     }
 
     protected fun onDividedView() {

@@ -14,13 +14,13 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import com.kakaovx.homet.lib.constant.AnimationDuration
-import com.kakaovx.homet.user.App
 
 abstract class PageFragment:Fragment(), Page {
     enum class PageType {
         INIT, IN, OUT, POPUP
     }
     private var animationDuration = AnimationDuration.SHORT.duration
+    private var animationHandler: Handler = Handler()
     private var viewCreateRunnable: Runnable = Runnable {onCreateAnimation()}
     protected var animationCreateRunnable: Runnable = Runnable {didCreateAnimation()}
     protected var animationDestroyRunnable: Runnable = Runnable {didDestroyAnimation()}
@@ -40,7 +40,7 @@ abstract class PageFragment:Fragment(), Page {
         super.onViewCreated(view, savedInstanceState)
         onCreated()
         willCreateAnimation()
-        onCreateAnimation()
+        animationHandler.post(viewCreateRunnable)
     }
 
     @CallSuper
@@ -140,6 +140,7 @@ abstract class PageFragment:Fragment(), Page {
     @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
+        animationHandler.removeCallbacks(viewCreateRunnable)
         view?.let{
             val parent = it.parent as ViewGroup?
             parent?.removeView(it)

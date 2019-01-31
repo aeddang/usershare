@@ -10,6 +10,7 @@ class ImageListItem(context:Context): ListItem(context) {
     override fun getLayoutResId(): Int {
         return R.layout.item_image
     }
+
     override fun <String> setData(data:String)
     {
         textView.text = data.toString()

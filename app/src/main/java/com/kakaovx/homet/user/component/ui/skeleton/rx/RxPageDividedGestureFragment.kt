@@ -17,7 +17,7 @@ abstract class RxPageDividedGestureFragment : PageDividedGestureFragment(), Rx {
 
     @CallSuper
     override fun onDestroyed() {
+        super.onDestroyed()
         disposables.clear()
-        super.onDestroy()
     }
 }

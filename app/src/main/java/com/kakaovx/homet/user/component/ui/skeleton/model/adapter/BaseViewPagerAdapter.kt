@@ -18,8 +18,8 @@ abstract class BaseViewPagerAdapter<V:View,T>: PagerAdapter() {
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        //super.destroyItem(container, position, `object`)
         container.removeView(`object` as View)
+        //super.destroyItem(container, position, `object`)
     }
     override fun instantiateItem(container: ViewGroup, position: Int):V {
         val v = getPageView(container, position)
