@@ -13,12 +13,12 @@ class SplashActivity : PageActivity<PageID>() {
     val TAG = javaClass.simpleName
 
     override fun onCreated() {
-        Log.d(TAG, "onCreated")
+        Log.d(TAG, "onCreated()")
         PagePresenter.getInstance<PageID>().pageStart(PageID.SPLASH)
     }
 
     override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed")
+        Log.d(TAG, "onDestroyed()")
     }
 
     override fun getPageAreaId(): Int {
