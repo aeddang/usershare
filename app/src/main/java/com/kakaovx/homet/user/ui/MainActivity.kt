@@ -29,14 +29,7 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
         bottomTab.delegate = this
     }
 
-<<<<<<< HEAD
-    override fun onDestroyed() {
-
-    }
-
-=======
-    override fun onDestroyed() { }
->>>>>>> d12934f638e577be154b752730b6e905a44bd9a9
+    override fun onDestroyed() {}
 
     override fun onSelected(view:DivisionTab<PageID>, id:PageID) {
         PagePresenter.getInstance<PageID>().pageChange(id)

@@ -1,11 +1,5 @@
 package com.kakaovx.homet.user.ui.page
-<<<<<<< HEAD
-import android.util.Log
-import com.kakaovx.homet.user.ui.PageID
-import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
-=======
->>>>>>> d12934f638e577be154b752730b6e905a44bd9a9
+
 import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.repository.Repository

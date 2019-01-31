@@ -3,7 +3,7 @@ package com.kakaovx.homet.lib.page
 class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presenter<T> {
 
     companion object {
-        internal const val TAG = "Page"
+        internal const val TAG = "PagePresenter"
         private  var currentInstance:Any? = null
         @Suppress("UNCHECKED_CAST")
         fun <T> getInstance(): Presenter<T> {
@@ -13,7 +13,6 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
 
     fun onDestroy() {
         model.onDestroy()
-        currentInstance = null
         view = null
     }
 

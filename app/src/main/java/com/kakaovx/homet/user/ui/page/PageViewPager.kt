@@ -3,11 +3,8 @@ package com.kakaovx.homet.user.ui.page
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.PagerAdapter
-import android.view.ViewGroup
-import com.facebook.stetho.inspector.protocol.module.Page
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.user.component.preference.SettingPreference
-import com.kakaovx.homet.user.component.ui.module.PagePagerAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.view.ViewPagerPageFragment
 import com.kakaovx.homet.user.ui.PageFactory
 import com.kakaovx.homet.user.ui.PageID
@@ -47,7 +44,7 @@ class PageViewPager : ViewPagerPageFragment() {
         }
 
         fun getPageFragment(position: Int): PageFragment {
-            return PageFactory.getInstence().getPageByID(pages[position])
+            return PageFactory.getInstance().getPageByID(pages[position])
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
