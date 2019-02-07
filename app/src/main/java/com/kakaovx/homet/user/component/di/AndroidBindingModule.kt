@@ -26,7 +26,7 @@ internal abstract class AndroidBindingModule {
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [])
-    internal abstract fun mainActivity(): MainActivity
+    internal abstract fun bindMainActivity(): MainActivity
 
     @PageScope
     @ContributesAndroidInjector(modules = [])
