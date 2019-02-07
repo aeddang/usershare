@@ -4,7 +4,7 @@ import com.kakaovx.homet.user.component.di.annotation.ActivityScope
 import com.kakaovx.homet.user.component.di.annotation.PageScope
 import com.kakaovx.homet.user.component.di.module.page.PageSplashModule
 import com.kakaovx.homet.user.ui.MainActivity
-import com.kakaovx.homet.user.ui.page.PageMain
+import com.kakaovx.homet.user.ui.page.PageHome
 import com.kakaovx.homet.user.ui.splash.SplashActivity
 import com.kakaovx.homet.user.ui.page.PageSplash
 import dagger.Module
@@ -30,7 +30,7 @@ internal abstract class AndroidBindingModule {
 
     @PageScope
     @ContributesAndroidInjector(modules = [])
-    internal abstract fun bindPageMain(): PageMain
+    internal abstract fun bindPageMain(): PageHome
 
 
 }

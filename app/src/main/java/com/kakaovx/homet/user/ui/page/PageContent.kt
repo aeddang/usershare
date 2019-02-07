@@ -5,20 +5,34 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.PagerAdapter
 import com.kakaovx.homet.lib.page.PageFragment
+import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.view.ViewPagerPageFragment
 import com.kakaovx.homet.user.constant.AppConst
+import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.PageFactory
 import com.kakaovx.homet.user.ui.PageID
 import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.page_viewpager.*
 
-class PageViewPager : ViewPagerPageFragment() {
+class PageContent : ViewPagerPageFragment() {
 
     private val TAG = javaClass.simpleName
+
+    private fun initView(context: Context) {
+        activity?.let {
+            val myActivity: MainActivity = activity as MainActivity
+            myActivity.supportActionBar?.apply {
+                title = context.getString(R.string.page_content)
+                setDisplayShowTitleEnabled(true)
+            }
+        }
+    }
 
     override fun onCreated() {
         super.onCreated()
         Log.d(TAG, "onCreated()")
+
+        context?.let { initView(it) }
         activity?.let {
             val adapt = PageViewPagerAdapter(childFragmentManager, context).setDatas(pages)
             viewPager.adapter = adapt

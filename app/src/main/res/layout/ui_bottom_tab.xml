@@ -13,7 +13,7 @@
             android:src="@drawable/kakaovx_apeach_profile_000"/>
 
     <ImageButton
-            android:id="@+id/tab_btn_program"
+            android:id="@+id/tab_btn_content"
             android:text="@string/title_B"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

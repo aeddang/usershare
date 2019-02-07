@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kakao Home Training</string>
     <string name="notice_app_exit">Please click BACK again to exit</string>
@@ -7,10 +8,12 @@
     <string name="title_D">D</string>
     <string name="title_E">E</string>
     <string name="company">Kakao VX</string>
-    <string name="tab_home">Home</string>
-    <string name="tab_program">Program</string>
-    <string name="tab_planner">Planner</string>
-    <string name="tab_search">Search</string>
-    <string name="tab_profile">Profile</string>
-
+    <string name="page_home">Home</string>
+    <string name="page_content">Content</string>
+    <string name="page_planner">Planner</string>
+    <string name="page_search">Search</string>
+    <string name="page_profile">Profile</string>
+    <string name="page_program">Program</string>
+    <string name="page_free_workout">FreeWorkout</string>
+    <string name="page_trainer">Trainer</string>
 </resources>

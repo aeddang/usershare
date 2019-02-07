@@ -18,7 +18,7 @@ class BottomTab: DivisionTab<PageID>{
     override fun getTabMenus(): Array<View> {
         return arrayOf(
             tab_btn_home,
-            tab_btn_program,
+            tab_btn_content,
             tab_btn_planner,
             tab_btn_search,
             tab_btn_profile
@@ -28,11 +28,10 @@ class BottomTab: DivisionTab<PageID>{
     override fun getIDDatas(): Array<PageID> {
         return arrayOf (
             PageID.HOME,
-            PageID.PROGRAM,
+            PageID.CONTENT,
             PageID.PLANNER,
             PageID.SEARCH,
             PageID.PROFILE
         )
     }
-
 }

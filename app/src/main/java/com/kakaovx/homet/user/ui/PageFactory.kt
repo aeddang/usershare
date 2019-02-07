@@ -21,26 +21,32 @@ class PageFactory {
     fun getPageByID(id:PageID): PageFragment {
         return when(id) {
             PageID.SPLASH -> { PageSplash() }
-            PageID.HOME -> { PageMain() }
-            PageID.PROGRAM -> { PageSub() }
-            PageID.PLANNER -> { PageNetworkTest() }
-            PageID.SEARCH -> {
-                val param = HashMap<String,Any>()
-                param[ParamType.PAGES.key] = arrayOf(PageID.PROGRAM, PageID.PLANNER, PageID.SEARCH)
-                PageViewPager().setParam(param)
+            PageID.HOME -> { PageHome() }
+            PageID.CONTENT -> {
+                val param = HashMap<String, Any>()
+                param[ParamType.PAGES.key] = arrayOf(PageID.PROGRAM, PageID.FREE_WORKOUT, PageID.TRAINER)
+                PageContent().setParam(param)
             }
-            PageID.PROFILE -> { PopupTest() }
+            PageID.PLANNER -> { PagePlanner() }
+            PageID.SEARCH -> { PageSearch() }
+            PageID.PROFILE -> { PageProfile() }
+            PageID.PROGRAM -> { PageProgram() }
+            PageID.FREE_WORKOUT -> { PageProgram() }
+            PageID.TRAINER -> { PageProgram() }
         }
     }
 }
 
 enum class PageID(val resId: Int) {
     SPLASH(R.string.company),
-    HOME(R.string.tab_home),
-    PROGRAM(R.string.tab_program),
-    PLANNER(R.string.tab_planner),
-    SEARCH(R.string.tab_search),
-    PROFILE(R.string.tab_profile)
+    HOME(R.string.page_home),
+    CONTENT(R.string.page_content),
+    PLANNER(R.string.page_planner),
+    SEARCH(R.string.page_search),
+    PROFILE(R.string.page_profile),
+    PROGRAM(R.string.page_program),
+    FREE_WORKOUT(R.string.page_free_workout),
+    TRAINER(R.string.page_trainer)
 }
 
 enum class ParamType(val key:String) {

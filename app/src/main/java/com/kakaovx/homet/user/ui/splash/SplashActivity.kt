@@ -1,5 +1,6 @@
 package com.kakaovx.homet.user.ui.splash
 
+import android.view.WindowManager
 import com.kakaovx.homet.lib.page.PageActivity
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePresenter
@@ -14,6 +15,12 @@ class SplashActivity : PageActivity<PageID>() {
 
     override fun onCreated() {
         Log.d(TAG, "onCreated()")
+
+        val window = window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = resources.getColor(R.color.indicator)
+
         PagePresenter.getInstance<PageID>().pageStart(PageID.SPLASH)
     }
 

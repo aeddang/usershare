@@ -1,16 +1,28 @@
 package com.kakaovx.homet.user.ui.page
 
+import android.content.Context
 import com.kakaovx.homet.user.util.Log
 import android.view.View
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
+import com.kakaovx.homet.user.ui.MainActivity
 import kotlinx.android.synthetic.main.page_network.*
 
-class PageNetworkTest : RxPageFragment() {
+class PagePlanner : RxPageFragment() {
 
     private val TAG = javaClass.simpleName
+
+    private fun initView(context: Context) {
+        activity?.let {
+            val myActivity: MainActivity = activity as MainActivity
+            myActivity.supportActionBar?.apply {
+                title = context.getString(R.string.page_planner)
+                setDisplayShowTitleEnabled(true)
+            }
+        }
+    }
 
     override fun getLayoutResId(): Int {
         return R.layout.page_network
@@ -18,6 +30,10 @@ class PageNetworkTest : RxPageFragment() {
 
     override fun onCreated() {
         super.onCreated()
+        Log.d(TAG, "onCreated()")
+
+        context?.let{ initView(it) }
+
         button.clicks().subscribe(this::getAllUsers).apply { disposables.add(this) }
         hideProgress()
     }
