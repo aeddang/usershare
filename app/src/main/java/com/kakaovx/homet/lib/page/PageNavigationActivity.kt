@@ -8,7 +8,7 @@ import android.view.ViewTreeObserver
 import com.kakaovx.homet.lib.constant.AnimationDuration
 import com.kakaovx.homet.lib.module.Gesture
 
-abstract class PageNavigationActivity<T> :  PageActivity<T>(), PageGestureView.Delegate, Animator.AnimatorListener {
+abstract class PageNavigationActivity<T>: PageActivity<T>(), PageGestureView.Delegate, Animator.AnimatorListener {
     private lateinit var navigationView: PageGestureView
     private lateinit var contentsView: View
     private lateinit var navigationViewBgView: View

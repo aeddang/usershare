@@ -26,7 +26,7 @@ class PageSplash : RxPageFragment() {
 
     private fun routeToMainPage() {
         Log.d(TAG, "routeToMainPage()")
-        val i = Intent(AppConst.HOMET_MAIN_ACTIVITY)
+        val i = Intent(AppConst.HOMET_ACTIVITY_MAIN)
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(i)

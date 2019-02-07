@@ -11,20 +11,27 @@ class BottomTab: DivisionTab<PageID>{
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-    override fun getLayoutResId(): Int { return R.layout.ui_bottom_tab }
+    override fun getLayoutResId(): Int {
+        return R.layout.ui_bottom_tab
+    }
 
-    override fun getTabMenus(): Array<View>
-    {
-        return arrayOf(button0,button1,button2,button3,button4)
+    override fun getTabMenus(): Array<View> {
+        return arrayOf(
+            tab_btn_home,
+            tab_btn_program,
+            tab_btn_planner,
+            tab_btn_search,
+            tab_btn_profile
+        )
     }
 
     override fun getIDDatas(): Array<PageID> {
         return arrayOf (
-            PageID.MAIN,
-            PageID.SUB,
-            PageID.TEST,
-            PageID.SUB,
-            PageID.SUB
+            PageID.HOME,
+            PageID.PROGRAM,
+            PageID.PLANNER,
+            PageID.SEARCH,
+            PageID.PROFILE
         )
     }
 

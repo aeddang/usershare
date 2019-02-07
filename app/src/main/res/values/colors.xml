@@ -5,4 +5,5 @@
     <color name="colorAccent">#000000</color>
     <color name="transparent">#32000000</color>
     <color name="splash_bg">#FFCD00</color>
+    <color name="tab_bg">#FFCD00</color>
 </resources>

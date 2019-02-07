@@ -5,6 +5,7 @@ import android.view.View
 import com.kakaovx.homet.lib.constant.AnimationDuration
 
 abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
+
     private lateinit var gestureView: PageGestureView
     private lateinit var contentsView:View
     private lateinit var backgroundView:View

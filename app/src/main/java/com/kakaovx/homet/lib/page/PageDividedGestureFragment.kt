@@ -3,7 +3,6 @@ package com.kakaovx.homet.lib.page
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.CallSuper
-import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.popup_test.*
 
 abstract class PageDividedGestureFragment:PageGestureFragment(), ViewTreeObserver.OnGlobalLayoutListener {

@@ -22,7 +22,7 @@ class SplashViewModel(repo: Repository) : ViewModel() {
     val autoLoginResponse: MutableLiveData<Boolean> = MutableLiveData()
 
     private fun handleComplete(data: ApiResponse) {
-        Log.i(TAG, "handleComplete")
+        Log.i(TAG, "handleComplete ($data)")
         response.value = true
     }
 
@@ -52,9 +52,7 @@ class SplashViewModel(repo: Repository) : ViewModel() {
         = Observable.just(isAuto)
             .delay(2000L, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .map {it ->
-                autoLoginResponse.value = it
-            }
+            .map { autoLoginResponse.value = it }
             .subscribe()
 
     override fun onCleared() {

@@ -3,7 +3,7 @@ package com.kakaovx.homet.lib.page
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PageModel<T> : Model<T> {
+class PageModel<T>: Model<T> {
     private var currentHistoryStack:T? = null
     private var currentParamStack:Map<String, Any>? = null
     private val histories = Stack<T>()

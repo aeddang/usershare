@@ -37,10 +37,10 @@ class ComponentRecycler: RecyclerFrameLayout {
     }
 
     private fun handleComplete(data: ApiResponse) {
-       // Log.i(TAG, "handleComplete ($data)")
+       Log.i(TAG, "handleComplete ($data)")
     }
 
     private fun handleError(err: Throwable) {
-        //Log.i(TAG, "handleError ($err)")
+       Log.i(TAG, "handleError ($err)")
     }
 }

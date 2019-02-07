@@ -1,8 +1,8 @@
 package com.kakaovx.homet.user.ui
 
 import com.kakaovx.homet.lib.page.PageFragment
+import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.ui.page.*
-import com.kakaovx.homet.user.ui.page.PageSplash
 
 class PageFactory {
 
@@ -18,31 +18,29 @@ class PageFactory {
         PageFactory.currentInstance = this
     }
 
-
     fun getPageByID(id:PageID): PageFragment {
         return when(id) {
             PageID.SPLASH -> { PageSplash() }
-            PageID.MAIN -> { PageMain() }
-            PageID.SUB -> { PageSub() }
-            PageID.NETWORK -> { PageNetworkTest() }
-            PageID.TEST -> {
+            PageID.HOME -> { PageMain() }
+            PageID.PROGRAM -> { PageSub() }
+            PageID.PLANNER -> { PageNetworkTest() }
+            PageID.SEARCH -> {
                 val param = HashMap<String,Any>()
-                param[ParamType.PAGES.key] = arrayOf(PageID.NETWORK,PageID.SUB,PageID.POPUP_TEST)
-                PageViewPager().setParam(param)}
-
-            PageID.POPUP_TEST -> { PopupTest() }
-            else -> { PageMain() }
+                param[ParamType.PAGES.key] = arrayOf(PageID.PROGRAM, PageID.PLANNER, PageID.SEARCH)
+                PageViewPager().setParam(param)
+            }
+            PageID.PROFILE -> { PopupTest() }
         }
     }
 }
 
-enum class PageID(val title:String) {
-    SPLASH("splash"),
-    MAIN("home"),
-    SUB("sub"),
-    NETWORK("network"),
-    TEST("test"),
-    POPUP_TEST("popuptest")
+enum class PageID(val resId: Int) {
+    SPLASH(R.string.company),
+    HOME(R.string.tab_home),
+    PROGRAM(R.string.tab_program),
+    PLANNER(R.string.tab_planner),
+    SEARCH(R.string.tab_search),
+    PROFILE(R.string.tab_profile)
 }
 
 enum class ParamType(val key:String) {

@@ -13,6 +13,18 @@ object AppConst {
      * Action names
      */
 
-    const val HOMET_SPLASH_ACTIVITY = "$packageName.action.HOMET_SPLASH"
-    const val HOMET_MAIN_ACTIVITY = "$packageName.action.HOMET_MAIN"
+    const val HOMET_ACTIVITY_SPLASH = "$packageName.action.HOMET_SPLASH"
+    const val HOMET_ACTIVITY_MAIN = "$packageName.action.HOMET_MAIN"
+
+    /**
+     * Values
+     */
+
+    const val HOMET_VALUE_NOTITLE = "NOTITLE"
+    const val HOMET_VALUE_SPLASH = "SPLASH"
+    const val HOMET_VALUE_HOME = "HOME"
+    const val HOMET_VALUE_PROGRAM = "PROGRAM"
+    const val HOMET_VALUE_PLANNER = "PLANNER"
+    const val HOMET_VALUE_SEARCH = "SEARCH"
+    const val HOMET_VALUE_PROFILE = "PROFILE"
 }

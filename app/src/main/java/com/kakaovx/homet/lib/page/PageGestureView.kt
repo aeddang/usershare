@@ -13,7 +13,7 @@ import android.widget.FrameLayout
 import com.kakaovx.homet.lib.module.Gesture
 
 const val DURATION_DIV = 3
-open class PageGestureView : FrameLayout, Gesture.Delegate {
+open class PageGestureView: FrameLayout, Gesture.Delegate {
     var closeType = Gesture.Type.PAN_DOWN
     var delegate: Delegate? = null
     lateinit var contentsView:View

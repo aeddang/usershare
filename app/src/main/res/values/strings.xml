@@ -1,12 +1,16 @@
 <resources>
     <string name="app_name">Kakao Home Training</string>
     <string name="notice_app_exit">Please click BACK again to exit</string>
-
     <string name="title_A">A</string>
     <string name="title_B">B</string>
     <string name="title_C">C</string>
     <string name="title_D">D</string>
     <string name="title_E">E</string>
-    <string name="company">kakaovx</string>
+    <string name="company">Kakao VX</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_program">Program</string>
+    <string name="tab_planner">Planner</string>
+    <string name="tab_search">Search</string>
+    <string name="tab_profile">Profile</string>
 
 </resources>

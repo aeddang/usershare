@@ -11,7 +11,7 @@ class BannerRecycler: RecyclerFrameLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-    private lateinit var viewAdapter:BannerAdapter
+    private lateinit var viewAdapter: BannerAdapter
 
     override fun onCreated() {
         viewAdapter = BannerAdapter()

@@ -8,4 +8,9 @@
     <string name="title_D">라</string>
     <string name="title_E">마</string>
     <string name="company">카카오VX</string>
+    <string name="tab_home">홈</string>
+    <string name="tab_program">프로그램</string>
+    <string name="tab_planner">플래너</string>
+    <string name="tab_search">검색</string>
+    <string name="tab_profile">프로파일</string>
 </resources>

@@ -1,31 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-                                             android:layout_height="@dimen/area_bottom">
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/area_bottom">
+
     <ImageButton
+            android:id="@+id/tab_btn_home"
             android:text="@string/title_A"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/button0" android:layout_weight="1"
-            android:background="@color/colorPrimary" tools:ignore="ButtonStyle" android:src="@mipmap/ic_launcher"
-    />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/tab_bg"
+            android:src="@drawable/kakaovx_apeach_profile_000"/>
+
     <ImageButton
+            android:id="@+id/tab_btn_program"
             android:text="@string/title_B"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/button1" android:layout_weight="1"
-            android:background="@color/colorPrimary" android:src="@mipmap/ic_launcher"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/tab_bg"
+            android:src="@drawable/kakaovx_con_profile_000"/>
+
     <ImageButton
+            android:id="@+id/tab_btn_planner"
             android:text="@string/title_C"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/button2" android:layout_weight="1"
-            android:background="@color/colorPrimary" android:src="@mipmap/ic_launcher"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/tab_bg"
+            android:src="@drawable/kakaovx_frodo_profile_000"/>
+
     <ImageButton
+            android:id="@+id/tab_btn_search"
             android:text="@string/title_D"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/button3" android:layout_weight="1"
-            android:background="@color/colorPrimary" android:src="@mipmap/ic_launcher"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/tab_bg"
+            android:src="@drawable/kakaovx_muzi_profile_000"/>
+
     <ImageButton
+            android:id="@+id/tab_btn_profile"
             android:text="@string/title_E"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/button4" android:layout_weight="1"
-            android:background="@color/colorPrimary" android:src="@mipmap/ic_launcher"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/tab_bg"
+            android:src="@drawable/kakaovx_neo_profile_000"/>
 </LinearLayout>

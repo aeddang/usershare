@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.CallSuper
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +13,16 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import com.kakaovx.homet.lib.constant.AnimationDuration
+import com.kakaovx.homet.user.util.Log
 
 abstract class PageFragment:Fragment(), Page {
+
+    private val TAG = javaClass.simpleName
+
     enum class PageType {
         INIT, IN, OUT, POPUP
     }
+
     private var animationDuration = AnimationDuration.SHORT.duration
     private var animationHandler: Handler = Handler()
     private var viewCreateRunnable: Runnable = Runnable {onCreateAnimation()}
@@ -33,7 +37,6 @@ abstract class PageFragment:Fragment(), Page {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayoutResId(), container, false)
     }
-
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -133,7 +136,7 @@ abstract class PageFragment:Fragment(), Page {
     }
 
     protected open fun didDestroyAnimation() {
-        Log.d(PagePresenter.TAG,"didDestroyAnimation")
+        Log.d(TAG,"didDestroyAnimation()")
         activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commitNow()
     }
 
@@ -149,7 +152,7 @@ abstract class PageFragment:Fragment(), Page {
         animation = null
         delegate = null
         onDestroyed()
-        Log.d(PagePresenter.TAG,"onDestroyView")
+        Log.d(TAG,"onDestroyView()")
     }
 
 

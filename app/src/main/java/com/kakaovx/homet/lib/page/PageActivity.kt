@@ -7,8 +7,12 @@ import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import android.widget.Toast
+import com.kakaovx.homet.user.util.Log
 
 abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Delegate, Page {
+
+    private val TAG = javaClass.simpleName
+
     open lateinit var pagePresenter: PagePresenter<T>
     open var currentPage: PageFragment? = null
         protected set
@@ -51,7 +55,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
         onAttached()
     }
 
-    open fun getCurentFragment(): PageFragment? {
+    open fun getCurrentFragment(): PageFragment? {
         return supportFragmentManager.fragments.last() as PageFragment
     }
 
@@ -70,21 +74,24 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
         return true
     }
     override fun onBackPressed() {
-        getCurentFragment()?.let{ if(!it.isBackAble())return }
+        getCurrentFragment()?.let{ if(!it.isBackAble())return }
         if(!pagePresenter.onBack()) return
         if(onBackPressedAction()) return
         super.onBackPressed()
     }
 
     abstract fun getPageByID(id:T): PageFragment
+
     final override fun onPageStart(id:T) {
         resetBackPressedAction()
         val willChangePage = getPageByID(id)
         willChangePage.pageID = id
         willChangePage.delegate = this
         willChangePage.pageType = PageFragment.PageType.INIT
-        supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commitNow()
+        Log.d(TAG, "onPageStart() = {$id}")
+        supportFragmentManager.beginTransaction().add(getPageAreaId(), willChangePage, id.toString()).commitNow()
     }
+
     final override fun onPageChange(id:T, param:Map<String, Any>, isBack:Boolean) {
         resetBackPressedAction()
         val willChangePage = getPageByID(id)
@@ -92,7 +99,8 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
         willChangePage.delegate = this
         willChangePage.pageType = if(isBack) PageFragment.PageType.OUT else PageFragment.PageType.IN
         if( !param.isEmpty()) willChangePage.setParam(param)
-        supportFragmentManager.beginTransaction().add(getPageAreaId(),willChangePage).commitNow()
+        Log.d(TAG, "onPageChange() = {$id}")
+        supportFragmentManager.beginTransaction().add(getPageAreaId(), willChangePage, id.toString()).commitNow()
     }
 
     override fun onCreateAnimation(v:PageFragment) {
@@ -105,13 +113,15 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
     }
 
     abstract fun getPopupByID(id:T): PageFragment
+
     final override fun onOpenPopup(id:T, param:Map<String, Any>) {
         resetBackPressedAction()
         val popup = getPopupByID(id)
         popup.pageID = id
         popup.pageType = PageFragment.PageType.POPUP
         if( !param.isEmpty()) popup.setParam(param)
-        supportFragmentManager.beginTransaction().add(getPageAreaId(),popup,id.toString()).commitNow()
+        Log.d(TAG, "onOpenPopup() = {$id}")
+        supportFragmentManager.beginTransaction().add(getPageAreaId(), popup, id.toString()).commitNow()
     }
 
     final override fun onClosePopup(id:T) {
