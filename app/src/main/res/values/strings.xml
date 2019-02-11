@@ -16,4 +16,5 @@
     <string name="page_program">Program</string>
     <string name="page_free_workout">FreeWorkout</string>
     <string name="page_trainer">Trainer</string>
+    <string name="page_list_empty">list is not exist in page.</string>
 </resources>

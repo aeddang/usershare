@@ -10,11 +10,7 @@ abstract class RecyclerFrameLayout : RxFrameLayout, BaseAdapter.Delegate {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-
     override fun getLayoutResId(): Int {
         return R.layout.ui_recycler
     }
-
-
-
 }

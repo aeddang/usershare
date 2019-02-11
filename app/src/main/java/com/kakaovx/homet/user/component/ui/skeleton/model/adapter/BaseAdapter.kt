@@ -14,7 +14,7 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
     private var viewMoreRunnable: Runnable = Runnable {delegate?.viewMore(paginationData.currentPage, paginationData.pageSize)}
     private var total = 0
     private var isBusy = false
-    protected var paginationData:InfinityPaginationData<T> = InfinityPaginationData(pageSize)
+    private var paginationData:InfinityPaginationData<T> = InfinityPaginationData(pageSize)
 
     @CallSuper
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
@@ -22,62 +22,62 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
         viewMoreHandler.removeCallbacks(viewMoreRunnable)
     }
 
-    fun setDatas(datas:Array<T>): RecyclerView.Adapter<BaseAdapter.ViewHolder>{
+    fun setData(data:Array<T>): RecyclerView.Adapter<BaseAdapter.ViewHolder>{
         paginationData.reset()
-        paginationData.addAll(datas)
+        paginationData.addAll(data)
         notifyDataSetChanged()
         return this
     }
 
-    fun addDatas(datas:Array<T>) {
-        val idx = paginationData.datas.size
-        paginationData.addAll(datas)
-        notifyItemRangeInserted(idx, datas.size)
+    fun addData(data:Array<T>) {
+        val idx = paginationData.data.size
+        paginationData.addAll(data)
+        notifyItemRangeInserted(idx, data.size)
     }
 
     fun insertData(data:T,idx:Int = -1) {
-        val position = if (idx == -1) paginationData.datas.size else idx
+        val position = if (idx == -1) paginationData.data.size else idx
         if(position == -1 || position >= total) return
-        paginationData.datas.add(position,data)
+        paginationData.data.add(position,data)
         notifyItemInserted(position)
     }
 
     fun updateData(data:T,idx:Int) {
         if(idx == -1 || idx >= total) return
-        paginationData.datas[idx] = data
+        paginationData.data[idx] = data
         notifyItemChanged(idx)
     }
 
     fun removeData(data:T) {
-        val position = paginationData.datas.indexOf(data)
+        val position = paginationData.data.indexOf(data)
         removeData(position)
     }
 
     fun removeData(idx:Int) {
         if(idx == -1 || idx >= total) return
-        paginationData.datas.removeAt(idx)
+        paginationData.data.removeAt(idx)
         notifyItemRemoved(idx)
     }
 
-    fun removeAllDatas() {
+    fun removeAllData() {
         paginationData.reset()
         notifyDataSetChanged()
     }
 
     @CallSuper
     open fun viewMoreComplete(datas:Array<T>) {
-        addDatas(datas)
+        addData(datas)
         isBusy = false
     }
 
     override fun getItemCount():Int {
-        total = paginationData.datas.size
+        total = paginationData.data.size
         return total
     }
 
     @CallSuper
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.item.setData(paginationData.datas[position])
+        holder.item.setData(paginationData.data[position])
         if(position == total-1 && isViewMore && paginationData.isPageable && !isBusy) {
             isBusy = true
             paginationData.next()

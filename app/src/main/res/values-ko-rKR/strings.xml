@@ -9,11 +9,12 @@
     <string name="title_E">마</string>
     <string name="company">카카오VX</string>
     <string name="page_home">홈</string>
-    <string name="page_content">컨텐츠</string>
+    <string name="page_content">콘텐츠</string>
     <string name="page_planner">플래너</string>
     <string name="page_search">검색</string>
     <string name="page_profile">프로파일</string>
     <string name="page_program">프로그램</string>
     <string name="page_free_workout">무료운동</string>
     <string name="page_trainer">트레이너</string>
+    <string name="page_list_empty">페이지에 목록이 없습니다.</string>
 </resources>

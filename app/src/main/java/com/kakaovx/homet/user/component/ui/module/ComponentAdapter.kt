@@ -7,6 +7,7 @@ import com.kakaovx.homet.user.component.ui.view.item.BannerListItem
 import com.kakaovx.homet.user.component.ui.view.item.ImageListItem
 
 class ComponentAdapter: MultipleAdapter<String>() {
+
     override fun getViewHolder(parent: ViewGroup, viewType: Int): BaseAdapter.ViewHolder {
         return when(viewType) {
             0 -> { ViewHolder(ImageListItem(parent.context)) }
@@ -14,7 +15,8 @@ class ComponentAdapter: MultipleAdapter<String>() {
             else -> { ViewHolder(ImageListItem(parent.context)) }
         }
     }
-    override fun getViewType( position: Int): Int {
+
+    override fun getViewType(position: Int): Int {
         return position % 2
     }
 }

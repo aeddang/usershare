@@ -9,8 +9,9 @@ import com.kakaovx.homet.lib.page.Page
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class RxFrameLayout : FrameLayout, Rx, Page {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+    constructor(context: Context): super(context)
+    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
     protected var disposables: CompositeDisposable? = null
 

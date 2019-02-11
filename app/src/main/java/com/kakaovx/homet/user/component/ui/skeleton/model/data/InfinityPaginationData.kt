@@ -4,26 +4,28 @@ import java.util.*
 
 data class InfinityPaginationData<T>(val pageSize:Int = 10) {
 
-    var currentPage = 0; private set
-    var isPageable = true; private set
-    var datas = ArrayList<T>(); private set
+    var currentPage = 0
+    var isPageable = true
+    var data = ArrayList<T>()
 
-    fun reset(){
+    fun reset() {
         currentPage = 0
         isPageable = true
-        datas = ArrayList()
+        data = ArrayList()
     }
 
-    fun addAll(addDatas:Array<T>): Int {
-        datas.addAll(addDatas)
-        if(addDatas.size < pageSize) isPageable = false
-        return datas.size
+    fun addAll(addData:Array<T>): Int {
+        data.addAll(addData)
+
+        if(addData.size < pageSize) {
+            isPageable = false
+        }
+
+        return data.size
     }
 
     fun next(): Int {
         currentPage ++
         return currentPage
     }
-
-
 }

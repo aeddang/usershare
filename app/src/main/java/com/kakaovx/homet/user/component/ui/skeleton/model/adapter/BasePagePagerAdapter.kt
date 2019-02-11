@@ -3,7 +3,6 @@ package com.kakaovx.homet.user.component.ui.skeleton.model.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.view.View
 import android.view.ViewGroup
 import com.kakaovx.homet.lib.page.PageFragment
 
@@ -13,8 +12,8 @@ abstract class BasePagePagerAdapter<T>(fragmentManager: FragmentManager?): Fragm
 
     abstract fun getPageFragment(position: Int): PageFragment
 
-    fun setDatas(datas:Array<T>): FragmentPagerAdapter {
-        pages = datas
+    fun setData(data:Array<T>): FragmentPagerAdapter {
+        pages = data
         notifyDataSetChanged()
         return this
     }

@@ -13,8 +13,7 @@ class ImageListItem(context:Context): ListItem(context) {
         return R.layout.item_image
     }
 
-    override fun <String> setData(data:String)
-    {
+    override fun <String> setData(data:String) {
         textView.text = data.toString()
         //Glide.with(this).load(data).into(imageView)
     }

@@ -11,8 +11,8 @@ abstract class BaseViewPagerAdapter<V:View,T>: PagerAdapter() {
 
     abstract fun getPageView(container: ViewGroup, position: Int):V
 
-    fun setDatas(datas:Array<T>):PagerAdapter {
-        pages = datas
+    fun setData(data:Array<T>):PagerAdapter {
+        pages = data
         notifyDataSetChanged()
         return this
     }

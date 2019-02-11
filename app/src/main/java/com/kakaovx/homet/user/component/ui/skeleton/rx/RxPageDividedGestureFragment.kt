@@ -14,7 +14,6 @@ abstract class RxPageDividedGestureFragment : PageDividedGestureFragment(), Rx {
         onSubscribe()
     }
 
-
     @CallSuper
     override fun onDestroyed() {
         super.onDestroyed()

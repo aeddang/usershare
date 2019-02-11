@@ -10,8 +10,8 @@ abstract class BasePageStatePagerAdapter<T>(fragmentManager: FragmentManager): F
 
     abstract fun getPageFragment(position: Int): PageFragment
 
-    fun setDatas(datas:Array<T>): FragmentStatePagerAdapter {
-        pages = datas
+    fun setData(data:Array<T>): FragmentStatePagerAdapter {
+        pages = data
         notifyDataSetChanged()
         return this
     }

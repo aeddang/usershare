@@ -35,6 +35,7 @@ abstract class PageFragment:Fragment(), Page {
 
     @CallSuper
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Log.d(TAG, "onCreateView()")
         return inflater.inflate(getLayoutResId(), container, false)
     }
 

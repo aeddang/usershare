@@ -27,7 +27,6 @@ abstract class RxConstraintLayout : ConstraintLayout, Rx, Page {
         onSubscribe()
     }
 
-
     @CallSuper
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
