@@ -1,5 +1,6 @@
 package com.kakaovx.homet.user.component.ui.skeleton.model.adapter
 
+import android.arch.lifecycle.MutableLiveData
 import android.os.Handler
 import android.support.annotation.CallSuper
 import android.support.v7.widget.RecyclerView
@@ -9,6 +10,7 @@ import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
 abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:Int = -1) : RecyclerView.Adapter<BaseAdapter.ViewHolder>() {
     class ViewHolder(val item: ListItem) : RecyclerView.ViewHolder(item)
 
+    val isEmpty: MutableLiveData<Boolean> = MutableLiveData()
     var delegate: BaseAdapter.Delegate? = null
     private var viewMoreHandler: Handler = Handler()
     private var viewMoreRunnable: Runnable = Runnable {delegate?.viewMore(paginationData.currentPage, paginationData.pageSize)}
@@ -71,6 +73,7 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
     }
 
     override fun getItemCount():Int {
+        isEmpty.value = (paginationData.data.size == 0)
         total = paginationData.data.size
         return total
     }

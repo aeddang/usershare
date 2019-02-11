@@ -17,7 +17,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/pagerBanner">
 
-        <com.kakaovx.homet.user.component.ui.view.recycler.ComponentRecycler
+        <com.kakaovx.homet.user.component.ui.view.recycler.WorkoutCardViewRecycler
             android:id="@+id/listComponent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
