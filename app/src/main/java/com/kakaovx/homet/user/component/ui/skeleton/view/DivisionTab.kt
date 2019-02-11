@@ -11,11 +11,11 @@ abstract class DivisionTab<T> : RxLinearLayout {
 
     var delegate: Delegate<T>? = null
     var selectedIdx:Int = -1; private set
-    protected lateinit var tabs:Array<View>
-    abstract fun getTabMenus(): Array<View>
+    protected lateinit var tab:Array<View>
+    abstract fun getTabMenu(): Array<View>
 
-    protected lateinit var datas:Array<T>
-    abstract fun getIDDatas(): Array<T>
+    protected lateinit var data:Array<T>
+    abstract fun getIDData(): Array<T>
 
     var selectedTab:View? = null
     set(value) {
@@ -23,28 +23,28 @@ abstract class DivisionTab<T> : RxLinearLayout {
         field = value
         value?.let {
             it.isSelected = true
-            selectedIdx = tabs.indexOf(it)
+            selectedIdx = tab.indexOf(it)
         }
     }
 
     fun setSelect(id:T) {
-        val idx = datas.indexOf(id)
+        val idx = data.indexOf(id)
         setSelect(idx)
     }
 
     fun setSelect(idx:Int) {
         if(idx < 0) return
-        if(idx >= tabs.size) return
-        selectedTab = tabs[idx]
+        if(idx >= tab.size) return
+        selectedTab = tab[idx]
     }
 
     override fun onCreated() {
-        datas = getIDDatas()
-        tabs = getTabMenus()
-        tabs.forEach { it.setOnClickListener{view ->
+        data = getIDData()
+        tab = getTabMenu()
+        tab.forEach { it.setOnClickListener{view ->
             selectedTab = view
             delegate?.onSelected(this, selectedIdx)
-            delegate?.onSelected(this, datas[selectedIdx])
+            delegate?.onSelected(this, data[selectedIdx])
         }}
     }
 

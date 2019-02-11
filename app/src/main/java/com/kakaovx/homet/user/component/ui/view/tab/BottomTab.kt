@@ -15,7 +15,7 @@ class BottomTab: DivisionTab<PageID>{
         return R.layout.ui_bottom_tab
     }
 
-    override fun getTabMenus(): Array<View> {
+    override fun getTabMenu(): Array<View> {
         return arrayOf(
             tab_btn_home,
             tab_btn_content,
@@ -25,7 +25,7 @@ class BottomTab: DivisionTab<PageID>{
         )
     }
 
-    override fun getIDDatas(): Array<PageID> {
+    override fun getIDData(): Array<PageID> {
         return arrayOf (
             PageID.HOME,
             PageID.CONTENT,
