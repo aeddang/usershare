@@ -2,13 +2,11 @@ package com.kakaovx.homet.user.component.di
 
 import com.kakaovx.homet.user.component.di.annotation.ActivityScope
 import com.kakaovx.homet.user.component.di.annotation.PageScope
-import com.kakaovx.homet.user.component.di.module.page.PageProgramModule
+import com.kakaovx.homet.user.component.di.module.page.PageContentListModule
 import com.kakaovx.homet.user.component.di.module.page.PageSplashModule
 import com.kakaovx.homet.user.ui.MainActivity
-import com.kakaovx.homet.user.ui.page.PageHome
-import com.kakaovx.homet.user.ui.page.PageProgram
+import com.kakaovx.homet.user.ui.page.*
 import com.kakaovx.homet.user.ui.splash.SplashActivity
-import com.kakaovx.homet.user.ui.page.PageSplash
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -35,7 +33,19 @@ internal abstract class AndroidBindingModule {
 
     @PageScope
     @ContributesAndroidInjector(modules = [
-        PageProgramModule::class
+        PageContentListModule::class
     ])
     internal abstract fun bindPageProgram(): PageProgram
+
+    @PageScope
+    @ContributesAndroidInjector(modules = [
+        PageContentListModule::class
+    ])
+    internal abstract fun bindPageFreeWorkout(): PageFreeWorkout
+
+    @PageScope
+    @ContributesAndroidInjector(modules = [
+        PageContentListModule::class
+    ])
+    internal abstract fun bindPageTrainer(): PageTrainer
 }

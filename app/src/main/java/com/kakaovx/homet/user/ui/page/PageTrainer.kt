@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.ui_recycler.view.*
 import javax.inject.Inject
 
 
-class PageProgram : RxPageFragment() {
+class PageTrainer : RxPageFragment() {
 
     private val TAG = javaClass.simpleName
 
@@ -32,7 +32,7 @@ class PageProgram : RxPageFragment() {
 
     private fun initView(context: Context) {
         val recyclerView: RecyclerView = listComponent.recyclerView
-        contentListAdapter = ContentListAdapter(AppConst.HOMET_LIST_ITEM_PROGRAM)
+        contentListAdapter = ContentListAdapter(AppConst.HOMET_LIST_ITEM_TRAINER)
         contentListAdapter?.let {
             recyclerView.apply {
                 layoutManager = VerticalLinearLayoutManager(context)
@@ -48,11 +48,11 @@ class PageProgram : RxPageFragment() {
     }
 
     private fun initDisposables() {
-        disposables += viewModelContent.getProgram()
+        disposables += viewModelContent.getTrainer()
     }
 
     override fun getLayoutResId(): Int {
-        return R.layout.page_program
+        return R.layout.page_trainer
     }
 
     override fun onCreated() {

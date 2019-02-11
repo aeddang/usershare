@@ -33,4 +33,12 @@ object AppConst {
      */
     const val LIVE_DATA_CMD_NONE = 0x0100
     const val LIVE_DATA_CMD_STRING = 0x0101
+
+    /**
+     * List Item Type
+     */
+    const val HOMET_LIST_ITEM_PROGRAM = 0x0200
+    const val HOMET_LIST_ITEM_WORKOUT = 0x0201
+    const val HOMET_LIST_ITEM_FREE_WORKOUT = 0x0202
+    const val HOMET_LIST_ITEM_TRAINER = 0x0203
 }

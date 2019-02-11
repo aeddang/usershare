@@ -31,8 +31,8 @@ class PageFactory {
             PageID.SEARCH -> { PageSearch() }
             PageID.PROFILE -> { PageProfile() }
             PageID.PROGRAM -> { PageProgram() }
-            PageID.FREE_WORKOUT -> { PageProgram() }
-            PageID.TRAINER -> { PageProgram() }
+            PageID.FREE_WORKOUT -> { PageFreeWorkout() }
+            PageID.TRAINER -> { PageTrainer() }
         }
     }
 }

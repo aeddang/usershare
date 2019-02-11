@@ -12,7 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class PageProgramViewModel(repo: Repository) : ViewModel() {
+class PageContentListViewModel(repo: Repository) : ViewModel() {
 
     val TAG = javaClass.simpleName
 
@@ -24,6 +24,48 @@ class PageProgramViewModel(repo: Repository) : ViewModel() {
         // samples
         val params: MutableMap<String, String> = mutableMapOf()
         params["q"] = "microsoft"
+        return restApi.searchRepositories(params)
+            .retry(RetryPolicy.none())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                this::handleComplete,
+                this::handleError
+            )
+    }
+
+    fun getWorkoutInProgram(programIndex: Int): Disposable {
+        // samples
+        val params: MutableMap<String, String> = mutableMapOf()
+        params["q"] = "microsoft"
+        return restApi.searchRepositories(params)
+            .retry(RetryPolicy.none())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                this::handleComplete,
+                this::handleError
+            )
+    }
+
+    fun getFreeWorkout(): Disposable {
+        // samples
+        val params: MutableMap<String, String> = mutableMapOf()
+        params["q"] = "workout"
+        return restApi.searchRepositories(params)
+            .retry(RetryPolicy.none())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                this::handleComplete,
+                this::handleError
+            )
+    }
+
+    fun getTrainer(): Disposable {
+        // samples
+        val params: MutableMap<String, String> = mutableMapOf()
+        params["q"] = "fitness trainer"
         return restApi.searchRepositories(params)
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
