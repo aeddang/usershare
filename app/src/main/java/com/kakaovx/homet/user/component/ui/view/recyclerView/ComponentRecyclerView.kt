@@ -14,7 +14,7 @@ class ComponentRecyclerView: RecyclerFrameLayout {
 
     override fun onCreated() {
         recyclerView.layoutManager = VerticalLinearLayoutManager(context)
-        recyclerView.adapter = ComponentAdapter().setData(arrayOf("AAA","BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
+        recyclerView.adapter = ComponentAdapter().setDataArray(arrayOf("AAA","BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
     }
 
     override fun injectApi(api: RestfulApi) {

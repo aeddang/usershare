@@ -17,7 +17,7 @@ class BannerRecyclerView: RecyclerFrameLayout {
         viewAdapter = BannerAdapter()
         viewAdapter.delegate = this
         recyclerView.layoutManager = HorizontalLinearLayoutManager(context)
-        recyclerView.adapter = viewAdapter.setData(arrayOf("AAA","BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
+        recyclerView.adapter = viewAdapter.setDataArray(arrayOf("AAA","BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
     }
 
 

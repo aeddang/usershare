@@ -18,34 +18,34 @@ class AppFragmentAutoClearedDisposable (
     private val TAG = "AppFragmentAutoClearedDisposable"
 
     fun add(disposable: Disposable) {
-        if (AppFeature.APP_LOG_DEBUG) Log.i(TAG, "add(), owner = ${lifecycleOwner::class.java}")
+        if (AppFeature.APP_LOG_DEBUG) Log.i(TAG, "add(), ownerData = ${lifecycleOwner::class.java}")
         check(lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.INITIALIZED))
         compositeDisposable.add(disposable)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun create() {
-        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "create(), owner = ${lifecycleOwner::class.java}")
+        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "create(), ownerData = ${lifecycleOwner::class.java}")
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun start() {
-        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "start(), owner = ${lifecycleOwner::class.java}")
+        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "start(), ownerData = ${lifecycleOwner::class.java}")
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun resume() {
-        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "resume(), owner = ${lifecycleOwner::class.java}")
+        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "resume(), ownerData = ${lifecycleOwner::class.java}")
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun pause() {
-        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "pause(), owner = ${lifecycleOwner::class.java}")
+        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "pause(), ownerData = ${lifecycleOwner::class.java}")
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun stop() {
-        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "stop(), owner = ${lifecycleOwner::class.java}")
+        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "stop(), ownerData = ${lifecycleOwner::class.java}")
         if (!alwaysClearOnStop && !lifecycleOwner.isDetached) {
             return
         }
@@ -54,7 +54,7 @@ class AppFragmentAutoClearedDisposable (
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun destroy() {
-        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "destroy(), owner = ${lifecycleOwner::class.java}")
+        if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "destroy(), ownerData = ${lifecycleOwner::class.java}")
         compositeDisposable.clear()
         lifecycleOwner.lifecycle.removeObserver(this)
     }

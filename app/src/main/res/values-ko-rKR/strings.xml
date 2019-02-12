@@ -17,4 +17,6 @@
     <string name="page_free_workout">무료운동</string>
     <string name="page_trainer">트레이너</string>
     <string name="page_list_empty">페이지에 목록이 없습니다.</string>
+    <string name="card_name">카드 이름</string>
+    <string name="card_description">" 카드 설명"</string>
 </resources>

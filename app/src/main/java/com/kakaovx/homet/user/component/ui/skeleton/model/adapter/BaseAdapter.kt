@@ -24,27 +24,27 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
         viewMoreHandler.removeCallbacks(viewMoreRunnable)
     }
 
-    fun setData(data:Array<T>): RecyclerView.Adapter<BaseAdapter.ViewHolder>{
+    fun setDataArray(data:Array<T>): RecyclerView.Adapter<BaseAdapter.ViewHolder>{
         paginationData.reset()
         paginationData.addAll(data)
         notifyDataSetChanged()
         return this
     }
 
-    fun addData(data:Array<T>) {
+    fun addDataArray(data:Array<T>) {
         val idx = paginationData.data.size
         paginationData.addAll(data)
         notifyItemRangeInserted(idx, data.size)
     }
 
-    fun insertData(data:T,idx:Int = -1) {
+    fun insertData(data:T, idx:Int = -1) {
         val position = if (idx == -1) paginationData.data.size else idx
         if(position == -1 || position >= total) return
-        paginationData.data.add(position,data)
+        paginationData.data.add(position, data)
         notifyItemInserted(position)
     }
 
-    fun updateData(data:T,idx:Int) {
+    fun updateData(data:T, idx:Int) {
         if(idx == -1 || idx >= total) return
         paginationData.data[idx] = data
         notifyItemChanged(idx)
@@ -67,8 +67,8 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
     }
 
     @CallSuper
-    open fun viewMoreComplete(datas:Array<T>) {
-        addData(datas)
+    open fun viewMoreComplete(dataArray:Array<T>) {
+        addDataArray(dataArray)
         isBusy = false
     }
 

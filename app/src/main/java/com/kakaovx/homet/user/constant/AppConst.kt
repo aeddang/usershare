@@ -33,6 +33,7 @@ object AppConst {
      */
     const val LIVE_DATA_CMD_NONE = 0x0100
     const val LIVE_DATA_CMD_STRING = 0x0101
+    const val LIVE_DATA_CMD_ITEM = 0x0102
 
     /**
      * List Item Type

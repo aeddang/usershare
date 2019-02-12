@@ -16,4 +16,7 @@
     <dimen name="font_mid">15dp</dimen>
     <dimen name="font_small">12dp</dimen>
     <dimen name="font_tiny">10dp</dimen>
+
+    <dimen name="card_view_radius">40dp</dimen>
+    <dimen name="card_view_height">200dp</dimen>
 </resources>

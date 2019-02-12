@@ -66,9 +66,16 @@ class PageFreeWorkout : RxPageFragment() {
                 when (cmd) {
                     AppConst.LIVE_DATA_CMD_NONE -> Log.e(TAG, "none command")
                     AppConst.LIVE_DATA_CMD_STRING -> {
-                        val data = liveData.message
-                        data?.let {
-                            contentListAdapter?.setData(arrayOf(data)) ?: Log.e(TAG, "adapter is null")
+                        liveData.message?.let {
+                            Log.d(TAG, "get Data title = ${liveData.message}")
+                        }
+                    }
+                    AppConst.LIVE_DATA_CMD_ITEM -> {
+                        liveData.item?.let {
+                            val data = liveData.item
+                            data?.let {
+                                contentListAdapter?.setDataArray(data.toTypedArray()) ?: Log.e(TAG, "adapter is null")
+                            }
                         }
                     }
                     else -> Log.e(TAG, "wrong command")

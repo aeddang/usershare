@@ -4,10 +4,12 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.model.ApiResponse
+import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.component.ui.skeleton.model.data.PageLiveData
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -23,32 +25,21 @@ class PageProgramViewModel(repo: Repository) : ViewModel() {
     fun getProgram(): Disposable {
         // samples
         val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "microsoft"
+        params["q"] = "program"
         return restApi.searchRepositories(params)
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                this::handleComplete,
-                this::handleError
-            )
+            .subscribe( { data ->
+                Log.i(TAG, "subscribeComplete")
+                Log.i(TAG, "apiResponse incompleteResults = ${data.incompleteResults}")
+                Log.i(TAG, "apiResponse total count = ${data.count}")
+                Log.i(TAG, "apiResponse raw = $data")
+                handleComplete(data.items)
+            }, { handleError(it) })
     }
 
     fun getWorkoutInProgram(programIndex: Int): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "microsoft"
-        return restApi.searchRepositories(params)
-            .retry(RetryPolicy.none())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                this::handleComplete,
-                this::handleError
-            )
-    }
-
-    fun getFreeWorkout(): Disposable {
         // samples
         val params: MutableMap<String, String> = mutableMapOf()
         params["q"] = "workout"
@@ -56,31 +47,21 @@ class PageProgramViewModel(repo: Repository) : ViewModel() {
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                this::handleComplete,
-                this::handleError
-            )
+            .subscribe( { data ->
+                Log.i(TAG, "subscribeComplete")
+                Log.i(TAG, "apiResponse incompleteResults = ${data.incompleteResults}")
+                Log.i(TAG, "apiResponse total count = ${data.count}")
+                Log.i(TAG, "apiResponse raw = $data")
+                handleComplete(data.items)
+            }, { handleError(it) })
     }
 
-    fun getTrainer(): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "fitness trainer"
-        return restApi.searchRepositories(params)
-            .retry(RetryPolicy.none())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                this::handleComplete,
-                this::handleError
-            )
-    }
+    private fun handleComplete(data: ArrayList<ResultData>) {
+        Log.i(TAG, "handleComplete")
 
-    private fun handleComplete(data: ApiResponse) {
-        Log.i(TAG, "handleComplete ($data)")
         val liveData = PageLiveData()
-        liveData.cmd = AppConst.LIVE_DATA_CMD_STRING
-        liveData.message = data.toString()
+        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+        liveData.item = data
         response.value = liveData
     }
 
