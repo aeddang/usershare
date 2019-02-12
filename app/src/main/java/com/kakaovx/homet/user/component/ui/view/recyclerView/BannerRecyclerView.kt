@@ -1,13 +1,13 @@
-package com.kakaovx.homet.user.component.ui.view.recycler
+package com.kakaovx.homet.user.component.ui.view.recyclerView
 
 import android.content.Context
 import android.util.AttributeSet
 import com.kakaovx.homet.user.component.ui.module.BannerAdapter
 import com.kakaovx.homet.user.component.ui.module.HorizontalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.view.RecyclerFrameLayout
-import kotlinx.android.synthetic.main.ui_recycler.view.*
+import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 
-class BannerRecycler: RecyclerFrameLayout {
+class BannerRecyclerView: RecyclerFrameLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 

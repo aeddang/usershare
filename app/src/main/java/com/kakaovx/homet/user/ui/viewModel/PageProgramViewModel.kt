@@ -12,7 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class PageContentListViewModel(repo: Repository) : ViewModel() {
+class PageProgramViewModel(repo: Repository) : ViewModel() {
 
     val TAG = javaClass.simpleName
 

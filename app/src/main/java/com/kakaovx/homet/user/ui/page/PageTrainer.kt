@@ -6,17 +6,17 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.module.ContentListAdapter
+import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
-import com.kakaovx.homet.user.ui.viewModel.PageContentListViewModel
-import com.kakaovx.homet.user.ui.viewModel.PageContentListViewModelFactory
+import com.kakaovx.homet.user.ui.viewModel.PageTrainerViewModel
+import com.kakaovx.homet.user.ui.viewModel.PageTrainerViewModelFactory
 import com.kakaovx.homet.user.util.Log
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.page_program.*
-import kotlinx.android.synthetic.main.ui_recycler.view.*
+import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 import javax.inject.Inject
 
 
@@ -25,8 +25,8 @@ class PageTrainer : RxPageFragment() {
     private val TAG = javaClass.simpleName
 
     @Inject
-    lateinit var viewModelFactoryContent: PageContentListViewModelFactory
-    private lateinit var viewModelContent: PageContentListViewModel
+    lateinit var viewViewModelFactory: PageTrainerViewModelFactory
+    private lateinit var viewModel: PageTrainerViewModel
 
     private var contentListAdapter: ContentListAdapter? = null
 
@@ -48,7 +48,7 @@ class PageTrainer : RxPageFragment() {
     }
 
     private fun initDisposables() {
-        disposables += viewModelContent.getTrainer()
+        disposables += viewModel.getTrainer()
     }
 
     override fun getLayoutResId(): Int {
@@ -59,8 +59,8 @@ class PageTrainer : RxPageFragment() {
         Log.d(TAG, "onCreated() start")
         AndroidSupportInjection.inject(this)
 
-        viewModelContent = ViewModelProviders.of(this, viewModelFactoryContent)[PageContentListViewModel::class.java]
-        viewModelContent.response.observe(this, Observer { liveData ->
+        viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageTrainerViewModel::class.java]
+        viewModel.response.observe(this, Observer { liveData ->
             liveData?.let {
                 val cmd = liveData.cmd
                 when (cmd) {

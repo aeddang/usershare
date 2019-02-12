@@ -4,9 +4,9 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-    <com.kakaovx.homet.user.component.ui.view.recycler.BannerRecycler android:layout_width="match_parent"
-                                                                      android:layout_height="match_parent"
-                                                                      android:id="@+id/bannerList">
-    </com.kakaovx.homet.user.component.ui.view.recycler.BannerRecycler>
+    <com.kakaovx.homet.user.component.ui.view.recyclerView.BannerRecyclerView android:layout_width="match_parent"
+                                                                              android:layout_height="match_parent"
+                                                                              android:id="@+id/bannerList">
+    </com.kakaovx.homet.user.component.ui.view.recyclerView.BannerRecyclerView>
 
 </FrameLayout>
