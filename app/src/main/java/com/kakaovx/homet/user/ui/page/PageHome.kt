@@ -1,14 +1,23 @@
 package com.kakaovx.homet.user.ui.page
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-import com.kakaovx.homet.lib.page.PagePresenter
+import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.repository.Repository
+import com.kakaovx.homet.user.component.ui.module.ComplexListAdapter
+import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
+import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.ui.MainActivity
-import com.kakaovx.homet.user.ui.PageID
+import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModel
+import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModelFactory
 import com.kakaovx.homet.user.util.Log
-import kotlinx.android.synthetic.main.page_main.*
+import dagger.android.support.AndroidSupportInjection
+import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.page_home.*
+import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 import javax.inject.Inject
 
 
@@ -17,9 +26,13 @@ class PageHome : RxPageFragment() {
     private val TAG = javaClass.simpleName
 
     @Inject
-    lateinit var repository: Repository
+    lateinit var viewViewModelFactory: PageHomeViewModelFactory
+    private lateinit var viewModel: PageHomeViewModel
+
+    private var complexListAdapter: ComplexListAdapter? = null
 
     private fun initView(context: Context) {
+        val recyclerView: RecyclerView = listComponent.recyclerView
         activity?.let {
             val myActivity: MainActivity = activity as MainActivity
             myActivity.supportActionBar?.apply {
@@ -27,28 +40,66 @@ class PageHome : RxPageFragment() {
                 setDisplayShowTitleEnabled(true)
             }
         }
+        complexListAdapter = ComplexListAdapter()
+        complexListAdapter?.let {
+            recyclerView.apply {
+                layoutManager = VerticalLinearLayoutManager(context)
+                adapter = it
+            }
+            it.isEmpty.observe(this, Observer { existData ->
+                existData?.let {
+                    if (existData) viewEmpty.visibility = View.VISIBLE
+                    else viewEmpty.visibility = View.INVISIBLE
+                }
+            })
+        }
     }
 
-    override fun getLayoutResId(): Int { return R.layout.page_main }
+    private fun initDisposables() {
+        disposables += viewModel.getHomeData()
+    }
+
+    override fun getLayoutResId(): Int {
+        return R.layout.page_home
+    }
 
     override fun onDestroyed() {
         Log.d(TAG, "onDestroyed()")
+        complexListAdapter = null
         super.onDestroyed()
     }
 
     override fun onCreated() {
+        Log.d(TAG, "onCreated() start")
+        AndroidSupportInjection.inject(this)
+
+        viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageHomeViewModel::class.java]
+        viewModel.response.observe(this, Observer { liveData ->
+            liveData?.let {
+                val cmd = liveData.cmd
+                when (cmd) {
+                    AppConst.LIVE_DATA_CMD_NONE -> Log.e(TAG, "none command")
+                    AppConst.LIVE_DATA_CMD_STRING -> {
+                        liveData.message?.let {
+                            Log.d(TAG, "get Data title = ${liveData.message}")
+                        } ?: Log.e(TAG, "message is null")
+                    }
+                    AppConst.LIVE_DATA_CMD_ITEM -> {
+                        liveData.item?.let {
+                            val data = liveData.item
+                            data?.let {
+                                complexListAdapter?.setDataArray(data.toTypedArray()) ?: Log.e(TAG, "adapter is null")
+                            } ?: Log.e(TAG, "data is null")
+                        }
+                    }
+                    else -> Log.e(TAG, "wrong command")
+                }
+            } ?: Log.e(TAG, "liveData is null")
+        })
         super.onCreated()
 
-        Log.d(TAG, "onCreated()")
-        // AndroidSupportInjection.inject(this)
-        // listComponent.injectApi(repository.restApi)
-
-        context?.let {
-            initView(it)
-        }
-
-        buttonTestA.setOnClickListener{ PagePresenter.getInstance<PageID>().pageChange( PageID.PROGRAM) }
-        buttonTestB.setOnClickListener{ PagePresenter.getInstance<PageID>().pageChange( PageID.PLANNER) }
+        context?.let{ initView(it) }
+        initDisposables()
+        Log.d(TAG, "onCreated() end")
     }
-
 }

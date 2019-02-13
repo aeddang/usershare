@@ -12,7 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class PageTrainerViewModel(repo: Repository) : ViewModel() {
+class PageHomeViewModel(repo: Repository) : ViewModel() {
 
     val TAG = javaClass.simpleName
 
@@ -20,10 +20,10 @@ class PageTrainerViewModel(repo: Repository) : ViewModel() {
 
     val response: MutableLiveData<PageLiveData> = MutableLiveData()
 
-    fun getTrainer(): Disposable {
+    fun getHomeData(): Disposable {
         // samples
         val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "fitness trainer"
+        params["q"] = "home"
         return restApi.searchRepositories(params)
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())

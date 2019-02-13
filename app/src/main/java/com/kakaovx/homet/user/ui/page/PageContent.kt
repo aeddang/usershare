@@ -34,7 +34,7 @@ class PageContent : ViewPagerPageFragment() {
 
         context?.let { initView(it) }
         activity?.let {
-            val adapt = PageViewPagerAdapter(childFragmentManager, context).setDatas(pages)
+            val adapt = PageViewPagerAdapter(childFragmentManager, context).setDataArray(pages)
             viewPager.adapter = adapt
             recyclerTabLayout.setUpWithViewPager(viewPager)
             viewPager.adapter?.notifyDataSetChanged()
@@ -51,8 +51,8 @@ class PageContent : ViewPagerPageFragment() {
 
         lateinit var pages: Array<PageID>
 
-        fun setDatas(datas:Array<PageID>): PagerAdapter {
-            pages = datas
+        fun setDataArray(dataArray:Array<PageID>): PagerAdapter {
+            pages = dataArray
             notifyDataSetChanged()
             return this
         }

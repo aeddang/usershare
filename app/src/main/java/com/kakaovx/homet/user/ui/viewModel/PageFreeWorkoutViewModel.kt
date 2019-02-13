@@ -8,7 +8,6 @@ import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.component.ui.skeleton.model.data.PageLiveData
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

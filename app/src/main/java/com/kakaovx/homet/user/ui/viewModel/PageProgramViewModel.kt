@@ -3,13 +3,11 @@ package com.kakaovx.homet.user.ui.viewModel
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.network.RetryPolicy
-import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.component.ui.skeleton.model.data.PageLiveData
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

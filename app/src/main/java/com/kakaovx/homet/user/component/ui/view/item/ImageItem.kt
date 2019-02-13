@@ -5,7 +5,7 @@ import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
 import kotlinx.android.synthetic.main.item_image.view.*
 
-class ImageListItem(context:Context): ListItem(context) {
+class ImageItem(context:Context): ListItem(context) {
 
     override fun onCreated() { }
 

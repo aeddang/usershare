@@ -42,4 +42,15 @@ object AppConst {
     const val HOMET_LIST_ITEM_WORKOUT = 0x0201
     const val HOMET_LIST_ITEM_FREE_WORKOUT = 0x0202
     const val HOMET_LIST_ITEM_TRAINER = 0x0203
+
+    /**
+     * Home List Item Type
+     */
+    const val HOMET_LIST_ITEM_HOME_INDEX = 0x300
+    const val HOMET_LIST_ITEM_HOME_PROGRAM = 0x300
+    const val HOMET_LIST_ITEM_HOME_WORKOUT_TYPE = 0x301
+    const val HOMET_LIST_ITEM_HOME_BANNER = 0x302
+    const val HOMET_LIST_ITEM_HOME_FREE_WORKOUT = 0x303
+    const val HOMET_LIST_ITEM_HOME_TRAINER = 0x304
+    const val HOMET_LIST_ITEM_HOME_HASH_TAG = 0x305
 }

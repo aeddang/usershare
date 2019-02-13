@@ -1,31 +1,26 @@
 package com.kakaovx.homet.user.component.ui.view.item
 
 import android.content.Context
-import com.bumptech.glide.Glide
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
 import com.kakaovx.homet.user.util.Log
-import kotlinx.android.synthetic.main.item_image_card.view.*
+import kotlinx.android.synthetic.main.item_landscape_list.view.*
 
-class ImageCardListItem(context:Context): ListItem(context) {
+class LandscapeListItem(context:Context): ListItem(context) {
 
     private val TAG = javaClass.simpleName
 
     override fun onCreated() { }
 
     override fun getLayoutResId(): Int {
-        return R.layout.item_image_card
+        return R.layout.item_landscape_list
     }
 
     override fun <T> setData(data: T) {
         val resultData: ResultData = data as ResultData
         Log.d(TAG, "setData() get data = [$resultData]")
-        val owner = resultData.ownerData
-        owner?.apply {
-            avatarUrl?.let {
-                Glide.with(context).load(it).into(imageView)
-            } ?: Log.e(TAG, "url is null")
-        }
+        landscapeListTitle.text = resultData.name ?: "title null"
+        landscapeListSubTitle.text = resultData.fullName ?: "sub title null"
     }
 }

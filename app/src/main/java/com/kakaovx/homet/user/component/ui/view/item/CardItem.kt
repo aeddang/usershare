@@ -7,7 +7,7 @@ import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
 import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.item_card.view.*
 
-class CardListItem(context:Context): ListItem(context) {
+class CardItem(context:Context): ListItem(context) {
 
     private val TAG = javaClass.simpleName
 

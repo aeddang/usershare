@@ -20,7 +20,6 @@ class BannerRecyclerView: RecyclerFrameLayout {
         recyclerView.adapter = viewAdapter.setDataArray(arrayOf("AAA","BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
     }
 
-
     override fun viewMore( page:Int, size:Int) {
         super.viewMore(page, size)
         viewAdapter.viewMoreComplete(arrayOf("AAA"+page.toString(),"BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
