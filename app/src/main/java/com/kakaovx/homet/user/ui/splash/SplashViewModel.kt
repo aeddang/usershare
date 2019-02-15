@@ -1,7 +1,7 @@
 package com.kakaovx.homet.user.ui.splash
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.repository.Repository

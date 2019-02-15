@@ -1,5 +1,5 @@
 package com.kakaovx.homet.user
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.facebook.stetho.Stetho
 import com.kakaovx.homet.user.component.di.DaggerAppComponent
 import com.kakaovx.homet.user.constant.AppFeature

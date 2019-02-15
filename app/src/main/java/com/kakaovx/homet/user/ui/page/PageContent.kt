@@ -1,9 +1,9 @@
 package com.kakaovx.homet.user.ui.page
 
 import android.content.Context
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.PagerAdapter
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.view.ViewPagerPageFragment

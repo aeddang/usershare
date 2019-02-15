@@ -1,6 +1,6 @@
 package com.kakaovx.homet.user.component.ui.skeleton.rx
 
-import android.support.annotation.CallSuper
+import androidx.annotation.CallSuper
 import com.kakaovx.homet.lib.page.PageGestureFragment
 import io.reactivex.disposables.CompositeDisposable
 

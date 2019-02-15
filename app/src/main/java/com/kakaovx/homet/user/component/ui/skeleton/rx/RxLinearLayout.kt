@@ -1,10 +1,10 @@
 package com.kakaovx.homet.user.component.ui.skeleton.rx
 
 import android.content.Context
-import android.support.annotation.CallSuper
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.CallSuper
 import com.kakaovx.homet.lib.page.Page
 import io.reactivex.disposables.CompositeDisposable
 

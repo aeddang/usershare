@@ -1,7 +1,7 @@
 package com.kakaovx.homet.user.component.ui.skeleton.model.adapter
 
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import com.kakaovx.homet.lib.page.PageFragment
 
 abstract class BasePageStatePagerAdapter<T>(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager) {

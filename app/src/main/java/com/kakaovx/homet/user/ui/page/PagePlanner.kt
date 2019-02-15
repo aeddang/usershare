@@ -1,8 +1,9 @@
 package com.kakaovx.homet.user.ui.page
 
 import android.content.Context
-import com.kakaovx.homet.user.util.Log
 import android.view.View
+import com.kakaovx.homet.user.util.Log
+
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.network.model.ApiResponse

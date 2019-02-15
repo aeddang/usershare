@@ -1,7 +1,7 @@
 package com.kakaovx.homet.user.component.ui.module
 
 import android.content.Context
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.FragmentManager
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BasePageStatePagerAdapter
 import com.kakaovx.homet.user.constant.AppConst

@@ -1,7 +1,7 @@
 package com.kakaovx.homet.user.ui.viewModel
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.kakaovx.homet.user.component.repository.Repository
 
 class PageHomeViewModelFactory(private val repo: Repository): ViewModelProvider.Factory {

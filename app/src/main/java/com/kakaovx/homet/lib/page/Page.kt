@@ -1,6 +1,6 @@
 package com.kakaovx.homet.lib.page
 
-import android.support.annotation.LayoutRes
+import androidx.annotation.LayoutRes
 
 interface Page {
     @LayoutRes

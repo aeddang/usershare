@@ -1,9 +1,9 @@
 package com.kakaovx.homet.user.util
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.kakaovx.homet.user.constant.AppFeature
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

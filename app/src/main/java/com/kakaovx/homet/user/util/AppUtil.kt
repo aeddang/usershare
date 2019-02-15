@@ -1,11 +1,11 @@
 package com.kakaovx.homet.user.util
 
 import android.app.ActivityManager
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import io.reactivex.disposables.Disposable
 
 operator fun Lifecycle.plusAssign(observer: LifecycleObserver)
