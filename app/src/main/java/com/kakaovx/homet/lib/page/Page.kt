@@ -17,12 +17,12 @@ interface Presenter<T> {
     fun toggleNavigation()
     fun showNavigation()
     fun hideNavigation()
-    fun closePopup(id:T): PagePresenter<T>
-    fun openPopup(id:T): PagePresenter<T>
-    fun openPopup(id:T,param:Map<String, Any>): PagePresenter<T>
-    fun pageStart(id:T): PagePresenter<T>
-    fun pageChange(id:T,isHistory:Boolean=true,isBack:Boolean = false): PagePresenter<T>
-    fun pageChange(id:T,param:Map<String, Any>,isHistory:Boolean=true,isBack:Boolean = false): PagePresenter<T>
+    fun closePopup(id:T): Presenter<T>
+    fun openPopup(id:T): Presenter<T>
+    fun openPopup(id:T,param:Map<String, Any>): Presenter<T>
+    fun pageStart(id:T): Presenter<T>
+    fun pageChange(id:T,isHistory:Boolean=true,isBack:Boolean = false): Presenter<T>
+    fun pageChange(id:T,param:Map<String, Any>,isHistory:Boolean=true,isBack:Boolean = false): Presenter<T>
 }
 
 interface View<T> {

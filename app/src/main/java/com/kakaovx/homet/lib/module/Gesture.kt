@@ -222,10 +222,7 @@ class Gesture(var delegate: Delegate?, private val isVertical: Boolean, private 
             rotate = (Math.atan2(h.toDouble(), w.toDouble()) / Math.PI * 360).toFloat()
             delegate?.rotateChange(this, rotate)
 
-            if (isComplete && Math.abs(startRotate - rotate) > changeRotate) delegate?.gestureComplete(this,
-                Type.PINCH_ROTATE
-            )
-
+            if (isComplete && Math.abs(startRotate - rotate) > changeRotate) delegate?.gestureComplete( this, Type.PINCH_ROTATE )
             if (isComplete) {
                 if (Math.abs(dist) > changeMin) {
                     if (dist > 0) delegate?.gestureComplete(this, Type.PINCH_OUT)
