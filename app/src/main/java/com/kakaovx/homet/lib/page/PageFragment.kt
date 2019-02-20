@@ -23,9 +23,9 @@ abstract class PageFragment: Fragment(), Page {
         INIT, IN, OUT, POPUP
     }
 
-    private var animationDuration = AnimationDuration.SHORT.duration
-    private var animationHandler: Handler = Handler()
-    private var viewCreateRunnable: Runnable = Runnable {onCreateAnimation()}
+    protected var animationDuration = AnimationDuration.SHORT.duration
+    protected var animationHandler: Handler = Handler()
+    protected var viewCreateRunnable: Runnable = Runnable {onCreateAnimation()}
     protected var animationCreateRunnable: Runnable = Runnable {didCreateAnimation()}
     protected var animationDestroyRunnable: Runnable = Runnable {didDestroyAnimation()}
     var pageID:Any? = null; internal set
@@ -59,7 +59,7 @@ abstract class PageFragment: Fragment(), Page {
         onDetached()
     }
 
-    open fun willCreateAnimation() {
+    protected open fun willCreateAnimation() {
         val pageActivity = activity as PageActivity<*>
         val size = pageActivity.getPageAreaSize()
         var posX = 0f
@@ -76,7 +76,7 @@ abstract class PageFragment: Fragment(), Page {
         view?.alpha = valueAlpha
     }
 
-    open fun onCreateAnimation():Long {
+    protected open fun onCreateAnimation():Long {
         var interpolator:Interpolator? = null
         when (pageType) {
             PageType.INIT -> DecelerateInterpolator()
@@ -99,10 +99,10 @@ abstract class PageFragment: Fragment(), Page {
     }
     protected open fun didCreateAnimation() {}
 
-    open fun onClosePopupAnimation():Long {
+    internal open fun onClosePopupAnimation():Long {
         return onDestroyAnimation()
     }
-    open fun onDestroyAnimation():Long {
+    internal open fun onDestroyAnimation():Long {
         animation?.cancel()
         view?.let {
             var posX = 0f
