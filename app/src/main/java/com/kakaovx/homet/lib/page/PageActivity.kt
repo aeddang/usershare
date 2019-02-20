@@ -25,6 +25,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
     abstract fun getHomes():Array<T>
 
     private var exitCount = 0
+    protected val popups = ArrayList<PageFragment>()
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,11 +124,13 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
         popup.pageType = PageFragment.PageType.POPUP
         if( !param.isEmpty()) popup.setParam(param)
         Log.d(TAG, "onOpenPopup() = {$id}")
+        popups.add(popup)
         supportFragmentManager.beginTransaction().add(getPageAreaId(), popup, id.toString()).commitNow()
     }
 
     final override fun onClosePopup(id:T) {
         val popup = supportFragmentManager.findFragmentByTag(id.toString()) as PageFragment
+        popups.remove(popup)
         popup.onClosePopupAnimation()
     }
 }
