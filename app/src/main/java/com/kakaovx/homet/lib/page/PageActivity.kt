@@ -13,9 +13,8 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
 
     private val TAG = javaClass.simpleName
 
-    open lateinit var pagePresenter: PagePresenter<T>
-    open var currentPage: PageFragment? = null
-        protected set
+    open lateinit var pagePresenter: PagePresenter<T>;  protected set
+    open var currentPage: PageFragment? = null; protected set
     protected lateinit var pageArea:ViewGroup
 
     @IdRes
@@ -43,6 +42,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
         super.onDestroy()
         currentPage = null
         pagePresenter.onDestroy()
+        popups.clear()
         onDestroyed()
     }
 
@@ -58,19 +58,19 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
         onAttached()
     }
 
-    open fun getCurrentFragment(): PageFragment? {
+    fun getCurrentFragment(): PageFragment? {
         return supportFragmentManager.fragments.last() as PageFragment
     }
 
-    open fun getPageAreaSize():Pair<Float,Float> {
+    fun getPageAreaSize():Pair<Float,Float> {
         return Pair(pageArea.width.toFloat(),pageArea.height.toFloat())
     }
 
-    protected fun resetBackPressedAction() {
+    protected open fun resetBackPressedAction() {
         exitCount = 0
     }
 
-    protected fun onBackPressedAction(): Boolean {
+    protected open fun onBackPressedAction(): Boolean {
         if(exitCount == 1) return false
         exitCount ++
         Toast.makeText(this,getPageExitMsg(),Toast.LENGTH_LONG).show()
