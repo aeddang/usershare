@@ -4,14 +4,12 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         tools:context=".ui.MainActivity">
 
     <FrameLayout
             android:id="@+id/area"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true">
+            android:layout_height="match_parent">
 
             <com.kakaovx.homet.user.component.ui.view.tab.BottomTab
                     android:orientation="horizontal"
@@ -21,6 +19,5 @@
                     android:id="@+id/bottomTab">
             </com.kakaovx.homet.user.component.ui.view.tab.BottomTab>
     </FrameLayout>
-
 
 </FrameLayout>

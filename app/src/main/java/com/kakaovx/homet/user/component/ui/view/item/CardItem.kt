@@ -4,7 +4,6 @@ import android.content.Context
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
-import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.item_card.view.*
 
 class CardItem(context:Context): ListItem(context) {
@@ -19,7 +18,7 @@ class CardItem(context:Context): ListItem(context) {
 
     override fun <T> setData(data: T) {
         val resultData: ResultData = data as ResultData
-        Log.d(TAG, "setData() get data = [$resultData]")
+//        Log.d(TAG, "setData() get data = [$resultData]")
         card_name.text = resultData.name ?: "card name null"
         card_description.text = resultData.description ?: "card description null"
     }

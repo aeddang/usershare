@@ -10,7 +10,7 @@ import com.kakaovx.homet.user.component.ui.view.item.LandscapeListItem
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
 
-class ComplexListAdapter: MultipleAdapter<ResultData>() {
+class ComplexListAdapter(private val listType: Int): MultipleAdapter<ResultData>() {
 
     private val TAG = javaClass.simpleName
 
@@ -37,8 +37,8 @@ class ComplexListAdapter: MultipleAdapter<ResultData>() {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_TRAINER")
                 ViewHolder(CardItem(parent.context))
             }
-            AppConst.HOMET_LIST_ITEM_HOME_HASH_TAG -> {
-                Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_HASH_TAG")
+            AppConst.HOMET_LIST_ITEM_HOME_RECOMMEND -> {
+                Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_RECOMMEND")
                 ViewHolder(LandscapeListItem(parent.context))
             }
             else -> { ViewHolder(ImageItem(parent.context)) }
@@ -46,6 +46,6 @@ class ComplexListAdapter: MultipleAdapter<ResultData>() {
     }
 
     override fun getViewType(position: Int): Int {
-        return position or AppConst.HOMET_LIST_ITEM_HOME_INDEX
+        return listType
     }
 }

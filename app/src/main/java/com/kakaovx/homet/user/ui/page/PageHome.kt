@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.ui.module.ComplexListAdapter
 import com.kakaovx.homet.user.component.ui.module.HorizontalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
@@ -20,7 +21,10 @@ import com.kakaovx.homet.user.util.Log
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.page_home.*
+import kotlinx.android.synthetic.main.page_home_content_free_workout.*
 import kotlinx.android.synthetic.main.page_home_content_program.*
+import kotlinx.android.synthetic.main.page_home_content_recommend.*
+import kotlinx.android.synthetic.main.page_home_content_trainer.*
 import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 import javax.inject.Inject
 
@@ -33,7 +37,10 @@ class PageHome : RxPageFragment() {
     lateinit var viewViewModelFactory: PageHomeViewModelFactory
     private lateinit var viewModel: PageHomeViewModel
 
-    private var complexListAdapter: ComplexListAdapter? = null
+    private var programListAdapter: ComplexListAdapter? = null
+    private var freeWorkoutListAdapter: ComplexListAdapter? = null
+    private var trainerListAdapter: ComplexListAdapter? = null
+    private var recommendListAdapter: ComplexListAdapter? = null
 
     private fun initView(context: Context) {
         activity?.let {
@@ -47,8 +54,8 @@ class PageHome : RxPageFragment() {
 
         program_list?.let{
             val recyclerView: RecyclerView = program_list.recyclerView
-            complexListAdapter = ComplexListAdapter()
-            complexListAdapter?.let {
+            programListAdapter = ComplexListAdapter(AppConst.HOMET_LIST_ITEM_HOME_PROGRAM)
+            programListAdapter?.let {
                 recyclerView.apply {
                     layoutManager = HorizontalLinearLayoutManager(context)
                     adapter = it
@@ -61,10 +68,69 @@ class PageHome : RxPageFragment() {
                 })
             }
         }
+
+        free_workout_list?.let{
+            val recyclerView: RecyclerView = free_workout_list.recyclerView
+            freeWorkoutListAdapter = ComplexListAdapter(AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT)
+            freeWorkoutListAdapter?.let {
+                recyclerView.apply {
+                    layoutManager = HorizontalLinearLayoutManager(context)
+                    adapter = it
+                }
+                it.isEmpty.observe(this, Observer { existData ->
+                    existData?.let {
+                        if (existData) free_workout_list_empty.visibility = View.VISIBLE
+                        else free_workout_list_empty.visibility = View.INVISIBLE
+                    }
+                })
+            }
+        }
+
+        trainer_list?.let{
+            val recyclerView: RecyclerView = trainer_list.recyclerView
+            trainerListAdapter = ComplexListAdapter(AppConst.HOMET_LIST_ITEM_HOME_TRAINER)
+            trainerListAdapter?.let {
+                recyclerView.apply {
+                    layoutManager = HorizontalLinearLayoutManager(context)
+                    adapter = it
+                }
+                it.isEmpty.observe(this, Observer { existData ->
+                    existData?.let {
+                        if (existData) trainer_list_empty.visibility = View.VISIBLE
+                        else trainer_list_empty.visibility = View.INVISIBLE
+                    }
+                })
+            }
+        }
+
+        recommend_tab_layout?.apply {
+//            setupWithViewPager(recommend_viewpager.viewPager)
+        }
     }
 
     private fun initDisposables() {
-        disposables += viewModel.getHomeData()
+        disposables += viewModel.getProgramData()
+        disposables += viewModel.getFreeWorkoutData()
+        disposables += viewModel.getTrainerData()
+        disposables += viewModel.getHashTagData()
+    }
+
+    private fun insertData(type: Int, dataArray: Array<ResultData>) {
+        when (type) {
+            AppConst.HOMET_LIST_ITEM_HOME_PROGRAM -> {
+                programListAdapter?.setDataArray(dataArray) ?: Log.e(TAG, "adapter is null")
+            }
+            AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT -> {
+                freeWorkoutListAdapter?.setDataArray(dataArray) ?: Log.e(TAG, "adapter is null")
+            }
+            AppConst.HOMET_LIST_ITEM_HOME_TRAINER -> {
+                trainerListAdapter?.setDataArray(dataArray) ?: Log.e(TAG, "adapter is null")
+            }
+            AppConst.HOMET_LIST_ITEM_HOME_RECOMMEND -> {
+                recommendListAdapter?.setDataArray(dataArray) ?: Log.e(TAG, "adapter is null")
+            }
+            else -> Log.e(TAG, "wrong list type")
+        }
     }
 
     override fun getLayoutResId(): Int {
@@ -73,7 +139,10 @@ class PageHome : RxPageFragment() {
 
     override fun onDestroyed() {
         Log.d(TAG, "onDestroyed()")
-        complexListAdapter = null
+        programListAdapter = null
+        freeWorkoutListAdapter = null
+        trainerListAdapter = null
+        recommendListAdapter = null
         super.onDestroyed()
     }
 
@@ -89,14 +158,20 @@ class PageHome : RxPageFragment() {
                     AppConst.LIVE_DATA_CMD_NONE -> Log.e(TAG, "none command")
                     AppConst.LIVE_DATA_CMD_STRING -> {
                         liveData.message?.let {
-                            Log.d(TAG, "get Data title = ${liveData.message}")
+                            val message = liveData.message
+                            recommend_tab_layout?.apply {
+                                if (tabCount < 4) {
+//                                    Log.d(TAG, "add Tab [$tabCount][$message]")
+                                    addTab(newTab().setText(message))
+                                }
+                            }
                         } ?: Log.e(TAG, "message is null")
                     }
                     AppConst.LIVE_DATA_CMD_ITEM -> {
                         liveData.item?.let {
                             val data = liveData.item
                             data?.let {
-                                complexListAdapter?.setDataArray(data.toTypedArray()) ?: Log.e(TAG, "adapter is null")
+                                insertData(liveData.listItemType, data.toTypedArray())
                             } ?: Log.e(TAG, "data is null")
                         }
                     }

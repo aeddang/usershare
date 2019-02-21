@@ -6,21 +6,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/area_bottom"
-        android:fitsSystemWindows="true"
         tools:context=".ui.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_height="@dimen/page_home_app_bar_height"
             android:layout_width="match_parent"
-            android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
                 app:toolbarId="@+id/toolbar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:contentScrim="?attr/colorPrimary">
@@ -29,12 +26,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/kakaovx_homet_home_bg"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitCenter"
+                    app:layout_collapseMode="parallax"/>
 
             <include
                     android:id="@+id/program_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:layout_collapseMode="parallax"
                     layout="@layout/page_home_content_program"/>
 
             <androidx.appcompat.widget.Toolbar

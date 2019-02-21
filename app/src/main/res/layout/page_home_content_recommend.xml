@@ -5,12 +5,31 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/page_home_recommend_bg"
         tools:context=".ui.MainActivity">
 
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/recommend_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?actionBarSize"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/indicator"
+            app:tabIndicatorHeight="@dimen/page_home_recommend_tab_indicator_height"
+            app:tabBackground="@color/page_home_recommend_bg"
+            app:tabMode="fixed"
+            app:tabTextColor="@color/page_home_recommend_font_color"
+            app:tabSelectedTextColor="@color/page_home_recommend_selected_font_color"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/recommend_content_layout"/>
+
     <FrameLayout
+            android:id="@+id/recommend_content_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recommend_tab_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">

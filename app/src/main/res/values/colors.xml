@@ -8,10 +8,14 @@
     <color name="indicator">#FFCD00</color>
 
     <color name="splash_bg">#FFCD00</color>
-    <color name="tab_bg">#FFFFFF</color>
+    <color name="tab_bg">#F8F8F8</color>
     <color name="divide_bg">#F3F8FA</color>
 
     <color name="page_home_title">#FFFFFF</color>
     <color name="page_home_sub_title">#1E1E1E</color>
     <color name="page_home_program">#FFFFFF</color>
+
+    <color name="page_home_recommend_bg">#F8F8F8</color>
+    <color name="page_home_recommend_font_color">#939393</color>
+    <color name="page_home_recommend_selected_font_color">#1E1E1E</color>
 </resources>
