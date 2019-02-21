@@ -29,101 +29,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/kakaovx_homet_home_bg"
-                    android:scaleType="fitCenter"
-                    app:layout_collapseMode="parallax"/>
+                    android:scaleType="fitCenter"/>
 
-            <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_width="match_parent"
-                    app:layout_collapseMode="pin"
-                    app:popupTheme="@style/AppTheme.PopupOverlay">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/app_name"
-                    android:textSize="@dimen/page_home_title_font_size"
-                    android:textColor="@color/page_home_title"
-                    android:letterSpacing="@dimen/page_home_title_font_letter_spacing"
-                    android:lineSpacingExtra="@dimen/page_home_title_font_line_spacing_extra"/>
-
-            </androidx.appcompat.widget.Toolbar>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
                     android:id="@+id/program_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/page_padding"
-                    app:layout_collapseMode="none">
+                    layout="@layout/page_home_content_program"/>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/program_title_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:paddingBottom="@dimen/page_padding"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/program_frame">
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                    <TextView
-                            android:id="@+id/program_member_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/page_home_program_font_size"
-                            android:textColor="@color/page_home_program"
-                            android:letterSpacing="@dimen/page_home_program_font_letter_spacing"
-                            android:lineSpacingExtra="@dimen/page_home_program_font_line_spacing_extra"
-                            android:text="@string/app_name"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toTopOf="@id/program_recommend_comment"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textSize="@dimen/page_home_title_font_size"
+                        android:textColor="@color/page_home_title"
+                        android:letterSpacing="@dimen/page_home_title_font_letter_spacing"
+                        android:lineSpacingExtra="@dimen/page_home_title_font_line_spacing_extra"/>
 
-                    <TextView
-                            android:id="@+id/program_recommend_comment"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/page_home_program_font_size"
-                            android:textColor="@color/page_home_program"
-                            android:letterSpacing="@dimen/page_home_program_font_letter_spacing"
-                            android:lineSpacingExtra="@dimen/page_home_program_font_line_spacing_extra"
-                            android:text="@string/home_program_recommend_comment"
-                            app:layout_constraintTop_toBottomOf="@id/program_member_name"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <FrameLayout
-                        android:id="@+id/program_frame"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/page_home_program_list_height"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
-
-                    <com.kakaovx.homet.user.component.ui.view.recyclerView.ComplexRecyclerView
-                            android:id="@+id/program_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/program_list_empty"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/page_list_empty"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"/>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </FrameLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -138,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
                     android:id="@+id/free_workout_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_home_free_workout_height"
@@ -147,67 +77,10 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/trainer_layout">
+                    app:layout_constraintBottom_toTopOf="@id/trainer_layout"
+                    layout="@layout/page_home_content_free_workout"/>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/free_workout_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/page_home_free_workout_title_height"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/free_workout_frame">
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/page_home_title_font_size"
-                            android:textColor="@color/page_home_sub_title"
-                            android:letterSpacing="@dimen/page_home_title_font_letter_spacing"
-                            android:lineSpacingExtra="@dimen/page_home_title_font_line_spacing_extra"
-                            android:text="@string/home_free_workout"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <FrameLayout
-                        android:id="@+id/free_workout_frame"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        app:layout_constraintTop_toBottomOf="@id/free_workout_title"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
-
-                    <com.kakaovx.homet.user.component.ui.view.recyclerView.ComplexRecyclerView
-                            android:id="@+id/free_workout_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/free_workout_list_empty"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/page_list_empty"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </FrameLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
                     android:id="@+id/trainer_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_home_trainer_height"
@@ -216,66 +89,10 @@
                     app:layout_constraintTop_toBottomOf="@id/free_workout_layout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/recommend_layout">
+                    app:layout_constraintBottom_toTopOf="@id/recommend_layout"
+                    layout="@layout/page_home_content_trainer"/>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/trainer_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/page_home_free_workout_title_height"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/trainer_frame">
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/page_home_title_font_size"
-                            android:textColor="@color/page_home_sub_title"
-                            android:letterSpacing="@dimen/page_home_title_font_letter_spacing"
-                            android:lineSpacingExtra="@dimen/page_home_title_font_line_spacing_extra"
-                            android:text="@string/home_trainer"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <FrameLayout
-                        android:id="@+id/trainer_frame"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        app:layout_constraintTop_toBottomOf="@id/trainer_title"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
-
-                    <com.kakaovx.homet.user.component.ui.view.recyclerView.ComplexRecyclerView
-                            android:id="@+id/trainer_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/trainer_list_empty"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/page_list_empty"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </FrameLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
                     android:id="@+id/recommend_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_home_recommend_height"
@@ -284,41 +101,8 @@
                     app:layout_constraintTop_toBottomOf="@id/trainer_layout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
-
-                <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
-
-                    <com.kakaovx.homet.user.component.ui.view.viewpager.RecommendViewPager
-                            android:id="@+id/recommend_viewpager"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/recommend_viewpager_empty"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/page_list_empty"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </FrameLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    layout="@layout/page_home_content_recommend"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

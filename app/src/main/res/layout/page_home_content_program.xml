@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/page_padding"
+        tools:context=".ui.MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/program_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/page_home_program_title_height"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/program_frame">
+
+        <!--android:paddingBottom="@dimen/page_padding"-->
+
+        <TextView
+                android:id="@+id/program_member_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/page_home_program_font_size"
+                android:textColor="@color/page_home_program"
+                android:letterSpacing="@dimen/page_home_program_font_letter_spacing"
+                android:lineSpacingExtra="@dimen/page_home_program_font_line_spacing_extra"
+                android:text="@string/app_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/program_recommend_comment"/>
+
+        <TextView
+                android:id="@+id/program_recommend_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/page_home_program_font_size"
+                android:textColor="@color/page_home_program"
+                android:letterSpacing="@dimen/page_home_program_font_letter_spacing"
+                android:lineSpacingExtra="@dimen/page_home_program_font_line_spacing_extra"
+                android:text="@string/home_program_recommend_comment"
+                app:layout_constraintTop_toBottomOf="@id/program_member_name"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+            android:id="@+id/program_frame"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/page_home_program_list_height"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.kakaovx.homet.user.component.ui.view.recyclerView.ComplexRecyclerView
+                android:id="@+id/program_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/program_list_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/page_list_empty"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,6 +20,7 @@ import com.kakaovx.homet.user.util.Log
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.page_home.*
+import kotlinx.android.synthetic.main.page_home_content_program.*
 import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 import javax.inject.Inject
 
@@ -35,7 +36,6 @@ class PageHome : RxPageFragment() {
     private var complexListAdapter: ComplexListAdapter? = null
 
     private fun initView(context: Context) {
-        val recyclerView: RecyclerView = program_list.recyclerView
         activity?.let {
             val myActivity: MainActivity = activity as MainActivity
             myActivity.setSupportActionBar(toolbar)
@@ -44,18 +44,22 @@ class PageHome : RxPageFragment() {
                 setHasOptionsMenu(true)
             }
         }
-        complexListAdapter = ComplexListAdapter()
-        complexListAdapter?.let {
-            recyclerView.apply {
-                layoutManager = HorizontalLinearLayoutManager(context)
-                adapter = it
-            }
-            it.isEmpty.observe(this, Observer { existData ->
-                existData?.let {
-                    if (existData) program_list_empty.visibility = View.VISIBLE
-                    else program_list_empty.visibility = View.INVISIBLE
+
+        program_list?.let{
+            val recyclerView: RecyclerView = program_list.recyclerView
+            complexListAdapter = ComplexListAdapter()
+            complexListAdapter?.let {
+                recyclerView.apply {
+                    layoutManager = HorizontalLinearLayoutManager(context)
+                    adapter = it
                 }
-            })
+                it.isEmpty.observe(this, Observer { existData ->
+                    existData?.let {
+                        if (existData) program_list_empty.visibility = View.VISIBLE
+                        else program_list_empty.visibility = View.INVISIBLE
+                    }
+                })
+            }
         }
     }
 
