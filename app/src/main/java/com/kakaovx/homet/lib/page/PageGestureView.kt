@@ -28,9 +28,8 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
     private var finalGesture = Gesture.Type.NONE
     private var animationCloseRunnable: Runnable = Runnable { didCloseAnimation() }
     private var animationReturnRunnable: Runnable = Runnable { didReturnAnimation() }
+
     private var _contentSize = 0f
-
-
     var contentSize = 0f
         get() {
         if (_contentSize != 0f) return _contentSize
@@ -41,8 +40,15 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs:AttributeSet) : super(context,attrs)
 
-    fun willCreateAnimation(startPos:Float) {
+    open fun setGestureStart(startPos:Float) {
         if(isVertical) contentsView.translationY = startPos else contentsView.translationX = startPos
+    }
+
+    open fun setGestureClose() {
+        val closePosX = getClosePos().first
+        val closePosY = getClosePos().second
+        contentsView.translationX = closePosX
+        contentsView.translationY = closePosY
     }
 
     override fun onAttachedToWindow() {
@@ -140,13 +146,6 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
             else -> { }
         }
         return Pair(closePosX,closePosY)
-    }
-
-    open fun setGestureClose() {
-        val closePosX = getClosePos().first
-        val closePosY = getClosePos().second
-        contentsView.translationX = closePosX
-        contentsView.translationY = closePosY
     }
 
     open fun onGestureClose(isClosure:Boolean = true):Long {

@@ -33,7 +33,7 @@ abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
         val pageActivity = activity as PageActivity<*>
         pageActivity.let {
             val size = it.getPageAreaSize()
-            gestureView.willCreateAnimation(size.second)
+            gestureView.setGestureStart(size.second)
         }
     }
 
