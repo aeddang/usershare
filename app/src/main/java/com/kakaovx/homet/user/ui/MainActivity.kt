@@ -26,10 +26,10 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     lateinit var repository: Repository
 
     private fun initView(context: Context) {
-        val window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = resources.getColor(R.color.indicator)
+//        val window = window
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        window.statusBarColor = resources.getColor(R.color.indicator)
 
     }
 

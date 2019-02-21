@@ -1,13 +1,16 @@
 package com.kakaovx.homet.user.ui.page
 
 import android.content.Context
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.module.ComplexListAdapter
-import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
+import com.kakaovx.homet.user.component.ui.module.HorizontalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.ui.MainActivity
@@ -32,24 +35,25 @@ class PageHome : RxPageFragment() {
     private var complexListAdapter: ComplexListAdapter? = null
 
     private fun initView(context: Context) {
-        val recyclerView: RecyclerView = listComponent.recyclerView
+        val recyclerView: RecyclerView = program_list.recyclerView
         activity?.let {
             val myActivity: MainActivity = activity as MainActivity
+            myActivity.setSupportActionBar(toolbar)
             myActivity.supportActionBar?.apply {
-                title = context.getString(R.string.page_home)
-                setDisplayShowTitleEnabled(true)
+                setDisplayShowTitleEnabled(false)
+                setHasOptionsMenu(true)
             }
         }
         complexListAdapter = ComplexListAdapter()
         complexListAdapter?.let {
             recyclerView.apply {
-                layoutManager = VerticalLinearLayoutManager(context)
+                layoutManager = HorizontalLinearLayoutManager(context)
                 adapter = it
             }
             it.isEmpty.observe(this, Observer { existData ->
                 existData?.let {
-                    if (existData) viewEmpty.visibility = View.VISIBLE
-                    else viewEmpty.visibility = View.INVISIBLE
+                    if (existData) program_list_empty.visibility = View.VISIBLE
+                    else program_list_empty.visibility = View.INVISIBLE
                 }
             })
         }
@@ -101,5 +105,24 @@ class PageHome : RxPageFragment() {
         context?.let{ initView(it) }
         initDisposables()
         Log.d(TAG, "onCreated() end")
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.page_home_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item?.let {
+            when (it.itemId) {
+                R.id.action_finder -> {
+                    Log.i(TAG, "action finder")
+                }
+                else -> {
+                    Log.e(TAG, "no menu")
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
