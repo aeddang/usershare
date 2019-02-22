@@ -1,10 +1,10 @@
 package com.kakaovx.homet.lib.page
 
 import android.animation.Animator
-import android.support.annotation.CallSuper
 import android.view.View
 import android.view.ViewPropertyAnimator
 import android.view.ViewTreeObserver
+import androidx.annotation.CallSuper
 import com.kakaovx.homet.lib.constant.AnimationDuration
 import com.kakaovx.homet.lib.module.Gesture
 

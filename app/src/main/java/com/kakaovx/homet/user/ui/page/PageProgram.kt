@@ -1,13 +1,13 @@
 package com.kakaovx.homet.user.ui.page
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.module.ContentListAdapter
+import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.ui.viewModel.PageProgramViewModel

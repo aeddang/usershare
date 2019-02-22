@@ -1,12 +1,12 @@
 package com.kakaovx.homet.lib.page
 
 import android.os.Bundle
-import android.support.annotation.CallSuper
-import android.support.annotation.IdRes
-import android.support.annotation.StringRes
-import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.CallSuper
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import com.kakaovx.homet.user.util.Log
 
 abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Delegate, Page {
@@ -18,8 +18,10 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
         protected set
     protected lateinit var pageArea:ViewGroup
 
-    @IdRes abstract fun getPageAreaId(): Int
-    @StringRes abstract fun getPageExitMsg(): Int
+    @IdRes
+    abstract fun getPageAreaId(): Int
+    @StringRes
+    abstract fun getPageExitMsg(): Int
     abstract fun getHomes():Array<T>
 
     private var exitCount = 0

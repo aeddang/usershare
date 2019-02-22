@@ -1,9 +1,9 @@
 package com.kakaovx.homet.user.component.ui.skeleton.model.adapter
 
-import android.arch.lifecycle.MutableLiveData
 import android.os.Handler
-import android.support.annotation.CallSuper
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.CallSuper
+import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.RecyclerView
 import com.kakaovx.homet.user.component.ui.skeleton.model.data.InfinityPaginationData
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
 
