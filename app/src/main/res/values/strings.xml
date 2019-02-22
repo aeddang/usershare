@@ -2,11 +2,9 @@
 <resources>
     <string name="app_name">Kakao Home Training</string>
     <string name="notice_app_exit">Please click BACK again to exit</string>
-    <string name="title_A">A</string>
-    <string name="title_B">B</string>
-    <string name="title_C">C</string>
-    <string name="title_D">D</string>
-    <string name="title_E">E</string>
+    <string name="home_recommend_A">#recommned1</string>
+    <string name="home_recommend_B">#recommned2</string>
+    <string name="home_recommend_C">#recommend3</string>
     <string name="company">Kakao VX</string>
     <string name="page_home">Home</string>
     <string name="page_content">Content</string>
@@ -21,4 +19,8 @@
     <string name="card_description">Card Description</string>
     <string name="landscape_list_title">Landspace List Title</string>
     <string name="landscape_list_sub_title">Landscape List Sub Title</string>
+    <string name="home_free_workout">FreeWorkout</string>
+    <string name="home_trainer">Trainer</string>
+    <string name="home_program_recommend_comment">recommends this program.</string>
+    <string name="finder">Find</string>
 </resources>

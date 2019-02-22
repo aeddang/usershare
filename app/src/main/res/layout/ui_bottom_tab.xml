@@ -5,46 +5,33 @@
 
     <ImageButton
             android:id="@+id/tab_btn_home"
-            android:text="@string/title_A"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/tab_bg"
-            android:src="@drawable/kakaovx_apeach_profile_000"/>
+            android:src="@drawable/home_select"/>
 
     <ImageButton
             android:id="@+id/tab_btn_content"
-            android:text="@string/title_B"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/tab_bg"
-            android:src="@drawable/kakaovx_con_profile_000"/>
+            android:src="@drawable/contents"/>
 
     <ImageButton
             android:id="@+id/tab_btn_planner"
-            android:text="@string/title_C"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/tab_bg"
-            android:src="@drawable/kakaovx_frodo_profile_000"/>
-
-    <ImageButton
-            android:id="@+id/tab_btn_search"
-            android:text="@string/title_D"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/tab_bg"
-            android:src="@drawable/kakaovx_muzi_profile_000"/>
+            android:src="@drawable/planer"/>
 
     <ImageButton
             android:id="@+id/tab_btn_profile"
-            android:text="@string/title_E"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/tab_bg"
-            android:src="@drawable/kakaovx_neo_profile_000"/>
+            android:src="@drawable/my"/>
 </LinearLayout>

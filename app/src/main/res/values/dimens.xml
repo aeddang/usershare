@@ -1,5 +1,13 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="page_home_program_font_size">26sp</dimen>
+    <dimen name="page_home_program_font_letter_spacing">-0.01</dimen>
+    <dimen name="page_home_program_font_line_spacing_extra">8sp</dimen>
+
+    <dimen name="page_home_title_font_size">18sp</dimen>
+    <dimen name="page_home_title_font_letter_spacing">-0.07</dimen>
+    <dimen name="page_home_title_font_line_spacing_extra">10sp</dimen>
+
     <dimen name="area_header">50dp</dimen>
     <dimen name="area_bottom">50dp</dimen>
 
@@ -19,4 +27,19 @@
 
     <dimen name="card_view_radius">40dp</dimen>
     <dimen name="card_view_height">200dp</dimen>
+
+    <dimen name="page_top_padding">32.3dp</dimen>
+    <dimen name="page_padding">18dp</dimen>
+
+    <dimen name="page_home_app_bar_height">386dp</dimen>
+    <dimen name="page_home_program_height">386dp</dimen>
+    <dimen name="page_home_program_title_height">76dp</dimen>
+    <dimen name="page_home_program_list_height">101dp</dimen>
+    <dimen name="page_home_free_workout_height">180dp</dimen>
+    <dimen name="page_home_free_workout_title_height">52dp</dimen>
+    <dimen name="page_home_dummy_height">8dp</dimen>
+    <dimen name="page_home_trainer_height">180dp</dimen>
+    <dimen name="page_home_trainer_title_height">52dp</dimen>
+    <dimen name="page_home_recommend_height">298dp</dimen>
+    <dimen name="page_home_recommend_tab_indicator_height">3dp</dimen>
 </resources>

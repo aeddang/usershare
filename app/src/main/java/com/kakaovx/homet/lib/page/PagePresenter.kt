@@ -60,32 +60,32 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
         return true
     }
 
-    override fun closePopup(id:T): PagePresenter<T> {
+    override fun closePopup(id:T): Presenter<T> {
         model.removePopup(id)
         view?.onClosePopup(id)
         return this
     }
 
-    override fun openPopup(id:T): PagePresenter<T> {
+    override fun openPopup(id:T): Presenter<T> {
         return openPopup(id,HashMap())
     }
 
-    override fun openPopup(id:T,param:Map<String, Any>): PagePresenter<T> {
+    override fun openPopup(id:T,param:Map<String, Any>): Presenter<T> {
         view?.onOpenPopup(id,param)
         model.addPopup(id)
         return this
     }
 
-    override fun pageStart(id:T): PagePresenter<T> {
+    override fun pageStart(id:T): Presenter<T> {
         view?.onPageStart(id)
         model.addHistory(id,HashMap(),true)
         return this
     }
 
-    override fun pageChange(id:T,isHistory:Boolean,isBack:Boolean): PagePresenter<T> {
+    override fun pageChange(id:T,isHistory:Boolean,isBack:Boolean): Presenter<T> {
         return pageChange(id, HashMap(), isHistory, isBack)
     }
-    override fun pageChange(id:T,param:Map<String, Any>,isHistory:Boolean,isBack:Boolean): PagePresenter<T> {
+    override fun pageChange(id:T,param:Map<String, Any>,isHistory:Boolean,isBack:Boolean): Presenter<T> {
         view?.onPageChange(id,param,isBack)
         model.addHistory(id,param,isHistory)
         return this
