@@ -1,16 +1,13 @@
 package com.kakaovx.homet.user.component.ui.module
 
 import android.view.ViewGroup
-import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.MultipleAdapter
-import com.kakaovx.homet.user.component.ui.view.item.CardItem
-import com.kakaovx.homet.user.component.ui.view.item.ImageItem
-import com.kakaovx.homet.user.component.ui.view.item.LandscapeListItem
+import com.kakaovx.homet.user.component.ui.view.item.*
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
 
-class ComplexListAdapter(private val listType: Int): MultipleAdapter<ResultData>() {
+class HomeListAdapter<T>(private val listType: Int): MultipleAdapter<T>() {
 
     private val TAG = javaClass.simpleName
 
@@ -19,7 +16,7 @@ class ComplexListAdapter(private val listType: Int): MultipleAdapter<ResultData>
         return when(viewType) {
             AppConst.HOMET_LIST_ITEM_HOME_PROGRAM -> {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_PROGRAM")
-                ViewHolder(LandscapeListItem(parent.context))
+                ViewHolder(HomeProgramCardItem(parent.context))
             }
             AppConst.HOMET_LIST_ITEM_HOME_WORKOUT_TYPE -> {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_WORKOUT_TYPE")
@@ -31,15 +28,15 @@ class ComplexListAdapter(private val listType: Int): MultipleAdapter<ResultData>
             }
             AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT -> {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_FREE_WORKOUT")
-                ViewHolder(CardItem(parent.context))
+                ViewHolder(HomeFreeWorkoutCardItem(parent.context))
             }
             AppConst.HOMET_LIST_ITEM_HOME_TRAINER -> {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_TRAINER")
-                ViewHolder(CardItem(parent.context))
+                ViewHolder(HomeTrainerCardItem(parent.context))
             }
             AppConst.HOMET_LIST_ITEM_HOME_RECOMMEND -> {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_RECOMMEND")
-                ViewHolder(LandscapeListItem(parent.context))
+                ViewHolder(HomeTrainerCardItem(parent.context))
             }
             else -> { ViewHolder(ImageItem(parent.context)) }
         }

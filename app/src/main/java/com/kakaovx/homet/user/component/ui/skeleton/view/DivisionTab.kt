@@ -6,12 +6,15 @@ import android.view.View
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxLinearLayout
 
 abstract class DivisionTab<T> : RxLinearLayout {
+
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
     var delegate: Delegate<T>? = null
-    var selectedIdx:Int = -1; private set
-    protected lateinit var tab:Array<View>
+
+    private var selectedIdx:Int = -1
+
+    lateinit var tab:Array<View>
     abstract fun getTabMenu(): Array<View>
 
     protected lateinit var data:Array<T>

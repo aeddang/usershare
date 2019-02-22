@@ -4,7 +4,7 @@ import android.view.View
 import androidx.annotation.CallSuper
 import com.kakaovx.homet.lib.constant.AnimationDuration
 
-abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
+abstract class PageGestureFragment: PageFragment(), PageGestureView.Delegate {
 
     private lateinit var gestureView: PageGestureView
     private lateinit var contentsView:View
@@ -22,7 +22,7 @@ abstract class PageGestureFragment:PageFragment(), PageGestureView.Delegate {
     }
 
     @CallSuper
-    override fun onDestroyed() {
+    override fun  onDestroyed() {
     }
 
     override fun willCreateAnimation() {

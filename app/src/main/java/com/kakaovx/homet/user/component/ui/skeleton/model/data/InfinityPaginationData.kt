@@ -14,6 +14,10 @@ data class InfinityPaginationData<T>(val pageSize:Int = 10) {
         data = ArrayList()
     }
 
+    fun add(item: T) {
+        data.add(item)
+    }
+
     fun addAll(addData:Array<T>): Int {
         data.addAll(addData)
 

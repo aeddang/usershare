@@ -8,8 +8,11 @@ import com.kakaovx.homet.user.ui.PageID
 import kotlinx.android.synthetic.main.ui_bottom_tab.view.*
 
 class BottomTab: DivisionTab<PageID>{
+
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
+
+    override fun onDestroyed() {}
 
     override fun getLayoutResId(): Int {
         return R.layout.ui_bottom_tab

@@ -16,7 +16,7 @@ abstract class RxPageGestureFragment : PageGestureFragment(), Rx {
 
     @CallSuper
     override fun onDestroyed() {
-        disposables.clear()
         super.onDestroy()
+        disposables.clear()
     }
 }

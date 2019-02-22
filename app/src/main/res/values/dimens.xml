@@ -26,7 +26,7 @@
     <dimen name="font_tiny">10dp</dimen>
 
     <dimen name="card_view_radius">40dp</dimen>
-    <dimen name="card_view_height">200dp</dimen>
+    <dimen name="card_view_height">68dp</dimen>
 
     <dimen name="page_top_padding">32.3dp</dimen>
     <dimen name="page_padding">18dp</dimen>

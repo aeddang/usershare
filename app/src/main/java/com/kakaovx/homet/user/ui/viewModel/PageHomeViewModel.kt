@@ -2,6 +2,9 @@ package com.kakaovx.homet.user.ui.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kakaovx.homet.user.component.model.HomeFreeWorkoutModel
+import com.kakaovx.homet.user.component.model.HomeProgramModel
+import com.kakaovx.homet.user.component.model.HomeTrainerModel
 import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.repository.Repository
@@ -29,9 +32,19 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
         return restApi.searchRepositories(params)
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe( { data ->
-                handleComplete(AppConst.HOMET_LIST_ITEM_HOME_PROGRAM, data.items)
+                Observable.fromIterable(data.items)
+                    .map { item ->
+                        HomeProgramModel(item.name, item.description, item.ownerData?.avatarUrl)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( { model ->
+                        val liveData = PageLiveData()
+                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                        liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_PROGRAM
+                        liveData.homeProgramModel = model
+                        response.value = liveData
+                    }, { handleError(it) })
             }, { handleError(it) })
     }
 
@@ -44,7 +57,18 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( { data ->
-                handleComplete(AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT, data.items)
+                Observable.fromIterable(data.items)
+                    .map { item ->
+                        HomeFreeWorkoutModel(item.description, item.fullName, item.ownerData?.avatarUrl)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( { model ->
+                        val liveData = PageLiveData()
+                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                        liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT
+                        liveData.homeFreeWorkoutModel = model
+                        response.value = liveData
+                    }, { handleError(it) })
             }, { handleError(it) })
     }
 
@@ -58,6 +82,18 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( { data ->
                 handleComplete(AppConst.HOMET_LIST_ITEM_HOME_TRAINER, data.items)
+                Observable.fromIterable(data.items)
+                    .map { item ->
+                        HomeTrainerModel(item.name, item.description, item.ownerData?.type, item.ownerData?.avatarUrl)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( { model ->
+                        val liveData = PageLiveData()
+                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                        liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_TRAINER
+                        liveData.homeTrainerModel = model
+                        response.value = liveData
+                    }, { handleError(it) })
             }, { handleError(it) })
     }
 
@@ -72,7 +108,9 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
             .subscribe( { data ->
 //                Log.d(TAG, "get data = [$data]")
                 Observable.fromIterable(data.items)
+                    .subscribeOn(Schedulers.io())
                     .map { it.name }
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { message ->
 //                        Log.d(TAG, "name = $message")
                         handleComplete(message)
@@ -94,8 +132,6 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
     }
 
     private fun handleComplete(type: Int, data: ArrayList<ResultData>) {
-//        Log.i(TAG, "handleComplete")
-
         val liveData = PageLiveData()
         liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
         liveData.listItemType = type
@@ -104,8 +140,6 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
     }
 
     private fun handleComplete(data: ArrayList<ResultData>) {
-//        Log.i(TAG, "handleComplete")
-
         val liveData = PageLiveData()
         liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
         liveData.item = data
@@ -113,8 +147,6 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
     }
 
     private fun handleComplete(message: String?) {
-//        Log.i(TAG, "handleComplete")
-
         val liveData = PageLiveData()
         liveData.cmd = AppConst.LIVE_DATA_CMD_STRING
         liveData.message = message

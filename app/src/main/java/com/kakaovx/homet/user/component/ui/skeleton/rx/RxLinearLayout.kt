@@ -2,20 +2,21 @@ package com.kakaovx.homet.user.component.ui.skeleton.rx
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.CallSuper
 import com.kakaovx.homet.lib.page.Page
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class RxLinearLayout : LinearLayout, Rx, Page {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+    constructor(context: Context): super(context) { init(context) }
+    constructor(context: Context, attrs: AttributeSet): super(context, attrs) { init(context) }
 
     protected var disposables: CompositeDisposable? = null
 
-    init {
-        View.inflate(context, getLayoutResId(), this)
+    private fun init(context: Context) {
+        LayoutInflater.from(context).inflate(getLayoutResId(), this, true)
         onCreated()
     }
 
@@ -34,6 +35,4 @@ abstract class RxLinearLayout : LinearLayout, Rx, Page {
         disposables = null
         onDetached()
     }
-
-    final override fun onDestroyed() {}
 }

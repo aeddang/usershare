@@ -7,6 +7,7 @@ import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
 class BannerListItem(context:Context): ListItem(context) {
 
     override fun onCreated() { }
+    override fun onDestroyed() {}
 
     override fun getLayoutResId(): Int {
         return R.layout.item_banner_list

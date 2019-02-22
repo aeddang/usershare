@@ -156,7 +156,6 @@ abstract class PageFragment: Fragment(), Page {
         Log.d(TAG,"onDestroyView()")
     }
 
-
     open fun setParam(param:Map<String,Any>):PageFragment { return this }
     open fun isBackAble():Boolean { return true }
 
