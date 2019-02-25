@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewPropertyAnimator
@@ -12,7 +13,7 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import com.kakaovx.homet.lib.module.Gesture
 
-const val DURATION_DIV = 3
+const val DURATION_DIV = 5
 open class PageGestureView: FrameLayout, Gesture.Delegate {
     var closeType = Gesture.Type.PAN_DOWN
     var delegate: Delegate? = null
@@ -198,6 +199,7 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
         val range = Math.abs(end - start)
         val pct = animation.animatedValue as Float
         val pos = start + (dr*range*pct)
+
         delegate?.onAnimate(this, getMoveAmount(pos))
     }
 

@@ -15,7 +15,6 @@ abstract class PageDividedGestureFragment: PageGestureFragment(), ViewTreeObserv
     override fun onCreated() {
         super.onCreated()
         dividedView = getDividedView()
-        dividedView.alpha = 0f
         dividedView.viewTreeObserver.addOnGlobalLayoutListener(this)
     }
 
@@ -39,6 +38,7 @@ abstract class PageDividedGestureFragment: PageGestureFragment(), ViewTreeObserv
         moveGestureArea(pct)
     }
     override fun onAnimate(view: PageGestureView, pct: Float) {
+        super.onAnimate(view, pct)
         moveGestureArea(pct)
     }
 

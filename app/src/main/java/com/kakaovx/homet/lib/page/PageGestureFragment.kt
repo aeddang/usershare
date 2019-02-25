@@ -19,58 +19,31 @@ abstract class PageGestureFragment: PageFragment(), PageGestureView.Delegate {
         gestureView = getGestureView()
         contentsView = getContentsView()
         backgroundView = getBackgroundView()
+
+        gestureView.delegate = this
+        gestureView.contentsView = contentsView
+
     }
 
     @CallSuper
     override fun  onDestroyed() {
     }
 
-    override fun willCreateAnimation() {
-        backgroundView.alpha = 0f
-        gestureView.delegate = this
-        gestureView.contentsView = contentsView
-
-        val pageActivity = activity as PageActivity<*>
-        pageActivity.let {
-            val size = it.getPageAreaSize()
-            gestureView.setGestureStart(size.second)
-        }
-    }
-
-    override fun onCreateAnimation(): Long {
-        gestureView.onGestureReturn(false)
-        val duration = AnimationDuration.SHORT.duration
-        backgroundView.animate().alpha(1f).setDuration(duration).withEndAction(animationCreateRunnable).start()
-        return duration
-    }
-
-    override fun onClosePopupAnimation():Long {
-        if(gestureView.isClosed) return onDestroyAnimation()
-        gestureView.onGestureClose(true)
-        return 0L
-    }
-
-    override fun onDestroyAnimation(): Long {
-        gestureView.onGestureClose(false)
-        val duration = AnimationDuration.SHORT.duration
-        backgroundView.animate().alpha(0f).setDuration(duration).withEndAction(animationDestroyRunnable).start()
-        return duration
-    }
-
     override fun onMove(view: PageGestureView, pct:Float) {
         backgroundView.alpha = pct
     }
 
+    override fun onAnimate(view: PageGestureView, pct:Float){
+        backgroundView.alpha = pct
+    }
+
     override fun onClose(view: PageGestureView) {
-        pageID?.let {
-            PagePresenter.getInstance<Any>().closePopup(it)
-            return
-        }
-        onDestroyAnimation()
+        pageID?.let { PagePresenter.getInstance<Any>().closePopup(it) }
+
     }
 
     override fun onReturn(view: PageGestureView) {
-        onCreateAnimation()
+
     }
 
 

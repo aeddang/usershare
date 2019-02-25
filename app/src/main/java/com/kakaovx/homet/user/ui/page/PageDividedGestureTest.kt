@@ -1,6 +1,7 @@
 package com.kakaovx.homet.user.ui.page
 
 import android.content.Context
+import android.transition.ChangeBounds
 import android.view.View
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.lib.page.PageGestureView
@@ -32,7 +33,8 @@ class PageDividedGestureTest : RxPageDividedGestureFragment() {
     override fun onCreated() {
         super.onCreated()
         Log.d(TAG, "onCreated()")
-
+        sharedElementEnterTransition = ChangeBounds()
+        image.transitionName = "testAni"
         context?.let{ initView(it) }
     }
 

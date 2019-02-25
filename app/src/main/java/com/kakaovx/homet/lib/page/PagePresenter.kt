@@ -36,58 +36,43 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
         isNavigationShow = false
         view?.onHideNavigation()
     }
-    override fun goHome(){
-        pageChange(model.getHome(),true, false)
+    override fun goHome(idx:Int){
+        pageChange(model.getHome())
     }
 
-    override fun goBack(){ onBack() }
-    internal fun onBack():Boolean {
-        if(isNavigationShow) {
-            hideNavigation()
-            return false
-        }
-        val pop:T? = model.getPopup()
-        pop?.let {
-            closePopup(it)
-            return false
-        }
-        val tuple = model.getHistory()
-        val page:T? = tuple?.first
-        page?.let{
-            pageChange(it,tuple.second!!,false)
-            return false
-        }
-        return true
+    override fun goBack(){
+        view?.onBack()
+    }
+
+    override fun clearPageHistory(id:T): Presenter<T> {
+        view?.onClearPageHistory()
+        return this
+    }
+
+    override fun closeAllPopup(id:T): Presenter<T> {
+        view?.onCloseAllPopup()
+        return this
     }
 
     override fun closePopup(id:T): Presenter<T> {
-        model.removePopup(id)
         view?.onClosePopup(id)
         return this
     }
 
-    override fun openPopup(id:T): Presenter<T> {
-        return openPopup(id,HashMap())
-    }
 
-    override fun openPopup(id:T,param:Map<String, Any>): Presenter<T> {
-        view?.onOpenPopup(id,param)
-        model.addPopup(id)
+    override fun openPopup(id:T, param:Map<String, Any>?, sharedElement:android.view.View?, transitionName:String?): Presenter<T> {
+        view?.onOpenPopup(id, param, sharedElement, transitionName)
         return this
     }
 
     override fun pageStart(id:T): Presenter<T> {
         view?.onPageStart(id)
-        model.addHistory(id,HashMap(),true)
         return this
     }
 
-    override fun pageChange(id:T,isHistory:Boolean,isBack:Boolean): Presenter<T> {
-        return pageChange(id, HashMap(), isHistory, isBack)
-    }
-    override fun pageChange(id:T,param:Map<String, Any>,isHistory:Boolean,isBack:Boolean): Presenter<T> {
-        view?.onPageChange(id,param,isBack)
-        model.addHistory(id,param,isHistory)
+    override fun pageChange(id:T, param:Map<String, Any>?, sharedElement:android.view.View?, transitionName:String?): Presenter<T> {
+        view?.onPageChange(id, param, sharedElement, transitionName)
+        if(model.isHome(id)) view?.onClearPageHistory()
         return this
     }
 

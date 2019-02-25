@@ -33,6 +33,8 @@ class PageFactory {
             PageID.PROGRAM -> { PageProgram() }
             PageID.FREE_WORKOUT -> { PageFreeWorkout() }
             PageID.TRAINER -> { PageTrainer() }
+            PageID.TEST -> { PageTest() }
+            PageID.TEST_POP -> { PageDividedGestureTest() }
         }
     }
 }
@@ -46,7 +48,10 @@ enum class PageID(val resId: Int) {
     PROFILE(R.string.page_profile),
     PROGRAM(R.string.page_program),
     FREE_WORKOUT(R.string.page_free_workout),
-    TRAINER(R.string.page_trainer)
+    TRAINER(R.string.page_trainer),
+
+    TEST(1000000000),
+    TEST_POP(1000000002)
 }
 
 enum class ParamType(val key:String) {

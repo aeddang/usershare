@@ -32,7 +32,7 @@ class BottomTab: DivisionTab<PageID>{
             PageID.HOME,
             PageID.CONTENT,
             PageID.PLANNER,
-            PageID.PROFILE
+            PageID.TEST
         )
     }
 }
