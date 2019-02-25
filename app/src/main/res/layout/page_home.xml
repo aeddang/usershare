@@ -65,14 +65,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/home_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/page_padding"
+                android:paddingEnd="@dimen/page_padding"
+        >
 
             <include
                     android:id="@+id/free_workout_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_home_free_workout_height"
-                    android:paddingStart="@dimen/page_padding"
-                    android:paddingEnd="@dimen/page_padding"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -83,8 +84,6 @@
                     android:id="@+id/trainer_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_home_trainer_height"
-                    android:paddingStart="@dimen/page_padding"
-                    android:paddingEnd="@dimen/page_padding"
                     app:layout_constraintTop_toBottomOf="@id/free_workout_layout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -95,8 +94,6 @@
                     android:id="@+id/recommend_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_home_recommend_height"
-                    android:paddingStart="@dimen/page_padding"
-                    android:paddingEnd="@dimen/page_padding"
                     app:layout_constraintTop_toBottomOf="@id/trainer_layout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

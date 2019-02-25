@@ -81,7 +81,6 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( { data ->
-                handleComplete(AppConst.HOMET_LIST_ITEM_HOME_TRAINER, data.items)
                 Observable.fromIterable(data.items)
                     .map { item ->
                         HomeTrainerModel(item.name, item.description, item.ownerData?.type, item.ownerData?.avatarUrl)
@@ -106,28 +105,17 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( { data ->
-//                Log.d(TAG, "get data = [$data]")
                 Observable.fromIterable(data.items)
                     .subscribeOn(Schedulers.io())
                     .map { it.name }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { message ->
-//                        Log.d(TAG, "name = $message")
-                        handleComplete(message)
+                        val liveData = PageLiveData()
+                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                        liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_HASH_TAG
+                        liveData.message = message
+                        response.value = liveData
                     }, { handleError(it) })
-            }, { handleError(it) })
-    }
-
-    fun getRecommendData(key: String): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = key
-        return restApi.searchRepositories(params)
-            .retry(RetryPolicy.none())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe( { data ->
-                handleComplete(AppConst.HOMET_LIST_ITEM_HOME_RECOMMEND, data.items)
             }, { handleError(it) })
     }
 

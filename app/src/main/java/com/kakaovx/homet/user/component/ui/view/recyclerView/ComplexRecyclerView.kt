@@ -11,9 +11,9 @@ class ComplexRecyclerView: RecyclerFrameLayout {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     override fun onCreated() {
-        Log.d("VX_ComplexRecyclerView", "onCreated")
+        Log.d("ComplexRecyclerView", "onCreated()")
     }
     override fun onDestroyed() {
-        Log.d("VX_ComplexRecyclerView", "onDestroyed")
+        Log.d("ComplexRecyclerView", "onDestroyed()")
     }
 }

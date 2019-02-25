@@ -36,7 +36,7 @@ class HomeListAdapter<T>(private val listType: Int): MultipleAdapter<T>() {
             }
             AppConst.HOMET_LIST_ITEM_HOME_RECOMMEND -> {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_RECOMMEND")
-                ViewHolder(HomeTrainerCardItem(parent.context))
+                ViewHolder(HomeRecommendCardItem(parent.context))
             }
             else -> { ViewHolder(ImageItem(parent.context)) }
         }

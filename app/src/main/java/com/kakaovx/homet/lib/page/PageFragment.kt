@@ -17,6 +17,7 @@ import com.kakaovx.homet.user.util.Log
 
 abstract class PageFragment: Fragment(), Page {
 
+
     private val TAG = javaClass.simpleName
     var pageID:Any? = null; internal set
 

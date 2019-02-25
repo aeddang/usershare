@@ -2,19 +2,25 @@ package com.kakaovx.homet.user.component.ui.view.viewpager
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.annotation.LayoutRes
+import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
+import com.kakaovx.homet.user.component.ui.skeleton.rx.RxFrameLayout
+import com.kakaovx.homet.user.util.Log
 
-import com.kakaovx.homet.user.component.ui.skeleton.view.ViewPagerFrameLayout
-import com.kakaovx.homet.user.component.ui.module.BannerPagerAdapter
-import kotlinx.android.synthetic.main.ui_viewpager.view.*
-
-class RecommendViewPager: ViewPagerFrameLayout {
+class RecommendViewPager: RxFrameLayout, BaseAdapter.Delegate {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
     override fun onCreated() {
-        viewPager.adapter = BannerPagerAdapter().setData(arrayOf("0","1","2"))
+        Log.d("RecommendViewPager", "onCreated()")
     }
 
-    override fun onDestroyed() {}
+    override fun onDestroyed() {
+        Log.d("RecommendViewPager", "onDestroyed()")
+    }
+
+    @LayoutRes
+    override fun getLayoutResId() = R.layout.ui_viewpager
 }
