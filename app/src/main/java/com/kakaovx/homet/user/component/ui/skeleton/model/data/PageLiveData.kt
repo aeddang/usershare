@@ -2,6 +2,7 @@ package com.kakaovx.homet.user.component.ui.skeleton.model.data
 
 import com.kakaovx.homet.user.component.model.HomeFreeWorkoutModel
 import com.kakaovx.homet.user.component.model.HomeProgramModel
+import com.kakaovx.homet.user.component.model.HomeRecommendModel
 import com.kakaovx.homet.user.component.model.HomeTrainerModel
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.component.network.model.ResultData
@@ -14,4 +15,5 @@ class PageLiveData {
     var homeProgramModel: HomeProgramModel? = null
     var homeFreeWorkoutModel: HomeFreeWorkoutModel? = null
     var homeTrainerModel: HomeTrainerModel? = null
+    var homeRecommendModel: HomeRecommendModel? = null
 }

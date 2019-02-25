@@ -11,12 +11,13 @@ import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.model.HomeFreeWorkoutModel
 import com.kakaovx.homet.user.component.model.HomeProgramModel
 import com.kakaovx.homet.user.component.model.HomeTrainerModel
-import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.ui.module.HomeListAdapter
+import com.kakaovx.homet.user.component.ui.module.HomePagerAdapter
 import com.kakaovx.homet.user.component.ui.module.HorizontalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.model.data.PageLiveData
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
+import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModel
 import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModelFactory
@@ -29,6 +30,7 @@ import kotlinx.android.synthetic.main.page_home_content_program.*
 import kotlinx.android.synthetic.main.page_home_content_recommend.*
 import kotlinx.android.synthetic.main.page_home_content_trainer.*
 import kotlinx.android.synthetic.main.ui_recyclerview.view.*
+import kotlinx.android.synthetic.main.ui_viewpager.view.*
 import javax.inject.Inject
 
 
@@ -43,7 +45,6 @@ class PageHome : RxPageFragment() {
     private var programListAdapter: HomeListAdapter<HomeProgramModel>? = null
     private var freeWorkoutListAdapter: HomeListAdapter<HomeFreeWorkoutModel>? = null
     private var trainerListAdapter: HomeListAdapter<HomeTrainerModel>? = null
-    private var recommendListAdapter: HomeListAdapter<ResultData>? = null
 
     private fun initView(context: Context) {
         activity?.let {
@@ -52,6 +53,11 @@ class PageHome : RxPageFragment() {
             myActivity.supportActionBar?.apply {
                 setDisplayShowTitleEnabled(false)
                 setHasOptionsMenu(true)
+            }
+            recommend_viewpager?.let {
+                val viewPager = recommend_viewpager.viewPager
+                viewPager.adapter = HomePagerAdapter(context, myActivity.supportFragmentManager)
+                hash_tag_tab_layout?.setupWithViewPager(viewPager)
             }
         }
 
@@ -102,10 +108,6 @@ class PageHome : RxPageFragment() {
                 })
             }
         }
-
-//        recommend_tab_layout?.apply {
-////            setupWithViewPager(recommend_viewpager.viewPager)
-//        }
     }
 
     private fun insertData(liveData: PageLiveData) {
@@ -125,10 +127,15 @@ class PageHome : RxPageFragment() {
                     trainerListAdapter?.addData(it) ?: Log.e(TAG, "adapter is null")
                 }
             }
-            AppConst.HOMET_LIST_ITEM_HOME_RECOMMEND -> {
-                val dataArray = liveData.item
-                dataArray?.let {
-                    recommendListAdapter?.setDataArray(it.toTypedArray()) ?: Log.e(TAG, "adapter is null")
+            AppConst.HOMET_LIST_ITEM_HOME_HASH_TAG -> {
+                liveData.message?.let {
+                    val message = it
+                    hash_tag_tab_layout?.apply {
+                        if (tabCount < AppFeature.APP_FEATURE_VIEWPAGER_COUNT) {
+                            Log.d(TAG, "message = [$message]")
+                            addTab(newTab().setText(message))
+                        }
+                    } ?: Log.e(TAG, "tag tab is null")
                 }
             }
             else -> Log.e(TAG, "wrong list type")
@@ -152,7 +159,6 @@ class PageHome : RxPageFragment() {
         programListAdapter = null
         freeWorkoutListAdapter = null
         trainerListAdapter = null
-        recommendListAdapter = null
         super.onDestroyed()
     }
 
@@ -170,12 +176,7 @@ class PageHome : RxPageFragment() {
                     AppConst.LIVE_DATA_CMD_STRING -> {
                         liveData.message?.let {
                             val message = liveData.message
-                            recommend_tab_layout?.apply {
-                                if (tabCount < 4) {
-//                                    Log.d(TAG, "add Tab [$tabCount][$message]")
-                                    addTab(newTab().setText(message))
-                                }
-                            }
+                            Log.d(TAG, "message = [$message]")
                         } ?: Log.e(TAG, "message is null")
                     }
                     AppConst.LIVE_DATA_CMD_ITEM -> {

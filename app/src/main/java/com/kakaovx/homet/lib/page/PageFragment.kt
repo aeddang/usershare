@@ -17,7 +17,7 @@ import com.kakaovx.homet.user.util.Log
 
 abstract class PageFragment: Fragment(), Page {
 
-    private val TAG = javaClass.simpleName
+    private val TAG = "PageFragment"
 
     enum class PageType {
         INIT, IN, OUT, POPUP

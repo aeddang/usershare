@@ -27,6 +27,7 @@ object AppConst {
     const val HOMET_VALUE_PLANNER = "PLANNER"
     const val HOMET_VALUE_SEARCH = "SEARCH"
     const val HOMET_VALUE_PROFILE = "PROFILE"
+    const val HOMET_VALUE_RECOMMEND = "RECOMMEND"
 
     /**
      * LiveData Model index

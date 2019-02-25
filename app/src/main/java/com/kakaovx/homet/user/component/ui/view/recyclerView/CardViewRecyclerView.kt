@@ -11,9 +11,9 @@ class CardViewRecyclerView: RecyclerFrameLayout {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     override fun onCreated() {
-        Log.d("VX_CardViewRecyclerView", "onCreated")
+        Log.d("CardViewRecyclerView", "onCreated()")
     }
     override fun onDestroyed() {
-        Log.d("VX_CardViewRecyclerView", "onDestroyed")
+        Log.d("CardViewRecyclerView", "onDestroyed()")
     }
 }
