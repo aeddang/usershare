@@ -15,5 +15,6 @@ class PageLiveData {
     var homeProgramModel: HomeProgramModel? = null
     var homeFreeWorkoutModel: HomeFreeWorkoutModel? = null
     var homeTrainerModel: HomeTrainerModel? = null
+    var homeRecommendTags: ArrayList<String>? = null
     var homeRecommendModel: HomeRecommendModel? = null
 }

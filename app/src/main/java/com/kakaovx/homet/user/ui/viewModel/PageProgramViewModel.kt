@@ -21,37 +21,28 @@ class PageProgramViewModel(repo: Repository) : ViewModel() {
     val response: MutableLiveData<PageLiveData> = MutableLiveData()
 
     fun getProgram(): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "program"
-        return restApi.searchRepositories(params)
+        return restApi.getProgramList()
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( { data ->
                 Log.i(TAG, "subscribeComplete")
-                Log.i(TAG, "apiResponse incompleteResults = ${data.incompleteResults}")
-                Log.i(TAG, "apiResponse total count = ${data.count}")
+                Log.i(TAG, "apiResponse code = ${data.code}")
+                Log.i(TAG, "apiResponse message = ${data.message}")
                 Log.i(TAG, "apiResponse raw = $data")
-                handleComplete(data.items)
+//                handleComplete(data.items)
             }, { handleError(it) })
-    }
-
-    fun getWorkoutInProgram(programIndex: Int): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "workout"
-        return restApi.searchRepositories(params)
-            .retry(RetryPolicy.none())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe( { data ->
-                Log.i(TAG, "subscribeComplete")
-                Log.i(TAG, "apiResponse incompleteResults = ${data.incompleteResults}")
-                Log.i(TAG, "apiResponse total count = ${data.count}")
-                Log.i(TAG, "apiResponse raw = $data")
-                handleComplete(data.items)
-            }, { handleError(it) })
+//        return restApi.searchRepositories(params)
+//            .retry(RetryPolicy.none())
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe( { data ->
+//                Log.i(TAG, "subscribeComplete")
+//                Log.i(TAG, "apiResponse incompleteResults = ${data.incompleteResults}")
+//                Log.i(TAG, "apiResponse total count = ${data.count}")
+//                Log.i(TAG, "apiResponse raw = $data")
+//                handleComplete(data.items)
+//            }, { handleError(it) })
     }
 
     private fun handleComplete(data: ArrayList<ResultData>) {

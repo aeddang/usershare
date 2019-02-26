@@ -2,14 +2,12 @@ package com.kakaovx.homet.user.ui.splash
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.model.ApiResponse
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.util.Log
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class SplashViewModel(repo: Repository) : ViewModel() {
@@ -32,16 +30,10 @@ class SplashViewModel(repo: Repository) : ViewModel() {
 
     fun startLoginProcess(): Disposable {
         // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "apple"
-        return restApi.searchRepositories(params)
-            .retry(RetryPolicy.none())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                this::handleComplete,
-                this::handleError
-            )
+        return Observable.just("start")
+            .subscribe ({
+                response.value = true
+            }, { handleError(it) })
     }
 
     fun startLoginForm() {

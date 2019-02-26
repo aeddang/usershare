@@ -1,5 +1,6 @@
 package com.kakaovx.homet.user.component.network.error
 
+import com.kakaovx.homet.user.util.Log
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Response
@@ -11,16 +12,24 @@ class RetrofitException(override val message: String?,
                         private val response: Response<*>?,
                         val kind: ErrorKind,
                         private val exception: Throwable?,
-                        val retrofit: Retrofit?) : RuntimeException(message, exception) {
+                        private val retrofit: Retrofit?) : RuntimeException(message, exception) {
+
+    private val TAG = javaClass.simpleName
 
     fun isTimeout(): Boolean {
         return exception is SocketTimeoutException
     }
 
     fun <T> getErrorBodyAs(type: Class<T>): T? {
-        if (retrofit == null || response == null || response.errorBody() == null) return null
-        val converter: Converter<ResponseBody, T> = retrofit.responseBodyConverter(type, arrayOf())
-        return converter.convert(response.errorBody())
+        retrofit?.apply {
+            response?.apply {
+                response.errorBody()?.let {
+                    val converter: Converter<ResponseBody, T> = retrofit.responseBodyConverter(type, arrayOf())
+                    return converter.convert(it)
+                }
+            } ?: Log.e(TAG, "response is null")
+        } ?: Log.e(TAG, "retrofit is null")
+        return null
     }
 
     companion object {

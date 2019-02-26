@@ -14,11 +14,15 @@ class HomePagerAdapter(val context: Context,
 
     private val TAG = javaClass.simpleName
 
+    private val tagList: ArrayList<String> = ArrayList()
+
+    fun setDataList(tagList: ArrayList<String>) {
+        tagList.addAll(tagList)
+    }
+
     override fun getItem(position: Int): Fragment {
         Log.d(TAG, "getItem = [$position]")
-        getPageTitle(position)?.let {
-            return PageHomeRecommendList.newInstance(it.toString())
-        } ?: Log.e(TAG, "no title page")
+//        return PageHomeRecommendList.newInstance(tagList[position])
         return PageHomeRecommendList.newInstance(AppConst.HOMET_VALUE_NOTITLE)
     }
 
