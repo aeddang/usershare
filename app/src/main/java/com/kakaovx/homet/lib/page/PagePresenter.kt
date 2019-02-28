@@ -72,7 +72,7 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
 
     override fun pageChange(id:T, param:Map<String, Any>?, sharedElement:android.view.View?, transitionName:String?): Presenter<T> {
         view?.onPageChange(id, param, sharedElement, transitionName)
-        if(model.isHome(id)) view?.onClearPageHistory()
+       // if(model.isHome(id)) view?.onClearPageHistory()
         return this
     }
 

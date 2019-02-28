@@ -3,6 +3,10 @@ package com.kakaovx.homet.lib.page
 import android.view.View
 import androidx.annotation.LayoutRes
 
+interface PagePosition {
+    var position: Int
+}
+
 interface Page {
     @LayoutRes
     fun getLayoutResId(): Int
