@@ -137,6 +137,11 @@ class PageHome : RxPageFragment() {
                         }
                     } ?: Log.e(TAG, "tag tab is null")
                 }
+                liveData.homeRecommendTags?.let {
+                    recommend_viewpager?.apply {
+
+                    }
+                }
             }
             else -> Log.e(TAG, "wrong list type")
         }

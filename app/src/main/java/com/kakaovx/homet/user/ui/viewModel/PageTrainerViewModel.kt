@@ -21,20 +21,35 @@ class PageTrainerViewModel(repo: Repository) : ViewModel() {
     val response: MutableLiveData<PageLiveData> = MutableLiveData()
 
     fun getTrainer(): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "fitness trainer"
-        return restApi.searchRepositories(params)
+        return restApi.getTrainerList()
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( { data ->
                 Log.i(TAG, "subscribeComplete")
-                Log.i(TAG, "apiResponse incompleteResults = ${data.incompleteResults}")
-                Log.i(TAG, "apiResponse total count = ${data.count}")
+                Log.i(TAG, "apiResponse code = ${data.code}")
+                Log.i(TAG, "apiResponse message = ${data.message}")
                 Log.i(TAG, "apiResponse raw = $data")
-                handleComplete(data.items)
+//                handleComplete(data.items)
             }, { handleError(it) })
+
+//        return restApi.searchRepositories(params)
+//            .retry(RetryPolicy.none())
+//            .subscribeOn(Schedulers.io())
+//            .subscribe( { data ->
+//                Observable.fromIterable(data.items)
+//                    .map { item ->
+//                        HomeTrainerModel(item.name, item.description, item.ownerData?.type, item.ownerData?.avatarUrl)
+//                    }
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe( { model ->
+//                        val liveData = PageLiveData()
+//                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+//                        liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_TRAINER
+//                        liveData.homeTrainerModel = model
+//                        response.value = liveData
+//                    }, { handleError(it) })
+//            }, { handleError(it) })
     }
 
     private fun handleComplete(data: ArrayList<ResultData>) {

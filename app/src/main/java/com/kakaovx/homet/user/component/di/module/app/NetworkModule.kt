@@ -5,14 +5,16 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kakaovx.homet.user.component.network.api.RestfulApi
 import com.kakaovx.homet.user.component.network.error.Rx2ErrorHandlingCallAdapterFactory
-import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.constant.ApiConst
+import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.Log
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.CallAdapter
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.CookieManager
 import java.net.CookiePolicy
@@ -20,14 +22,13 @@ import java.util.concurrent.TimeUnit
 
 
 @Module
-class NetworkModule {
+open class NetworkModule {
+
+    private val TAG = javaClass.simpleName
 
     private val CONNECT_TIMEOUT: Long = 30
     private val WRITE_TIMEOUT: Long = 30
     private val READ_TIMEOUT: Long = 30
-    private val TAG = javaClass.simpleName
-
-    private val baseUrl: String = ApiConst.HOMET_DEFAULT_REST_ADDRESS
 
     @Provides
     fun provideCache(application: Application): Cache {
@@ -36,19 +37,23 @@ class NetworkModule {
     }
 
     @Provides
-    fun provideGs(): Gson {
-        return GsonBuilder().create()
+    fun provideInterceptor(): Interceptor {
+        return Interceptor {
+            val builder: Request.Builder = it.request().newBuilder()
+            builder.header("User-Agent", "Android")
+            it.proceed(builder.build())
+        }
     }
 
     @Provides
     fun provideOkHttpClient(cache: Cache, interceptor: Interceptor): OkHttpClient {
         val logger = HttpLoggingInterceptor(
             HttpLoggingInterceptor.Logger { message ->
-                var parse_message = message
-                Log.d(TAG, parse_message)
-                if (parse_message.contains("END")) {
+                var parseMessage = message
+                Log.d(TAG, parseMessage)
+                if (parseMessage.contains("END")) {
                     Log.d(TAG, "\n")
-                    parse_message += "\n"
+                    parseMessage += "\n"
                 }
             })
         if (AppFeature.APP_LOG_DEBUG) {
@@ -67,22 +72,25 @@ class NetworkModule {
     }
 
     @Provides
-    fun provideRetrofit(gs: Gson, client: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .addCallAdapterFactory(Rx2ErrorHandlingCallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(gs))
-            .baseUrl(baseUrl)
-            .client(client)
-            .build()
+    fun provideGs(): Gson {
+        return GsonBuilder().create()
     }
 
     @Provides
-    fun provideInterceptor(): Interceptor {
-        return Interceptor {
-            val builder: Request.Builder = it.request().newBuilder()
-            builder.header("User-Agent", "Android")
-            it.proceed(builder.build())
-        }
+    fun provideCallAdapterFactory(): CallAdapter.Factory
+            = RxJava2CallAdapterFactory.createAsync()
+
+    @Provides
+    fun provideRetrofit(gs: Gson,
+//                        callAdapter: CallAdapter.Factory,
+                        client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+//            .addCallAdapterFactory(callAdapter)
+            .addCallAdapterFactory(Rx2ErrorHandlingCallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gs))
+            .baseUrl(ApiConst.HOMET_DEFAULT_REST_ADDRESS)
+            .client(client)
+            .build()
     }
 
     @Provides
