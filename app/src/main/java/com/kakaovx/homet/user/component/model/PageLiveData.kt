@@ -1,13 +1,14 @@
-package com.kakaovx.homet.user.component.ui.skeleton.model.data
+package com.kakaovx.homet.user.component.model
 
 import com.kakaovx.homet.user.component.model.HomeFreeWorkoutModel
 import com.kakaovx.homet.user.component.model.HomeProgramModel
-import com.kakaovx.homet.user.component.model.HomeRecommendModel
+import com.kakaovx.homet.user.component.model.HomeIssueProgramModel
 import com.kakaovx.homet.user.component.model.HomeTrainerModel
-import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.component.network.model.ResultData
+import com.kakaovx.homet.user.constant.AppConst
 
 class PageLiveData {
+
     var cmd: Int = AppConst.LIVE_DATA_CMD_NONE
     var message: String? = null
     var listItemType: Int = AppConst.HOMET_LIST_ITEM_INDEX
@@ -15,6 +16,6 @@ class PageLiveData {
     var homeProgramModel: HomeProgramModel? = null
     var homeFreeWorkoutModel: HomeFreeWorkoutModel? = null
     var homeTrainerModel: HomeTrainerModel? = null
-    var homeRecommendTags: ArrayList<String>? = null
-    var homeRecommendModel: HomeRecommendModel? = null
+    var homeIssueTags: ArrayList<String>? = null
+    var homeIssueProgramModel: HomeIssueProgramModel? = null
 }

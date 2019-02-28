@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.repository.Repository
-import com.kakaovx.homet.user.component.ui.skeleton.model.data.PageLiveData
+import com.kakaovx.homet.user.component.model.PageLiveData
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers

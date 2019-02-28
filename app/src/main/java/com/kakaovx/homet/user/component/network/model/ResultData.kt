@@ -7,14 +7,18 @@ data class ResultData(
     @SerializedName("full_name") val fullName: String?,
     @SerializedName("owner") val ownerData: OwnerData?,
     @SerializedName("description") val description: String?
-)
+) {
+    override fun toString(): String {
+        return "ResultData(id=$id\n" +
+                " name=$name\n" +
+                " fullName=$fullName\n" +
+                " ownerData=$ownerData\n" +
+                " description=$description)"
+    }
+}
 
-data class OwnerData(
-    @SerializedName("id") val id: Int,
-    @SerializedName("login") val login: String?,
-    @SerializedName("avatar_url") val avatarUrl: String?,
-    @SerializedName("grAvatar_id") val grAvatarId: String?,
-    @SerializedName("url") val url: String?,
-    @SerializedName("received_events_url") val receivedEventsUrl: String?,
-    @SerializedName("type") val type: String?
-)
+
+
+
+
+

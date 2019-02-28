@@ -14,20 +14,21 @@ import com.kakaovx.homet.user.component.model.HomeTrainerModel
 import com.kakaovx.homet.user.component.ui.module.HomeListAdapter
 import com.kakaovx.homet.user.component.ui.module.HomePagerAdapter
 import com.kakaovx.homet.user.component.ui.module.HorizontalLinearLayoutManager
-import com.kakaovx.homet.user.component.ui.skeleton.model.data.PageLiveData
+import com.kakaovx.homet.user.component.model.PageLiveData
+import com.kakaovx.homet.user.component.ui.skeleton.model.layoutUtil.RecyclerViewRightDecoration
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
-import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModel
 import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModelFactory
+import com.kakaovx.homet.user.util.AppUtil
 import com.kakaovx.homet.user.util.Log
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.page_home.*
 import kotlinx.android.synthetic.main.page_home_content_free_workout.*
 import kotlinx.android.synthetic.main.page_home_content_program.*
-import kotlinx.android.synthetic.main.page_home_content_recommend.*
+import kotlinx.android.synthetic.main.page_home_content_issue.*
 import kotlinx.android.synthetic.main.page_home_content_trainer.*
 import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 import kotlinx.android.synthetic.main.ui_viewpager.view.*
@@ -45,6 +46,7 @@ class PageHome : RxPageFragment() {
     private var programListAdapter: HomeListAdapter<HomeProgramModel>? = null
     private var freeWorkoutListAdapter: HomeListAdapter<HomeFreeWorkoutModel>? = null
     private var trainerListAdapter: HomeListAdapter<HomeTrainerModel>? = null
+    private var issuePagerAdapter: HomePagerAdapter? = null
 
     private fun initView(context: Context) {
         activity?.let {
@@ -54,10 +56,8 @@ class PageHome : RxPageFragment() {
                 setDisplayShowTitleEnabled(false)
                 setHasOptionsMenu(true)
             }
-            recommend_viewpager?.let {
-                val viewPager = recommend_viewpager.viewPager
-                viewPager.adapter = HomePagerAdapter(context, myActivity.supportFragmentManager)
-                hash_tag_tab_layout?.setupWithViewPager(viewPager)
+            issue_program_viewpager?.apply {
+                issuePagerAdapter = HomePagerAdapter(context, myActivity.supportFragmentManager)
             }
         }
 
@@ -66,13 +66,12 @@ class PageHome : RxPageFragment() {
             programListAdapter?.let {
                 program_list.recyclerView?.apply {
                     layoutManager = HorizontalLinearLayoutManager(context)
+                    addItemDecoration(RecyclerViewRightDecoration(20))
                     adapter = it
                 }
-                it.isEmpty.observe(this, Observer { existData ->
-                    existData?.let {
-                        if (existData) program_list_empty.visibility = View.VISIBLE
-                        else program_list_empty.visibility = View.INVISIBLE
-                    }
+                it.isEmpty.observe(this, Observer { value ->
+                    if (value) program_list_empty.visibility = View.VISIBLE
+                    else program_list_empty.visibility = View.INVISIBLE
                 })
             } ?: Log.e(TAG, "home list adapter null")
         } ?: Log.e(TAG, "program_list null")
@@ -82,13 +81,12 @@ class PageHome : RxPageFragment() {
             freeWorkoutListAdapter?.let {
                 free_workout_list.recyclerView.apply {
                     layoutManager = HorizontalLinearLayoutManager(context)
+                    addItemDecoration(RecyclerViewRightDecoration(20))
                     adapter = it
                 }
-                it.isEmpty.observe(this, Observer { existData ->
-                    existData?.let {
-                        if (existData) free_workout_list_empty.visibility = View.VISIBLE
-                        else free_workout_list_empty.visibility = View.INVISIBLE
-                    }
+                it.isEmpty.observe(this, Observer { value ->
+                    if (value) free_workout_list_empty.visibility = View.VISIBLE
+                    else free_workout_list_empty.visibility = View.INVISIBLE
                 })
             }
         }
@@ -98,19 +96,19 @@ class PageHome : RxPageFragment() {
             trainerListAdapter?.let {
                 trainer_list.recyclerView.apply {
                     layoutManager = HorizontalLinearLayoutManager(context)
+                    addItemDecoration(RecyclerViewRightDecoration(20))
                     adapter = it
                 }
-                it.isEmpty.observe(this, Observer { existData ->
-                    existData?.let {
-                        if (existData) trainer_list_empty.visibility = View.VISIBLE
-                        else trainer_list_empty.visibility = View.INVISIBLE
-                    }
+                it.isEmpty.observe(this, Observer { value ->
+                    if (value) trainer_list_empty.visibility = View.VISIBLE
+                    else trainer_list_empty.visibility = View.INVISIBLE
                 })
             }
         }
     }
 
     private fun insertData(liveData: PageLiveData) {
+        AppUtil.getLiveDataListItemType(TAG, liveData.listItemType)
         when (liveData.listItemType) {
             AppConst.HOMET_LIST_ITEM_HOME_PROGRAM -> {
                 liveData.homeProgramModel?.let {
@@ -127,21 +125,22 @@ class PageHome : RxPageFragment() {
                     trainerListAdapter?.addData(it) ?: Log.e(TAG, "adapter is null")
                 }
             }
-            AppConst.HOMET_LIST_ITEM_HOME_HASH_TAG -> {
-                liveData.message?.let {
-                    val message = it
-                    hash_tag_tab_layout?.apply {
-                        if (tabCount < AppFeature.APP_FEATURE_VIEWPAGER_COUNT) {
-                            Log.d(TAG, "message = [$message]")
-                            addTab(newTab().setText(message))
+            AppConst.HOMET_LIST_ITEM_HOME_ISSUE_TAG -> {
+                issue_program_viewpager?.apply {
+                    val viewPager = viewPager
+                    issuePagerAdapter?.apply {
+                        liveData.homeIssueTags?.let { setDataList(it) } ?: Log.e(TAG, "homeIssueTags is null")
+                        viewPager.adapter = issuePagerAdapter
+                        hash_tag_tab_layout?.apply {
+                            for (i in 0 until count) {
+                                liveData.homeIssueTags?.let {
+                                    addTab(newTab().setText(it[i]))
+                                } ?: Log.e(TAG, "homeIssueTags is null")
+                            }
+                            setupWithViewPager(viewPager)
                         }
-                    } ?: Log.e(TAG, "tag tab is null")
-                }
-                liveData.homeRecommendTags?.let {
-                    recommend_viewpager?.apply {
-
-                    }
-                }
+                    } ?: Log.e(TAG, "issuePagerAdapter is null")
+                } ?: Log.e(TAG, "recommend_viewpager is null")
             }
             else -> Log.e(TAG, "wrong list type")
         }
@@ -156,7 +155,7 @@ class PageHome : RxPageFragment() {
         disposables += viewModel.getProgramData()
         disposables += viewModel.getFreeWorkoutData()
         disposables += viewModel.getTrainerData()
-        disposables += viewModel.getHashTagData()
+        disposables += viewModel.getIssueProgramData()
     }
 
     override fun onDestroyed() {
@@ -164,6 +163,7 @@ class PageHome : RxPageFragment() {
         programListAdapter = null
         freeWorkoutListAdapter = null
         trainerListAdapter = null
+        issuePagerAdapter = null
         super.onDestroyed()
     }
 

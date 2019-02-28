@@ -34,9 +34,9 @@ internal abstract class AndroidBindingModule {
 
     @PageScope
     @ContributesAndroidInjector(modules = [
-        PageHomeRecommendListModule::class
+        PageHomeIssueProgramListModule::class
     ])
-    internal abstract fun bindPageHomeRecommendList(): PageHomeRecommendList
+    internal abstract fun bindPageHomeIssueList(): PageHomeIssueProgramList
 
     @PageScope
     @ContributesAndroidInjector(modules = [

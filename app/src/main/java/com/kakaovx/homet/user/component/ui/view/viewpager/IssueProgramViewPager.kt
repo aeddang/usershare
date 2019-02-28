@@ -8,17 +8,17 @@ import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxFrameLayout
 import com.kakaovx.homet.user.util.Log
 
-class RecommendViewPager: RxFrameLayout, BaseAdapter.Delegate {
+class IssueProgramViewPager: RxFrameLayout, BaseAdapter.Delegate {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
     override fun onCreated() {
-        Log.d("RecommendViewPager", "onCreated()")
+        Log.d("IssueProgramViewPager", "onCreated()")
     }
 
     override fun onDestroyed() {
-        Log.d("RecommendViewPager", "onDestroyed()")
+        Log.d("IssueProgramViewPager", "onDestroyed()")
     }
 
     @LayoutRes

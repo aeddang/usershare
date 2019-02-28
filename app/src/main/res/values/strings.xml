@@ -23,4 +23,11 @@
     <string name="home_trainer">Trainer</string>
     <string name="home_program_recommend_comment">recommends this program.</string>
     <string name="finder">Find</string>
+    <string name="home_free_workout_title">Free Workout Title</string>
+    <string name="home_free_workout_description">Free Workout Description</string>
+    <string name="home_program_title">Program Title</string>
+    <string name="home_program_description">Program Description</string>
+    <string name="home_trainer_title">Trainer Title</string>
+    <string name="home_trainer_description">Trainer Description</string>
+    <string name="home_trainer_job">Trainer Job</string>
 </resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/page_home_issue_program_bg"
+        tools:context=".ui.MainActivity">
+
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/hash_tag_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/indicator"
+            app:tabIndicatorHeight="@dimen/page_home_issue_program_tab_indicator_height"
+            app:tabBackground="@color/page_home_issue_program_bg"
+            app:tabTextColor="@color/page_home_issue_program_tab"
+            app:tabSelectedTextColor="@color/page_home_issue_program_tab_selected"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bar_layout"/>
+
+    <LinearLayout
+        android:id="@+id/bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/page_home_issue_program_bar_height"
+        android:background="@color/bar_bg"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/hash_tag_tab_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/issue_program_viewpager" />
+
+    <com.kakaovx.homet.user.component.ui.view.viewpager.IssueProgramViewPager
+            android:id="@+id/issue_program_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/page_home_issue_program_pager_height"
+            app:layout_constraintTop_toBottomOf="@id/bar_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
