@@ -6,7 +6,7 @@ import com.kakaovx.homet.user.util.Log
 
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.network.model.ApiResponse
+import com.kakaovx.homet.user.component.network.model.ResponseList
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.ui.MainActivity
@@ -40,7 +40,7 @@ class PagePlanner : RxPageFragment() {
         hideProgress()
     }
 
-    private fun handleComplete(data: ApiResponse<ResultData>) {
+    private fun handleComplete(data: ResponseList<ResultData>) {
         Log.i(TAG, "handleComplete ($data)")
         hideProgress()
     }

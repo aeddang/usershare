@@ -1,5 +1,6 @@
 package com.kakaovx.homet.user.component.ui.module
 
+import android.view.MotionEvent
 import android.view.ViewGroup
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.BaseAdapter
 import com.kakaovx.homet.user.component.ui.skeleton.model.adapter.MultipleAdapter
@@ -39,5 +40,26 @@ class ContentListAdapter<T>(private val listType: Int): MultipleAdapter<T>() {
 
     override fun getViewType(position: Int): Int {
         return listType
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+        when(listType) {
+            AppConst.HOMET_LIST_ITEM_FREE_WORKOUT -> {
+                Log.d(TAG, "onBindViewHolder() HOMET_LIST_ITEM_FREE_WORKOUT")
+                holder.itemView.setOnTouchListener{ _, motionEvent ->
+                    when (motionEvent.action) {
+                        MotionEvent.ACTION_DOWN -> {}
+                        MotionEvent.ACTION_UP -> {
+                            itemPosition.value = position
+                        }
+                    }
+                    true
+                }
+            }
+            else -> {
+                Log.d(TAG, "onBindViewHolder() create default list")
+            }
+        }
     }
 }

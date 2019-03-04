@@ -29,7 +29,7 @@ class PageTrainerViewModel(repo: Repository) : ViewModel() {
             .subscribe( { res ->
                 Observable.fromIterable(res.data)
                     .map { data ->
-                        ContentModel(data.provider_name, data.description, data.thumbnail_provider_profile)
+                        ContentModel(data.provider_id, data.provider_name, data.description, data.thumbnail_provider_profile)
                     }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { model ->

@@ -2,7 +2,7 @@ package com.kakaovx.homet.user.ui.splash
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kakaovx.homet.user.component.network.model.ApiResponse
+import com.kakaovx.homet.user.component.network.model.ResponseList
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.util.Log
@@ -20,7 +20,7 @@ class SplashViewModel(repo: Repository) : ViewModel() {
     val response: MutableLiveData<Boolean> = MutableLiveData()
     val autoLoginResponse: MutableLiveData<Boolean> = MutableLiveData()
 
-    private fun handleComplete(data: ApiResponse<ResultData>) {
+    private fun handleComplete(data: ResponseList<ResultData>) {
         Log.i(TAG, "handleComplete ($data)")
         response.value = true
     }

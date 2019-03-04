@@ -12,7 +12,7 @@ import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.PageFactory
 import com.kakaovx.homet.user.ui.PageID
 import com.kakaovx.homet.user.util.Log
-import kotlinx.android.synthetic.main.page_viewpager.*
+import kotlinx.android.synthetic.main.page_content.*
 
 class PageContent : ViewPagerPageFragment() {
 

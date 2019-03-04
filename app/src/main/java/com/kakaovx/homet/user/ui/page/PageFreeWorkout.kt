@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.model.ContentModel
 import com.kakaovx.homet.user.component.ui.module.ContentListAdapter
@@ -12,6 +13,8 @@ import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.model.layoutUtil.RecyclerViewBottomDecoration
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
+import com.kakaovx.homet.user.ui.PageID
+import com.kakaovx.homet.user.ui.ParamType
 import com.kakaovx.homet.user.ui.viewModel.PageFreeWorkoutViewModel
 import com.kakaovx.homet.user.ui.viewModel.PageFreeWorkoutViewModelFactory
 import com.kakaovx.homet.user.util.Log
@@ -45,6 +48,16 @@ class PageFreeWorkout : RxPageFragment() {
                 existData?.let {
                     if (existData) viewEmpty.visibility = View.VISIBLE
                     else viewEmpty.visibility = View.INVISIBLE
+                }
+            })
+            it.itemPosition.observe(this, Observer { position ->
+                position?.apply {
+                    val model = it.getData(this)
+                    model.id?.apply {
+                        val param = HashMap<String, Any>()
+                        param[ParamType.DETAIL.key] = this
+                        PagePresenter.getInstance<PageID>().pageChange(PageID.CONTENT_DETAIL, param = param)
+                    }
                 }
             })
         }

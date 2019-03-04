@@ -66,12 +66,15 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     override fun getPageIn(isBack:Boolean): Int {
         return if(isBack) R.anim.slide_in_left else R.anim.slide_in_right
     }
+
     override fun getPageOut(isBack:Boolean): Int {
         return if(isBack) R.anim.slide_out_right else R.anim.slide_out_left
     }
+
     override fun getPopupIn(): Int {
         return R.anim.slide_in_down
     }
+
     override fun getPopupOut(): Int {
         return  R.anim.slide_out_down
     }

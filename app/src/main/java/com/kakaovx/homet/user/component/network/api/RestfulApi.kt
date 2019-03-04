@@ -12,34 +12,40 @@ interface RestfulApi {
     @FormUrlEncoded
     @POST(ApiConst.HOMET_API_PROGRAM_URL)
     fun getProgramList(@Field(ApiConst.HOMET_API_FIELD_KEY_MODE) key: String
-                       = ApiConst.HOMET_API_FIELD_VALUE_PROGRAM_LIST): Observable<ApiResponse<ProgramData>>
+                       = ApiConst.HOMET_API_FIELD_VALUE_PROGRAM_LIST): Observable<ResponseList<ProgramData>>
 
     @FormUrlEncoded
     @POST(ApiConst.HOMET_API_PROGRAM_URL)
     fun getIssueProgramList(@Field(ApiConst.HOMET_API_FIELD_KEY_MODE) key: String
-                            = ApiConst.HOMET_API_FIELD_VALUE_ISSUE_LIST): Observable<ApiResponse<ProgramData>>
+                            = ApiConst.HOMET_API_FIELD_VALUE_ISSUE_LIST): Observable<ResponseList<ProgramData>>
 
     @FormUrlEncoded
     @POST(ApiConst.HOMET_API_PROGRAM_URL)
     fun getRecommendProgramList(@Field(ApiConst.HOMET_API_FIELD_KEY_MODE) key: String
                                 = ApiConst.HOMET_API_FIELD_VALUE_RECOMMEND_LIST,
                                 @Field(ApiConst.HOMET_API_FIELD_KEY_USER_ID) id: String
-                                = ApiConst.HOMET_API_FIELD_VALUE_NONE): Observable<ApiResponse<ProgramData>>
+                                = ApiConst.HOMET_API_FIELD_VALUE_NONE): Observable<ResponseList<ProgramData>>
 
     @FormUrlEncoded
     @POST(ApiConst.HOMET_API_PROGRAM_URL)
     fun getWorkoutList(@Field(ApiConst.HOMET_API_FIELD_KEY_MODE) key: String
-                       = ApiConst.HOMET_API_FIELD_VALUE_EXERCISE_LIST): Observable<ApiResponse<WorkoutData>>
+                       = ApiConst.HOMET_API_FIELD_VALUE_EXERCISE_LIST): Observable<ResponseList<WorkoutData>>
 
     @FormUrlEncoded
     @POST(ApiConst.HOMET_API_PROGRAM_URL)
     fun getFreeWorkoutList(@Field(ApiConst.HOMET_API_FIELD_KEY_MODE) key: String
-                                      = ApiConst.HOMET_API_FIELD_VALUE_FREE_LIST): Observable<ApiResponse<WorkoutData>>
+                           = ApiConst.HOMET_API_FIELD_VALUE_FREE_LIST): Observable<ResponseList<WorkoutData>>
+
+    @FormUrlEncoded
+    @POST(ApiConst.HOMET_API_PROGRAM_URL)
+    fun getFreeWorkoutContent(@Field(ApiConst.HOMET_API_FIELD_KEY_MODE) key: String
+                              = ApiConst.HOMET_API_FIELD_VALUE_EXERCISE_CONTENT,
+                              @Field(ApiConst.HOMET_API_FIELD_KEY_EXERCISE_ID) id: String): Observable<Response<WorkoutData>>
 
     @FormUrlEncoded
     @POST(ApiConst.HOMET_API_TRAINER_URL)
     fun getTrainerList(@Field(ApiConst.HOMET_API_FIELD_KEY_MODE) key: String
-                           = ApiConst.HOMET_API_FIELD_VALUE_TRAINER_LIST,
+                       = ApiConst.HOMET_API_FIELD_VALUE_TRAINER_LIST,
                        @Field(ApiConst.HOMET_API_FIELD_KEY_USER_ID) id: String
-                           = "0"): Observable<ApiResponse<TrainerData>>
+                       = "0"): Observable<ResponseList<TrainerData>>
 }

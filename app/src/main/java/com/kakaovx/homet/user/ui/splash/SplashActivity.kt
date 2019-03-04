@@ -1,6 +1,5 @@
 package com.kakaovx.homet.user.ui.splash
 
-import android.view.WindowManager
 import com.kakaovx.homet.lib.page.PageActivity
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePresenter

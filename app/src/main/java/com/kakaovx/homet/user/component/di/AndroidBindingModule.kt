@@ -52,6 +52,12 @@ internal abstract class AndroidBindingModule {
 
     @PageScope
     @ContributesAndroidInjector(modules = [
+        PageContentDetailModule::class
+    ])
+    internal abstract fun bindPageContentDetail(): PageContentDetail
+
+    @PageScope
+    @ContributesAndroidInjector(modules = [
         PageTrainerModule::class
     ])
     internal abstract fun bindPageTrainer(): PageTrainer

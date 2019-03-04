@@ -29,7 +29,7 @@ class PageFreeWorkoutViewModel(repo: Repository) : ViewModel() {
             .subscribe( { res ->
                 Observable.fromIterable(res.data)
                     .map { data ->
-                        ContentModel(data.title, data.description, data.thumbnail_preview)
+                        ContentModel(data.exercise_id, data.title, data.description, data.thumbnail_preview)
                     }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { model ->
