@@ -9,6 +9,7 @@ import com.kakaovx.homet.user.component.ui.skeleton.view.RecyclerFrameLayout
 import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 
 class ComponentRecyclerView: RecyclerFrameLayout {
+
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
@@ -20,4 +21,6 @@ class ComponentRecyclerView: RecyclerFrameLayout {
     override fun injectApi(api: RestfulApi) {
         return
     }
+
+    override fun onDestroyed() {}
 }

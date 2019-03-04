@@ -7,25 +7,31 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.RecyclerView
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.network.model.ResultData
-import com.kakaovx.homet.user.component.ui.module.ComplexListAdapter
+import com.kakaovx.homet.user.component.model.HomeFreeWorkoutModel
+import com.kakaovx.homet.user.component.model.HomeProgramModel
+import com.kakaovx.homet.user.component.model.HomeTrainerModel
+import com.kakaovx.homet.user.component.ui.module.HomeListAdapter
+import com.kakaovx.homet.user.component.ui.module.HomePagerAdapter
 import com.kakaovx.homet.user.component.ui.module.HorizontalLinearLayoutManager
+import com.kakaovx.homet.user.component.model.PageLiveData
+import com.kakaovx.homet.user.component.ui.skeleton.model.layoutUtil.RecyclerViewRightDecoration
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModel
 import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModelFactory
+import com.kakaovx.homet.user.util.AppUtil
 import com.kakaovx.homet.user.util.Log
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.page_home.*
 import kotlinx.android.synthetic.main.page_home_content_free_workout.*
 import kotlinx.android.synthetic.main.page_home_content_program.*
-import kotlinx.android.synthetic.main.page_home_content_recommend.*
+import kotlinx.android.synthetic.main.page_home_content_issue.*
 import kotlinx.android.synthetic.main.page_home_content_trainer.*
 import kotlinx.android.synthetic.main.ui_recyclerview.view.*
+import kotlinx.android.synthetic.main.ui_viewpager.view.*
 import javax.inject.Inject
 
 
@@ -37,10 +43,10 @@ class PageHome : RxPageFragment() {
     lateinit var viewViewModelFactory: PageHomeViewModelFactory
     private lateinit var viewModel: PageHomeViewModel
 
-    private var programListAdapter: ComplexListAdapter? = null
-    private var freeWorkoutListAdapter: ComplexListAdapter? = null
-    private var trainerListAdapter: ComplexListAdapter? = null
-    private var recommendListAdapter: ComplexListAdapter? = null
+    private var programListAdapter: HomeListAdapter<HomeProgramModel>? = null
+    private var freeWorkoutListAdapter: HomeListAdapter<HomeFreeWorkoutModel>? = null
+    private var trainerListAdapter: HomeListAdapter<HomeTrainerModel>? = null
+    private var issuePagerAdapter: HomePagerAdapter? = null
 
     private fun initView(context: Context) {
         activity?.let {
@@ -50,84 +56,91 @@ class PageHome : RxPageFragment() {
                 setDisplayShowTitleEnabled(false)
                 setHasOptionsMenu(true)
             }
-        }
-
-        program_list?.let{
-            val recyclerView: RecyclerView = program_list.recyclerView
-            programListAdapter = ComplexListAdapter(AppConst.HOMET_LIST_ITEM_HOME_PROGRAM)
-            programListAdapter?.let {
-                recyclerView.apply {
-                    layoutManager = HorizontalLinearLayoutManager(context)
-                    adapter = it
-                }
-                it.isEmpty.observe(this, Observer { existData ->
-                    existData?.let {
-                        if (existData) program_list_empty.visibility = View.VISIBLE
-                        else program_list_empty.visibility = View.INVISIBLE
-                    }
-                })
+            issue_program_viewpager?.apply {
+                issuePagerAdapter = HomePagerAdapter(context, myActivity.supportFragmentManager)
             }
         }
 
-        free_workout_list?.let{
-            val recyclerView: RecyclerView = free_workout_list.recyclerView
-            freeWorkoutListAdapter = ComplexListAdapter(AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT)
-            freeWorkoutListAdapter?.let {
-                recyclerView.apply {
+        program_list?.let{
+            programListAdapter = HomeListAdapter(AppConst.HOMET_LIST_ITEM_HOME_PROGRAM)
+            programListAdapter?.let {
+                program_list.recyclerView?.apply {
                     layoutManager = HorizontalLinearLayoutManager(context)
+                    addItemDecoration(RecyclerViewRightDecoration(20))
                     adapter = it
                 }
-                it.isEmpty.observe(this, Observer { existData ->
-                    existData?.let {
-                        if (existData) free_workout_list_empty.visibility = View.VISIBLE
-                        else free_workout_list_empty.visibility = View.INVISIBLE
-                    }
+                it.isEmpty.observe(this, Observer { value ->
+                    if (value) program_list_empty.visibility = View.VISIBLE
+                    else program_list_empty.visibility = View.INVISIBLE
+                })
+            } ?: Log.e(TAG, "home list adapter null")
+        } ?: Log.e(TAG, "program_list null")
+
+        free_workout_list?.let{
+            freeWorkoutListAdapter = HomeListAdapter(AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT)
+            freeWorkoutListAdapter?.let {
+                free_workout_list.recyclerView.apply {
+                    layoutManager = HorizontalLinearLayoutManager(context)
+                    addItemDecoration(RecyclerViewRightDecoration(20))
+                    adapter = it
+                }
+                it.isEmpty.observe(this, Observer { value ->
+                    if (value) free_workout_list_empty.visibility = View.VISIBLE
+                    else free_workout_list_empty.visibility = View.INVISIBLE
                 })
             }
         }
 
         trainer_list?.let{
-            val recyclerView: RecyclerView = trainer_list.recyclerView
-            trainerListAdapter = ComplexListAdapter(AppConst.HOMET_LIST_ITEM_HOME_TRAINER)
+            trainerListAdapter = HomeListAdapter(AppConst.HOMET_LIST_ITEM_HOME_TRAINER)
             trainerListAdapter?.let {
-                recyclerView.apply {
+                trainer_list.recyclerView.apply {
                     layoutManager = HorizontalLinearLayoutManager(context)
+                    addItemDecoration(RecyclerViewRightDecoration(20))
                     adapter = it
                 }
-                it.isEmpty.observe(this, Observer { existData ->
-                    existData?.let {
-                        if (existData) trainer_list_empty.visibility = View.VISIBLE
-                        else trainer_list_empty.visibility = View.INVISIBLE
-                    }
+                it.isEmpty.observe(this, Observer { value ->
+                    if (value) trainer_list_empty.visibility = View.VISIBLE
+                    else trainer_list_empty.visibility = View.INVISIBLE
                 })
             }
         }
-
-        recommend_tab_layout?.apply {
-//            setupWithViewPager(recommend_viewpager.viewPager)
-        }
     }
 
-    private fun initDisposables() {
-        disposables += viewModel.getProgramData()
-        disposables += viewModel.getFreeWorkoutData()
-        disposables += viewModel.getTrainerData()
-        disposables += viewModel.getHashTagData()
-    }
-
-    private fun insertData(type: Int, dataArray: Array<ResultData>) {
-        when (type) {
+    private fun insertData(liveData: PageLiveData) {
+        AppUtil.getLiveDataListItemType(TAG, liveData.listItemType)
+        when (liveData.listItemType) {
             AppConst.HOMET_LIST_ITEM_HOME_PROGRAM -> {
-                programListAdapter?.setDataArray(dataArray) ?: Log.e(TAG, "adapter is null")
+                liveData.homeProgramModel?.let {
+                    programListAdapter?.addData(it) ?: Log.e(TAG, "adapter is null")
+                }
             }
             AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT -> {
-                freeWorkoutListAdapter?.setDataArray(dataArray) ?: Log.e(TAG, "adapter is null")
+                liveData.homeFreeWorkoutModel?.let {
+                    freeWorkoutListAdapter?.addData(it) ?: Log.e(TAG, "adapter is null")
+                }
             }
             AppConst.HOMET_LIST_ITEM_HOME_TRAINER -> {
-                trainerListAdapter?.setDataArray(dataArray) ?: Log.e(TAG, "adapter is null")
+                liveData.homeTrainerModel?.let {
+                    trainerListAdapter?.addData(it) ?: Log.e(TAG, "adapter is null")
+                }
             }
-            AppConst.HOMET_LIST_ITEM_HOME_RECOMMEND -> {
-                recommendListAdapter?.setDataArray(dataArray) ?: Log.e(TAG, "adapter is null")
+            AppConst.HOMET_LIST_ITEM_HOME_ISSUE_TAG -> {
+                issue_program_viewpager?.apply {
+                    val viewPager = viewPager
+                    issuePagerAdapter?.apply {
+                        liveData.homeIssueTags?.let { setDataList(it) } ?: Log.e(TAG, "homeIssueTags is null")
+                        viewPager.adapter = issuePagerAdapter
+                        hash_tag_tab_layout?.apply {
+                            for (i in 0 until count) {
+                                liveData.homeIssueTags?.let {
+                                    addTab(newTab().setText(it[i]))
+                                } ?: Log.e(TAG, "homeIssueTags is null")
+                            }
+                            setupWithViewPager(viewPager)
+                        }
+                    } ?: Log.e(TAG, "issuePagerAdapter is null")
+                } ?: Log.e(TAG, "recommend_viewpager is null")
             }
             else -> Log.e(TAG, "wrong list type")
         }
@@ -137,20 +150,29 @@ class PageHome : RxPageFragment() {
         return R.layout.page_home
     }
 
+    override fun onSubscribe() {
+        super.onSubscribe()
+        disposables += viewModel.getProgramData()
+        disposables += viewModel.getFreeWorkoutData()
+        disposables += viewModel.getTrainerData()
+        disposables += viewModel.getIssueProgramData()
+    }
+
     override fun onDestroyed() {
         Log.d(TAG, "onDestroyed()")
         programListAdapter = null
         freeWorkoutListAdapter = null
         trainerListAdapter = null
-        recommendListAdapter = null
+        issuePagerAdapter = null
         super.onDestroyed()
     }
 
     override fun onCreated() {
-        Log.d(TAG, "onCreated() start")
+        Log.d(TAG, "onCreated()")
         AndroidSupportInjection.inject(this)
 
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageHomeViewModel::class.java]
+
         viewModel.response.observe(this, Observer { liveData ->
             liveData?.let {
                 val cmd = liveData.cmd
@@ -159,31 +181,18 @@ class PageHome : RxPageFragment() {
                     AppConst.LIVE_DATA_CMD_STRING -> {
                         liveData.message?.let {
                             val message = liveData.message
-                            recommend_tab_layout?.apply {
-                                if (tabCount < 4) {
-//                                    Log.d(TAG, "add Tab [$tabCount][$message]")
-                                    addTab(newTab().setText(message))
-                                }
-                            }
+                            Log.d(TAG, "message = [$message]")
                         } ?: Log.e(TAG, "message is null")
                     }
                     AppConst.LIVE_DATA_CMD_ITEM -> {
-                        liveData.item?.let {
-                            val data = liveData.item
-                            data?.let {
-                                insertData(liveData.listItemType, data.toTypedArray())
-                            } ?: Log.e(TAG, "data is null")
-                        }
+                        insertData(liveData)
                     }
                     else -> Log.e(TAG, "wrong command")
                 }
             } ?: Log.e(TAG, "liveData is null")
         })
-        super.onCreated()
-
         context?.let{ initView(it) }
-        initDisposables()
-        Log.d(TAG, "onCreated() end")
+        super.onCreated()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

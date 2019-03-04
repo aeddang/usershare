@@ -20,8 +20,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/page_home_title_font_size"
                 android:textColor="@color/page_home_sub_title"
-                android:letterSpacing="@dimen/page_home_title_font_letter_spacing"
-                android:lineSpacingExtra="@dimen/page_home_title_font_line_spacing_extra"
                 android:text="@string/home_trainer"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.item_image.view.*
 class ImageItem(context:Context): ListItem(context) {
 
     override fun onCreated() { }
+    override fun onDestroyed() {}
 
     override fun getLayoutResId(): Int {
         return R.layout.item_image

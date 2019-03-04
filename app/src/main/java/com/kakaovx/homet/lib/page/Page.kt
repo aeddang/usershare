@@ -1,6 +1,11 @@
 package com.kakaovx.homet.lib.page
 
+import android.view.View
 import androidx.annotation.LayoutRes
+
+interface PagePosition {
+    var position: Int
+}
 
 interface Page {
     @LayoutRes
@@ -12,35 +17,36 @@ interface Page {
 }
 
 interface Presenter<T> {
-    fun goHome()
+    fun goHome(idx:Int = 0)
     fun goBack()
     fun toggleNavigation()
     fun showNavigation()
     fun hideNavigation()
+    fun clearPageHistory(id:T): Presenter<T>
     fun closePopup(id:T): Presenter<T>
-    fun openPopup(id:T): Presenter<T>
-    fun openPopup(id:T,param:Map<String, Any>): Presenter<T>
+    fun closeAllPopup(id:T): Presenter<T>
+    fun openPopup(id:T,param:Map<String, Any>? = null, sharedElement:View? = null, transitionName:String? = null): Presenter<T>
     fun pageStart(id:T): Presenter<T>
-    fun pageChange(id:T,isHistory:Boolean=true,isBack:Boolean = false): Presenter<T>
-    fun pageChange(id:T,param:Map<String, Any>,isHistory:Boolean=true,isBack:Boolean = false): Presenter<T>
+    fun pageChange(id:T,param:Map<String, Any>? = null, sharedElement:View? = null, transitionName:String? = null): Presenter<T>
 }
 
 interface View<T> {
+    fun getCurrentPageFragment(): PageFragment?
+    fun getCurrentFragment(): PageFragment?
+    fun getPageAreaSize():Pair<Float,Float>
+    fun onClearPageHistory()
     fun onPageStart(id:T)
-    fun onPageChange(id:T,param:Map<String, Any>, isBack:Boolean)
-    fun onOpenPopup(id:T, param:Map<String, Any>)
+    fun onBack()
+    fun onPageChange(id:T,param:Map<String, Any>? = null, sharedElement: View? = null, transitionName:String? = null)
+    fun onOpenPopup(id:T, param:Map<String, Any>? = null, sharedElement: View? = null, transitionName:String? = null)
     fun onClosePopup(id:T)
+    fun onCloseAllPopup()
     fun onShowNavigation(){}
     fun onHideNavigation(){}
 }
 
 interface Model<T> {
-    fun getHome():T
-    fun addHistory(id:T, param:Map<String, Any>, isHistory:Boolean)
-    fun getHistory():Pair<T?, Map<String, Any>?>?
-    fun clearAllHistory()
-    fun removePopup(id:T)
-    fun addPopup(id:T)
-    fun getPopup():T?
+    fun getHome(idx:Int = 0):T
+    fun isHome(id:T):Boolean
     fun onDestroy()
 }

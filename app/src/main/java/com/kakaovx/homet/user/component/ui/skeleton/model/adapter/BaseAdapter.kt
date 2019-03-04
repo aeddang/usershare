@@ -24,7 +24,12 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
         viewMoreHandler.removeCallbacks(viewMoreRunnable)
     }
 
-    fun setDataArray(data:Array<T>): RecyclerView.Adapter<BaseAdapter.ViewHolder>{
+    fun addData(data:T) {
+        paginationData.add(data)
+        notifyDataSetChanged()
+    }
+
+    fun setDataArray(data:Array<T>): RecyclerView.Adapter<BaseAdapter.ViewHolder> {
         paginationData.reset()
         paginationData.addAll(data)
         notifyDataSetChanged()
@@ -81,6 +86,7 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
     @CallSuper
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.item.setData(paginationData.data[position])
+
         if(position == total-1 && isViewMore && paginationData.isPageable && !isBusy) {
             isBusy = true
             paginationData.next()

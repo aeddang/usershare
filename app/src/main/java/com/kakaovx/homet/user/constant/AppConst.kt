@@ -27,6 +27,7 @@ object AppConst {
     const val HOMET_VALUE_PLANNER = "PLANNER"
     const val HOMET_VALUE_SEARCH = "SEARCH"
     const val HOMET_VALUE_PROFILE = "PROFILE"
+    const val HOMET_VALUE_RECOMMEND = "RECOMMEND"
 
     /**
      * LiveData Model index
@@ -46,8 +47,8 @@ object AppConst {
     const val HOMET_LIST_ITEM_HOME_BANNER = 0x0203
     const val HOMET_LIST_ITEM_HOME_FREE_WORKOUT = 0x0204
     const val HOMET_LIST_ITEM_HOME_TRAINER = 0x0205
-    const val HOMET_LIST_ITEM_HOME_HASH_TAG = 0x0206
-    const val HOMET_LIST_ITEM_HOME_RECOMMEND = 0x0207
+    const val HOMET_LIST_ITEM_HOME_ISSUE_TAG = 0x0206
+    const val HOMET_LIST_ITEM_HOME_ISSUE_PROGRAM = 0x0207
     const val HOMET_LIST_ITEM_PROGRAM = 0x0208
     const val HOMET_LIST_ITEM_WORKOUT = 0x0209
     const val HOMET_LIST_ITEM_FREE_WORKOUT = 0x020A

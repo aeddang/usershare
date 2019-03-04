@@ -2,6 +2,7 @@ package com.kakaovx.homet.user.component.ui.view.item
 
 import android.content.Context
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
@@ -13,6 +14,7 @@ class ImageCardItem(context:Context): ListItem(context) {
     private val TAG = javaClass.simpleName
 
     override fun onCreated() { }
+    override fun onDestroyed() {}
 
     override fun getLayoutResId(): Int {
         return R.layout.item_image_card
@@ -24,7 +26,10 @@ class ImageCardItem(context:Context): ListItem(context) {
         val owner = resultData.ownerData
         owner?.apply {
             avatarUrl?.let {
-                Glide.with(context).load(it).into(imageView)
+                Glide.with(context)
+                    .load(it)
+                    .apply(RequestOptions().error(R.drawable.kakaovx_con_profile_000))
+                    .into(imageView)
             } ?: Log.e(TAG, "url is null")
         }
     }

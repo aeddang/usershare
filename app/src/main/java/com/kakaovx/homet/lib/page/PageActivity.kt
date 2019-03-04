@@ -1,30 +1,40 @@
 package com.kakaovx.homet.lib.page
 
+import android.nfc.Tag
 import android.os.Bundle
+import android.transition.ChangeBounds
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.AnimRes
 import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.kakaovx.homet.user.util.Log
+import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import java.util.*
 
-abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Delegate, Page {
+abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page {
 
     private val TAG = javaClass.simpleName
-
     open lateinit var pagePresenter: PagePresenter<T>;  protected set
-    open var currentPage: PageFragment? = null; protected set
     protected lateinit var pageArea:ViewGroup
 
-    @IdRes
-    abstract fun getPageAreaId(): Int
-    @StringRes
-    abstract fun getPageExitMsg(): Int
+    @IdRes abstract fun getPageAreaId(): Int
+    @StringRes abstract fun getPageExitMsg(): Int
     abstract fun getHomes():Array<T>
+    @AnimRes protected open fun getPageStart(): Int { return android.R.anim.fade_in }
+    @AnimRes protected open fun getPageIn(isBack:Boolean): Int { return if(isBack) android.R.anim.fade_in else android.R.anim.slide_in_left}
+    @AnimRes protected open fun getPageOut(isBack:Boolean): Int { return if(isBack) android.R.anim.fade_out else android.R.anim.slide_out_right}
+    @AnimRes protected open fun getPopupIn(): Int { return android.R.anim.fade_in }
+    @AnimRes protected open fun getPopupOut(): Int { return android.R.anim.fade_in }
+    protected open fun getSharedChange():Any { return ChangeBounds() }
 
-    private var exitCount = 0
-    protected val popups = ArrayList<PageFragment>()
+    protected open var exitCount = 0
+    protected var currentPage: T? = null
+    protected val historys = Stack<T>()
+    protected val popups = ArrayList<T>()
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +53,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
         currentPage = null
         pagePresenter.onDestroy()
         popups.clear()
+        historys.clear()
         onDestroyed()
     }
 
@@ -58,79 +69,142 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, PageFragment.Dele
         onAttached()
     }
 
-    fun getCurrentFragment(): PageFragment? {
-        return supportFragmentManager.fragments.last() as PageFragment
+    override fun getCurrentPageFragment(): PageFragment? {
+        if( currentPage == null ) return null
+        val fragment = supportFragmentManager.findFragmentByTag(currentPage.toString())
+        return fragment as? PageFragment
     }
 
-    fun getPageAreaSize():Pair<Float,Float> {
+    override fun getCurrentFragment(): PageFragment? {
+        if( supportFragmentManager.fragments.isEmpty() ) return null
+        return supportFragmentManager.fragments.last() as? PageFragment
+    }
+
+    override fun getPageAreaSize():Pair<Float,Float> {
         return Pair(pageArea.width.toFloat(),pageArea.height.toFloat())
     }
 
-    protected open fun resetBackPressedAction() {
-        exitCount = 0
+    @CallSuper
+    override fun onClearPageHistory() {
+        val len = supportFragmentManager.backStackEntryCount
+        for (i in 1..len) supportFragmentManager.popBackStackImmediate()
     }
 
-    protected open fun onBackPressedAction(): Boolean {
-        if(exitCount == 1) return false
-        exitCount ++
-        Toast.makeText(this,getPageExitMsg(),Toast.LENGTH_LONG).show()
-        return true
+    @CallSuper
+    override fun onCloseAllPopup() {
+        popups.forEach { p -> this.onClosePopup(p)}
     }
+
+    override fun onBack() { onBackPressed() }
     override fun onBackPressed() {
-        getCurrentFragment()?.let{ if(!it.isBackAble())return }
-        if(!pagePresenter.onBack()) return
-        if(onBackPressedAction()) return
+        if( !popups.isEmpty() ){
+            val last = popups.last()
+            val lastPopup = supportFragmentManager.findFragmentByTag(last.toString()) as? PageFragment
+            lastPopup?.let { if(!it.isBackAble()) return }
+            popups.remove(last)
+            onClosePopup(last)
+            return
+        }
+        var isExit = false
+        currentPage?.let { isExit = pagePresenter.model.isHome(it) }
+        if(supportFragmentManager.backStackEntryCount == 0) isExit = true
+        if(isExit) onExitAction() else onBackPressedAction()
+    }
+    protected open fun resetBackPressedAction() { exitCount = 0 }
+    protected open fun onExitAction() {
+        if(exitCount == 1) { finish() }
+        else {
+            exitCount ++
+            Toast.makeText(this,getPageExitMsg(),Toast.LENGTH_LONG).show()
+        }
+    }
+    protected open fun onBackPressedAction() {
+        val currentFragment = getCurrentFragment()
+        currentFragment?.let{ if(!it.isBackAble()) return }
+        currentPage = historys.pop()
         super.onBackPressed()
     }
 
+
+    private fun getSharedTransitionName(sharedElement: android.view.View,  transitionName:String):String{
+        var name = ViewCompat.getTransitionName(sharedElement)
+        if(name == null) ViewCompat.setTransitionName(sharedElement, transitionName)
+        return transitionName
+    }
+
     abstract fun getPageByID(id:T): PageFragment
-
-    final override fun onPageStart(id:T) {
+    final override fun onPageStart(id:T) { pageChange(id, null, true) }
+    final override fun onPageChange(id:T, param:Map<String, Any>?, sharedElement: android.view.View?,  transitionName:String?) {
+        pageChange(id, param, false, sharedElement,  transitionName )
+    }
+    private fun pageChange(id:T, param:Map<String, Any>? , isStart:Boolean = false, sharedElement: android.view.View? = null, transitionName:String? = null) {
+        onCloseAllPopup()
         resetBackPressedAction()
         val willChangePage = getPageByID(id)
         willChangePage.pageID = id
-        willChangePage.delegate = this
-        willChangePage.pageType = PageFragment.PageType.INIT
-        Log.d(TAG, "onPageStart() = {$id}")
-        supportFragmentManager.beginTransaction().add(getPageAreaId(), willChangePage, id.toString()).commitNow()
-    }
-
-    final override fun onPageChange(id:T, param:Map<String, Any>, isBack:Boolean) {
-        resetBackPressedAction()
-        val willChangePage = getPageByID(id)
-        willChangePage.pageID = id
-        willChangePage.delegate = this
-        willChangePage.pageType = if(isBack) PageFragment.PageType.OUT else PageFragment.PageType.IN
-        if( !param.isEmpty()) willChangePage.setParam(param)
-        Log.d(TAG, "onPageChange() = {$id}")
-        supportFragmentManager.beginTransaction().add(getPageAreaId(), willChangePage, id.toString()).commitNow()
-    }
-
-    override fun onCreateAnimation(v:PageFragment) {
-        if(v.pageType == PageFragment.PageType.POPUP) return
-        currentPage?.let {
-            it.pageType = v.pageType
-            it.onDestroyAnimation()
+        param?.let { willChangePage.setParam(it) }
+        val transaction = supportFragmentManager.beginTransaction()
+        if(isStart) {
+            transaction.setCustomAnimations(getPageStart(),getPageOut(false))
+        } else {
+            if(sharedElement == null) {
+                var isReverse = false
+                var currentPos = 9999
+                val pos = id as? PagePosition
+                pos?.let { currentPos = it.position }
+                currentPage?.let {
+                    val prevPos = it as? PagePosition
+                    prevPos?.let { pp -> isReverse = pp.position > currentPos }
+                }
+                transaction.setCustomAnimations(getPageIn(isReverse),getPageOut(isReverse),getPageIn(!isReverse),getPageOut(!isReverse))
+            }else {
+                transaction.setReorderingAllowed(true)
+                transitionName?.let { transaction.addSharedElement(sharedElement, getSharedTransitionName(sharedElement,it)) }
+                willChangePage.sharedElementEnterTransition = getSharedChange()
+            }
         }
-        currentPage = v
+        transaction.replace(getPageAreaId(), willChangePage, id.toString())
+        if(!isStart) transaction.addToBackStack(null)
+        transaction.commit()
+        currentPage?.let { historys.push(it) }
+        currentPage = id
+
     }
 
     abstract fun getPopupByID(id:T): PageFragment
-
-    final override fun onOpenPopup(id:T, param:Map<String, Any>) {
+    final override fun onOpenPopup(id:T, param:Map<String, Any>?, sharedElement: android.view.View?, transitionName:String?) {
         resetBackPressedAction()
         val popup = getPopupByID(id)
         popup.pageID = id
-        popup.pageType = PageFragment.PageType.POPUP
-        if( !param.isEmpty()) popup.setParam(param)
-        Log.d(TAG, "onOpenPopup() = {$id}")
-        popups.add(popup)
-        supportFragmentManager.beginTransaction().add(getPageAreaId(), popup, id.toString()).commitNow()
+        param?.let { popup.setParam(it) }
+        val transaction = supportFragmentManager.beginTransaction()
+        if(sharedElement == null) {
+            transaction.setCustomAnimations(getPopupIn(), getPopupOut())
+        }else {
+            transaction.setReorderingAllowed(true)
+            transitionName?.let { transaction.addSharedElement(sharedElement, getSharedTransitionName(sharedElement,it)) }
+            popup.sharedElementEnterTransition = getSharedChange()
+            getCurrentPageFragment()?.let { transaction.hide(it) }
+        }
+        transaction.add(getPageAreaId(), popup, id.toString())
+        transaction.commit()
+
+        if(sharedElement != null) {
+            getCurrentPageFragment()?.let { supportFragmentManager.beginTransaction(). show(it).commit() }
+        }
+        popups.add(id)
     }
 
+
     final override fun onClosePopup(id:T) {
-        val popup = supportFragmentManager.findFragmentByTag(id.toString()) as PageFragment
-        popups.remove(popup)
-        popup.onClosePopupAnimation()
+        val fragment = supportFragmentManager.findFragmentByTag(id.toString())
+        fragment?.let { closePopup(it) }
+        popups.remove(id)
+    }
+
+    private fun closePopup(pop: Fragment){
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(getPopupIn(), getPopupOut())
+            .remove(pop).commitNow()
     }
 }

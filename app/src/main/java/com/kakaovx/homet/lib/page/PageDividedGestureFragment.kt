@@ -5,17 +5,16 @@ import android.view.ViewTreeObserver
 import androidx.annotation.CallSuper
 import kotlinx.android.synthetic.main.popup_test.*
 
-abstract class PageDividedGestureFragment:PageGestureFragment(), ViewTreeObserver.OnGlobalLayoutListener {
+abstract class PageDividedGestureFragment: PageGestureFragment(), ViewTreeObserver.OnGlobalLayoutListener {
 
     private lateinit var dividedView:View
-    protected var positionOffset = 0f
+    private var positionOffset = 0f
     abstract fun getDividedView(): View
 
     @CallSuper
     override fun onCreated() {
         super.onCreated()
         dividedView = getDividedView()
-        dividedView.alpha = 0f
         dividedView.viewTreeObserver.addOnGlobalLayoutListener(this)
     }
 
@@ -39,6 +38,7 @@ abstract class PageDividedGestureFragment:PageGestureFragment(), ViewTreeObserve
         moveGestureArea(pct)
     }
     override fun onAnimate(view: PageGestureView, pct: Float) {
+        super.onAnimate(view, pct)
         moveGestureArea(pct)
     }
 
@@ -46,7 +46,5 @@ abstract class PageDividedGestureFragment:PageGestureFragment(), ViewTreeObserve
         dividedView.alpha = pct
         dividedView.translationY = contents.translationY + positionOffset
     }
-
-
 
 }

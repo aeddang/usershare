@@ -1,8 +1,8 @@
 package com.kakaovx.homet.user.component.ui.skeleton.view
 
 import android.content.Context
-import com.kakaovx.homet.user.component.ui.skeleton.rx.RxFrameLayout
+import com.kakaovx.homet.user.component.ui.skeleton.rx.RxConstraintLayout
 
-abstract class ListItem(context:Context): RxFrameLayout (context) {
+abstract class ListItem(context:Context): RxConstraintLayout (context) {
     override fun onCreated() {}
 }

@@ -2,17 +2,19 @@ package com.kakaovx.homet.user.ui.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kakaovx.homet.user.component.model.HomeFreeWorkoutModel
+import com.kakaovx.homet.user.component.model.HomeProgramModel
+import com.kakaovx.homet.user.component.model.HomeTrainerModel
 import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.repository.Repository
-import com.kakaovx.homet.user.component.ui.skeleton.model.data.PageLiveData
+import com.kakaovx.homet.user.component.model.PageLiveData
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
 class PageHomeViewModel(repo: Repository) : ViewModel() {
 
@@ -23,79 +25,95 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
     val response: MutableLiveData<PageLiveData> = MutableLiveData()
 
     fun getProgramData(): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "program"
-        return restApi.searchRepositories(params)
+        Log.d(TAG, "getProgramData()")
+        return restApi.getRecommendProgramList()
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe( { data ->
-                handleComplete(AppConst.HOMET_LIST_ITEM_HOME_PROGRAM, data.items)
-            }, { handleError(it) })
-    }
-
-    fun getFreeWorkoutData(): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "free workout"
-        return restApi.searchRepositories(params)
-            .retry(RetryPolicy.none())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe( { data ->
-                handleComplete(AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT, data.items)
-            }, { handleError(it) })
-    }
-
-    fun getTrainerData(): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "trainer"
-        return restApi.searchRepositories(params)
-            .retry(RetryPolicy.none())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe( { data ->
-                handleComplete(AppConst.HOMET_LIST_ITEM_HOME_TRAINER, data.items)
-            }, { handleError(it) })
-    }
-
-    fun getHashTagData(): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "hash tag"
-        return restApi.searchRepositories(params)
-            .retry(RetryPolicy.none())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe( { data ->
-//                Log.d(TAG, "get data = [$data]")
-                Observable.fromIterable(data.items)
-                    .map { it.name }
-                    .subscribe( { message ->
-//                        Log.d(TAG, "name = $message")
-                        handleComplete(message)
+            .subscribe( { res ->
+                Observable.fromIterable(res.data)
+                    .map { data ->
+                        HomeProgramModel(data.title, data.description, data.thumbnail_preview)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( { model ->
+                        val liveData = PageLiveData()
+                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                        liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_PROGRAM
+                        liveData.homeProgramModel = model
+                        response.value = liveData
                     }, { handleError(it) })
             }, { handleError(it) })
     }
 
-    fun getRecommendData(key: String): Disposable {
-        // samples
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = key
-        return restApi.searchRepositories(params)
+    fun getFreeWorkoutData(): Disposable {
+        Log.d(TAG, "getFreeWorkoutData()")
+        return restApi.getFreeWorkoutProgramList()
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
+            .subscribe( { res ->
+                Observable.fromIterable(res.data)
+                    .map { data ->
+                        HomeFreeWorkoutModel(data.description, data.title, data.thumbnail_intro)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( { model ->
+                        val liveData = PageLiveData()
+                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                        liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT
+                        liveData.homeFreeWorkoutModel = model
+                        response.value = liveData
+                    }, { handleError(it) })
+            }, { handleError(it) })
+    }
+
+    fun getTrainerData(): Disposable {
+        Log.d(TAG, "getTrainerData()")
+        return restApi.getTrainerList()
+            .retry(RetryPolicy.none())
+            .subscribeOn(Schedulers.io())
+            .subscribe( { res ->
+                Observable.fromIterable(res.data)
+                    .map { data ->
+                        HomeTrainerModel(data.provider_name, data.description, data.trainer_alias, data.thumbnail_provider_profile)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( { model ->
+                        val liveData = PageLiveData()
+                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                        liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_TRAINER
+                        liveData.homeTrainerModel = model
+                        response.value = liveData
+                    }, { handleError(it) })
+            }, { handleError(it) })
+    }
+
+    fun getIssueProgramData(): Disposable {
+        Log.d(TAG, "getIssueProgramData()")
+        val tagList: ArrayList<String> = ArrayList()
+        return restApi.getIssueProgramList()
+            .retry(RetryPolicy.none())
+            .subscribeOn(Schedulers.io())
+            .map { res ->
+                Observable.fromIterable(res.data)
+                    .map { data ->
+                        data.program_id?.let{
+                            tagList.add(it)
+                        }
+                    }
+                    .subscribe()
+                tagList
+            }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe( { data ->
-                handleComplete(AppConst.HOMET_LIST_ITEM_HOME_RECOMMEND, data.items)
+            .subscribe( { list ->
+                val liveData = PageLiveData()
+                liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_ISSUE_TAG
+                liveData.homeIssueTags = list
+                response.value = liveData
             }, { handleError(it) })
     }
 
     private fun handleComplete(type: Int, data: ArrayList<ResultData>) {
-//        Log.i(TAG, "handleComplete")
-
         val liveData = PageLiveData()
         liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
         liveData.listItemType = type
@@ -104,8 +122,6 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
     }
 
     private fun handleComplete(data: ArrayList<ResultData>) {
-//        Log.i(TAG, "handleComplete")
-
         val liveData = PageLiveData()
         liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
         liveData.item = data
@@ -113,8 +129,6 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
     }
 
     private fun handleComplete(message: String?) {
-//        Log.i(TAG, "handleComplete")
-
         val liveData = PageLiveData()
         liveData.cmd = AppConst.LIVE_DATA_CMD_STRING
         liveData.message = message

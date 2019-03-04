@@ -8,6 +8,7 @@ import com.kakaovx.homet.user.component.ui.skeleton.view.RecyclerFrameLayout
 import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 
 class BannerRecyclerView: RecyclerFrameLayout {
+
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
@@ -24,4 +25,6 @@ class BannerRecyclerView: RecyclerFrameLayout {
         super.viewMore(page, size)
         viewAdapter.viewMoreComplete(arrayOf("AAA"+page.toString(),"BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
     }
+
+    override fun onDestroyed() {}
 }
