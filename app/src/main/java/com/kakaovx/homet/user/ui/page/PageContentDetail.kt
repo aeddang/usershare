@@ -22,6 +22,7 @@ import com.kakaovx.homet.user.ui.viewModel.PageContentDetailViewModelFactory
 import com.kakaovx.homet.user.util.Log
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.page_home.*
 import javax.inject.Inject
 
 class PageContentDetail : RxPageFragment() {
@@ -30,7 +31,7 @@ class PageContentDetail : RxPageFragment() {
 
     lateinit var dataBinding: PageContentDetailBinding
 
-    var data_id: String? = null
+    private var dataId: String? = null
 
     @Inject
     lateinit var viewViewModelFactory: PageContentDetailViewModelFactory
@@ -39,6 +40,7 @@ class PageContentDetail : RxPageFragment() {
     private fun initView(context: Context) {
         activity?.let {
             val myActivity: MainActivity = activity as MainActivity
+            myActivity.setSupportActionBar(toolbar)
             myActivity.supportActionBar?.apply {
                 title = context.getString(R.string.page_content)
                 setDisplayShowTitleEnabled(true)
@@ -71,13 +73,13 @@ class PageContentDetail : RxPageFragment() {
     override fun getLayoutResId(): Int = R.layout.page_content_detail
 
     override fun setParam(param: Map<String, Any>): PageFragment {
-        data_id = param[ParamType.DETAIL.key] as String?
-        Log.d(TAG, "setParam() data = [$data_id]")
+        dataId = param[ParamType.DETAIL.key] as String?
+        Log.d(TAG, "setParam() data = [$dataId]")
         return this
     }
 
     override fun onSubscribe() {
-        data_id?.let {
+        dataId?.let {
             disposables += viewModel.getWorkoutContent(it)
         }
     }

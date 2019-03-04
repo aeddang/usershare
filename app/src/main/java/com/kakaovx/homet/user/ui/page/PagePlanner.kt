@@ -10,6 +10,7 @@ import com.kakaovx.homet.user.component.network.model.ResponseList
 import com.kakaovx.homet.user.component.network.model.ResultData
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.ui.MainActivity
+import kotlinx.android.synthetic.main.page_home.*
 import kotlinx.android.synthetic.main.page_network.*
 
 class PagePlanner : RxPageFragment() {
@@ -19,6 +20,7 @@ class PagePlanner : RxPageFragment() {
     private fun initView(context: Context) {
         activity?.let {
             val myActivity: MainActivity = activity as MainActivity
+            myActivity.setSupportActionBar(toolbar)
             myActivity.supportActionBar?.apply {
                 title = context.getString(R.string.page_planner)
                 setDisplayShowTitleEnabled(true)
