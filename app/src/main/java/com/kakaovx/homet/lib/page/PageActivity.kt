@@ -164,7 +164,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page {
             }
         }
         transaction.replace(getPageAreaId(), willChangePage, id.toString())
-        if(!isStart) transaction.addToBackStack(null)
+        if(!isStart) transaction.addToBackStack(currentPage.toString())
         transaction.commit()
         currentPage?.let { historys.push(it) }
         currentPage = id
