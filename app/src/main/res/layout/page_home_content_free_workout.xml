@@ -19,7 +19,7 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/page_home_title_font_size"
+                android:textSize="@dimen/item_title_font_size"
                 android:textColor="@color/page_home_sub_title"
                 android:text="@string/home_free_workout"
                 app:layout_constraintTop_toTopOf="parent"

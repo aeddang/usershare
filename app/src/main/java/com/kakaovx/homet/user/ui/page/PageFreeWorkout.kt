@@ -6,8 +6,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.component.model.ContentModel
 import com.kakaovx.homet.user.component.ui.module.ContentListAdapter
 import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
+import com.kakaovx.homet.user.component.ui.skeleton.model.layoutUtil.RecyclerViewBottomDecoration
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.ui.viewModel.PageFreeWorkoutViewModel
@@ -28,7 +30,7 @@ class PageFreeWorkout : RxPageFragment() {
     lateinit var viewViewModelFactory: PageFreeWorkoutViewModelFactory
     private lateinit var viewModel: PageFreeWorkoutViewModel
 
-    private var contentListAdapter: ContentListAdapter? = null
+    private var contentListAdapter: ContentListAdapter<ContentModel>? = null
 
     private fun initView(context: Context) {
         val recyclerView: RecyclerView = listComponent.recyclerView
@@ -36,6 +38,7 @@ class PageFreeWorkout : RxPageFragment() {
         contentListAdapter?.let {
             recyclerView.apply {
                 layoutManager = VerticalLinearLayoutManager(context)
+                addItemDecoration(RecyclerViewBottomDecoration(20))
                 adapter = it
             }
             it.isEmpty.observe(this, Observer { existData ->
@@ -71,11 +74,8 @@ class PageFreeWorkout : RxPageFragment() {
                         }
                     }
                     AppConst.LIVE_DATA_CMD_ITEM -> {
-                        liveData.item?.let {
-                            val data = liveData.item
-                            data?.let {
-                                contentListAdapter?.setDataArray(data.toTypedArray()) ?: Log.e(TAG, "adapter is null")
-                            }
+                        liveData.contentModel?.let {
+                            contentListAdapter?.addData(it) ?: Log.e(TAG, "adapter is null")
                         }
                     }
                     else -> Log.e(TAG, "wrong command")
