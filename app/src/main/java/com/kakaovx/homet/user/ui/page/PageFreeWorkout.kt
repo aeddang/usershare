@@ -5,11 +5,16 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.component.model.ContentModel
 import com.kakaovx.homet.user.component.ui.module.ContentListAdapter
 import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
+import com.kakaovx.homet.user.component.ui.skeleton.model.layoutUtil.RecyclerViewBottomDecoration
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
+import com.kakaovx.homet.user.ui.PageID
+import com.kakaovx.homet.user.ui.ParamType
 import com.kakaovx.homet.user.ui.viewModel.PageFreeWorkoutViewModel
 import com.kakaovx.homet.user.ui.viewModel.PageFreeWorkoutViewModelFactory
 import com.kakaovx.homet.user.util.Log
@@ -28,7 +33,7 @@ class PageFreeWorkout : RxPageFragment() {
     lateinit var viewViewModelFactory: PageFreeWorkoutViewModelFactory
     private lateinit var viewModel: PageFreeWorkoutViewModel
 
-    private var contentListAdapter: ContentListAdapter? = null
+    private var contentListAdapter: ContentListAdapter<ContentModel>? = null
 
     private fun initView(context: Context) {
         val recyclerView: RecyclerView = listComponent.recyclerView
@@ -36,12 +41,23 @@ class PageFreeWorkout : RxPageFragment() {
         contentListAdapter?.let {
             recyclerView.apply {
                 layoutManager = VerticalLinearLayoutManager(context)
+                addItemDecoration(RecyclerViewBottomDecoration(20))
                 adapter = it
             }
             it.isEmpty.observe(this, Observer { existData ->
                 existData?.let {
                     if (existData) viewEmpty.visibility = View.VISIBLE
                     else viewEmpty.visibility = View.INVISIBLE
+                }
+            })
+            it.itemPosition.observe(this, Observer { position ->
+                position?.apply {
+                    val model = it.getData(this)
+                    model.id?.apply {
+                        val param = HashMap<String, Any>()
+                        param[ParamType.DETAIL.key] = this
+                        PagePresenter.getInstance<PageID>().pageChange(PageID.CONTENT_DETAIL, param = param)
+                    }
                 }
             })
         }
@@ -71,11 +87,8 @@ class PageFreeWorkout : RxPageFragment() {
                         }
                     }
                     AppConst.LIVE_DATA_CMD_ITEM -> {
-                        liveData.item?.let {
-                            val data = liveData.item
-                            data?.let {
-                                contentListAdapter?.setDataArray(data.toTypedArray()) ?: Log.e(TAG, "adapter is null")
-                            }
+                        liveData.contentModel?.let {
+                            contentListAdapter?.addData(it) ?: Log.e(TAG, "adapter is null")
                         }
                     }
                     else -> Log.e(TAG, "wrong command")

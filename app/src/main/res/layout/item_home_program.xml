@@ -4,13 +4,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/home_program_card_layout"
-        android:layout_width="324dp"
-        android:layout_height="@dimen/card_view_height">
+        android:layout_width="@dimen/page_home_program_content_width"
+        android:layout_height="@dimen/page_home_program_content_height">
 
         <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="@dimen/card_view_radius"
+                app:cardElevation="@dimen/card_elevation"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -19,19 +20,17 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#FFE400"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp">
+                    android:background="@color/page_home_program_content_bg"
+                    android:paddingStart="@dimen/page_content_padding"
+                    android:paddingEnd="@dimen/page_content_padding">
 
                 <TextView
                         android:id="@+id/home_program_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="#1e1e1e"
-                        android:letterSpacing="-0.01"
-                        android:gravity="center_horizontal"
-                        tools:text="다이어트 4주 완성"
+                        android:textSize="@dimen/item_content_font_size"
+                        android:textColor="@color/page_home_program_content_title"
+                        tools:text="@string/home_program_title"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/home_program_description"/>
@@ -40,19 +39,17 @@
                         android:id="@+id/home_program_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="#814c14"
-                        android:letterSpacing="-0.02"
-                        android:lineSpacingExtra="6sp"
-                        tools:text="김홈트 트레이너 초급 1:1 코칭"
+                        android:textSize="@dimen/item_content_font_size"
+                        android:textColor="@color/page_home_program_content_description"
+                        tools:text="@string/home_program_description"
                         app:layout_constraintTop_toBottomOf="@id/home_program_name"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <ImageView
                         android:id="@+id/home_program_image"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="@dimen/page_home_program_image"
+                        android:layout_height="@dimen/page_home_program_image"
                         android:src="@drawable/kakaovx_apeach_profile_000"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

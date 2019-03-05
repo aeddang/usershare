@@ -1,16 +1,13 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="page_home_program_font_size">26sp</dimen>
-    <dimen name="page_home_program_font_letter_spacing">-0.01</dimen>
-    <dimen name="page_home_program_font_line_spacing_extra">8sp</dimen>
-
-    <dimen name="page_home_title_font_size">18sp</dimen>
-    <dimen name="page_home_title_font_letter_spacing">-0.07</dimen>
-    <dimen name="page_home_title_font_line_spacing_extra">10sp</dimen>
+    <dimen name="item_title_font_size">18sp</dimen>
+    <dimen name="item_content_font_size">14sp</dimen>
 
     <dimen name="area_header">50dp</dimen>
     <dimen name="area_bottom">50dp</dimen>
 
+    <dimen name="bar_height">8dp</dimen>
     <dimen name="tabs_height">50dp</dimen>
 
     <dimen name="margin_ultra">25dp</dimen>
@@ -25,21 +22,44 @@
     <dimen name="font_small">12dp</dimen>
     <dimen name="font_tiny">10dp</dimen>
 
-    <dimen name="card_view_radius">40dp</dimen>
+    <dimen name="card_view_radius">8dp</dimen>
     <dimen name="card_view_height">68dp</dimen>
+    <dimen name="card_elevation">20dp</dimen>
 
     <dimen name="page_top_padding">32.3dp</dimen>
     <dimen name="page_padding">18dp</dimen>
 
+    <dimen name="page_content_padding">20dp</dimen>
+    <dimen name="page_content_width">324dp</dimen>
+    <dimen name="page_content_height">68dp</dimen>
+    <dimen name="page_content_image">40dp</dimen>
+
     <dimen name="page_home_app_bar_height">386dp</dimen>
+
     <dimen name="page_home_program_height">386dp</dimen>
     <dimen name="page_home_program_title_height">76dp</dimen>
-    <dimen name="page_home_program_list_height">101dp</dimen>
-    <dimen name="page_home_free_workout_height">180dp</dimen>
+    <dimen name="page_home_program_content_area">101dp</dimen>
+    <dimen name="page_home_program_content_width">324dp</dimen>
+    <dimen name="page_home_program_content_height">68dp</dimen>
+    <dimen name="page_home_program_image">40dp</dimen>
+
+    <dimen name="page_home_free_workout_height">230dp</dimen>
     <dimen name="page_home_free_workout_title_height">52dp</dimen>
+    <dimen name="page_home_free_workout_content_width">134dp</dimen>
+    <dimen name="page_home_free_workout_content_height">170dp</dimen>
+    <dimen name="page_home_free_workout_description_width">81dp</dimen>
+
     <dimen name="page_home_dummy_height">8dp</dimen>
+
     <dimen name="page_home_trainer_height">180dp</dimen>
     <dimen name="page_home_trainer_title_height">52dp</dimen>
-    <dimen name="page_home_recommend_height">298dp</dimen>
-    <dimen name="page_home_recommend_tab_indicator_height">3dp</dimen>
+    <dimen name="page_home_trainer_content_width">274dp</dimen>
+    <dimen name="page_home_trainer_content_height">96dp</dimen>
+
+    <dimen name="page_home_issue_program_height">297dp</dimen>
+    <dimen name="page_home_issue_program_pager_height">250dp</dimen>
+    <dimen name="page_home_issue_program_content_width">324dp</dimen>
+    <dimen name="page_home_issue_program_content_height">68dp</dimen>
+    <dimen name="page_home_issue_program_tab_indicator_height">3dp</dimen>
+    <dimen name="page_home_issue_program_bar_height">1dp</dimen>
 </resources>

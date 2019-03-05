@@ -20,11 +20,11 @@ class HomeListAdapter<T>(private val listType: Int): MultipleAdapter<T>() {
             }
             AppConst.HOMET_LIST_ITEM_HOME_WORKOUT_TYPE -> {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_WORKOUT_TYPE")
-                ViewHolder(CardItem(parent.context))
+                ViewHolder(ContentCardItem(parent.context))
             }
             AppConst.HOMET_LIST_ITEM_HOME_BANNER -> {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_BANNER")
-                ViewHolder(CardItem(parent.context))
+                ViewHolder(ContentCardItem(parent.context))
             }
             AppConst.HOMET_LIST_ITEM_HOME_FREE_WORKOUT -> {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_FREE_WORKOUT")
@@ -34,9 +34,9 @@ class HomeListAdapter<T>(private val listType: Int): MultipleAdapter<T>() {
                 Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_TRAINER")
                 ViewHolder(HomeTrainerCardItem(parent.context))
             }
-            AppConst.HOMET_LIST_ITEM_HOME_RECOMMEND -> {
-                Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_RECOMMEND")
-                ViewHolder(HomeRecommendCardItem(parent.context))
+            AppConst.HOMET_LIST_ITEM_HOME_ISSUE_PROGRAM -> {
+                Log.d(TAG, "getViewHolder() create HOMET_LIST_ITEM_HOME_ISSUE_PROGRAM")
+                ViewHolder(HomeIssueProgramCardItem(parent.context))
             }
             else -> { ViewHolder(ImageItem(parent.context)) }
         }

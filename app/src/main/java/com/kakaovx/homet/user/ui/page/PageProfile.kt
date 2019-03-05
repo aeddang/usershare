@@ -5,6 +5,7 @@ import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.util.Log
+import kotlinx.android.synthetic.main.page_home.*
 
 
 class PageProfile : RxPageFragment() {
@@ -14,6 +15,7 @@ class PageProfile : RxPageFragment() {
     private fun initView(context: Context) {
         activity?.let {
             val myActivity: MainActivity = activity as MainActivity
+            myActivity.setSupportActionBar(toolbar)
             myActivity.supportActionBar?.apply {
                 title = context.getString(R.string.page_profile)
                 setDisplayShowTitleEnabled(true)

@@ -47,10 +47,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/app_name"
-                        android:textSize="@dimen/page_home_title_font_size"
-                        android:textColor="@color/page_home_title"
-                        android:letterSpacing="@dimen/page_home_title_font_letter_spacing"
-                        android:lineSpacingExtra="@dimen/page_home_title_font_line_spacing_extra"/>
+                        android:textSize="@dimen/item_title_font_size"
+                        android:textColor="@color/page_home_title"/>
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -67,8 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="@dimen/page_padding"
-                android:paddingEnd="@dimen/page_padding"
-        >
+                android:paddingEnd="@dimen/page_padding">
 
             <include
                     android:id="@+id/free_workout_layout"
@@ -77,14 +74,25 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/trainer_layout"
+                    app:layout_constraintBottom_toTopOf="@id/bar_layout"
                     layout="@layout/page_home_content_free_workout"/>
+
+            <LinearLayout
+                android:id="@+id/bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/bar_height"
+                android:background="@color/tab_bg"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/free_workout_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/trainer_layout"/>
 
             <include
                     android:id="@+id/trainer_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_home_trainer_height"
-                    app:layout_constraintTop_toBottomOf="@id/free_workout_layout"
+                    app:layout_constraintTop_toBottomOf="@id/bar_layout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/recommend_layout"
@@ -93,12 +101,12 @@
             <include
                     android:id="@+id/recommend_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/page_home_recommend_height"
+                    android:layout_height="@dimen/page_home_issue_program_height"
                     app:layout_constraintTop_toBottomOf="@id/trainer_layout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    layout="@layout/page_home_content_recommend"/>
+                    layout="@layout/page_home_content_issue"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

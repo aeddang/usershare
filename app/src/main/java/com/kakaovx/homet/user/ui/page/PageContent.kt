@@ -12,7 +12,8 @@ import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.PageFactory
 import com.kakaovx.homet.user.ui.PageID
 import com.kakaovx.homet.user.util.Log
-import kotlinx.android.synthetic.main.page_viewpager.*
+import kotlinx.android.synthetic.main.page_content.*
+import kotlinx.android.synthetic.main.page_home.*
 
 class PageContent : ViewPagerPageFragment() {
 
@@ -21,6 +22,7 @@ class PageContent : ViewPagerPageFragment() {
     private fun initView(context: Context) {
         activity?.let {
             val myActivity: MainActivity = activity as MainActivity
+            myActivity.setSupportActionBar(toolbar)
             myActivity.supportActionBar?.apply {
                 title = context.getString(R.string.page_content)
                 setDisplayShowTitleEnabled(true)
