@@ -19,8 +19,8 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     override fun getLayoutResId(): Int { return R.layout.activity_main }
     override fun getPageAreaId(): Int { return R.id.area }
     override fun getPageExitMsg(): Int { return R.string.notice_app_exit }
-    override fun getHomes():Array<PageID> { return arrayOf(PageID.HOME) }
-
+    override fun getHomes():Array<PageID> { return arrayOf( PageID.HOME ) }
+    override fun getBackStacks():Array<PageID> { return arrayOf( PageID.HOME, PageID.TEST ) }
     @Inject
     lateinit var repository: Repository
 

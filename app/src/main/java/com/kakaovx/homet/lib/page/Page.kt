@@ -48,5 +48,6 @@ interface View<T> {
 interface Model<T> {
     fun getHome(idx:Int = 0):T
     fun isHome(id:T):Boolean
+    fun isBackStack(id:T):Boolean
     fun onDestroy()
 }

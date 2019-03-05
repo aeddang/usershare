@@ -13,19 +13,24 @@ abstract class PageFragment: Fragment(), Page {
 
 
     private val TAG = javaClass.simpleName
+
+    protected open var isRestoredPage:Boolean = false
+    private var isInit:Boolean = true
+    private var restoredView:View? = null
     var pageID:Any? = null; internal set
 
 
-//    @CallSuper
+    @CallSuper
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "onCreateView()")
+        this.restoredView?.let { return it }
         return inflater.inflate(getLayoutResId(), container, false)
     }
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onCreated()
+        if( isInit ) onCreated()
     }
 
     @CallSuper
@@ -42,9 +47,25 @@ abstract class PageFragment: Fragment(), Page {
 
     @CallSuper
     override fun onDestroyView() {
-        super.onDestroyView()
-        onDestroyed()
-        Log.d(TAG,"onDestroyView()")
+        if( isRestoredPage ){
+            isInit = false
+            this.restoredView = this.view
+            super.onDestroyView()
+            return
+        } else {
+            super.onDestroyView()
+            onDestroyed()
+            Log.d(TAG,"onDestroyView()")
+        }
+    }
+
+    @CallSuper
+    override fun onDestroy() {
+        super.onDestroy()
+        if( isRestoredPage ) {
+            onDestroyed()
+            Log.d(TAG,"onDestroyView()")
+        }
     }
 
     open fun setParam(param:Map<String,Any>):PageFragment { return this }
