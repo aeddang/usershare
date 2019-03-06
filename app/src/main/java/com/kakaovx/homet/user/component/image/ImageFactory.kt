@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.module.image
+package com.kakaovx.homet.user.component.image
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
