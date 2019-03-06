@@ -5,7 +5,7 @@ import kotlin.collections.ArrayList
 
 class PageModel<T>: Model<T> {
     internal lateinit var homes: Array<T>
-
+    internal var backStacks: Array<T>? = null
     override fun onDestroy() {
     }
 
@@ -16,6 +16,12 @@ class PageModel<T>: Model<T> {
 
     override fun getHome(idx:Int):T {
         return homes[idx]
+    }
+
+    override fun isBackStack(id:T):Boolean {
+        if( backStacks == null) return false
+        var idx  = backStacks!!.indexOf(id)
+        return idx != -1
     }
 
 }

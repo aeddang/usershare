@@ -10,7 +10,7 @@ abstract class ViewPagerPageFragment : RxPageFragment() {
 
     protected lateinit var pages: Array<PageID>
 
-    override fun getLayoutResId(): Int { return R.layout.page_viewpager }
+    override fun getLayoutResId(): Int { return R.layout.page_content }
 
     override fun setParam(param:Map<String, Any>): PageFragment {
         pages = param[ParamType.PAGES.key] as Array<PageID>

@@ -1,15 +1,12 @@
 package com.kakaovx.homet.user.ui.page
 
 
-import androidx.core.view.ViewCompat
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.ui.PageID
-import kotlinx.android.synthetic.main.page_network.*
 import kotlinx.android.synthetic.main.page_test.*
-import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 
 class PageTest : RxPageFragment() {
 

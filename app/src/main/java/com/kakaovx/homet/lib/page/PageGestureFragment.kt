@@ -2,7 +2,6 @@ package com.kakaovx.homet.lib.page
 
 import android.view.View
 import androidx.annotation.CallSuper
-import com.kakaovx.homet.lib.constant.AnimationDuration
 
 abstract class PageGestureFragment: PageFragment(), PageGestureView.Delegate {
 

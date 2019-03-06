@@ -47,7 +47,7 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
 
     fun getFreeWorkoutData(): Disposable {
         Log.d(TAG, "getFreeWorkoutData()")
-        return restApi.getFreeWorkoutProgramList()
+        return restApi.getFreeWorkoutList()
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
             .subscribe( { res ->

@@ -11,6 +11,7 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
     class ViewHolder(val item: ListItem) : RecyclerView.ViewHolder(item)
 
     val isEmpty: MutableLiveData<Boolean> = MutableLiveData()
+    val itemPosition: MutableLiveData<Int> = MutableLiveData()
     var delegate: BaseAdapter.Delegate? = null
     private var viewMoreHandler: Handler = Handler()
     private var viewMoreRunnable: Runnable = Runnable {delegate?.viewMore(paginationData.currentPage, paginationData.pageSize)}
@@ -70,6 +71,8 @@ abstract class BaseAdapter<T>(private val isViewMore:Boolean = false, pageSize:I
         paginationData.reset()
         notifyDataSetChanged()
     }
+
+    fun getData(position: Int) = paginationData.data[position]
 
     @CallSuper
     open fun viewMoreComplete(dataArray:Array<T>) {

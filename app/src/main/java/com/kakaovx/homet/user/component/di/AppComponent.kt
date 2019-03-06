@@ -1,10 +1,7 @@
 package com.kakaovx.homet.user.component.di
 
 import com.kakaovx.homet.user.App
-import com.kakaovx.homet.user.component.di.module.app.AppModule
-import com.kakaovx.homet.user.component.di.module.app.NetworkModule
-import com.kakaovx.homet.user.component.di.module.app.PreferenceModule
-import com.kakaovx.homet.user.component.di.module.app.RepositoryModule
+import com.kakaovx.homet.user.component.di.module.app.*
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -17,7 +14,8 @@ import javax.inject.Singleton
     AndroidBindingModule::class,
     PreferenceModule::class,
     NetworkModule::class,
-    AndroidSupportInjectionModule::class
+    AndroidSupportInjectionModule::class,
+    ImageModule::class
 ])
 interface AppComponent : AndroidInjector<App> {
 

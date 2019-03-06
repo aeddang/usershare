@@ -30,4 +30,22 @@
     <string name="home_trainer_title">Trainer Title</string>
     <string name="home_trainer_description">Trainer Description</string>
     <string name="home_trainer_job">Trainer Job</string>
+    <string name="action_workout">Start Workout</string>
+    <string name="exercise_id">exercise_id</string>
+    <string name="title">title</string>
+    <string name="description">description</string>
+    <string name="difficulty">difficulty</string>
+    <string name="calorie">calorie</string>
+    <string name="play_time">play time</string>
+    <string name="motion_count">motion count</string>
+    <string name="program_count">program_count</string>
+    <string name="confirm_status">confirm status</string>
+    <string name="is_display">is display</string>
+    <string name="read_count">read count</string>
+    <string name="provider_id">provider id</string>
+    <string name="thumbnail_intro">thumbnail intro</string>
+    <string name="thumbnail_preview">thumbnail preview</string>
+    <string name="add_time">add time</string>
+    <string name="modify_time">modify time</string>
+    <string name="body_parts">body parts</string>
 </resources>

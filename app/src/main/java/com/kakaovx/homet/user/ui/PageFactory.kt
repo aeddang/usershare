@@ -35,6 +35,7 @@ class PageFactory {
             PageID.PROGRAM -> { PageProgram() }
             PageID.FREE_WORKOUT -> { PageFreeWorkout() }
             PageID.TRAINER -> { PageTrainer() }
+            PageID.CONTENT_DETAIL -> { PageContentDetail() }
             PageID.TEST -> { PageTest() }
             PageID.TEST_POP -> { PageDividedGestureTest() }
         }
@@ -51,11 +52,12 @@ enum class PageID(val resId: Int, override var position: Int = 9999):PagePositio
     PROGRAM(R.string.page_program,6),
     FREE_WORKOUT(R.string.page_free_workout,7),
     TRAINER(R.string.page_trainer,8),
-
-    TEST(1000000000,9),
+    CONTENT_DETAIL(R.string.page_content,9),
+    TEST(1000000000,10),
     TEST_POP(1000000002)
 }
 
 enum class ParamType(val key:String) {
-    PAGES("pages")
+    PAGES("pages"),
+    DETAIL("detail")
 }

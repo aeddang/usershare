@@ -1,14 +1,13 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="page_home_program_font_size">26sp</dimen>
-    <dimen name="page_home_title_font_size">18sp</dimen>
-    <dimen name="page_home_content_font_size">14sp</dimen>
+    <dimen name="item_title_font_size">18sp</dimen>
+    <dimen name="item_content_font_size">14sp</dimen>
 
     <dimen name="area_header">50dp</dimen>
     <dimen name="area_bottom">50dp</dimen>
 
     <dimen name="bar_height">8dp</dimen>
-
     <dimen name="tabs_height">50dp</dimen>
 
     <dimen name="margin_ultra">25dp</dimen>
@@ -29,7 +28,11 @@
 
     <dimen name="page_top_padding">32.3dp</dimen>
     <dimen name="page_padding">18dp</dimen>
+
     <dimen name="page_content_padding">20dp</dimen>
+    <dimen name="page_content_width">324dp</dimen>
+    <dimen name="page_content_height">68dp</dimen>
+    <dimen name="page_content_image">40dp</dimen>
 
     <dimen name="page_home_app_bar_height">386dp</dimen>
 
