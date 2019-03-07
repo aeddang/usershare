@@ -53,7 +53,7 @@ class PageHomeViewModel(repo: Repository) : ViewModel() {
             .subscribe( { res ->
                 Observable.fromIterable(res.data)
                     .map { data ->
-                        HomeFreeWorkoutModel(data.description, data.title, data.thumbnail_intro)
+                        HomeFreeWorkoutModel(data.description, data.title, data.thumb_url)
                     }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { model ->

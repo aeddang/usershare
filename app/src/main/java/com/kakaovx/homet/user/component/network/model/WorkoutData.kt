@@ -16,10 +16,10 @@ data class WorkoutData(
     @SerializedName("is_display") val is_display: String?,
     @SerializedName("read_count") val read_count: String?,
     @SerializedName("provider_id") val provider_id: String?,
-    @SerializedName("thumbnail_intro") val thumbnail_intro: String?,
-    @SerializedName("thumbnail_preview") val thumbnail_preview: String?,
     @SerializedName("add_time") val add_time: String?,
-    @SerializedName("modify_time") val modify_time: String?
+    @SerializedName("modify_time") val modify_time: String?,
+    @SerializedName("movie_url") val movie_url: String?,
+    @SerializedName("thumb_url") val thumb_url: String?
 ){
     override fun toString(): String {
         return "WorkoutData(exercise_id=$exercise_id\n" +
@@ -35,9 +35,9 @@ data class WorkoutData(
                 " is_display=$is_display\n" +
                 " read_count=$read_count\n" +
                 " provider_id=$provider_id\n" +
-                " thumbnail_intro=$thumbnail_intro\n" +
-                " thumbnail_preview=$thumbnail_preview\n" +
                 " add_time=$add_time\n" +
-                " modify_time=$modify_time)"
+                " modify_time=$modify_time\n" +
+                " movie_url=$movie_url\n" +
+                " thumb_url=$thumb_url)"
     }
 }

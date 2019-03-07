@@ -15,6 +15,7 @@ object AppConst {
 
     const val HOMET_ACTIVITY_SPLASH = "$packageName.action.HOMET_SPLASH"
     const val HOMET_ACTIVITY_MAIN = "$packageName.action.HOMET_MAIN"
+    const val HOMET_ACTIVITY_PLAYER = "$packageName.action.HOMET_PLAYER"
 
     /**
      * Values
@@ -28,6 +29,7 @@ object AppConst {
     const val HOMET_VALUE_SEARCH = "SEARCH"
     const val HOMET_VALUE_PROFILE = "PROFILE"
     const val HOMET_VALUE_RECOMMEND = "RECOMMEND"
+    const val HOMET_VALUE_VIDEO_URL = "VIDEO_URL"
 
     /**
      * LiveData Model index

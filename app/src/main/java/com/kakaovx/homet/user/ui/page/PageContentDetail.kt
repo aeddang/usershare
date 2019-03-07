@@ -1,6 +1,7 @@
 package com.kakaovx.homet.user.ui.page
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -62,11 +63,26 @@ class PageContentDetail : RxPageFragment() {
             isDisplayText.text = data.is_display
             readCountText.text = data.read_count
             providerIdText.text = data.provider_id
-            thumbnailIntroText.text = data.thumbnail_intro
-            thumbnailPreviewText.text = data.thumbnail_preview
             addTimeText.text = data.add_time
             modifyTimeText.text = data.modify_time
+            movieUrlText.text = data.movie_url
+            thumbnailUrlText.text = data.thumb_url
+            playWorkoutAction.setOnClickListener {
+                val url = movieUrlText.text.toString()
+                if (url.isNotEmpty()) {
+                    routeToPlayer(url)
+                }
+            }
         }
+    }
+
+    private fun routeToPlayer(movie_url: String) {
+        Log.d(TAG, "routeToPlayer() url = [$movie_url]")
+        val i = Intent(AppConst.HOMET_ACTIVITY_PLAYER)
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        i.putExtra(AppConst.HOMET_VALUE_VIDEO_URL, movie_url)
+        startActivity(i)
+        activity?.finish()
     }
 
     @LayoutRes

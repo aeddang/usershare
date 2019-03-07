@@ -347,7 +347,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/read_count_layout"
-                app:layout_constraintBottom_toTopOf="@+id/thumbnail_intro_layout">
+                app:layout_constraintBottom_toTopOf="@+id/add_time_layout">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -368,63 +368,11 @@
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/thumbnail_intro_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/provider_id_layout"
-                app:layout_constraintBottom_toTopOf="@+id/thumbnail_preview_layout">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:textSize="@dimen/item_content_font_size"
-                    android:textColor="@color/content_title"
-                    android:text="@string/thumbnail_intro"/>
-            <TextView
-                    android:id="@+id/thumbnail_intro_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:background="@color/colorPrimaryDark"
-                    android:textSize="@dimen/item_content_font_size"
-                    android:textColor="@color/page_home_issue_program_description"
-                    tools:text="@string/home_program_description"/>
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/thumbnail_preview_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/thumbnail_intro_layout"
-                app:layout_constraintBottom_toTopOf="@+id/add_time_layout">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:textSize="@dimen/item_content_font_size"
-                    android:textColor="@color/content_title"
-                    android:text="@string/thumbnail_preview"/>
-            <TextView
-                    android:id="@+id/thumbnail_preview_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:background="@color/colorPrimaryDark"
-                    android:textSize="@dimen/item_content_font_size"
-                    android:textColor="@color/page_home_issue_program_description"
-                    tools:text="@string/home_program_description"/>
-        </LinearLayout>
-
-        <LinearLayout
                 android:id="@+id/add_time_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/thumbnail_preview_layout"
+                app:layout_constraintTop_toBottomOf="@id/provider_id_layout"
                 app:layout_constraintBottom_toTopOf="@+id/modify_time_layout">
             <TextView
                     android:layout_width="wrap_content"
@@ -450,7 +398,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/add_time_layout">
+                app:layout_constraintTop_toBottomOf="@id/add_time_layout"
+                app:layout_constraintBottom_toTopOf="@+id/movie_url_layout">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -461,6 +410,57 @@
                     android:text="@string/modify_time"/>
             <TextView
                     android:id="@+id/modify_time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@color/colorPrimaryDark"
+                    android:textSize="@dimen/item_content_font_size"
+                    android:textColor="@color/page_home_issue_program_description"
+                    tools:text="@string/home_program_description"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/movie_url_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/modify_time_layout"
+                app:layout_constraintBottom_toTopOf="@+id/thumbnail_url_layout">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:textSize="@dimen/item_content_font_size"
+                    android:textColor="@color/content_title"
+                    android:text="@string/movie_url"/>
+            <TextView
+                    android:id="@+id/movie_url_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@color/colorPrimaryDark"
+                    android:textSize="@dimen/item_content_font_size"
+                    android:textColor="@color/page_home_issue_program_description"
+                    tools:text="@string/home_program_description"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/thumbnail_url_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/movie_url_layout">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:textSize="@dimen/item_content_font_size"
+                    android:textColor="@color/content_title"
+                    android:text="@string/thumbnail_url"/>
+            <TextView
+                    android:id="@+id/thumbnail_url_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"

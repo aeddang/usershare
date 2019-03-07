@@ -43,9 +43,11 @@
     <string name="is_display">화면표시여부</string>
     <string name="read_count">읽음 횟수</string>
     <string name="provider_id">트레이너 번호</string>
-    <string name="thumbnail_intro">썸네일 인트로</string>
-    <string name="thumbnail_preview">썸네일 미리보기</string>
+    <string name="thumbnail_url">썸네일 주소</string>
+    <string name="movie_url">영상 주소</string>
     <string name="add_time">추가 시간</string>
     <string name="modify_time">수정 시간</string>
     <string name="body_parts">신체 부위</string>
+    <string name="capture">내 화면</string>
+    <string name="video">영상</string>
 </resources>

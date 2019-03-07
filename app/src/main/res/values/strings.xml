@@ -43,9 +43,11 @@
     <string name="is_display">is display</string>
     <string name="read_count">read count</string>
     <string name="provider_id">provider id</string>
-    <string name="thumbnail_intro">thumbnail intro</string>
-    <string name="thumbnail_preview">thumbnail preview</string>
+    <string name="thumbnail_url">thumbnail url</string>
+    <string name="movie_url">movie_url</string>
     <string name="add_time">add time</string>
     <string name="modify_time">modify time</string>
     <string name="body_parts">body parts</string>
+    <string name="capture">Capture</string>
+    <string name="video">video</string>
 </resources>

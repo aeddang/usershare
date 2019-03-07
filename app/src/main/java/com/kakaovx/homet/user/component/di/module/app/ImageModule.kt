@@ -1,10 +1,8 @@
 package com.kakaovx.homet.user.component.di.module.app
-import com.kakaovx.homet.user.component.module.image.ImageFactory
+import com.kakaovx.homet.user.component.image.ImageFactory
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
-
-
 
 @Module
 class ImageModule {
@@ -14,5 +12,3 @@ class ImageModule {
         return ImageFactory()
     }
 }
-
-

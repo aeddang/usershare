@@ -3,7 +3,6 @@ package com.kakaovx.homet.user.ui.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kakaovx.homet.user.component.model.ContentModel
 import com.kakaovx.homet.user.component.model.PageLiveData
 import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.model.ResultData
@@ -11,7 +10,6 @@ import com.kakaovx.homet.user.component.network.model.WorkoutData
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
