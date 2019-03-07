@@ -4,7 +4,6 @@ import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePosition
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.ui.page.*
-import java.text.FieldPosition
 
 class PageFactory {
 
@@ -22,7 +21,6 @@ class PageFactory {
 
     fun getPageByID(id:PageID): PageFragment {
         return when(id) {
-            PageID.SPLASH -> { PageSplash() }
             PageID.HOME -> { PageHome() }
             PageID.CONTENT -> {
                 val param = HashMap<String, Any>()
@@ -43,17 +41,16 @@ class PageFactory {
 }
 
 enum class PageID(val resId: Int, override var position: Int = 9999):PagePosition {
-    SPLASH(R.string.company),
-    HOME(R.string.page_home,1),
-    CONTENT(R.string.page_content,2),
-    PLANNER(R.string.page_planner,3),
-    SEARCH(R.string.page_search,4),
-    PROFILE(R.string.page_profile,5),
-    PROGRAM(R.string.page_program,6),
-    FREE_WORKOUT(R.string.page_free_workout,7),
-    TRAINER(R.string.page_trainer,8),
-    CONTENT_DETAIL(R.string.page_content,9),
-    TEST(1000000000,10),
+    HOME(R.string.page_home),
+    CONTENT(R.string.page_content,1),
+    PLANNER(R.string.page_planner,2),
+    SEARCH(R.string.page_search,3),
+    PROFILE(R.string.page_profile,4),
+    PROGRAM(R.string.page_program,5),
+    FREE_WORKOUT(R.string.page_free_workout,6),
+    TRAINER(R.string.page_trainer,7),
+    CONTENT_DETAIL(R.string.page_content,8),
+    TEST(1000000000,9),
     TEST_POP(1000000002)
 }
 

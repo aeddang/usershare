@@ -10,12 +10,14 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [
     AppModule::class,
+    BaseModule::class,
     RepositoryModule::class,
     AndroidBindingModule::class,
     PreferenceModule::class,
     NetworkModule::class,
-    AndroidSupportInjectionModule::class,
-    ImageModule::class
+    ImageModule::class,
+    CaptureModule::class,
+    AndroidSupportInjectionModule::class
 ])
 interface AppComponent : AndroidInjector<App> {
 

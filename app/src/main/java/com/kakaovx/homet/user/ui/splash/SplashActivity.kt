@@ -1,59 +1,59 @@
 package com.kakaovx.homet.user.ui.splash
 
-import com.kakaovx.homet.lib.page.PageActivity
-import com.kakaovx.homet.lib.page.PageFragment
-import com.kakaovx.homet.lib.page.PagePresenter
+import android.os.Bundle
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.ui.PageFactory
-import com.kakaovx.homet.user.ui.PageID
+import com.kakaovx.homet.user.util.AppPermissionManager
 import com.kakaovx.homet.user.util.Log
+import dagger.android.support.DaggerAppCompatActivity
 
-class SplashActivity : PageActivity<PageID>() {
+class SplashActivity : DaggerAppCompatActivity() {
 
     val TAG = javaClass.simpleName
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
-
-//        val window = window
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//        window.statusBarColor = resources.getColor(R.color.indicator)
-
-        PagePresenter.getInstance<PageID>().pageStart(PageID.SPLASH)
+    private fun startFragmentTransaction(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, SplashFragment.newInstance())
+                .commitNow()
+        }
     }
 
-    override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed()")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_splash)
+
+        if (!AppPermissionManager.checkPermissions(this)) {
+            AppPermissionManager.requestPermissions(this)
+        } else {
+            Log.i(TAG, "Accept All User Permissions")
+            startFragmentTransaction(savedInstanceState)
+        }
     }
 
-    override fun getPageAreaId(): Int {
-        Log.d(TAG, "getPageAreaId()")
-        return R.id.container
-    }
-
-    override fun getPageExitMsg(): Int {
-        Log.d(TAG, "getPageExitMsg()")
-        return R.string.notice_app_exit
-    }
-
-    override fun getHomes(): Array<PageID> {
-        Log.d(TAG, "getHomes()")
-        return arrayOf(PageID.SPLASH)
-    }
-
-    override fun getPageByID(id: PageID): PageFragment {
-        Log.d(TAG, "getPageByID()")
-        return PageFactory.getInstance().getPageByID(id)
-    }
-
-    override fun getPopupByID(id: PageID): PageFragment {
-        Log.d(TAG, "getPopupByID()")
-        return PageFactory.getInstance().getPageByID(id)
-    }
-
-    override fun getLayoutResId(): Int {
-        Log.d(TAG, "getLayoutResId()")
-        return R.layout.activity_splash
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        var notOk = false
+        when (requestCode) {
+            AppPermissionManager.PERMISSIONS_REQUEST_CODE -> {
+                for (i in grantResults.indices) {
+                    if (grantResults[i] != 0) {
+                        Log.e(TAG, "onRequestPermissionsResult = "
+                                + permissions[i]
+                                + ", grantResult = "
+                                + "NOK")
+                        notOk = true
+                    }
+                }
+                if (notOk) {
+                    finish()
+                } else {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, SplashFragment.newInstance())
+                        .commitNow()
+                }
+            }
+            else -> {
+                Log.e(TAG, "unknown error")
+            }
+        }
     }
 }

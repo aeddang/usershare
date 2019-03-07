@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.di.module.page
+package com.kakaovx.homet.user.component.di.module.view
 
 import com.kakaovx.homet.user.component.di.annotation.PageScope
 import com.kakaovx.homet.user.component.repository.Repository

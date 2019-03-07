@@ -8,7 +8,6 @@ import com.kakaovx.homet.user.component.model.HomeFreeWorkoutModel
 import com.kakaovx.homet.user.component.ui.skeleton.view.ListItem
 import com.kakaovx.homet.user.util.Log
 import kotlinx.android.synthetic.main.item_home_free_workout.view.*
-import kotlinx.android.synthetic.main.item_home_issue_program.view.*
 
 class HomeFreeWorkoutCardItem(context:Context): ListItem(context) {
 

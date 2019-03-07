@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.model.HomeFreeWorkoutModel
 import com.kakaovx.homet.user.component.model.HomeProgramModel
@@ -19,6 +20,8 @@ import com.kakaovx.homet.user.component.ui.skeleton.model.layoutUtil.RecyclerVie
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.ui.MainActivity
+import com.kakaovx.homet.user.ui.PageID
+import com.kakaovx.homet.user.ui.ParamType
 import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModel
 import com.kakaovx.homet.user.ui.viewModel.PageHomeViewModelFactory
 import com.kakaovx.homet.user.util.AppUtil
@@ -87,6 +90,16 @@ class PageHome : RxPageFragment() {
                 it.isEmpty.observe(this, Observer { value ->
                     if (value) free_workout_list_empty.visibility = View.VISIBLE
                     else free_workout_list_empty.visibility = View.INVISIBLE
+                })
+                it.itemPosition.observe(this, Observer { position ->
+                    position?.apply {
+                        val model = it.getData(this)
+                        model.id?.apply {
+                            val param = HashMap<String, Any>()
+                            param[ParamType.DETAIL.key] = this
+                            PagePresenter.getInstance<PageID>().pageChange(PageID.CONTENT_DETAIL, param = param)
+                        }
+                    }
                 })
             }
         }

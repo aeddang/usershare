@@ -1,28 +1,35 @@
-package com.kakaovx.homet.user.ui.page
+package com.kakaovx.homet.user.ui.splash
 
 import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
-import com.kakaovx.homet.user.ui.splash.SplashViewModel
-import com.kakaovx.homet.user.ui.splash.SplashViewModelFactory
+import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.Log
-import dagger.android.support.AndroidSupportInjection
-import io.reactivex.rxkotlin.plusAssign
+import com.kakaovx.homet.user.util.plusAssign
+import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class PageSplash : RxPageFragment() {
+class SplashFragment : DaggerFragment() {
 
     val TAG = javaClass.simpleName
 
+    private val disposables = AppFragmentAutoClearedDisposable(this)
+
     @Inject
     lateinit var viewModelFactory: SplashViewModelFactory
-
     private lateinit var viewModel: SplashViewModel
 
     private val autoLogin = true
+
+    companion object {
+        fun newInstance() = SplashFragment()
+    }
 
     private fun routeToMainPage() {
         Log.d(TAG, "routeToMainPage()")
@@ -37,22 +44,30 @@ class PageSplash : RxPageFragment() {
         Log.d(TAG, "showLoginForm()")
     }
 
-    override fun getLayoutResId(): Int {
-        Log.d(TAG, "getLayoutResId()")
-        return R.layout.page_splash
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate()")
     }
 
-    override fun onSubscribe() {
-        super.onSubscribe()
-        Log.d(TAG, "onSubscribe()")
-        disposables += viewModel.startLogin(autoLogin)
+    override fun onDestroy() {
+        Log.d(TAG, "onDestroy()")
+        super.onDestroy()
     }
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated() start")
-        AndroidSupportInjection.inject(this)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.fragment_splash, container, false)
+    }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onActivityCreated()")
+        super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory)[SplashViewModel::class.java]
+
+        disposables += viewModel.startLogin(autoLogin)
+
         viewModel.autoLoginResponse.observe(this, Observer {
             when (it) {
                 true -> disposables += viewModel.startLoginProcess()
@@ -66,13 +81,5 @@ class PageSplash : RxPageFragment() {
                 false -> showLoginForm()
             }
         })
-
-        super.onCreated()
-        Log.d(TAG, "onCreated() end")
-    }
-
-    override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed()")
-        super.onDestroyed()
     }
 }

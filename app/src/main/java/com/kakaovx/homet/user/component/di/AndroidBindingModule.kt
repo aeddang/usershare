@@ -1,10 +1,14 @@
 package com.kakaovx.homet.user.component.di
 
 import com.kakaovx.homet.user.component.di.annotation.ActivityScope
+import com.kakaovx.homet.user.component.di.annotation.FragmentScope
 import com.kakaovx.homet.user.component.di.annotation.PageScope
-import com.kakaovx.homet.user.component.di.module.page.*
+import com.kakaovx.homet.user.component.di.module.view.*
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.page.*
+import com.kakaovx.homet.user.ui.player.PlayerActivity
+import com.kakaovx.homet.user.ui.player.PlayerFragment
+import com.kakaovx.homet.user.ui.splash.SplashFragment
 import com.kakaovx.homet.user.ui.splash.SplashActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -16,11 +20,21 @@ internal abstract class AndroidBindingModule {
     @ContributesAndroidInjector(modules = [])
     internal abstract fun bindSplashActivity(): SplashActivity
 
-    @PageScope
+    @FragmentScope
     @ContributesAndroidInjector(modules = [
-        PageSplashModule::class
+        FragmentSplashModule::class
     ])
-    internal abstract fun bindPageSplash(): PageSplash
+    internal abstract fun bindSplashFragment(): SplashFragment
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [])
+    internal abstract fun bindPlayerActivity(): PlayerActivity
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = [
+        FragmentPlayerModule::class
+    ])
+    internal abstract fun bindPlayerFragment(): PlayerFragment
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [])

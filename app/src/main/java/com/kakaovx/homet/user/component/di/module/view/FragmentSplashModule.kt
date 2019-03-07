@@ -1,16 +1,16 @@
-package com.kakaovx.homet.user.component.di.module.page
+package com.kakaovx.homet.user.component.di.module.view
 
-import com.kakaovx.homet.user.component.di.annotation.PageScope
+import com.kakaovx.homet.user.component.di.annotation.FragmentScope
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.ui.splash.SplashViewModelFactory
 import dagger.Module
 import dagger.Provides
 
 @Module
-class PageSplashModule {
+class FragmentSplashModule {
 
     @Provides
-    @PageScope
+    @FragmentScope
     fun provideViewModelFactory(repository: Repository): SplashViewModelFactory
         = SplashViewModelFactory(repository)
 }
