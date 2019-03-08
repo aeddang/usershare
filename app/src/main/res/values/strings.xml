@@ -44,10 +44,12 @@
     <string name="read_count">read count</string>
     <string name="provider_id">provider id</string>
     <string name="thumbnail_url">thumbnail url</string>
-    <string name="movie_url">movie_url</string>
+    <string name="movie_url">movie url</string>
     <string name="add_time">add time</string>
     <string name="modify_time">modify time</string>
     <string name="body_parts">body parts</string>
     <string name="capture">Capture</string>
     <string name="video">video</string>
+    <string name="free_motion_thumbnail_url">free motion movie thumbnail url</string>
+    <string name="free_motion_movie_url">free motion movie url</string>
 </resources>

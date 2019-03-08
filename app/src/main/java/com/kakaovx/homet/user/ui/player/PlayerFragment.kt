@@ -6,12 +6,16 @@ import android.graphics.*
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.util.Size
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.databinding.FragmentPlayerBinding
 import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.CompareSizesByArea
@@ -24,6 +28,18 @@ import javax.inject.Inject
 class PlayerFragment : DaggerFragment() {
 
     val TAG = javaClass.simpleName
+
+    companion object {
+        fun newInstance() = PlayerFragment()
+
+        fun newInstance(url: String): PlayerFragment {
+            val fragment = PlayerFragment()
+            val bundle = Bundle()
+            bundle.putString(AppConst.HOMET_VALUE_VIDEO_URL, url)
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
 
     /**
      * Max preview width that is guaranteed by Camera2 API
@@ -48,7 +64,10 @@ class PlayerFragment : DaggerFragment() {
     private lateinit var previewSize: Size
     private lateinit var videoSize: Size
 
-    private val listener = object: TextureView.SurfaceTextureListener {
+    private var videoUrl: String? = null
+    private var mediaPlayer: MediaPlayer? = null
+
+    private val cameraListener = object: TextureView.SurfaceTextureListener {
 
         override fun onSurfaceTextureSizeChanged(texture: SurfaceTexture?, width: Int, height: Int) {
             Log.d(TAG, "onSurfaceTextureSizeChanged()")
@@ -75,10 +94,6 @@ class PlayerFragment : DaggerFragment() {
                 viewModel.resumeCamera()
             }
         }
-    }
-
-    companion object {
-        fun newInstance() = PlayerFragment()
     }
 
     /**
@@ -262,9 +277,44 @@ class PlayerFragment : DaggerFragment() {
 
     private fun initComponent() {
         dataBinding.captureView?.apply {
-            surfaceTextureListener = listener
+            surfaceTextureListener = cameraListener
             viewModel.setExistView(true)
             videoSize = viewModel.getVideoSize()
+        }
+        dataBinding.rendererView?.apply {
+            surfaceTextureListener = object: TextureView.SurfaceTextureListener {
+                override fun onSurfaceTextureSizeChanged(texture: SurfaceTexture?, width: Int, height: Int) {
+                    Log.d(TAG, "onSurfaceTextureSizeChanged()")
+                }
+
+                override fun onSurfaceTextureUpdated(texture: SurfaceTexture?) {
+//            Log.d(TAG, "onSurfaceTextureUpdated()")
+                }
+
+                override fun onSurfaceTextureDestroyed(texture: SurfaceTexture?): Boolean {
+                    Log.d(TAG, "onSurfaceTextureDestroyed()")
+                    return true
+                }
+
+                override fun onSurfaceTextureAvailable(texture: SurfaceTexture?, width: Int, height: Int) {
+                    Log.d(TAG, "onSurfaceTextureAvailable()")
+                    val surface = Surface(texture)
+                    videoUrl?.let {
+                        mediaPlayer = MediaPlayer()
+                        val audioAttributes = AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+                            .build()
+                        mediaPlayer?.run {
+                            setAudioAttributes(audioAttributes)
+                            setDataSource(it)
+                            setSurface(surface)
+                            prepare()
+                            start()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -272,10 +322,18 @@ class PlayerFragment : DaggerFragment() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate()")
         lifecycle += disposables
+        arguments?.apply {
+            videoUrl = getString(AppConst.HOMET_VALUE_VIDEO_URL)
+        }
     }
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy()")
+        mediaPlayer?.apply {
+            stop()
+            release()
+        }
+        mediaPlayer = null
         super.onDestroy()
     }
 

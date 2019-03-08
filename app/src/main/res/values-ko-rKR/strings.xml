@@ -50,4 +50,6 @@
     <string name="body_parts">신체 부위</string>
     <string name="capture">내 화면</string>
     <string name="video">영상</string>
+    <string name="free_motion_movie_url">무료 동작 영상 주소</string>
+    <string name="free_motion_thumbnail_url">무료 동작 썸네일 주소</string>
 </resources>

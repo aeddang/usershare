@@ -61,7 +61,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/renderer_view"/>
 
-            <android.opengl.GLSurfaceView
+            <TextureView
                     android:id="@+id/renderer_view"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"

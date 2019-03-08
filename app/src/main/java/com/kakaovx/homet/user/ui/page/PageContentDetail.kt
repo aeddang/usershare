@@ -30,8 +30,7 @@ class PageContentDetail : RxPageFragment() {
 
     private val TAG = javaClass.simpleName
 
-    lateinit var dataBinding: PageContentDetailBinding
-
+    private lateinit var dataBinding: PageContentDetailBinding
     private var dataId: String? = null
 
     @Inject
@@ -67,8 +66,10 @@ class PageContentDetail : RxPageFragment() {
             modifyTimeText.text = data.modify_time
             movieUrlText.text = data.movie_url
             thumbnailUrlText.text = data.thumb_url
+            freeMotionMovieUrlText.text = data.free_motion_movie_url
+            freeMotionThumbnailUrlText.text = data.free_motion_thumb_url
             playWorkoutAction.setOnClickListener {
-                val url = movieUrlText.text.toString()
+                val url = freeMotionMovieUrlText.text.toString()
                 if (url.isNotEmpty()) {
                     routeToPlayer(url)
                 }
