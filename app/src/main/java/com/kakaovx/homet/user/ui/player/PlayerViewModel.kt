@@ -1,13 +1,16 @@
 package com.kakaovx.homet.user.ui.player
 
+import android.graphics.SurfaceTexture
 import android.opengl.GLSurfaceView
-import android.view.TextureView
+import android.util.Size
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.model.PageLiveData
+import com.kakaovx.homet.user.component.model.VxCoreLiveData
 import com.kakaovx.homet.user.component.network.model.WorkoutData
 import com.kakaovx.homet.user.component.repository.Repository
+import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
 
 class PlayerViewModel(val repo: Repository) : ViewModel() {
@@ -23,7 +26,8 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
     private val _content: MutableLiveData<WorkoutData> = MutableLiveData()
     val content: LiveData<WorkoutData> get() = _content
 
-    fun initCaptureView(view: TextureView) = cameraView.initCameraView(view)
+    private val _core: MutableLiveData<VxCoreLiveData> = MutableLiveData()
+    val core: LiveData<VxCoreLiveData> get() = _core
 
     fun initRendererView(view: GLSurfaceView) {}
 
@@ -31,7 +35,16 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
         cameraView.existView = existView
     }
 
+    fun setSurfaceTextureData(texture: SurfaceTexture?) {
+        cameraView.surfaceTexture = texture
+    }
+
     fun setChangeCamera(isFront: Boolean = true) = cameraView.changeCameraView(isFront)
+
+    fun setPreviewVideoSize(preview: Size) {
+        cameraView.videoWidth = preview.width
+        cameraView.videoHeight = preview.height
+    }
 
     fun isFrontCamera() = cameraView.isFrontCamera()
 
@@ -39,9 +52,22 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     fun pauseCamera() = cameraView.pauseCamera()
 
+    fun getCameraId() = cameraView.cameraId
+
+    fun getVideoSize() = cameraView.getVideoSize()
+
+    private fun sendCommand(cmd: Int, width: Int = 0, height: Int = 0) {
+        val liveData = VxCoreLiveData()
+        liveData.cmd = AppConst.LIVE_DATA_CMD_CAMERA
+        liveData.cameraCmd = cmd
+        liveData.width = width
+        liveData.height = height
+        _core.value = liveData
+    }
+
     override fun onCleared() {
         Log.i(TAG, "onCleared()")
-        pauseCamera()
+        cameraView.destroyCamera()
         super.onCleared()
     }
 }

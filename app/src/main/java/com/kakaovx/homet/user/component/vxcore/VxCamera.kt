@@ -8,8 +8,8 @@ import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.media.Image
 import android.media.ImageReader
+import android.util.Size
 import android.view.Surface
-import android.view.TextureView
 import androidx.core.content.ContextCompat
 import com.kakaovx.homet.user.util.AppDeviceExecutor
 import com.kakaovx.homet.user.util.Log
@@ -22,10 +22,13 @@ class VxCamera(val context: Context) {
     val TAG = javaClass.simpleName
 
     private var deviceIO: AppDeviceExecutor? = null
-    private var videoWidth: Int = 304
-    private var videoHeight: Int = 304
     private var videoFps: Int = 15
+    private val preDefinedVideoSize = Size(304,304)
+    var videoWidth: Int = 0
+    var videoHeight: Int = 0
     var existView: Boolean = false
+    var surfaceTexture: SurfaceTexture? = null
+    var cameraId: String? = null
 
     private lateinit var previewRequestBuilder: CaptureRequest.Builder
     private lateinit var previewRequest: CaptureRequest
@@ -33,14 +36,11 @@ class VxCamera(val context: Context) {
     private var cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     private var cameraDevice: CameraDevice? = null
     private var captureSession: CameraCaptureSession? = null
-    private var cameraId: String? = null
     private var frontCameraId: String? = null
     private var backCameraId: String? = null
 
     private var imageReader: ImageReader? = null
-    private var surfaceTexture: SurfaceTexture? = null
     private var dummySurfaceTexture: SurfaceTexture = SurfaceTexture(10)
-    private var deviceOrientation = 0
 
     private val cameraOpenCloseLock = Semaphore(1)
 
@@ -73,31 +73,6 @@ class VxCamera(val context: Context) {
             onDisconnected(cameraDevice)
         }
 
-    }
-
-    inner class MySurfaceTextureListener: TextureView.SurfaceTextureListener {
-
-        override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
-            Log.d(TAG, "onSurfaceTextureSizeChanged()")
-            surfaceTexture = surface
-        }
-
-        override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
-//            Log.d(TAG, "onSurfaceTextureUpdated()")
-            surfaceTexture = surface
-        }
-
-        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
-            Log.d(TAG, "onSurfaceTextureDestroyed()")
-            surfaceTexture = surface
-            return true
-        }
-
-        override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
-            Log.d(TAG, "onSurfaceTextureAvailable()")
-            surfaceTexture = surface
-            resumeCamera()
-        }
     }
 
     private fun convertYUV420ToNV21(imgYUV420: Image): ByteArray {
@@ -154,25 +129,8 @@ class VxCamera(val context: Context) {
         return result
     }
 
-
-    private fun setCameraDisplayOrientation(displayRotation: Int, characteristics: CameraCharacteristics) {
-        val sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)!!
-        val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
-        var result: Int
-
-        if (cameraDirection == CameraCharacteristics.LENS_FACING_FRONT) {
-            result = (sensorOrientation + displayRotation) % 360
-            result = (360 - result) % 360 // compensate the mirror
-        } else { // back-facing
-            result = (sensorOrientation - displayRotation + 360) % 360
-        }
-
-        Log.w(TAG, "Camera preview sensor orientation: $sensorOrientation")
-        Log.w(TAG, "Camera preview orientation: $result")
-        deviceOrientation = result
-    }
-
     private fun getCameraIds() {
+        Log.d(TAG, "getCameraIds()")
         for (cameraId in cameraManager.cameraIdList) {
             val characteristics = cameraManager.getCameraCharacteristics(cameraId)
 
@@ -191,10 +149,10 @@ class VxCamera(val context: Context) {
     }
 
     private fun setupCamera() {
+        Log.d(TAG, "setupCamera()")
         cameraId?.let {
             val characteristics = cameraManager.getCameraCharacteristics(it)
             val configs = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-            setCameraDisplayOrientation(0, characteristics)
 
             Log.d(TAG, "NV21 = " + ImageFormat.NV21)
             Log.d(TAG, "YUV_420_8888 = " + ImageFormat.YUV_420_888)
@@ -208,25 +166,27 @@ class VxCamera(val context: Context) {
     }
 
     private fun createCameraPreviewSession() {
+        Log.d(TAG, "createCameraPreviewSession() start")
         try {
             // This is the output Surface we need to start preview.
-            val mySurfaceTexture = if (existView) surfaceTexture else dummySurfaceTexture
-            mySurfaceTexture?.let {
-                val mySurface = Surface(mySurfaceTexture)
-                // We set up a CaptureRequest.Builder with the output Surface.
-                previewRequestBuilder = cameraDevice!!.createCaptureRequest(
-                    CameraDevice.TEMPLATE_PREVIEW
-                )
-                previewRequestBuilder.addTarget(mySurface)
+            val surfaceTexture = if (existView) surfaceTexture else dummySurfaceTexture
+
+            surfaceTexture?.let {
                 imageReader?.apply {
+                    val mySurface = Surface(it)
+                    // We set up a CaptureRequest.Builder with the output Surface.
+                    previewRequestBuilder = cameraDevice!!.createCaptureRequest(
+                        CameraDevice.TEMPLATE_PREVIEW
+                    )
+                    previewRequestBuilder.addTarget(mySurface)
                     previewRequestBuilder.addTarget(surface)
 
                     // Here, we create a CameraCaptureSession for camera preview.
-                    cameraDevice?.createCaptureSession(
-                        Arrays.asList(mySurface, surface),
+                    cameraDevice?.createCaptureSession(Arrays.asList(mySurface, surface),
                         object : CameraCaptureSession.StateCallback() {
 
                             override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
+                                Log.e(TAG, "onConfigured()")
                                 // The camera is already closed
                                 if (cameraDevice == null) return
 
@@ -249,15 +209,18 @@ class VxCamera(val context: Context) {
                             override fun onConfigureFailed(session: CameraCaptureSession) {
                                 Log.e(TAG, "onConfigureFailed()")
                             }
-                        }, null)
-                }
-            } ?: Log.e(TAG, "surface is null")
+                        },
+                        null)
+                } ?: Log.e(TAG, "ImageReader is null")
+            } ?: Log.e(TAG, "SurfaceTexture is null")
         } catch (e: CameraAccessException) {
             Log.e(TAG, e.toString())
         }
+        Log.d(TAG, "createCameraPreviewSession() end")
     }
 
     private fun startPreview() {
+        Log.d(TAG, "startPreview()")
         val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
         if (permission != PackageManager.PERMISSION_GRANTED) {
             Log.e(TAG, "Need Camera Permission")
@@ -280,6 +243,7 @@ class VxCamera(val context: Context) {
     }
 
     private fun stopPreview() {
+        Log.d(TAG, "stopPreview()")
         try {
             cameraOpenCloseLock.acquire()
             cameraDevice?.close()
@@ -298,11 +262,6 @@ class VxCamera(val context: Context) {
         getCameraIds()
     }
 
-    fun initCameraView(view: TextureView) {
-        Log.d(TAG, "initCameraView()")
-        view.surfaceTextureListener = MySurfaceTextureListener()
-    }
-
     fun pauseCamera() {
         Log.d(TAG, "pauseCamera()")
         stopPreview()
@@ -312,15 +271,23 @@ class VxCamera(val context: Context) {
     fun resumeCamera() {
         Log.d(TAG, "resumeCamera()")
         deviceIO = AppDeviceExecutor()
-
         startPreview()
     }
 
     fun changeCameraView(isFront: Boolean = true) {
+        Log.d(TAG, "changeCameraView()")
         cameraId = if (isFront) frontCameraId else backCameraId
         stopPreview()
         startPreview()
     }
 
     fun isFrontCamera(): Boolean = (cameraId == frontCameraId)
+
+    fun getVideoSize(): Size = preDefinedVideoSize
+
+    fun destroyCamera() {
+        Log.d(TAG, "destroyCamera()")
+        pauseCamera()
+        surfaceTexture = null
+    }
 }

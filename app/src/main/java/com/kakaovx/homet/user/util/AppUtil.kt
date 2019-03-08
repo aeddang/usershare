@@ -4,10 +4,13 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Size
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import com.kakaovx.homet.user.constant.AppConst
 import io.reactivex.disposables.Disposable
+import java.lang.Long.signum
+import java.util.*
 
 operator fun Lifecycle.plusAssign(observer: LifecycleObserver)
         = this.addObserver(observer)
@@ -85,4 +88,15 @@ object AppUtil {
             }
         }
     }
+}
+
+/**
+ * Compares two `Size`s based on their areas.
+ */
+internal class CompareSizesByArea : Comparator<Size> {
+
+    // We cast here to ensure the multiplications won't overflow
+    override fun compare(lhs: Size, rhs: Size) =
+        signum(lhs.width.toLong() * lhs.height - rhs.width.toLong() * rhs.height)
+
 }

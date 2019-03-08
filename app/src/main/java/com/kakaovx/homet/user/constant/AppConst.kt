@@ -38,6 +38,7 @@ object AppConst {
     const val LIVE_DATA_CMD_NONE = 0x0100
     const val LIVE_DATA_CMD_STRING = 0x0101
     const val LIVE_DATA_CMD_ITEM = 0x0102
+    const val LIVE_DATA_CMD_CAMERA = 0x0103
 
     /**
      * List Item Type
@@ -55,4 +56,13 @@ object AppConst {
     const val HOMET_LIST_ITEM_WORKOUT = 0x0209
     const val HOMET_LIST_ITEM_FREE_WORKOUT = 0x020A
     const val HOMET_LIST_ITEM_TRAINER = 0x020B
+
+    /**
+     * Camera Command Type
+     */
+    const val HOMET_CAMERA_CMD_NONE = 0x300
+    const val HOMET_CAMERA_CMD_SURFACE_SIZE_CHANGED = 0x301
+    const val HOMET_CAMERA_CMD_SURFACE_UPDATED = 0x302
+    const val HOMET_CAMERA_CMD_SURFACE_DESTROY = 0x303
+    const val HOMET_CAMERA_CMD_SURFACE_AVAILABLE = 0x304
 }

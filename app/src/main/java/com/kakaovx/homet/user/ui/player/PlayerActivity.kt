@@ -1,6 +1,7 @@
 package com.kakaovx.homet.user.ui.player
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.repository.Repository
@@ -17,7 +18,7 @@ class PlayerActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate()")
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
@@ -28,6 +29,6 @@ class PlayerActivity : DaggerAppCompatActivity() {
                 .replace(R.id.container, PlayerFragment.newInstance())
                 .commitNow()
         }
+        Log.d(TAG, "onCreate() default rotation = [${this.windowManager.defaultDisplay.rotation}]")
     }
-
 }
