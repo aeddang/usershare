@@ -14,7 +14,6 @@ interface Page {
     fun onAttached(){}
     fun onDetached(){}
     fun onDestroyed()
-    fun requestPermissionResult( resultAll:Boolean ,  permissions: List<out Boolean>? = null )
 }
 
 interface Presenter<T> {

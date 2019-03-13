@@ -108,7 +108,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page {
         }
     }
 
-    override fun requestPermissionResult( resultAll:Boolean , permissions: List<out Boolean>? )
+    private fun requestPermissionResult( resultAll:Boolean , permissions: List<out Boolean>? = null )
     {
         getCurrentPageFragment()?.requestPermissionResult(resultAll, permissions)
     }

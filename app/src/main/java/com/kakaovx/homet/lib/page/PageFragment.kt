@@ -78,8 +78,7 @@ abstract class PageFragment: Fragment(), Page {
      * callback -> PagePresenter.getInstance<T>().requestPermission( permissions: Array<out String> )
      * 2019.03.13 - aeddang@kakaovx.com
      */
-    override fun requestPermissionResult( resultAll:Boolean ,  permissions: List<out Boolean>? ){}
-
+    open fun requestPermissionResult( resultAll:Boolean ,  permissions: List<out Boolean>? ){}
     open fun setParam(param:Map<String,Any>):PageFragment { return this }
     open fun isBackAble():Boolean { return true }
 
