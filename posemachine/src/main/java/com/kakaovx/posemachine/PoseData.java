@@ -1,9 +1,6 @@
 package com.kakaovx.posemachine;
 
 import android.app.Activity;
-
-import com.kakaovx.posemachine.Keypoints;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

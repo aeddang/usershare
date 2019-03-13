@@ -10,15 +10,18 @@ import com.kakaovx.homet.user.component.model.PageLiveData
 import com.kakaovx.homet.user.component.model.VxCoreLiveData
 import com.kakaovx.homet.user.component.network.model.WorkoutData
 import com.kakaovx.homet.user.component.repository.Repository
+import com.kakaovx.homet.user.component.vxcore.VxCamera
+import com.kakaovx.homet.user.component.vxcore.VxMotionRecognition
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
 
-class PlayerViewModel(val repo: Repository) : ViewModel() {
+class PlayerViewModel(val repo: Repository,
+                      val motionRecognition: VxMotionRecognition,
+                      private val cameraView: VxCamera) : ViewModel() {
 
     val TAG = javaClass.simpleName
 
     private val restApi = repo.restApi
-    private val cameraView = repo.camera
 
     private val _response: MutableLiveData<PageLiveData> = MutableLiveData()
     val response: LiveData<PageLiveData> get() = _response
@@ -28,6 +31,11 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     private val _core: MutableLiveData<VxCoreLiveData> = MutableLiveData()
     val core: LiveData<VxCoreLiveData> get() = _core
+
+    fun intCaptureView() {
+        cameraView.initVxCamera()
+        motionRecognition.initMotionRecognition()
+    }
 
     fun initRendererView(view: GLSurfaceView) {}
 
@@ -68,6 +76,7 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
     override fun onCleared() {
         Log.i(TAG, "onCleared()")
         cameraView.destroyCamera()
+        motionRecognition.destroy()
         super.onCleared()
     }
 }

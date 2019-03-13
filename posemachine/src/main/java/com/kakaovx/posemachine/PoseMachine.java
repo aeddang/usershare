@@ -14,6 +14,9 @@ import java.util.Vector;
 import static com.kakaovx.posemachine.Utils.getAvg;
 
 public class PoseMachine {
+
+    private String TAG = getClass().getSimpleName();
+
     private MaceWrapper maceWrapper;
     private PoseEstimator poseEstimator;
     private PosePlot posePlot;
@@ -39,6 +42,8 @@ public class PoseMachine {
     }
 
     public PoseMachine(Application application, MaceWrapper.MODEL_TYPE model_type, MaceWrapper.RUNTIME_TYPE runtime_type) {
+        Log.i(TAG, "PoseMachine() Create");
+
         this.application = application;
 
         maceWrapper = new MaceWrapper(runtime_type);
@@ -54,6 +59,7 @@ public class PoseMachine {
     }
 
     public void Destory() {
+        Log.i(TAG, "Destroy()");
         if (maceWrapper != null)
             maceWrapper.release();
 

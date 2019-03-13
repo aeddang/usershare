@@ -2,13 +2,15 @@ package com.kakaovx.homet.user.ui.player
 
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.*
+import android.graphics.Matrix
+import android.graphics.Point
+import android.graphics.RectF
+import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import android.util.Size
 import android.view.*
@@ -277,6 +279,7 @@ class PlayerFragment : DaggerFragment() {
 
     private fun initComponent() {
         dataBinding.captureView?.apply {
+            viewModel.intCaptureView()
             surfaceTextureListener = cameraListener
             viewModel.setExistView(true)
             videoSize = viewModel.getVideoSize()

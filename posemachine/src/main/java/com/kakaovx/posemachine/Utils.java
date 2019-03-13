@@ -1,7 +1,7 @@
 package com.kakaovx.posemachine;
 
 import android.graphics.Bitmap;
-import android.util.Pair;
+import androidx.core.util.Pair;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -3,7 +3,6 @@ package com.kakaovx.posemachine;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.xiaomi.mace.JniMaceUtils;
 

@@ -11,6 +11,7 @@ import android.media.ImageReader
 import android.util.Size
 import android.view.Surface
 import androidx.core.content.ContextCompat
+import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.AppDeviceExecutor
 import com.kakaovx.homet.user.util.Log
 import java.util.*
@@ -23,7 +24,8 @@ class VxCamera(val context: Context) {
 
     private var deviceIO: AppDeviceExecutor? = null
     private var videoFps: Int = 15
-    private val preDefinedVideoSize = Size(304,304)
+    private val preDefinedVideoSize = Size(AppFeature.APP_FEATURE_VIDEO_WIDTH, AppFeature.APP_FEATURE_VIDEO_HEIGHT)
+    private var computeVideoSize: Size? = null
     var videoWidth: Int = 0
     var videoHeight: Int = 0
     var existView: Boolean = false
@@ -283,11 +285,15 @@ class VxCamera(val context: Context) {
 
     fun isFrontCamera(): Boolean = (cameraId == frontCameraId)
 
-    fun getVideoSize(): Size = preDefinedVideoSize
+    fun getVideoSize(): Size = computeVideoSize ?: preDefinedVideoSize
 
     fun destroyCamera() {
         Log.d(TAG, "destroyCamera()")
         pauseCamera()
         surfaceTexture = null
+    }
+
+    fun setVideoSize(width: Int, height: Int) {
+        computeVideoSize = Size(width, height)
     }
 }

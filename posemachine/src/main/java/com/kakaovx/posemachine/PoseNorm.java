@@ -1,7 +1,6 @@
 package com.kakaovx.posemachine;
 
-import android.util.Pair;
-
+import androidx.core.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 

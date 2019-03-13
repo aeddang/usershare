@@ -24,8 +24,6 @@ class PlayerActivity : DaggerAppCompatActivity() {
 
         val url = intent.getStringExtra(AppConst.HOMET_VALUE_VIDEO_URL)
 
-        repository.camera.initVxCamera()
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, PlayerFragment.newInstance(url))
