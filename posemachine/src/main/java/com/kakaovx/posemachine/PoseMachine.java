@@ -58,8 +58,8 @@ public class PoseMachine {
         midOffsets = new float[maceWrapper.getMidOffsetsLength()];
     }
 
-    public void Destory() {
-        Log.i(TAG, "Destroy()");
+    public void destroy() {
+        Log.i(TAG, "destroy()");
         if (maceWrapper != null)
             maceWrapper.release();
 

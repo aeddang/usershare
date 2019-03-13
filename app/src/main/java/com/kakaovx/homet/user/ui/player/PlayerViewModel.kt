@@ -16,8 +16,8 @@ import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
 
 class PlayerViewModel(val repo: Repository,
-                      val motionRecognition: VxMotionRecognition,
-                      private val cameraView: VxCamera) : ViewModel() {
+                      val mr: VxMotionRecognition,
+                      private val cv: VxCamera) : ViewModel() {
 
     val TAG = javaClass.simpleName
 
@@ -33,36 +33,37 @@ class PlayerViewModel(val repo: Repository,
     val core: LiveData<VxCoreLiveData> get() = _core
 
     fun intCaptureView() {
-        cameraView.initVxCamera()
-        motionRecognition.initMotionRecognition()
+        cv.initVxCamera()
+        mr.initMotionRecognition()
+        cv.setVideoSize(mr.getInputWidth(), mr.getInputHeight())
     }
 
     fun initRendererView(view: GLSurfaceView) {}
 
     fun setExistView(existView: Boolean) {
-        cameraView.existView = existView
+        cv.existView = existView
     }
 
     fun setSurfaceTextureData(texture: SurfaceTexture?) {
-        cameraView.surfaceTexture = texture
+        cv.surfaceTexture = texture
     }
 
-    fun setChangeCamera(isFront: Boolean = true) = cameraView.changeCameraView(isFront)
+    fun setChangeCamera(isFront: Boolean = true) = cv.changeCameraView(isFront)
 
     fun setPreviewVideoSize(preview: Size) {
-        cameraView.videoWidth = preview.width
-        cameraView.videoHeight = preview.height
+        cv.videoWidth = preview.width
+        cv.videoHeight = preview.height
     }
 
-    fun isFrontCamera() = cameraView.isFrontCamera()
+    fun isFrontCamera() = cv.isFrontCamera()
 
-    fun resumeCamera() = cameraView.resumeCamera()
+    fun resumeCamera() = cv.resumeCamera()
 
-    fun pauseCamera() = cameraView.pauseCamera()
+    fun pauseCamera() = cv.pauseCamera()
 
-    fun getCameraId() = cameraView.cameraId
+    fun getCameraId() = cv.cameraId
 
-    fun getVideoSize() = cameraView.getVideoSize()
+    fun getVideoSize() = cv.getVideoSize()
 
     private fun sendCommand(cmd: Int, width: Int = 0, height: Int = 0) {
         val liveData = VxCoreLiveData()
@@ -75,8 +76,8 @@ class PlayerViewModel(val repo: Repository,
 
     override fun onCleared() {
         Log.i(TAG, "onCleared()")
-        cameraView.destroyCamera()
-        motionRecognition.destroy()
+        cv.destroyCamera()
+        mr.destroy()
         super.onCleared()
     }
 }
