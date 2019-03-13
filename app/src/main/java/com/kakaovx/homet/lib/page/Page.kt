@@ -28,6 +28,8 @@ interface Presenter<T> {
     fun openPopup(id:T,param:Map<String, Any>? = null, sharedElement:View? = null, transitionName:String? = null): Presenter<T>
     fun pageStart(id:T): Presenter<T>
     fun pageChange(id:T,param:Map<String, Any>? = null, sharedElement:View? = null, transitionName:String? = null): Presenter<T>
+    fun hasPermissions( permissions: Array<String> ): Boolean
+    fun requestPermission( permissions: Array<out String> )
 }
 
 interface View<T> {
@@ -43,6 +45,8 @@ interface View<T> {
     fun onCloseAllPopup()
     fun onShowNavigation(){}
     fun onHideNavigation(){}
+    fun hasPermissions( permissions: Array<out String> ):  Pair< Boolean, List<out Boolean>>?
+    fun requestPermission( permissions: Array<out String> )
 }
 
 interface Model<T> {

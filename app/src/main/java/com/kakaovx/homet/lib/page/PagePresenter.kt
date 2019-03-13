@@ -75,6 +75,16 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
         return this
     }
 
+    override fun hasPermissions( permissions: Array<String> ): Boolean {
+        view?.let { v ->
+            v.hasPermissions( permissions )?.let { it.first }
+        }
+        return false
+    }
+    override fun requestPermission( permissions: Array<out String> ){
+        view?.requestPermission(permissions)
+    }
+
 
 }
 
