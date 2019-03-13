@@ -1,5 +1,6 @@
 package com.kakaovx.homet.user.component.di.module.app
 
+import android.app.Application
 import android.content.Context
 import com.kakaovx.homet.user.component.vxcore.VxCamera
 import com.kakaovx.homet.user.component.vxcore.VxMotionRecognition
@@ -15,6 +16,6 @@ class CaptureModule {
             = VxCamera(ctx)
 
     @Provides
-    fun provideMotionRecognition(@Named("appContext") ctx: Context): VxMotionRecognition
-            = VxMotionRecognition(ctx)
+    fun provideMotionRecognition(app: Application, @Named("appContext") ctx: Context): VxMotionRecognition
+            = VxMotionRecognition(app, ctx)
 }
