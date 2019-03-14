@@ -3,6 +3,7 @@ package com.kakaovx.homet.user.component.vxcore
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -11,14 +12,19 @@ import android.media.ImageReader
 import android.util.Size
 import android.view.Surface
 import androidx.core.content.ContextCompat
+import com.kakaovx.homet.user.component.model.VxCoreLiveData
+import com.kakaovx.homet.user.component.model.VxCoreObserver
+import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.AppDeviceExecutor
 import com.kakaovx.homet.user.util.Log
+import com.kakaovx.posemachine.PoseMachine
+import org.tensorflow.demo.env.ImageUtils
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 
-class VxCamera(val context: Context) {
+class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
 
     val TAG = javaClass.simpleName
 
@@ -48,9 +54,15 @@ class VxCamera(val context: Context) {
 
     private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
         deviceIO?.execute {
-            val image = it.acquireNextImage()
-            val bytes = convertYUV420ToNV21(image)
-            image.close()
+            val image: Image? = it.acquireNextImage()
+            image?.let {
+                val liveData = VxCoreLiveData()
+                liveData.cmd = AppConst.LIVE_DATA_CMD_CAMERA
+                liveData.cameraCmd = AppConst.HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE
+                liveData.data = convertYUV420ToARGB8888(it)
+                VxCoreObserver.setData(liveData)
+                it.close()
+            }
         }
     }
 
@@ -75,6 +87,37 @@ class VxCamera(val context: Context) {
             onDisconnected(cameraDevice)
         }
 
+    }
+
+    fun fillBytes(planes: Array<Image.Plane>, yuvBytes: Array<ByteArray?>) {
+        // Because of the variable row stride it's not possible to know in
+        // advance the actual necessary dimensions of the yuv planes.
+        for (i in planes.indices) {
+            val buffer = planes[i].buffer
+            if (yuvBytes[i] == null) {
+//                Log.d(TAG, "Initializing buffer $i at size ${buffer.capacity()}")
+                yuvBytes[i] = ByteArray(buffer.capacity())
+            }
+            buffer.get(yuvBytes[i])
+        }
+    }
+
+    private fun convertYUV420ToARGB8888(imgYUV420: Image): IntArray {
+        val previewWidth = videoWidth
+        val previewHeight = videoHeight
+        val yuvBytes = arrayOfNulls<ByteArray>(3)
+        val rgbData = IntArray(previewWidth * previewHeight)
+        val planes = imgYUV420.planes
+        val yRowStride = planes[0].rowStride
+        val uvRowStride = planes[1].rowStride
+        val uvPixelStride = planes[1].pixelStride
+
+        fillBytes(planes, yuvBytes)
+        ImageUtils.convertYUV420ToARGB8888(yuvBytes[0], yuvBytes[1], yuvBytes[2],
+                                           previewWidth, previewHeight,
+                                           yRowStride, uvRowStride, uvPixelStride,
+                                           rgbData)
+        return rgbData
     }
 
     private fun convertYUV420ToNV21(imgYUV420: Image): ByteArray {
@@ -259,8 +302,14 @@ class VxCamera(val context: Context) {
         }
     }
 
+    private fun setInputVideoSize(width: Int, height: Int) {
+        computeVideoSize = Size(width, height)
+    }
+
     fun initVxCamera() {
         Log.d(TAG, "initVxCamera()")
+        mr.initMotionRecognition()
+        setInputVideoSize(mr.getInputWidth(), mr.getInputHeight())
         getCameraIds()
     }
 
@@ -285,15 +334,16 @@ class VxCamera(val context: Context) {
 
     fun isFrontCamera(): Boolean = (cameraId == frontCameraId)
 
-    fun getVideoSize(): Size = computeVideoSize ?: preDefinedVideoSize
+    fun getInputVideoSize(): Size = computeVideoSize ?: preDefinedVideoSize
+
+    fun getDebugInfo(previewWidth: Int, previewHeight: Int) = mr.getDebugInfo(previewWidth, previewHeight)
+
+    fun poseEstimate(bitmap: Bitmap, callback: PoseMachine.DataProcessCallback) = mr.poseEstimate(bitmap, callback)
 
     fun destroyCamera() {
         Log.d(TAG, "destroyCamera()")
         pauseCamera()
+        mr.destroy()
         surfaceTexture = null
-    }
-
-    fun setVideoSize(width: Int, height: Int) {
-        computeVideoSize = Size(width, height)
     }
 }

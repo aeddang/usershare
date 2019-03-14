@@ -2,10 +2,7 @@ package com.kakaovx.homet.user.ui.player
 
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Matrix
-import android.graphics.Point
-import android.graphics.RectF
-import android.graphics.SurfaceTexture
+import android.graphics.*
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
@@ -15,15 +12,20 @@ import android.os.Bundle
 import android.util.Size
 import android.view.*
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.component.ui.view.BorderedText
+import com.kakaovx.homet.user.component.ui.view.OverlayView
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.databinding.FragmentPlayerBinding
 import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.CompareSizesByArea
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.homet.user.util.plusAssign
+import com.kakaovx.posemachine.PoseMachine
 import dagger.android.support.DaggerFragment
+import org.tensorflow.demo.env.ImageUtils
 import java.util.*
 import javax.inject.Inject
 
@@ -64,7 +66,14 @@ class PlayerFragment : DaggerFragment() {
      * The [android.util.Size] of camera preview.
      */
     private lateinit var previewSize: Size
-    private lateinit var videoSize: Size
+    private lateinit var inputVideoSize: Size
+
+    private var frameToCropTransform: Matrix? = null
+    private var cropToFrameTransform: Matrix? = null
+
+    private var rgbFrameBitmap: Bitmap? = null
+    private var croppedBitmap: Bitmap? = null
+    private var borderedText: BorderedText? = null
 
     private var videoUrl: String? = null
     private var mediaPlayer: MediaPlayer? = null
@@ -259,7 +268,7 @@ class PlayerFragment : DaggerFragment() {
             previewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture::class.java),
                                             rotatedPreviewWidth, rotatedPreviewHeight,
                                             maxPreviewWidth, maxPreviewHeight,
-                                            videoSize)
+                                            inputVideoSize)
 
             // We fit the aspect ratio of TextureView to the size of preview we picked.
             if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -268,12 +277,64 @@ class PlayerFragment : DaggerFragment() {
                 textureView.setAspectRatio(previewSize.height, previewSize.width)
             }
             viewModel.setPreviewVideoSize(previewSize)
+            initMatrix(sensorOrientation)
         } catch (e: CameraAccessException) {
             Log.e(TAG, e.toString())
         } catch (e: NullPointerException) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
             // device this code runs.
             Log.e(TAG, e.toString())
+        }
+
+    }
+
+    private fun initMatrix(sensorOrientation: Int) {
+        Log.i(TAG, "Initializing at size [${previewSize.width}]x[${previewSize.height}]")
+        rgbFrameBitmap = Bitmap.createBitmap(previewSize.width, previewSize.height, Bitmap.Config.ARGB_8888)
+        croppedBitmap = Bitmap.createBitmap(inputVideoSize.width, inputVideoSize.height, Bitmap.Config.ARGB_8888)
+        frameToCropTransform = ImageUtils.getTransformationMatrix(
+            previewSize.width, previewSize.height,
+            inputVideoSize.width, inputVideoSize.height,
+            sensorOrientation, true)
+
+        cropToFrameTransform = Matrix()
+        frameToCropTransform?.invert(cropToFrameTransform)
+    }
+
+    private fun processImage(data: IntArray) {
+        val rgbFrame = rgbFrameBitmap
+        val croppedFrame = croppedBitmap
+        val frameToCrop = frameToCropTransform
+        val cropToFrame = cropToFrameTransform
+
+        rgbFrame ?: return
+        croppedFrame ?: return
+        frameToCrop ?: return
+        cropToFrame ?: return
+
+        rgbFrame.setPixels(data, 0, previewSize.width, 0, 0, previewSize.width, previewSize.height)
+        val canvas = Canvas(croppedFrame)
+        canvas.drawBitmap(rgbFrame, frameToCrop, null)
+
+        val pose = viewModel.poseEstimate(croppedFrame, PoseMachine.DataProcessCallback {
+            Log.d(TAG, "onBitmapPrepared()")
+        })
+        pose?.let { Log.d(TAG, "Detect Skeletons: [${it.size}]") }
+        requestDraw()
+    }
+
+    private fun requestDraw() {
+        dataBinding.overlayView?.apply {
+            Log.d(TAG, "requestDraw() overlayView postInvalidate")
+            postInvalidate()
+        }
+    }
+
+    private fun drawInfo(canvas: Canvas) {
+        val lines = viewModel.getDebugInfo(previewSize.width, previewSize.height)
+        lines?.let {
+            Log.d(TAG, "drawInfo() [$lines]")
+            borderedText?.drawLines(canvas, 10.toFloat(), (canvas.height - 10).toFloat(), it)
         }
     }
 
@@ -282,7 +343,14 @@ class PlayerFragment : DaggerFragment() {
             viewModel.intCaptureView()
             surfaceTextureListener = cameraListener
             viewModel.setExistView(true)
-            videoSize = viewModel.getVideoSize()
+            inputVideoSize = viewModel.getInputVideoSize()
+        }
+        dataBinding.overlayView?.apply {
+            addCallback(object: OverlayView.DrawCallback {
+                override fun drawCallback(canvas: Canvas) {
+                    this@PlayerFragment.drawInfo(canvas)
+                }
+            })
         }
         dataBinding.rendererView?.apply {
             surfaceTextureListener = object: TextureView.SurfaceTextureListener {
@@ -356,5 +424,20 @@ class PlayerFragment : DaggerFragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
 
         initComponent()
+
+        viewModel.core.observe(this, Observer {
+            if (it.cmd == AppConst.LIVE_DATA_CMD_CAMERA) {
+                when (it.cameraCmd) {
+                    AppConst.HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE -> {
+                        it.data?.run { processImage(this) }
+                    }
+                    else -> {
+                        Log.e(TAG, "wrong camera cmd")
+                    }
+                }
+            } else {
+                Log.e(TAG, "wrong cmd")
+            }
+        })
     }
 }

@@ -1,5 +1,6 @@
 package com.kakaovx.homet.user.ui.player
 
+import android.graphics.Bitmap
 import android.graphics.SurfaceTexture
 import android.opengl.GLSurfaceView
 import android.util.Size
@@ -8,16 +9,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.model.PageLiveData
 import com.kakaovx.homet.user.component.model.VxCoreLiveData
+import com.kakaovx.homet.user.component.model.VxCoreObserver
 import com.kakaovx.homet.user.component.network.model.WorkoutData
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.component.vxcore.VxCamera
-import com.kakaovx.homet.user.component.vxcore.VxMotionRecognition
-import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
+import com.kakaovx.posemachine.PoseMachine
 
-class PlayerViewModel(val repo: Repository,
-                      val mr: VxMotionRecognition,
-                      private val cv: VxCamera) : ViewModel() {
+class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewModel() {
 
     val TAG = javaClass.simpleName
 
@@ -34,8 +33,12 @@ class PlayerViewModel(val repo: Repository,
 
     fun intCaptureView() {
         cv.initVxCamera()
-        mr.initMotionRecognition()
-        cv.setVideoSize(mr.getInputWidth(), mr.getInputHeight())
+        VxCoreObserver.addObserver{ observable, _ ->
+            if (observable is VxCoreObserver) {
+                val liveData = observable.getData()
+                _core.postValue(liveData)
+            }
+        }
     }
 
     fun initRendererView(view: GLSurfaceView) {}
@@ -63,21 +66,16 @@ class PlayerViewModel(val repo: Repository,
 
     fun getCameraId() = cv.cameraId
 
-    fun getVideoSize() = cv.getVideoSize()
+    fun getInputVideoSize() = cv.getInputVideoSize()
 
-    private fun sendCommand(cmd: Int, width: Int = 0, height: Int = 0) {
-        val liveData = VxCoreLiveData()
-        liveData.cmd = AppConst.LIVE_DATA_CMD_CAMERA
-        liveData.cameraCmd = cmd
-        liveData.width = width
-        liveData.height = height
-        _core.value = liveData
-    }
+    fun getDebugInfo(previewWidth: Int, previewHeight: Int) = cv.getDebugInfo(previewWidth, previewHeight)
+
+    fun poseEstimate(bitmap: Bitmap, callback: PoseMachine.DataProcessCallback) = cv.poseEstimate(bitmap, callback)
 
     override fun onCleared() {
         Log.i(TAG, "onCleared()")
         cv.destroyCamera()
-        mr.destroy()
+        VxCoreObserver.deleteObservers()
         super.onCleared()
     }
 }

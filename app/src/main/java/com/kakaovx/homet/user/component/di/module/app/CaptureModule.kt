@@ -12,10 +12,10 @@ import javax.inject.Named
 class CaptureModule {
 
     @Provides
-    fun provideCamera(@Named("appContext") ctx: Context): VxCamera
-            = VxCamera(ctx)
-
-    @Provides
     fun provideMotionRecognition(app: Application, @Named("appContext") ctx: Context): VxMotionRecognition
             = VxMotionRecognition(app, ctx)
+
+    @Provides
+    fun provideCamera(@Named("appContext") ctx: Context, mr: VxMotionRecognition): VxCamera
+            = VxCamera(ctx, mr)
 }

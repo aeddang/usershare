@@ -7,6 +7,5 @@ class VxCoreLiveData {
     var cmd: Int = AppConst.LIVE_DATA_CMD_NONE
     var cameraCmd: Int = AppConst.HOMET_CAMERA_CMD_NONE
     var message: String? = null
-    var width: Int = 0
-    var height: Int = 0
+    var data: IntArray? = null
 }

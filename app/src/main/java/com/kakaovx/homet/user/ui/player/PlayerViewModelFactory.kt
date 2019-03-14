@@ -4,14 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.component.vxcore.VxCamera
-import com.kakaovx.homet.user.component.vxcore.VxMotionRecognition
 
 class PlayerViewModelFactory(private val repo: Repository,
-                             private val motionRecognition: VxMotionRecognition,
                              private val camera: VxCamera): ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return PlayerViewModel(repo, motionRecognition, camera) as T
+        return PlayerViewModel(repo, camera) as T
     }
 }

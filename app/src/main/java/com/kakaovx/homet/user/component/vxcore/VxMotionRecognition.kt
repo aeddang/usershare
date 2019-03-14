@@ -2,10 +2,12 @@ package com.kakaovx.homet.user.component.vxcore
 
 import android.app.Application
 import android.content.Context
+import android.graphics.Bitmap
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.posemachine.MaceWrapper
 import com.kakaovx.posemachine.PoseMachine
+import java.util.ArrayList
 
 class VxMotionRecognition(val app: Application, val context: Context) {
 
@@ -37,4 +39,14 @@ class VxMotionRecognition(val app: Application, val context: Context) {
     fun getInputWidth() = poseMachine?.inputWidth ?: AppFeature.APP_FEATURE_VIDEO_WIDTH
 
     fun getInputHeight() = poseMachine?.inputHeight ?: AppFeature.APP_FEATURE_VIDEO_HEIGHT
+
+    fun getDebugInfo(previewWidth: Int, previewHeight: Int) = poseMachine?.getDebugInfo(previewWidth, previewHeight)
+
+    fun poseEstimate(bitmap: Bitmap, callback: PoseMachine.DataProcessCallback): ArrayList<Array<FloatArray>>? {
+        val lStartTime = System.currentTimeMillis()
+        val data = poseMachine?.poseEstimate(bitmap, callback)
+        val elapseTime = System.currentTimeMillis() - lStartTime
+        Log.d(TAG, "poseEstimate() elapseTime = [$elapseTime]ms")
+        return data
+    }
 }
