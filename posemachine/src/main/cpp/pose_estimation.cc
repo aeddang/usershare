@@ -44,7 +44,7 @@ struct MaceContext {
   mace::DeviceType device_type = mace::DeviceType::CPU;
   std::map<std::string, ModelInfo> model_infos = {
       {"personlab", {"MobilenetV1/input_1", {"tower0/Top/kp_maps/Sigmoid", "tower0/Top/short_offsets/BiasAdd", "tower0/Top/mid_offsets/BiasAdd"},
-                            {1, 304, 304, 3}, {{1, 19, 19, 17}, {1, 19, 19, 34}, {1, 19, 19, 72}}}},
+                            {1, 224, 224, 3}, {{1, 14, 14, 17}, {1, 14, 14, 34}, {1, 14, 14, 72}}}},
   };
 };
 
@@ -201,20 +201,20 @@ Java_com_xiaomi_mace_JniMaceUtils_macePersonlabEstimate(
                       std::multiplies<int64_t>());
 
   //  load input
-    jfloat *input_data_ptr = env->GetFloatArrayElements(input_data, nullptr);
-    if (input_data_ptr == nullptr) {
-        __android_log_print(ANDROID_LOG_ERROR,
-                            "VX_pose_estimation",
-                            "Invalid input ptr");
-        return JNI_ERR; //return nullptr;
-    }
-    jsize length = env->GetArrayLength(input_data);
-    if (length != input_size) {
-        __android_log_print(ANDROID_LOG_ERROR,
-                            "VX_pose_estimation",
-                            "Invalid length");
-        return JNI_ERR; //return nullptr;
-    }
+  jfloat *input_data_ptr = env->GetFloatArrayElements(input_data, nullptr);
+  if (input_data_ptr == nullptr) {
+    __android_log_print(ANDROID_LOG_ERROR,
+                      "VX_pose_estimation",
+                      "Invalid input ptr");
+    return JNI_ERR; //return nullptr;
+  }
+  jsize length = env->GetArrayLength(input_data);
+  if (length != input_size) {
+    __android_log_print(ANDROID_LOG_ERROR,
+                      "VX_pose_estimation",
+                      "Invalid length");
+    return JNI_ERR; //return nullptr;
+  }
 
   std::map<std::string, mace::MaceTensor> inputs;
   std::map<std::string, mace::MaceTensor> outputs;

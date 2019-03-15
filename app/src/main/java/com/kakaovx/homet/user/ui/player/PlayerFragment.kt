@@ -403,7 +403,7 @@ class PlayerFragment : DaggerFragment() {
         Log.i(TAG, "window orientation : [${AppUtil.getScreenOrientation(displayRotation)}]")
 
         val calOrientation = if (viewModel.isFrontCamera()) {
-            sensorOrientation - AppUtil.getScreenOrientation(displayRotation) - 180
+            sensorOrientation - AppUtil.getScreenOrientation(displayRotation)
         } else {
             sensorOrientation - AppUtil.getScreenOrientation(displayRotation)
         }
@@ -418,6 +418,11 @@ class PlayerFragment : DaggerFragment() {
             previewSize.width, previewSize.height,
             inputVideoSize.width, inputVideoSize.height,
             calOrientation, true)
+
+        if (viewModel.isFrontCamera()) {
+            // front facing only
+            frameToCropTransform?.postScale(1f, -1f, (inputVideoSize.width / 2).toFloat(), (inputVideoSize.height / 2).toFloat())
+        }
 
         cropToFrameTransform = Matrix()
         frameToCropTransform?.invert(cropToFrameTransform)

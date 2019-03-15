@@ -13,10 +13,10 @@ cmake_minimum_required(VERSION 3.4.1)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(LIB_PATH ${CMAKE_SOURCE_DIR}/../../../libs/${CMAKE_ANDROID_ARCH_ABI})
-set(MACE_LIB ${LIB_PATH}/libmace.so)
+set(MACE_LIB ${LIB_PATH}/libmace.a)
 set(PERSON_LIB ${LIB_PATH}/personlab.a)
 
-add_library (mace_lib SHARED IMPORTED)
+add_library (mace_lib STATIC IMPORTED)
 set_target_properties(mace_lib PROPERTIES IMPORTED_LOCATION ${MACE_LIB})
 
 add_library (personlab_lib STATIC IMPORTED)
