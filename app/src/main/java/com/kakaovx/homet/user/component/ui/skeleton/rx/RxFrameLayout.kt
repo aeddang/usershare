@@ -17,13 +17,13 @@ abstract class RxFrameLayout : FrameLayout, Rx, Page {
 
     private fun init(context: Context) {
         LayoutInflater.from(context).inflate(getLayoutResId(), this, true)
-        onCreated()
     }
 
     @CallSuper
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         disposables = CompositeDisposable()
+        onCreated()
         onAttached()
         onSubscribe()
     }
@@ -34,5 +34,6 @@ abstract class RxFrameLayout : FrameLayout, Rx, Page {
         disposables?.clear()
         disposables = null
         onDetached()
+        onDestroyed()
     }
 }

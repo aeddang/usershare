@@ -27,6 +27,7 @@ buildscript {
         okHttpVersion = '3.4.1'
         daggerVersion = '2.20'
         glideVersion = '4.9.0'
+        exoplayerVersion = '2.9.6'
         stethoVersion = '1.5.0'
         leakcanaryVersion = '1.6.3'
         gsonVersion = '2.8.2'

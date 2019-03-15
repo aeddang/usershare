@@ -16,6 +16,7 @@ abstract class PageDividedGestureFragment: PageGestureFragment(), ViewTreeObserv
         super.onCreated()
         dividedView = getDividedView()
         dividedView.viewTreeObserver.addOnGlobalLayoutListener(this)
+        player.load("http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4")
     }
 
     @CallSuper
