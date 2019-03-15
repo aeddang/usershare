@@ -106,6 +106,14 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 
     /**
+     * Exoplayer
+     */
+    implementation "com.google.android.exoplayer:exoplayer:$rootProject.exoplayerVersion"
+    implementation "com.google.android.exoplayer:exoplayer-core:$rootProject.exoplayerVersion"
+    implementation "com.google.android.exoplayer:exoplayer-dash:$rootProject.exoplayerVersion"
+    implementation "com.google.android.exoplayer:exoplayer-hls:$rootProject.exoplayerVersion"
+    implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$rootProject.exoplayerVersion"
+    /**
      * GSON
      */
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"

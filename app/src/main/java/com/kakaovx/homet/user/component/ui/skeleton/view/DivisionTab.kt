@@ -51,8 +51,7 @@ abstract class DivisionTab<T> : RxLinearLayout {
         }}
     }
 
-    override fun onDetached() {
-        super.onDetached()
+    override fun onDestroyed() {
         delegate = null
     }
 
