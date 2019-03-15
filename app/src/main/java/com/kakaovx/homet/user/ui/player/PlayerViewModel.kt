@@ -16,9 +16,9 @@ import com.kakaovx.homet.user.component.network.model.WorkoutData
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.component.vxcore.VxCamera
 import com.kakaovx.homet.user.constant.AppConst
+import com.kakaovx.homet.user.util.AppDeviceExecutor
 import com.kakaovx.homet.user.util.Log
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 
@@ -39,9 +39,11 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
 
     private val _coreData: BehaviorSubject<VxCoreLiveData> = BehaviorSubject.create()
 
+    private var deviceIO: AppDeviceExecutor? = null
     private var isProcessingImage: Boolean = false
 
     fun intCaptureView() {
+        deviceIO = AppDeviceExecutor()
         cv.initVxCamera()
         VxCoreObserver.addObserver{ observable, _ ->
             if (observable is VxCoreObserver) {
@@ -86,13 +88,14 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
 
     fun processImage(previewSize: Size, frameToCropTransform: Matrix?,
                      rgbFrameBitmap: Bitmap?, croppedBitmap: Bitmap?): Disposable {
-        return _coreData.subscribeOn(Schedulers.io())
-            .map { coreData ->
+        return _coreData.map { coreData ->
                 if (coreData.cmd == AppConst.LIVE_DATA_CMD_CAMERA) {
                     when (coreData.cameraCmd) {
                         AppConst.HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE -> {
                             coreData.data?.let {
-                                poseEstimate(it, previewSize, frameToCropTransform, rgbFrameBitmap, croppedBitmap)
+                                deviceIO?.execute {
+                                    poseEstimate(it, previewSize, frameToCropTransform, rgbFrameBitmap, croppedBitmap)
+                                }
                             }
                         }
                         else -> {
@@ -103,10 +106,7 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
                     Log.e(TAG, "wrong cmd")
                 }
             }
-            .subscribe {
-//                val lines = getDebugInfo(previewSize.width, previewSize.height)
-//                Log.d(TAG, "processImage() getDebugInfo[$lines]")
-            }
+            .subscribe()
     }
 
 //    fun poseEstimate(bitmap: Bitmap, callback: PoseMachine.DataProcessCallback) = cv.poseEstimate(bitmap, callback)
@@ -115,7 +115,7 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
     private fun poseEstimate(data: IntArray, previewSize: Size,
                              frameToCropTransform: Matrix?,
                              rgbFrameBitmap: Bitmap?, croppedBitmap: Bitmap?) {
-//        Log.d(TAG, "processImage() Thread id = [${Thread.currentThread().id}]")
+//        Log.d(TAG, "poseEstimate() Thread id = [${Thread.currentThread().id}]")
 
         rgbFrameBitmap ?: return
         croppedBitmap ?: return
@@ -143,6 +143,7 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
         Log.i(TAG, "onCleared()")
         cv.destroyCamera()
         VxCoreObserver.deleteObservers()
+        deviceIO?.shutdown()
         super.onCleared()
     }
 }
