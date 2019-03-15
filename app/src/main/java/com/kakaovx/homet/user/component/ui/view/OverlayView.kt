@@ -6,18 +6,20 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import java.util.*
+import kotlin.collections.ArrayList
 
 class OverlayView : View {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
     private val callbacks = LinkedList<DrawCallback>()
+    val pose: ArrayList<Array<FloatArray>> = ArrayList()
 
     /**
      * Interface defining the callback for client classes.
      */
     interface DrawCallback {
-        fun drawCallback(canvas: Canvas)
+        fun drawCallback(canvas: Canvas, pose: ArrayList<Array<FloatArray>>)
     }
 
     fun addCallback(callback: DrawCallback) {
@@ -28,7 +30,8 @@ class OverlayView : View {
     @Synchronized
     override fun draw(canvas: Canvas) {
         for (callback in callbacks) {
-            callback.drawCallback(canvas)
+            callback.drawCallback(canvas, pose)
+            pose.clear()
         }
     }
 }

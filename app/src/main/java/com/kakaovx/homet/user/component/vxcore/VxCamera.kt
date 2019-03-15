@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -54,6 +55,7 @@ class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
 
     private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
         deviceIO?.execute {
+//            Log.d(TAG, "onImageAvailable() Thread id = [${Thread.currentThread().id}]")
             val image: Image? = it.acquireNextImage()
             image?.let {
                 val liveData = VxCoreLiveData()
@@ -191,6 +193,9 @@ class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
         frontCameraId?.apply {
             cameraId = frontCameraId
         }
+//        backCameraId?.apply {
+//            cameraId = backCameraId
+//        }
     }
 
     private fun setupCamera() {
@@ -217,6 +222,11 @@ class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
             val surfaceTexture = if (existView) surfaceTexture else dummySurfaceTexture
 
             surfaceTexture?.let {
+                // We configure the size of default buffer to be the size of camera preview we want.
+                surfaceTexture.setDefaultBufferSize(videoWidth, videoHeight)
+
+                Log.i(TAG, "Opening camera preview: $videoWidth x $videoHeight")
+
                 imageReader?.apply {
                     val mySurface = Surface(it)
                     // We set up a CaptureRequest.Builder with the output Surface.
@@ -238,9 +248,20 @@ class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
                                 // When the session is ready, we start displaying the preview.
                                 captureSession = cameraCaptureSession
                                 try {
+//                                    // Auto focus should be continuous for camera preview.
+//                                    previewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
+//                                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+
                                     // Auto focus should be continuous for camera preview.
-                                    previewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+                                    previewRequestBuilder.set(
+                                        CaptureRequest.CONTROL_AF_MODE,
+                                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
+                                    )
+                                    // Flash is automatically enabled when necessary.
+                                    previewRequestBuilder.set(
+                                        CaptureRequest.CONTROL_AE_MODE,
+                                        CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH
+                                    )
 
                                     // Finally, we start displaying the camera preview.
                                     previewRequest = previewRequestBuilder.build()
@@ -338,7 +359,13 @@ class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
 
     fun getDebugInfo(previewWidth: Int, previewHeight: Int) = mr.getDebugInfo(previewWidth, previewHeight)
 
-    fun poseEstimate(bitmap: Bitmap, callback: PoseMachine.DataProcessCallback) = mr.poseEstimate(bitmap, callback)
+    fun drawPose(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) = mr.drawPose(canvas, pose)
+
+    fun poseEstimate(bitmap: Bitmap): ArrayList<Array<FloatArray>>?  {
+        return mr.poseEstimate(bitmap, PoseMachine.DataProcessCallback {
+            //            Log.d(TAG, "onBitmapPrepared()")
+        })
+    }
 
     fun destroyCamera() {
         Log.d(TAG, "destroyCamera()")

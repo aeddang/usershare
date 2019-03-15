@@ -109,7 +109,7 @@ Java_com_xiaomi_mace_JniMaceUtils_macePersonlabCreateEngine(
       true);
   if (status != mace::MaceStatus::MACE_SUCCESS) {
     __android_log_print(ANDROID_LOG_ERROR,
-                        "pose_estimation attrs",
+                        "VX_pose_estimation attrs",
                         "openmp result: %s, threads: %d, cpu: %d",
                         status.information().c_str(), omp_num_threads,
                         cpu_affinity_policy);
@@ -120,13 +120,13 @@ Java_com_xiaomi_mace_JniMaceUtils_macePersonlabCreateEngine(
         static_cast<mace::GPUPerfHint>(gpu_perf_hint),
         static_cast<mace::GPUPriorityHint>(gpu_priority_hint));
     __android_log_print(ANDROID_LOG_INFO,
-                        "pose_estimation attrs",
+                        "VX_pose_estimation attrs",
                         "gpu perf: %d, priority: %d",
                         gpu_perf_hint, gpu_priority_hint);
   }
 
   __android_log_print(ANDROID_LOG_INFO,
-                      "pose_estimation attrs",
+                      "VX_pose_estimation attrs",
                       "device: %d",
                       mace_context.device_type);
 
@@ -141,7 +141,7 @@ Java_com_xiaomi_mace_JniMaceUtils_macePersonlabCreateEngine(
       mace_context.model_infos.find(mace_context.model_name);
   if (model_info_iter == mace_context.model_infos.end()) {
     __android_log_print(ANDROID_LOG_ERROR,
-                        "pose_estimation",
+                        "VX_pose_estimation",
                         "Invalid model name: %s",
                         mace_context.model_name.c_str());
     return JNI_ERR;
@@ -158,7 +158,7 @@ Java_com_xiaomi_mace_JniMaceUtils_macePersonlabCreateEngine(
                                &mace_context.engine);
 
   __android_log_print(ANDROID_LOG_INFO,
-                      "pose_estimation attrs",
+                      "VX_pose_estimation attrs",
                       "create result: %s",
                       create_engine_status.information().c_str());
 
@@ -176,7 +176,7 @@ Java_com_xiaomi_mace_JniMaceUtils_macePersonlabEstimate(
       mace_context.model_infos.find(mace_context.model_name);
   if (model_info_iter == mace_context.model_infos.end()) {
     __android_log_print(ANDROID_LOG_ERROR,
-                        "pose_estimation",
+                        "VX_pose_estimation",
                         "Invalid model name: %s",
                         mace_context.model_name.c_str());
     //return nullptr;
@@ -201,10 +201,20 @@ Java_com_xiaomi_mace_JniMaceUtils_macePersonlabEstimate(
                       std::multiplies<int64_t>());
 
   //  load input
-  jfloat *input_data_ptr = env->GetFloatArrayElements(input_data, nullptr);
-  if (input_data_ptr == nullptr) return JNI_ERR; //return nullptr;
-  jsize length = env->GetArrayLength(input_data);
-  if (length != input_size) return JNI_ERR; //return nullptr;
+    jfloat *input_data_ptr = env->GetFloatArrayElements(input_data, nullptr);
+    if (input_data_ptr == nullptr) {
+        __android_log_print(ANDROID_LOG_ERROR,
+                            "VX_pose_estimation",
+                            "Invalid input ptr");
+        return JNI_ERR; //return nullptr;
+    }
+    jsize length = env->GetArrayLength(input_data);
+    if (length != input_size) {
+        __android_log_print(ANDROID_LOG_ERROR,
+                            "VX_pose_estimation",
+                            "Invalid length");
+        return JNI_ERR; //return nullptr;
+    }
 
   std::map<std::string, mace::MaceTensor> inputs;
   std::map<std::string, mace::MaceTensor> outputs;

@@ -21,7 +21,9 @@ object AppPermissionManager {
 
     fun checkPermissions(ctx: Context): Boolean {
         var ret = false
-        if (checkPermission(ctx, Manifest.permission.CAMERA)) {
+        if (checkPermission(ctx, Manifest.permission.CAMERA)
+            && checkPermission(ctx, Manifest.permission.READ_EXTERNAL_STORAGE)
+            && checkPermission(ctx, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             ret = true
         }
         return ret
@@ -29,8 +31,9 @@ object AppPermissionManager {
 
     fun requestPermissions(activity: AppCompatActivity): Boolean {
         val ret = false
-        val userPermissions = arrayOf(
-            Manifest.permission.CAMERA)
+        val userPermissions = arrayOf(Manifest.permission.CAMERA,
+                                      Manifest.permission.READ_EXTERNAL_STORAGE,
+                                      Manifest.permission.WRITE_EXTERNAL_STORAGE)
         ActivityCompat.requestPermissions(activity, userPermissions, PERMISSIONS_REQUEST_CODE)
         return ret
     }

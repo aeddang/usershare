@@ -19,7 +19,7 @@ class SplashFragment : DaggerFragment() {
 
     val TAG = javaClass.simpleName
 
-    private val disposables = AppFragmentAutoClearedDisposable(this)
+    private val viewDisposables = AppFragmentAutoClearedDisposable(this)
 
     @Inject
     lateinit var viewModelFactory: SplashViewModelFactory
@@ -46,6 +46,7 @@ class SplashFragment : DaggerFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lifecycle += viewDisposables
         Log.d(TAG, "onCreate()")
     }
 
@@ -66,11 +67,11 @@ class SplashFragment : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory)[SplashViewModel::class.java]
 
-        disposables += viewModel.startLogin(autoLogin)
+        viewDisposables += viewModel.startLogin(autoLogin)
 
         viewModel.autoLoginResponse.observe(this, Observer {
             when (it) {
-                true -> disposables += viewModel.startLoginProcess()
+                true -> viewDisposables += viewModel.startLoginProcess()
                 false -> viewModel.startLoginForm()
             }
         })

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Size
+import android.view.Surface
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import com.kakaovx.homet.user.constant.AppConst
@@ -88,6 +89,14 @@ object AppUtil {
             }
         }
     }
+
+    fun getScreenOrientation(rotation: Int) =
+        when (rotation) {
+            Surface.ROTATION_270 -> 270
+            Surface.ROTATION_180 -> 180
+            Surface.ROTATION_90 -> 90
+            else -> 0
+        }
 }
 
 /**

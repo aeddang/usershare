@@ -16,4 +16,7 @@ object AppFeature {
      */
     const val APP_FEATURE_VIDEO_WIDTH = 304
     const val APP_FEATURE_VIDEO_HEIGHT = 304
+
+    const val APP_FEATURE_TEXT_SIZE_DIP = 10.toFloat()
+
 }

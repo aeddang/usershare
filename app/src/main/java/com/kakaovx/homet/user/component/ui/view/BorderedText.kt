@@ -1,6 +1,7 @@
 package com.kakaovx.homet.user.component.ui.view
 
 import android.graphics.*
+import com.kakaovx.homet.user.util.Log
 import java.util.*
 
 /**
@@ -8,10 +9,11 @@ import java.util.*
  */
 class BorderedText {
 
+    val TAG = javaClass.simpleName
+
     private val interiorPaint: Paint = Paint()
     private val exteriorPaint: Paint = Paint()
-    private val textSize: Float = 0.toFloat()
-
+    private var textSize: Float = 0.toFloat()
 
     /**
      * Create a bordered text object with the specified interior and exterior colors, text size and
@@ -22,6 +24,7 @@ class BorderedText {
      * @param textSize text size in pixels
      */
     constructor(interiorColor: Int, exteriorColor: Int, textSize: Float) {
+        Log.d(TAG, "BorderedText() textSize = [$textSize]")
         interiorPaint.textSize = textSize
         interiorPaint.color = interiorColor
         interiorPaint.style = Paint.Style.FILL
@@ -34,6 +37,8 @@ class BorderedText {
         exteriorPaint.strokeWidth = textSize / 8
         exteriorPaint.isAntiAlias = false
         exteriorPaint.alpha = 255
+
+        this.textSize = textSize
     }
 
     /**
@@ -49,16 +54,23 @@ class BorderedText {
         exteriorPaint.typeface = typeface
     }
 
-    fun drawText(canvas: Canvas, posX: Float, posY: Float, text: String) {
+    private fun drawText(canvas: Canvas, posX: Float, posY: Float, text: String) {
         canvas.drawText(text, posX, posY, exteriorPaint)
         canvas.drawText(text, posX, posY, interiorPaint)
     }
 
     fun drawLines(canvas: Canvas, posX: Float, posY: Float, lines: Vector<String>) {
-        var lineNum = 0
-        for (line in lines) {
-            drawText(canvas, posX, posY - textSize * (lines.size - lineNum - 1), line)
-            ++lineNum
+        for ((lineNum, line) in lines.withIndex()) {
+            val x = posX
+            val y = posY - textSize * (lines.size - lineNum - 1)
+//            Log.d(TAG, "drawLines() testSize[$textSize]")
+//            Log.d(TAG, "drawLines() lines.size[${lines.size}]")
+//            Log.d(TAG, "drawLines() lineNum[$lineNum]")
+//            Log.d(TAG, "drawLines() X[$x]")
+//            Log.d(TAG, "drawLines() Y[$y]")
+//            Log.d(TAG, "drawLines() VALUE[$line]")
+
+            drawText(canvas, x, y, line)
         }
     }
 
