@@ -2,6 +2,7 @@ package com.kakaovx.homet.lib.page
 
 class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presenter<T> {
 
+    override var activity: Activity? = null
     companion object {
         internal const val TAG = "PagePresenter"
         private  var currentInstance:Any? = null
@@ -14,6 +15,7 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
     fun onDestroy() {
         model.onDestroy()
         view = null
+        activity = null
     }
 
     var isNavigationShow = false
@@ -77,12 +79,12 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
 
     override fun hasPermissions( permissions: Array<String> ): Boolean {
         view?.let { v ->
-            v.hasPermissions( permissions )?.let { it.first }
+            v.hasPermissions( permissions )?.let { return it.first }
         }
         return false
     }
-    override fun requestPermission( permissions: Array<out String> ){
-        view?.requestPermission(permissions)
+    override fun requestPermission( permissions: Array<out String>, requester:PageRequestPermission){
+        view?.requestPermission(permissions, requester)
     }
 
 

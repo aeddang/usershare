@@ -21,7 +21,8 @@ class PageTest : RxPageFragment() {
     }
 
     fun onTest(v: Unit) {
-        PagePresenter.getInstance<PageID>().openPopup(PageID.TEST_POP, null, image, "testAni")
+        //PagePresenter.getInstance<PageID>().openPopup(PageID.TEST_POP, null, image, "testAni")
+        PagePresenter.getInstance<PageID>().openPopup(PageID.POPUP_PLAYER, null, image, "testAni")
     }
 
     override fun getLayoutResId(): Int {
@@ -31,5 +32,7 @@ class PageTest : RxPageFragment() {
     override fun onDestroyed() {
         super.onDestroyed()
     }
+
+
 
 }

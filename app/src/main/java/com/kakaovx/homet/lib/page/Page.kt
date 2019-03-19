@@ -16,7 +16,12 @@ interface Page {
     fun onDestroyed()
 }
 
+interface PageRequestPermission {
+    fun onRequestPermissionResult(resultAll:Boolean ,  permissions: List<out Boolean>?){}
+}
+
 interface Presenter<T> {
+    var activity:Activity?
     fun goHome(idx:Int = 0)
     fun goBack()
     fun toggleNavigation()
@@ -29,13 +34,16 @@ interface Presenter<T> {
     fun pageStart(id:T): Presenter<T>
     fun pageChange(id:T,param:Map<String, Any>? = null, sharedElement:View? = null, transitionName:String? = null): Presenter<T>
     fun hasPermissions( permissions: Array<String> ): Boolean
-    fun requestPermission( permissions: Array<out String> )
+    fun requestPermission( permissions: Array<out String>, requester:PageRequestPermission )
 }
 
-interface View<T> {
+interface Activity {
     fun getCurrentPageFragment(): PageFragment?
     fun getCurrentFragment(): PageFragment?
     fun getPageAreaSize():Pair<Float,Float>
+}
+
+interface View<T> {
     fun onClearPageHistory()
     fun onPageStart(id:T)
     fun onBack()
@@ -46,7 +54,7 @@ interface View<T> {
     fun onShowNavigation(){}
     fun onHideNavigation(){}
     fun hasPermissions( permissions: Array<out String> ):  Pair< Boolean, List<out Boolean>>?
-    fun requestPermission( permissions: Array<out String> )
+    fun requestPermission( permissions: Array<out String> , requester:PageRequestPermission)
 }
 
 interface Model<T> {

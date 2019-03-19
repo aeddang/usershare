@@ -38,6 +38,7 @@ class Gesture(var delegate: Delegate?, private val isVertical: Boolean, private 
     private var startDistance = 0f
     private val changeRotate = 30f
     private val longTime = 2L
+    private val moveMin = 3
     private val changeMin = 10
     private val changeMax = 50
 
@@ -121,12 +122,12 @@ class Gesture(var delegate: Delegate?, private val isVertical: Boolean, private 
             change = changePosA[0]
             // Log.i("t","change.x "+change.x+" -  change.y "+change.y)
             if (Math.abs(change.x) > Math.abs(change.y)) {
-                if (isHorizontal) trigger = false
+                if (isHorizontal) trigger = Math.abs(change.x) <= moveMin
                 moveType = MoveType.HORIZONTAL
                 if (isHorizontal && len == 1) delegate?.stateChange(this, Type.MOVE_H)
             }
             else if (Math.abs(change.y) > Math.abs(change.x)) {
-                if (isVertical) trigger = false
+                if (isVertical) trigger = Math.abs(change.y) <= moveMin
                 moveType = MoveType.VERTICAL
                 if (isVertical && len == 1) delegate?.stateChange(this, Type.MOVE_V)
             }

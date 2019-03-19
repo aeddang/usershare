@@ -5,9 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <!-- Media Permission -->
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
             android:name=".App"
@@ -34,7 +38,8 @@
 
         <activity
                 android:name=".ui.MainActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                android:configChanges="orientation|keyboard|screenSize">
             <intent-filter>
                 <action android:name="com.kakaovx.homet.user.action.HOMET_MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>

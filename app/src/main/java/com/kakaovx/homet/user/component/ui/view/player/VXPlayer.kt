@@ -7,20 +7,12 @@ import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.view.player.Player
 import kotlinx.android.synthetic.main.ui_player.view.*
 
-class VXplayer: Player {
+class VXPlayer: Player {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-    override fun getAppName(): Int {
-        return R.string.app_name
-    }
-
-    override fun getLayoutResId(): Int {
-        return R.layout.ui_player
-    }
-
-    override fun getPlayerView(): PlayerView {
-        return playerView
-    }
+    override fun getAppName(): Int { return R.string.app_name }
+    override fun getLayoutResId(): Int { return R.layout.ui_player }
+    override fun getPlayerView(): PlayerView { return playerView }
 
 }

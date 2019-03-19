@@ -15,14 +15,9 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import java.util.*
-import androidx.core.app.ActivityCompat
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
-
-
-abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page {
+abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
 
     private val TAG = javaClass.simpleName
     open lateinit var pagePresenter: PagePresenter<T>;  protected set
@@ -43,7 +38,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page {
     private var currentPage: T? = null
     private val historys = Stack< Pair< T, Map< String, Any >? >> ()
     private val popups = ArrayList<T>()
-    private var currentRequestPermissions = HashMap< Int , Array<String>>()
+    private var currentRequestPermissions = HashMap< Int , PageRequestPermission >()
 
 
     @CallSuper
@@ -53,6 +48,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page {
         model.homes = getHomes()
         model.backStacks = getBackStacks()
         pagePresenter = PagePresenter(this, model)
+        pagePresenter.activity = this
         setContentView(getLayoutResId())
         pageArea = findViewById(getPageAreaId())
         onCreated()
@@ -85,39 +81,44 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page {
         val permissionResults = ArrayList< Boolean >()
         var resultAll = true
         for (permission in permissions) {
-            val grant =  checkSelfPermission( permission ) != PackageManager.PERMISSION_GRANTED
+            val grant =  checkSelfPermission( permission ) == PackageManager.PERMISSION_GRANTED
             permissionResults.add ( grant )
             if( !grant ) resultAll = false
         }
         return Pair(resultAll, permissionResults )
     }
 
-    override fun requestPermission( permissions: Array<out String> )
+    override fun requestPermission( permissions: Array<out String>, requester:PageRequestPermission )
     {
+        val grantResult = currentRequestPermissions.size
+        currentRequestPermissions[ grantResult ] = requester
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            requestPermissionResult( true )
+            requestPermissionResult( grantResult, true )
             return
         }
+
         hasPermissions(permissions)?.let {
+
             if ( !it.first ) {
-                val grantResult = currentRequestPermissions.size
-                currentRequestPermissions[ grantResult ]
+
                 requestPermissions( permissions, grantResult)
+            } else {
+                requestPermissionResult(grantResult, true )
             }
-            else requestPermissionResult( true )
         }
     }
 
-    private fun requestPermissionResult( resultAll:Boolean , permissions: List<out Boolean>? = null )
+    private fun requestPermissionResult(requestCode: Int, resultAll:Boolean , permissions: List<out Boolean>? = null )
     {
-        getCurrentPageFragment()?.requestPermissionResult(resultAll, permissions)
+        currentRequestPermissions[ requestCode ]?.onRequestPermissionResult(resultAll, permissions)
+        currentRequestPermissions.remove(requestCode)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
     {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-        hasPermissions(permissions)?.let { requestPermissionResult(it.first, it.second) }
+        hasPermissions(permissions)?.let { requestPermissionResult(requestCode, it.first, it.second) }
     }
 
     override fun getCurrentPageFragment(): PageFragment? {

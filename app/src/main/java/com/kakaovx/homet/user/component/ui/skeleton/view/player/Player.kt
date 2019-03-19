@@ -21,26 +21,32 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
 
-
 abstract class Player : RxFrameLayout, Player.EventListener, VideoListener {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-    private lateinit var viewModel:PlayerViewModel
+    companion object {
+        private  var viewModelInstance: PlayerViewModel? = null
+        fun getViewmodel(): PlayerViewModel {
+            if(viewModelInstance == null) viewModelInstance = PlayerViewModel()
+            return viewModelInstance!!
+        }
+    }
+    private var viewModel:PlayerViewModel = com.kakaovx.homet.user.component.ui.skeleton.view.player.Player.getViewmodel()
     private var player: SimpleExoPlayer? = null
-    private lateinit var playerView:PlayerView
+    private var playerView:PlayerView? = null
     protected open fun getUserAgent(): String { return "AwesomePlayer" }
     @StringRes abstract fun getAppName():Int
     abstract fun getPlayerView(): PlayerView
     override fun onCreated() {
-        viewModel = PlayerViewModel()
-        playerView = getPlayerView()
-        initPlayer()
     }
 
     override fun onDestroyed() {
         releasePlayer()
-        viewModel.destroy()
+    }
+
+    open fun onInit(){
+        initPlayer()
     }
 
     open fun onPause(){
@@ -48,21 +54,21 @@ abstract class Player : RxFrameLayout, Player.EventListener, VideoListener {
     }
 
     open fun onResume() {
-        if( this.viewModel == null ) return
         initPlayer()
     }
 
-    private fun initPlayer() {
+    fun initPlayer() {
         if( player != null ) return
+        playerView = getPlayerView()
         player = ExoPlayerFactory.newSimpleInstance(context)
         player?.addListener( this )
         player?.addVideoListener( this )
-        playerView.player = player
+        playerView?.player = player
         player?.playWhenReady = viewModel.playWhenReady
         player?.seekTo(viewModel.currentWindow, viewModel.playbackPosition)
     }
 
-    private fun releasePlayer() {
+    fun releasePlayer() {
         player?.let {
             viewModel.playbackPosition = it.currentPosition
             viewModel.currentWindow = it.currentWindowIndex
@@ -71,6 +77,7 @@ abstract class Player : RxFrameLayout, Player.EventListener, VideoListener {
             it.removeVideoListener( this )
             it.release()
             player = null
+            playerView = null
         }
     }
     private fun buildDataSource(uri: Uri): MediaSource {
@@ -80,14 +87,17 @@ abstract class Player : RxFrameLayout, Player.EventListener, VideoListener {
 
     private fun buildMediaSource(uri: Uri): MediaSource {
         val userAgent = this.getUserAgent()
-        var extension = uri.lastPathSegment
-        return if (extension.contains("mp3") || extension.contains("mp4")) ExtractorMediaSource.Factory(DefaultHttpDataSourceFactory(userAgent)).createMediaSource(uri)
-        else if (extension.contains("m3u8")) HlsMediaSource.Factory(DefaultHttpDataSourceFactory(userAgent)).createMediaSource(uri)
-        else {
-            val dashChunkSourceFactory = DefaultDashChunkSource.Factory(DefaultHttpDataSourceFactory("ua", DefaultBandwidthMeter()))
-            val manifestDataSourceFactory = DefaultHttpDataSourceFactory(userAgent)
-            DashMediaSource.Factory(dashChunkSourceFactory, manifestDataSourceFactory).createMediaSource(uri)
+        val extension = uri.lastPathSegment
+        extension?.let {
+            return if (it.contains("mp3") || it.contains("mp4")) ExtractorMediaSource.Factory(DefaultHttpDataSourceFactory(userAgent)).createMediaSource(uri)
+            else if (it.contains("m3u8")) HlsMediaSource.Factory(DefaultHttpDataSourceFactory(userAgent)).createMediaSource(uri)
+            else {
+                val dashChunkSourceFactory = DefaultDashChunkSource.Factory(DefaultHttpDataSourceFactory("ua", DefaultBandwidthMeter()))
+                val manifestDataSourceFactory = DefaultHttpDataSourceFactory(userAgent)
+                DashMediaSource.Factory(dashChunkSourceFactory, manifestDataSourceFactory).createMediaSource(uri)
+            }
         }
+        return ExtractorMediaSource.Factory(DefaultHttpDataSourceFactory(userAgent)).createMediaSource(uri)
     }
 
     fun load(videoPath:String, isDataSorce:Boolean = false) {

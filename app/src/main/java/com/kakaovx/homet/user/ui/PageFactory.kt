@@ -34,6 +34,7 @@ class PageFactory {
             PageID.FREE_WORKOUT -> { PageFreeWorkout() }
             PageID.TRAINER -> { PageTrainer() }
             PageID.CONTENT_DETAIL -> { PageContentDetail() }
+            PageID.POPUP_PLAYER -> { PopupPlayer() }
             PageID.TEST -> { PageTest() }
             PageID.TEST_POP -> { PageDividedGestureTest() }
         }
@@ -41,7 +42,7 @@ class PageFactory {
 }
 
 enum class PageID(val resId: Int, override var position: Int = 9999):PagePosition {
-    HOME(R.string.page_home),
+    HOME(R.string.page_home,0),
     CONTENT(R.string.page_content,1),
     PLANNER(R.string.page_planner,2),
     SEARCH(R.string.page_search,3),
@@ -50,6 +51,7 @@ enum class PageID(val resId: Int, override var position: Int = 9999):PagePositio
     FREE_WORKOUT(R.string.page_free_workout,6),
     TRAINER(R.string.page_trainer,7),
     CONTENT_DETAIL(R.string.page_content,8),
+    POPUP_PLAYER(R.string.popup_player),
     TEST(1000000000,9),
     TEST_POP(1000000002)
 }
