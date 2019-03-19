@@ -9,7 +9,6 @@ import android.util.Size
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kakaovx.homet.user.component.model.PageLiveData
 import com.kakaovx.homet.user.component.model.VxCoreLiveData
 import com.kakaovx.homet.user.component.model.VxCoreObserver
 import com.kakaovx.homet.user.component.network.model.WorkoutData
@@ -18,18 +17,17 @@ import com.kakaovx.homet.user.component.vxcore.VxCamera
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.AppDeviceExecutor
 import com.kakaovx.homet.user.util.Log
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewModel() {
 
     val TAG = javaClass.simpleName
 
     private val restApi = repo.restApi
-
-    private val _response: MutableLiveData<PageLiveData> = MutableLiveData()
-    val response: LiveData<PageLiveData> get() = _response
 
     private val _content: MutableLiveData<WorkoutData> = MutableLiveData()
     val content: LiveData<WorkoutData> get() = _content
@@ -38,6 +36,8 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
     val core: LiveData<VxCoreLiveData> get() = _core
 
     private val _coreData: BehaviorSubject<VxCoreLiveData> = BehaviorSubject.create()
+    val isLoading: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
+    val message: BehaviorSubject<String> = BehaviorSubject.create()
 
     private var deviceIO: AppDeviceExecutor? = null
     private var isProcessingImage: Boolean = false
@@ -89,7 +89,7 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
     fun processImage(previewSize: Size, frameToCropTransform: Matrix?,
                      rgbFrameBitmap: Bitmap?, croppedBitmap: Bitmap?): Disposable {
         return _coreData.map { coreData ->
-                if (coreData.cmd == AppConst.LIVE_DATA_CMD_CAMERA) {
+                if (coreData.cmd == AppConst.LIVE_DATA_VX_CMD_CAMERA) {
                     when (coreData.cameraCmd) {
                         AppConst.HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE -> {
                             coreData.data?.let {
@@ -109,13 +109,31 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
             .subscribe()
     }
 
-//    fun poseEstimate(bitmap: Bitmap, callback: PoseMachine.DataProcessCallback) = cv.poseEstimate(bitmap, callback)
+    fun startLoader(): Disposable {
+        val limitTime = 6
+        isLoading.onNext(true)
+        return Observable.interval(1000L, TimeUnit.MILLISECONDS)
+            .take(limitTime.toLong())
+            .map { count ->
+                Log.d(TAG, "count = [$count]")
+                val time = limitTime - count - 1
+                message.onNext(time.toString())
+                if (count > 4) isLoading.onNext(false)
+            }
+            .subscribe { value ->
+                Log.d(TAG, "subscribe complete() = [$value]")
+            }
+    }
+
+    fun getProviderData(exercise_id: String): Disposable {
+        return Observable.just(exercise_id)
+            .subscribe()
+    }
 
     @Synchronized
     private fun poseEstimate(data: IntArray, previewSize: Size,
                              frameToCropTransform: Matrix?,
                              rgbFrameBitmap: Bitmap?, croppedBitmap: Bitmap?) {
-//        Log.d(TAG, "poseEstimate() Thread id = [${Thread.currentThread().id}]")
 
         rgbFrameBitmap ?: return
         croppedBitmap ?: return
@@ -131,7 +149,7 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
 //        pose?.let { Log.d(TAG, "Detect Skeletons: [${it.size}]") }
 
         val liveData = VxCoreLiveData()
-        liveData.cmd = AppConst.LIVE_DATA_CMD_CAMERA
+        liveData.cmd = AppConst.LIVE_DATA_VX_CMD_CAMERA
         liveData.cameraCmd = AppConst.HOMET_CAMERA_CMD_REQUEST_DRAW
         liveData.poseData = pose
         _core.postValue(liveData)

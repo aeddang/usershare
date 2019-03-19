@@ -5,11 +5,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Pair;
 
-import com.kakaovx.posemachine.Keypoints;
-
 import java.util.ArrayList;
 
 public class PosePlot {
+
+    private String TAG = getClass().getSimpleName();
+
     private Paint paint = null;
     private Paint inputRectPaint = null;
 

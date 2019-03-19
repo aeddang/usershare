@@ -59,7 +59,7 @@ class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
             val image: Image? = it.acquireNextImage()
             image?.let {
                 val liveData = VxCoreLiveData()
-                liveData.cmd = AppConst.LIVE_DATA_CMD_CAMERA
+                liveData.cmd = AppConst.LIVE_DATA_VX_CMD_CAMERA
                 liveData.cameraCmd = AppConst.HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE
                 liveData.data = convertYUV420ToARGB8888(it)
                 VxCoreObserver.setData(liveData)

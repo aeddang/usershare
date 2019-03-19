@@ -4,6 +4,12 @@
     <dimen name="item_title_font_size">18sp</dimen>
     <dimen name="item_content_font_size">14sp</dimen>
 
+    <dimen name="font_ultra">45sp</dimen>
+    <dimen name="font_big">20sp</dimen>
+    <dimen name="font_mid">15sp</dimen>
+    <dimen name="font_small">12sp</dimen>
+    <dimen name="font_tiny">10sp</dimen>
+
     <dimen name="area_header">50dp</dimen>
     <dimen name="area_bottom">50dp</dimen>
 
@@ -15,12 +21,6 @@
     <dimen name="margin_mid">15dp</dimen>
     <dimen name="margin_small">10dp</dimen>
     <dimen name="margin_tiny">5dp</dimen>
-
-    <dimen name="font_ultra">45dp</dimen>
-    <dimen name="font_big">20dp</dimen>
-    <dimen name="font_mid">15dp</dimen>
-    <dimen name="font_small">12dp</dimen>
-    <dimen name="font_tiny">10dp</dimen>
 
     <dimen name="card_view_radius">8dp</dimen>
     <dimen name="card_view_height">68dp</dimen>

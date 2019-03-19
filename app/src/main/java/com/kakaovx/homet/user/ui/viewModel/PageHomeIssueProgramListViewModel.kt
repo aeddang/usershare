@@ -35,7 +35,7 @@ class PageHomeIssueProgramListViewModel(repo: Repository) : ViewModel() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { model ->
                         val liveData = PageLiveData()
-                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                        liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
                         liveData.listItemType = AppConst.HOMET_LIST_ITEM_HOME_ISSUE_PROGRAM
                         liveData.homeIssueProgramModel = model
                         response.value = liveData
@@ -45,7 +45,7 @@ class PageHomeIssueProgramListViewModel(repo: Repository) : ViewModel() {
 
     private fun handleComplete(type: Int, data: ArrayList<ResultData>) {
         val liveData = PageLiveData()
-        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+        liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
         liveData.listItemType = type
         liveData.item = data
         response.value = liveData
@@ -53,7 +53,7 @@ class PageHomeIssueProgramListViewModel(repo: Repository) : ViewModel() {
 
     private fun handleComplete(data: ArrayList<ResultData>) {
         val liveData = PageLiveData()
-        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+        liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
         liveData.item = data
         response.value = liveData
     }
