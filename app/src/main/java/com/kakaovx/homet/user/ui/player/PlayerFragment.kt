@@ -8,6 +8,7 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Size
@@ -16,6 +17,16 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.source.dash.DashMediaSource
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.view.BorderedText
 import com.kakaovx.homet.user.component.ui.view.OverlayView
@@ -73,6 +84,7 @@ class PlayerFragment : DaggerFragment() {
 
     private var videoUrl: String? = null
     private var mediaPlayer: MediaPlayer? = null
+    private var exoPlayer: ExoPlayer? = null
 
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, chooses the smallest one whose
@@ -263,6 +275,29 @@ class PlayerFragment : DaggerFragment() {
         viewModel.drawPose(canvas, pose)
     }
 
+    private fun buildMediaSource(uri: Uri): MediaSource {
+        val userAgent = "AwesomePlayer"
+        val extension = uri.lastPathSegment
+        extension?.let {
+            return if (it.contains("mp3") || it.contains("mp4")) ExtractorMediaSource.Factory(
+                DefaultHttpDataSourceFactory(userAgent)
+            ).createMediaSource(uri)
+            else if (it.contains("m3u8")) HlsMediaSource.Factory(DefaultHttpDataSourceFactory(userAgent)).createMediaSource(uri)
+            else {
+                val dashChunkSourceFactory = DefaultDashChunkSource.Factory(DefaultHttpDataSourceFactory("ua", DefaultBandwidthMeter()))
+                val manifestDataSourceFactory = DefaultHttpDataSourceFactory(userAgent)
+                DashMediaSource.Factory(dashChunkSourceFactory, manifestDataSourceFactory).createMediaSource(uri)
+            }
+        }
+        return ExtractorMediaSource.Factory(DefaultHttpDataSourceFactory(userAgent)).createMediaSource(uri)
+    }
+
+    private fun load(videoPath:String) {
+        val uri = Uri.parse(videoPath)
+        val source: MediaSource = buildMediaSource(uri)
+        exoPlayer?.prepare(source)
+    }
+
     private fun initComponent() {
         dataBinding.captureView?.apply {
             viewModel.intCaptureView()
@@ -305,40 +340,74 @@ class PlayerFragment : DaggerFragment() {
             })
         }
         dataBinding.rendererView?.apply {
-            surfaceTextureListener = object: TextureView.SurfaceTextureListener {
-                override fun onSurfaceTextureSizeChanged(texture: SurfaceTexture?, width: Int, height: Int) {
-                    Log.d(TAG, "rendererView onSurfaceTextureSizeChanged()")
-                }
-
-                override fun onSurfaceTextureUpdated(texture: SurfaceTexture?) {
-//                    Log.d(TAG, "rendererView onSurfaceTextureUpdated()")
-                }
-
-                override fun onSurfaceTextureDestroyed(texture: SurfaceTexture?): Boolean {
-                    Log.d(TAG, "rendererView onSurfaceTextureDestroyed()")
-                    return true
-                }
-
-                override fun onSurfaceTextureAvailable(texture: SurfaceTexture?, width: Int, height: Int) {
-                    Log.d(TAG, "rendererView onSurfaceTextureAvailable()")
-                    val surface = Surface(texture)
-                    videoUrl?.let {
-                        mediaPlayer = MediaPlayer()
-                        val audioAttributes = AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_MEDIA)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
-                            .build()
-                        mediaPlayer?.run {
-                            setAudioAttributes(audioAttributes)
-                            setDataSource(it)
-                            setSurface(surface)
-                            prepare()
-                            start()
-                        }
-                    }
+            videoUrl?.let {
+//                mediaPlayer = MediaPlayer()
+//                val audioAttributes = AudioAttributes.Builder()
+//                    .setUsage(AudioAttributes.USAGE_MEDIA)
+//                    .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+//                    .build()
+//                mediaPlayer?.run {
+//                    setAudioAttributes(audioAttributes)
+//                    setDataSource(it)
+//                    setSurface(surface)
+//                    prepare()
+//                    start()
+//                }
+                exoPlayer = ExoPlayerFactory.newSimpleInstance(context)
+                player = exoPlayer
+                exoPlayer?.run {
+                    addListener(object: Player.EventListener{
+                        override fun onTimelineChanged( timeline: Timeline, manifest: Any? ,@Player.TimelineChangeReason reason: Int){}
+                        override fun onTracksChanged( trackGroups: TrackGroupArray, trackSelections: TrackSelectionArray) {}
+                        override fun onLoadingChanged(isLoading: Boolean) {}
+                        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {}
+                        override fun onRepeatModeChanged(@Player.RepeatMode repeatMode: Int) {}
+                        override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {}
+                        override fun onPlayerError(error: ExoPlaybackException) {}
+                        override fun onPositionDiscontinuity(@Player.DiscontinuityReason reason: Int) {}
+                        override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
+                        override fun onSeekProcessed() {}
+                    })
+                    load(it)
+                    playWhenReady = true
                 }
             }
         }
+//        dataBinding.rendererView?.apply {
+//            surfaceTextureListener = object: TextureView.SurfaceTextureListener {
+//                override fun onSurfaceTextureSizeChanged(texture: SurfaceTexture?, width: Int, height: Int) {
+//                    Log.d(TAG, "rendererView onSurfaceTextureSizeChanged()")
+//                }
+//
+//                override fun onSurfaceTextureUpdated(texture: SurfaceTexture?) {
+////                    Log.d(TAG, "rendererView onSurfaceTextureUpdated()")
+//                }
+//
+//                override fun onSurfaceTextureDestroyed(texture: SurfaceTexture?): Boolean {
+//                    Log.d(TAG, "rendererView onSurfaceTextureDestroyed()")
+//                    return true
+//                }
+//
+//                override fun onSurfaceTextureAvailable(texture: SurfaceTexture?, width: Int, height: Int) {
+//                    Log.d(TAG, "rendererView onSurfaceTextureAvailable()")
+//                    val surface = Surface(texture)
+//                    videoUrl?.let {
+//                        mediaPlayer = MediaPlayer()
+//                        val audioAttributes = AudioAttributes.Builder()
+//                            .setUsage(AudioAttributes.USAGE_MEDIA)
+//                            .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+//                            .build()
+//                        mediaPlayer?.run {
+//                            setAudioAttributes(audioAttributes)
+//                            setDataSource(it)
+//                            setSurface(surface)
+//                            prepare()
+//                            start()
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun initSubscribe() {
@@ -382,6 +451,10 @@ class PlayerFragment : DaggerFragment() {
             release()
         }
         mediaPlayer = null
+        exoPlayer?.apply {
+            release()
+        }
+        exoPlayer = null
         super.onDestroy()
     }
 

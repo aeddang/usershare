@@ -112,17 +112,17 @@ class PlayerViewModel(val repo: Repository, private val cv: VxCamera) : ViewMode
     fun startLoader(): Disposable {
         val limitTime = 6
         isLoading.onNext(true)
+        message.onNext((limitTime - 1).toString())
         return Observable.interval(1000L, TimeUnit.MILLISECONDS)
             .take(limitTime.toLong())
             .map { count ->
-                Log.d(TAG, "count = [$count]")
                 val time = limitTime - count - 1
                 message.onNext(time.toString())
-                if (count > 4) isLoading.onNext(false)
             }
-            .subscribe { value ->
-                Log.d(TAG, "subscribe complete() = [$value]")
+            .doOnComplete {
+                isLoading.onNext(false)
             }
+            .subscribe()
     }
 
     fun getProviderData(exercise_id: String): Disposable {
