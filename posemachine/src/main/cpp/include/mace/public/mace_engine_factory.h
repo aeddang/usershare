@@ -1,4 +1,4 @@
-// Copyright 2018 Xiaomi, Inc.  All rights reserved.
+// Copyright 2018 The MACE Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ std::map<std::string, int> model_name_map {
 /// \param engine[out]: output MaceEngine object
 /// \return MaceStatus::MACE_SUCCESS for success, MACE_INVALID_ARGS for wrong arguments,
 ///         MACE_OUT_OF_RESOURCES for resources is out of range.
-MaceStatus CreateMaceEngineFromCode(
+__attribute__((deprecated)) MaceStatus CreateMaceEngineFromCode(
     const std::string &model_name,
     const std::string &model_data_file,
     const std::vector<std::string> &input_nodes,
@@ -78,9 +78,43 @@ MaceStatus CreateMaceEngineFromCode(
       net_def = mace::personlab::CreateNet();
       engine->reset(new mace::MaceEngine(config));
       model_data = mace::personlab::LoadModelData();
-      status = (*engine)->Init(net_def.get(), input_nodes, output_nodes, model_data);
+      status = (*engine)->Init(net_def.get(), input_nodes, output_nodes,
+                               model_data);
       break;
+   default:
+     status = MaceStatus::MACE_INVALID_ARGS;
+  }
 
+  return status;
+}
+
+MaceStatus CreateMaceEngineFromCode(
+    const std::string &model_name,
+    const unsigned char *model_weights_data,
+    const size_t model_weights_data_size,
+    const std::vector<std::string> &input_nodes,
+    const std::vector<std::string> &output_nodes,
+    const MaceEngineConfig &config,
+    std::shared_ptr<MaceEngine> *engine) {
+  // load model
+  if (engine == nullptr) {
+    return MaceStatus::MACE_INVALID_ARGS;
+  }
+  std::shared_ptr<NetDef> net_def;
+  const unsigned char * model_data;
+  (void)model_weights_data;
+  // TODO(yejianwu) Add buffer range checking
+  (void)model_weights_data_size;
+
+  MaceStatus status = MaceStatus::MACE_SUCCESS;
+  switch (model_name_map[model_name]) {
+    case 0:
+      net_def = mace::personlab::CreateNet();
+      engine->reset(new mace::MaceEngine(config));
+      model_data = mace::personlab::LoadModelData();
+      status = (*engine)->Init(net_def.get(), input_nodes, output_nodes,
+                               model_data);
+      break;
    default:
      status = MaceStatus::MACE_INVALID_ARGS;
   }

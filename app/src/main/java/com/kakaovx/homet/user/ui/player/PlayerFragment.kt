@@ -403,7 +403,7 @@ class PlayerFragment : DaggerFragment() {
         Log.i(TAG, "window orientation : [${AppUtil.getScreenOrientation(displayRotation)}]")
 
         val calOrientation = if (viewModel.isFrontCamera()) {
-            sensorOrientation - AppUtil.getScreenOrientation(displayRotation) - 180
+            sensorOrientation - AppUtil.getScreenOrientation(displayRotation)
         } else {
             sensorOrientation - AppUtil.getScreenOrientation(displayRotation)
         }
@@ -419,6 +419,11 @@ class PlayerFragment : DaggerFragment() {
             inputVideoSize.width, inputVideoSize.height,
             calOrientation, true)
 
+        if (viewModel.isFrontCamera()) {
+            // front facing only
+            frameToCropTransform?.postScale(1f, -1f, (inputVideoSize.width / 2).toFloat(), (inputVideoSize.height / 2).toFloat())
+        }
+
         cropToFrameTransform = Matrix()
         frameToCropTransform?.invert(cropToFrameTransform)
 
@@ -430,6 +435,8 @@ class PlayerFragment : DaggerFragment() {
 
     private fun drawInfo(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) {
 //        Log.d(TAG, "drawInfo() Thread id = [${Thread.currentThread().id}]")
+//        Log.d(TAG, "drawInfo() Thread name = [${Thread.currentThread().name}]")
+
         val lines = viewModel.getDebugInfo(previewSize.width, previewSize.height)
         lines?.let {
 //            Log.d(TAG, "drawInfo() [$lines]")
@@ -531,6 +538,9 @@ class PlayerFragment : DaggerFragment() {
         viewModel.core.observe(this, Observer {
             if (it.cmd == AppConst.LIVE_DATA_CMD_CAMERA) {
                 when (it.cameraCmd) {
+                    AppConst.HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE -> {
+                        Log.d(TAG, "HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE")
+                    }
                     AppConst.HOMET_CAMERA_CMD_REQUEST_DRAW -> {
                         dataBinding.overlayView?.apply {
 //                            Log.d(TAG, "requestDraw() overlayView postInvalidate")

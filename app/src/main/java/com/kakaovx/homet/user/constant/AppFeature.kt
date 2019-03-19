@@ -1,5 +1,7 @@
 package com.kakaovx.homet.user.constant
 
+import com.kakaovx.posemachine.PoseDef
+
 object AppFeature {
 
     const val APP_REMOTE_DEBUG = true
@@ -14,8 +16,8 @@ object AppFeature {
     /**
      * Default Compute Video Size
      */
-    const val APP_FEATURE_VIDEO_WIDTH = 304
-    const val APP_FEATURE_VIDEO_HEIGHT = 304
+    const val APP_FEATURE_VIDEO_WIDTH = PoseDef.input_width
+    const val APP_FEATURE_VIDEO_HEIGHT = PoseDef.input_height
 
     const val APP_FEATURE_TEXT_SIZE_DIP = 10.toFloat()
 

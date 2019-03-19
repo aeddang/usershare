@@ -1,4 +1,4 @@
-// Copyright 2018 Xiaomi, Inc.  All rights reserved.
+// Copyright 2018 The MACE Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -100,7 +100,44 @@ class RunMetadata {
   std::vector<OperatorStats> op_stats;
 };
 
-const char *MaceVersion();
+/// Consistent with Android NNAPI
+struct PerformanceInfo {
+  // Time of executing some workload.
+  // negative value for unsupported.
+  float exec_time;
+};
+
+struct Capability {
+  // Performance of running with float32 data type
+  // run time of the workload for CPU device,
+  // ratio of run time to execute same workload compared to the time the CPU
+  // execute same workload.
+  PerformanceInfo float32_performance;
+
+  // Performance of running with quantized-8 data type
+  // ratio compared with float32_performance
+  PerformanceInfo quantized8_performance;
+
+  // support or not
+  bool supported;
+};
+
+/// Get Devices Capacity
+///
+/// The float32_performance of CPU and GPU is tested using the workload of
+/// first 8 layer of mobilenet-v2 which contain Conv(1x1, 3x3),
+/// DepthwiseConv(3x3) and ElementWise Ops.
+/// The quantized8_performance is just a arbitrary value tested
+/// using mobilenet-v2 offline
+/// Actually, It's hard to test the precise performance, the result could be
+/// more accurate when your model is like with mobilenet-v2, otherwise the
+/// value is just a reference.
+///
+/// \return capability of the device
+MACE_API Capability GetCapability(DeviceType device_type,
+                                  float cpu_float32_exec_time = 1.f);
+
+MACE_API const char *MaceVersion();
 
 class MaceStatus {
  public:
@@ -173,9 +210,9 @@ class MACE_API GPUContextBuilder {
   /// \param path  Make sure your program have Read/Write permission of the path
   /// \return
   GPUContextBuilder &SetStoragePath(const std::string &path);
-  /// \brief Set paths of Generated OpenCL Compiled Kernel Binary file (not libOpenCL.so)  // NOLINT(whitespace/line_length)
+  /// \brief Set paths of generated OpenCL compiled kernel binary file (not libOpenCL.so)  // NOLINT(whitespace/line_length)
   ///
-  /// if you use gpu of specific soc, Using OpenCL binary will speed up the initialization.  // NOLINT(whitespace/line_length)
+  /// If you use GPU of specific soc, using OpenCL binary will speed up the initialization.  // NOLINT(whitespace/line_length)
   /// OpenCL binary is corresponding to the OpenCL Driver version,
   /// you should update the binary when OpenCL Driver changed.
   ///
@@ -183,15 +220,38 @@ class MACE_API GPUContextBuilder {
   /// \return
   GPUContextBuilder &SetOpenCLBinaryPaths(
       const std::vector<std::string> &paths);
-  /// \brief Set the path of Generated OpenCL parameter file
+
+  /// \brief Set generated OpenCL compiled kernel binary with bytes array
   ///
-  /// If you use gpu for specific soc, The parameters is the local work group
+  /// If you use GPU of specific soc, using OpenCL binary will speed up the initialization.  // NOLINT(whitespace/line_length)
+  /// OpenCL binary is corresponding to the OpenCL Driver version,
+  /// you should update the binary when OpenCL Driver changed.
+  ///
+  /// \param data Byte stream of OpenCL binary file
+  /// \param size Size of byte stream (data)
+  /// \return
+  GPUContextBuilder &SetOpenCLBinary(const unsigned char *data,
+                                     const size_t size);
+  /// \brief Set the path of generated OpenCL parameter file
+  ///
+  /// If you use GPU for specific soc, the parameters is the local work group
   /// size tuned for specific SOC, which may be faster than the
   /// general parameters.
   ///
   /// \param path Make sure your program have Read/Write permission of the path
   /// \return
   GPUContextBuilder &SetOpenCLParameterPath(const std::string &path);
+  /// \brief Set generated OpenCL parameter with bytes array
+  ///
+  /// If you use GPU for specific soc, the parameters is the local work group
+  /// size tuned for specific SOC, which may be faster than the
+  /// general parameters.
+  ///
+  /// \param data Byte stream of OpenCL parameter file
+  /// \param size Size of byte stream (data)
+  /// \return
+  GPUContextBuilder &SetOpenCLParameter(const unsigned char *data,
+                                        const size_t size);
 
   std::shared_ptr<GPUContext> Finalize();
 
@@ -259,8 +319,12 @@ class MACE_API MaceEngineConfig {
 
 // MACE input/output tensor
 class MACE_API MaceTensor {
+  friend class MaceEngine;
+
  public:
-  // shape - the shape of the tensor, with size n
+  // shape - the shape of the tensor, with size n, if shape is unknown
+  // in advance, it should be specified large enough to hold tensor of all
+  // possible size.
   // data - the buffer of the tensor, must not be null with size equals
   //        shape[0] * shape[1] * ... * shape[n-1].
   //        If you want to pass a buffer which is unsuitable to use the default
@@ -278,6 +342,7 @@ class MACE_API MaceTensor {
   MaceTensor &operator=(const MaceTensor &&other);
   ~MaceTensor();
 
+  // shape will be updated to the actual output shape after running.
   const std::vector<int64_t> &shape() const;
   const std::shared_ptr<float> data() const;
   std::shared_ptr<float> data();
@@ -318,7 +383,36 @@ class MACE_API MaceEngine {
   MaceEngine &operator=(const MaceEngine &) = delete;
 };
 
+/// \brief Create MaceEngine from model graph proto and weights data
+///
+/// Create MaceEngine object
+///
+/// \param model_graph_proto[in]: the content of model graph proto
+/// \param model_graph_proto_size[in]: the size of model graph proto
+/// \param model_weights_data[in]: the content of model weights data, the
+///                                returned engine will refer to this buffer
+///                                if CPU runtime is used. In this case, the
+///                                buffer should keep alive.
+/// \param model_weights_data_size[in]: the size of model weights data
+/// \param input_nodes[in]: the array of input nodes' name
+/// \param output_nodes[in]: the array of output nodes' name
+/// \param config[in]: configurations for MaceEngine.
+/// \param engine[out]: output MaceEngine object
+/// \return MaceStatus::MACE_SUCCESS for success,
+///         MaceStatus::MACE_INVALID_ARGS for wrong arguments,
+///         MaceStatus::MACE_OUT_OF_RESOURCES for resources is out of range.
+MACE_API MaceStatus CreateMaceEngineFromProto(
+    const unsigned char *model_graph_proto,
+    const size_t model_graph_proto_size,
+    const unsigned char *model_weights_data,
+    const size_t model_weights_data_size,
+    const std::vector<std::string> &input_nodes,
+    const std::vector<std::string> &output_nodes,
+    const MaceEngineConfig &config,
+    std::shared_ptr<MaceEngine> *engine);
+
 /// \brief Create MaceEngine from files (model file + data file)
+/// Deprecated, will be removed in future version
 ///
 /// Create MaceEngine object
 ///
@@ -337,7 +431,7 @@ MACE_API MaceStatus CreateMaceEngineFromProto(
     const std::vector<std::string> &input_nodes,
     const std::vector<std::string> &output_nodes,
     const MaceEngineConfig &config,
-    std::shared_ptr<MaceEngine> *engine);
+    std::shared_ptr<MaceEngine> *engine) __attribute__((deprecated));
 
 }  // namespace mace
 

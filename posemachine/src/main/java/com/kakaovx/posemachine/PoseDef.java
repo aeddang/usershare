@@ -1,8 +1,8 @@
 package com.kakaovx.posemachine;
 
 public class PoseDef {
-    public static final int input_width = 304;
-    public static final int input_height = 304;
+    public static final int input_width = 224;
+    public static final int input_height = 224;
     public static final int input_channel = 3;
     public static final int output_stride = 16;
 
