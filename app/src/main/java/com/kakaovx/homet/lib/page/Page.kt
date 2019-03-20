@@ -17,7 +17,7 @@ interface Page {
 }
 
 interface PageRequestPermission {
-    fun onRequestPermissionResult(resultAll:Boolean ,  permissions: List<out Boolean>?){}
+    fun onRequestPermissionResult(resultAll:Boolean ,  permissions: List<Boolean>?){}
 }
 
 interface Presenter<T> {
@@ -53,7 +53,7 @@ interface View<T> {
     fun onCloseAllPopup()
     fun onShowNavigation(){}
     fun onHideNavigation(){}
-    fun hasPermissions( permissions: Array<out String> ):  Pair< Boolean, List<out Boolean>>?
+    fun hasPermissions( permissions: Array<out String> ):  Pair< Boolean, List<Boolean>>?
     fun requestPermission( permissions: Array<out String> , requester:PageRequestPermission)
 }
 

@@ -2,6 +2,7 @@ package com.kakaovx.homet.lib.module
 
 import android.graphics.Point
 import android.view.MotionEvent
+import com.kakaovx.homet.user.util.Log
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -25,10 +26,17 @@ class Gesture(var delegate: Delegate?, private val isVertical: Boolean, private 
     private enum class MoveType {
         NONE,VERTICAL,HORIZONTAL
     }
-
+    private val TAG = javaClass.simpleName
+    var originPosA: ArrayList<Point> private set
     var startPosA: ArrayList<Point> private set
     var changePosA: ArrayList<Point> private set
     var movePosA: ArrayList<Point> private set
+
+    var deltaX:Int = 0; private set
+        get() { return originPosA[0].x - startPosA[0].x + changePosA[0].x }
+
+    var deltaY:Int = 0; private set
+        get() { return originPosA[0].y - startPosA[0].y + changePosA[0].y }
 
     private var moveType = MoveType.NONE
     private var isEventStart: Boolean = false
@@ -43,6 +51,7 @@ class Gesture(var delegate: Delegate?, private val isVertical: Boolean, private 
     private val changeMax = 50
 
     init {
+        originPosA = ArrayList()
         startPosA = ArrayList()
         changePosA = ArrayList()
         movePosA = ArrayList()
@@ -51,6 +60,7 @@ class Gesture(var delegate: Delegate?, private val isVertical: Boolean, private 
     fun onDestroy() {
         delegate = null
     }
+
 
     fun adjustEvent(event: MotionEvent): Boolean {
         val action = event.action
@@ -80,6 +90,7 @@ class Gesture(var delegate: Delegate?, private val isVertical: Boolean, private 
         isEventStart = true
         moveType = MoveType.NONE
         startPosA = locations
+        originPosA = locations
         changePosA = ArrayList()
 
         for (i in locations.indices) changePosA.add(Point(0, 0))
@@ -120,17 +131,23 @@ class Gesture(var delegate: Delegate?, private val isVertical: Boolean, private 
 
             }
             change = changePosA[0]
-            // Log.i("t","change.x "+change.x+" -  change.y "+change.y)
+            //Log.d(TAG,"change.x "+change.x+" -  change.y "+change.y )
             if (Math.abs(change.x) > Math.abs(change.y)) {
                 if (isHorizontal) trigger = Math.abs(change.x) <= moveMin
-                moveType = MoveType.HORIZONTAL
+                if (moveType != MoveType.HORIZONTAL) {
+                    moveType = MoveType.HORIZONTAL
+                    startPosA = locations
+                }
                 if (isHorizontal && len == 1) delegate?.stateChange(this, Type.MOVE_H)
-            }
-            else if (Math.abs(change.y) > Math.abs(change.x)) {
+            } else if (Math.abs(change.y) > Math.abs(change.x)) {
                 if (isVertical) trigger = Math.abs(change.y) <= moveMin
-                moveType = MoveType.VERTICAL
+                if (moveType != MoveType.VERTICAL) {
+                    moveType = MoveType.VERTICAL
+                    startPosA = locations
+                }
                 if (isVertical && len == 1) delegate?.stateChange(this, Type.MOVE_V)
             }
+            if(trigger) startPosA = locations
             delegate?.stateChange(this, Type.MOVE)
         }
         else {

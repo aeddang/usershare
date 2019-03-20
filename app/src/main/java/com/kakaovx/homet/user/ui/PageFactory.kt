@@ -35,6 +35,7 @@ class PageFactory {
             PageID.TRAINER -> { PageTrainer() }
             PageID.CONTENT_DETAIL -> { PageContentDetail() }
             PageID.POPUP_PLAYER -> { PopupPlayer() }
+            PageID.POPUP_CAMERA -> { PopupCamera() }
             PageID.TEST -> { PageTest() }
             PageID.TEST_POP -> { PageDividedGestureTest() }
         }
@@ -52,6 +53,7 @@ enum class PageID(val resId: Int, override var position: Int = 9999):PagePositio
     TRAINER(R.string.page_trainer,7),
     CONTENT_DETAIL(R.string.page_content,8),
     POPUP_PLAYER(R.string.popup_player),
+    POPUP_CAMERA(R.string.popup_camera),
     TEST(1000000000,9),
     TEST_POP(1000000002)
 }

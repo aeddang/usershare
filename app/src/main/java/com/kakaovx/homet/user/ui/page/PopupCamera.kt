@@ -1,20 +1,20 @@
 package com.kakaovx.homet.user.ui.page
 
-
-import android.content.res.Configuration
+import android.transition.ChangeBounds
 import android.view.View
-import androidx.annotation.CallSuper
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.lib.page.PageGestureView
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageDividedGestureFragment
-import kotlinx.android.synthetic.main.popup_player.*
+import kotlinx.android.synthetic.main.popup_capture_camera.*
+import kotlinx.android.synthetic.main.ui_capture_camera.view.*
 
-class PopupPlayer : RxPageDividedGestureFragment() {
+
+class PopupCamera : RxPageDividedGestureFragment() {
 
     private val TAG = javaClass.simpleName
 
 
-    override fun getLayoutResId(): Int { return R.layout.popup_player }
+    override fun getLayoutResId(): Int { return R.layout.popup_capture_camera }
     override fun getGestureView(): PageGestureView { return gestureView }
     override fun getContentsView(): View { return contents }
     override fun getBackgroundView(): View { return bg }
@@ -22,22 +22,19 @@ class PopupPlayer : RxPageDividedGestureFragment() {
 
     override fun onCreated() {
         super.onCreated()
-        player.onInit()
         camera.onInit()
-        player.load("http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4")
-        player.resume()
+        sharedElementEnterTransition = ChangeBounds()
+        camera.imageView.transitionName = "testAni"
     }
 
 
     override fun onResume() {
         super.onResume()
-        player.onResume()
         camera.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        player.onPause()
         camera.onPause()
     }
 

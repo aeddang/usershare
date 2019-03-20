@@ -15,6 +15,7 @@ import com.kakaovx.homet.lib.module.Gesture
 
 const val DURATION_DIV = 5
 open class PageGestureView: FrameLayout, Gesture.Delegate {
+    private val TAG = javaClass.simpleName
     var closeType = Gesture.Type.PAN_DOWN
     var delegate: Delegate? = null
     lateinit var contentsView:View
@@ -79,11 +80,10 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
     }
 
     override fun stateChange(g: Gesture, e: Gesture.Type) {
-        val d = g.changePosA[0]
         when (e) {
             Gesture.Type.START -> touchStart()
-            Gesture.Type.MOVE_V -> if(isVertical) touchMove(d.y)
-            Gesture.Type.MOVE_H -> if(isHorizontal) touchMove(d.x)
+            Gesture.Type.MOVE_V -> if(isVertical) touchMove(g.deltaY)
+            Gesture.Type.MOVE_H -> if(isHorizontal) touchMove(g.deltaX)
             Gesture.Type.END,Gesture.Type.CANCEL -> touchEnd()
             else -> { }
         }
@@ -146,7 +146,7 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
             Gesture.Type.PAN_LEFT -> closePosX = -contentsView.width.toFloat()
             else -> { }
         }
-        return Pair(closePosX,closePosY)
+        return Pair(closePosX + 10,closePosY + 10)
     }
 
     open fun onGestureClose(isClosure:Boolean = true):Long {
@@ -164,7 +164,7 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
         animation = contentsView.animate()
                 .translationX(closePosX)
                 .translationY(closePosY)
-                .setInterpolator(AccelerateInterpolator())
+                .setInterpolator(DecelerateInterpolator())
                 .setUpdateListener { this.onUpdateAnimation(it, start, end) }
                 .setDuration(duration)
 
@@ -186,7 +186,7 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
         animation = contentsView.animate()
             .translationX(0f)
             .translationY(0f)
-            .setInterpolator(DecelerateInterpolator())
+            .setInterpolator(AccelerateInterpolator())
             .setUpdateListener{this.onUpdateAnimation(it, start, 0f)}
             .setDuration(duration)
         if (isClosure) animation?.withEndAction(animationReturnRunnable)

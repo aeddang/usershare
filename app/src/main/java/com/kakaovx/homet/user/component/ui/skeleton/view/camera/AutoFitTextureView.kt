@@ -26,12 +26,21 @@ class AutoFitTextureView @JvmOverloads constructor(context: Context, attrs: Attr
         val height = View.MeasureSpec.getSize(heightMeasureSpec)
         if (0 == ratioWidth || 0 == ratioHeight) {
             setMeasuredDimension(width, height)
+            this.translationX = 0F
+            this.translationY = 0F
         } else {
             if (width < height * ratioWidth / ratioHeight) {
-                setMeasuredDimension(width, width * ratioHeight / ratioWidth)
+                val h = width * ratioHeight / ratioWidth
+                setMeasuredDimension(width, h )
+                translationX = 0F
+                translationY = ((height - h)/2).toFloat()
             } else {
-                setMeasuredDimension(height * ratioWidth / ratioHeight, height)
+                val w = height * ratioWidth / ratioHeight
+                setMeasuredDimension(w, height)
+                translationX = ((width - w)/2).toFloat()
+                translationY = 0F
             }
+
         }
     }
 

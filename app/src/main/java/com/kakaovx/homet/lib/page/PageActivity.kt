@@ -1,8 +1,6 @@
 package com.kakaovx.homet.lib.page
 
-import android.Manifest
 import android.content.pm.PackageManager
-import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.transition.ChangeBounds
@@ -16,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import java.util.*
+import android.annotation.SuppressLint
 
 abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
 
@@ -38,6 +37,8 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
     private var currentPage: T? = null
     private val historys = Stack< Pair< T, Map< String, Any >? >> ()
     private val popups = ArrayList<T>()
+
+    @SuppressLint("UseSparseArrays")
     private var currentRequestPermissions = HashMap< Int , PageRequestPermission >()
 
 
@@ -76,7 +77,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
         onAttached()
     }
 
-    override fun hasPermissions( permissions: Array<out String> ): Pair< Boolean, List<out Boolean>>? {
+    override fun hasPermissions( permissions: Array<out String> ): Pair< Boolean, List<Boolean>>? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return null
         val permissionResults = ArrayList< Boolean >()
         var resultAll = true
@@ -108,7 +109,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
         }
     }
 
-    private fun requestPermissionResult(requestCode: Int, resultAll:Boolean , permissions: List<out Boolean>? = null )
+    private fun requestPermissionResult(requestCode: Int, resultAll:Boolean , permissions: List<Boolean>? = null )
     {
         currentRequestPermissions[ requestCode ]?.onRequestPermissionResult(resultAll, permissions)
         currentRequestPermissions.remove(requestCode)
@@ -178,7 +179,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
 
 
     private fun getSharedTransitionName(sharedElement: android.view.View,  transitionName:String):String{
-        var name = ViewCompat.getTransitionName(sharedElement)
+        val name = ViewCompat.getTransitionName(sharedElement)
         if(name == null) ViewCompat.setTransitionName(sharedElement, transitionName)
         return transitionName
     }

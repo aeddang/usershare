@@ -10,27 +10,22 @@ import kotlinx.android.synthetic.main.page_test.*
 
 class PageTest : RxPageFragment() {
 
-
-    override fun onCreated(){
-        super.onCreated()
-    }
+    override fun getLayoutResId(): Int { return R.layout.page_test }
 
     override fun onSubscribe() {
         super.onSubscribe()
-        btnTest.clicks().subscribe(this::onTest).apply { disposables.add(this) }
+        btnTest1.clicks().subscribe(this::onTest1).apply { disposables.add(this) }
+        btnTest2.clicks().subscribe(this::onTest2).apply { disposables.add(this) }
     }
 
-    fun onTest(v: Unit) {
-        //PagePresenter.getInstance<PageID>().openPopup(PageID.TEST_POP, null, image, "testAni")
-        PagePresenter.getInstance<PageID>().openPopup(PageID.POPUP_PLAYER, null, image, "testAni")
+    @Suppress("UNUSED_PARAMETER")
+    private fun onTest1(v: Unit) {
+        PagePresenter.getInstance<PageID>().openPopup(PageID.POPUP_CAMERA, null, image, "testAni")
     }
 
-    override fun getLayoutResId(): Int {
-        return R.layout.page_test
-    }
-
-    override fun onDestroyed() {
-        super.onDestroyed()
+    @Suppress("UNUSED_PARAMETER")
+    private fun onTest2(v: Unit) {
+        PagePresenter.getInstance<PageID>().openPopup(PageID.POPUP_PLAYER)
     }
 
 

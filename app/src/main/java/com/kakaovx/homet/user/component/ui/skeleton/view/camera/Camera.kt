@@ -1,6 +1,5 @@
 package com.kakaovx.homet.user.component.ui.skeleton.view.camera
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
@@ -14,7 +13,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.util.Size
 import android.view.Surface
-import android.view.SurfaceView
 import android.view.TextureView
 import androidx.annotation.CallSuper
 import androidx.fragment.app.FragmentActivity
@@ -25,6 +23,9 @@ import java.io.File
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
+import android.hardware.camera2.CameraCharacteristics
+import android.view.ViewTreeObserver
+
 
 abstract class Camera : RxFrameLayout, PageRequestPermission {
     constructor(context: Context) : super(context)
@@ -45,8 +46,10 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
         PictureTaken
     }
     enum class Error{
-        Camera,
-        ConfigureFailed
+        CameraDevice,
+        CameraState,
+        CameraAccess,
+        CaptureSession
     }
 
     enum class PermissionGranted{
@@ -57,16 +60,20 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
     enum class CaptureMode{
         Image,
-        Extraction
+        Extraction,
+        All
     }
 
     private val TAG = javaClass.simpleName
 
     private var viewModel:CameraViewModel = Camera.getViewmodel()
     private var textureView: AutoFitTextureView? = null
+    private var blankSurfaceTexture = SurfaceTexture(10)
     private var currentCameraDevice: CameraDevice? = null
     private var state: State = State.Preview
     private var sensorOrientation: Int = 0
+    private var deviceOrientation:Int = 0
+    private var displayRotation:Int = 0
     private var backgroundExecutor: CameraExecutor? = null
     private var imageReader: ImageReader? = null
     private var extractionReader: ImageReader? = null
@@ -78,12 +85,16 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     private var previewSize: Size? = null
     private var isInit:Boolean = false
     private var captureCompletedRunnable: Runnable = Runnable { onCapture() }
+    private var initCameraRunnable: Runnable = Runnable { initCamera() }
+    private var releaseCameraRunnable: Runnable = Runnable { releaseCamera() }
 
     protected open var file: File? = null
     protected open var captureMode:CaptureMode = CaptureMode.Image
     protected open var extractionFps: Int = 15
     protected open var isFront: Boolean = viewModel.isFront
     protected open var isFlash: Boolean = viewModel.isFlash
+    protected open var maxPreviewWidth = 1920
+    protected open var maxPreviewHeight = 1080
 
 
     abstract fun getTextureView(): AutoFitTextureView
@@ -111,25 +122,26 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     @CallSuper
     open fun onInit(){
         viewModel.resetPermissionGranted()
-        initCamera()
+        Handler().post(initCameraRunnable)
     }
 
-    fun takePicture() { lockFocus() }
+    fun takePicture() {
+        if( captureMode == CaptureMode.Extraction) return
+        lockFocus()
+    }
 
     fun setFrontCamera() {
         viewModel.isFront = true
         if( isFront ) return
         isFront = true
-        releaseCamera()
-        initCamera()
+        resetCamera()
     }
 
     fun setBackCamera() {
         viewModel.isFront = false
         if( !isFront ) return
         isFront = false
-        releaseCamera()
-        initCamera()
+        resetCamera()
     }
 
     fun setUseFlash(flash:Boolean) {
@@ -141,8 +153,28 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     fun toggleCamera() {
         isFront = !isFront
         viewModel.isFront = isFront
-        releaseCamera()
-        initCamera()
+        resetCamera()
+    }
+
+    fun resetCamera(){
+        val handler = Handler()
+        handler.post(releaseCameraRunnable)
+        handler.post(initCameraRunnable)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if(newConfig.orientation != deviceOrientation) {
+            deviceOrientation = newConfig.orientation
+            textureView?.let {
+                it.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        it.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        resetCamera()
+                    }
+                })
+            }
+        }
     }
 
     @CallSuper
@@ -152,8 +184,9 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
     open fun onSurfaceTextureUpdated(texture: SurfaceTexture) {}
     open fun onError(type:Error, data:Any? = null){ Log.d(TAG, type.toString()) }
-    open fun onCapture(){ }
-    open fun onExtraction(image:Image){ }
+    open fun onCapture(){}
+    open fun onExtraction(image:Image){}
+    open fun onCapture(image:Image){}
 
     private fun initCamera() {
         if(isInit) return
@@ -162,7 +195,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
         startBackgroundThread()
         textureView?.let {
             if (it.isAvailable) {
-                openCamera(it.width, it.height)
+                openCamera(this.width, this.height)
             } else {
                 it.surfaceTextureListener = surfaceTextureListener
             }
@@ -179,10 +212,14 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     }
 
     private fun createImageReader( videoWidth:Int, videoHeight:Int) {
-        imageReader = ImageReader.newInstance( videoWidth, videoHeight, ImageFormat.JPEG, /*maxImages*/2)
-        imageReader?.setOnImageAvailableListener( onImageAvailableListener, backgroundExecutor?.backgroundHandler )
-        extractionReader = ImageReader.newInstance(videoWidth, videoHeight, ImageFormat.YUV_420_888, /*maxImages*/ extractionFps)
-        extractionReader?.setOnImageAvailableListener( onExtractionAvailableListener, backgroundExecutor?.backgroundHandler)
+        if(captureMode != CaptureMode.Extraction) {
+            imageReader = ImageReader.newInstance(videoWidth, videoHeight, ImageFormat.JPEG, /*maxImages*/2)
+            imageReader?.setOnImageAvailableListener(onImageAvailableListener, backgroundExecutor?.backgroundHandler)
+        }
+        if(captureMode != CaptureMode.Image) {
+            extractionReader = ImageReader.newInstance(videoWidth, videoHeight, ImageFormat.YUV_420_888, /*maxImages*/ extractionFps)
+            extractionReader?.setOnImageAvailableListener(onExtractionAvailableListener, backgroundExecutor?.backgroundHandler)
+        }
     }
 
     private fun findCamera(): CameraCharacteristics? {
@@ -212,8 +249,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
                     CameraUtil.CompareSizesByArea()
                 )
                 createImageReader(largest.width, largest.height)
-                val displayRotation = activity.windowManager.defaultDisplay.rotation
-
+                displayRotation = activity.windowManager.defaultDisplay.rotation
                 sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)!!
                 var swappedDimensions = false
                 when (displayRotation) {
@@ -225,20 +261,21 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
                 activity.windowManager.defaultDisplay.getSize(displaySize)
                 var rotatedPreviewWidth = width
                 var rotatedPreviewHeight = height
-                var maxPreviewWidth = displaySize.x
-                var maxPreviewHeight = displaySize.y
+                var maxWidth = displaySize.x
+                var maxHeight = displaySize.y
                 if (swappedDimensions) {
                     rotatedPreviewWidth = height
                     rotatedPreviewHeight = width
-                    maxPreviewWidth = displaySize.y
-                    maxPreviewHeight = displaySize.x
+                    maxWidth = displaySize.y
+                    maxHeight = displaySize.x
                 }
-                if (maxPreviewWidth > viewModel.MAX_PREVIEW_WIDTH) maxPreviewWidth = viewModel.MAX_PREVIEW_WIDTH
-                if (maxPreviewHeight > viewModel.MAX_PREVIEW_HEIGHT) maxPreviewHeight = viewModel.MAX_PREVIEW_HEIGHT
+                if (maxWidth > maxPreviewWidth ) maxWidth = maxPreviewWidth
+                if (maxHeight > maxPreviewHeight ) maxHeight = maxPreviewHeight
                 previewSize = CameraUtil.chooseOptimalSize(
                     map.getOutputSizes(SurfaceTexture::class.java),
-                    rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth,
-                    maxPreviewHeight, largest
+                    rotatedPreviewWidth, rotatedPreviewHeight,
+                    maxWidth, maxHeight,
+                    largest
                 )
                 val orientation = resources.configuration.orientation
                 previewSize?.let {
@@ -257,8 +294,9 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
         } catch (e: CameraAccessException) {
             e.printStackTrace()
+            onError(Error.CameraAccess)
         } catch (e: NullPointerException) {
-            onError(Error.Camera)
+            onError(Error.CameraDevice)
         }
     }
 
@@ -285,8 +323,8 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
     }
 
-    private fun getOrientation(rotation: Int): Int {
-        return (viewModel.ORIENTATIONS.get(rotation) + sensorOrientation + 270) % 360
+    private fun getOrientation(): Int {
+        return (viewModel.ORIENTATIONS.get(displayRotation) + sensorOrientation + 90) % 360
     }
 
     private fun unlockFocus() {
@@ -341,42 +379,36 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     private fun createCameraPreviewSession() {
         Log.d(TAG, "createCameraPreviewSession" )
         try {
-            val texture = if(textureView != null) textureView!!.surfaceTexture else SurfaceTexture(10)
+            val texture = if(textureView != null) textureView!!.surfaceTexture else blankSurfaceTexture
             previewSize?.let { texture.setDefaultBufferSize(it.width, it.height) }
             val surface = Surface(texture)
 
             previewRequestBuilder = currentCameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
             previewRequestBuilder?.let { requestBuilder ->
-                var output = ArrayList<Surface>()
+                val output = ArrayList<Surface>()
                 output.add(surface)
                 imageReader?.let { reader -> output.add(reader.surface) }
-                if (captureMode == CaptureMode.Extraction) {
-                    extractionReader?.let { reader ->
-                        requestBuilder.addTarget(reader.surface)
-                        output.add(reader.surface)
-                    }
+                extractionReader?.let { reader ->
+                    requestBuilder.addTarget(reader.surface)
+                    output.add(reader.surface)
                 }
                 requestBuilder.addTarget(surface)
-
                 currentCameraDevice?.createCaptureSession( output,
                     object : CameraCaptureSession.StateCallback() {
                         override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
                             captureSession = cameraCaptureSession
                             try {
-                                requestBuilder.set(
-                                    CaptureRequest.CONTROL_AF_MODE,
-                                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
-                                )
+                                requestBuilder.set( CaptureRequest.CONTROL_AF_MODE,  CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
                                 setAutoFlash( requestBuilder)
                                 previewRequest =  requestBuilder.build()
-                                captureSession?.setRepeatingRequest( previewRequest, captureCallback, backgroundExecutor?.backgroundHandler )
+                                previewRequest?.let { captureSession?.setRepeatingRequest( it, captureCallback, backgroundExecutor?.backgroundHandler ) }
                             } catch (e: CameraAccessException) {
                                 e.printStackTrace()
                             }
                         }
 
                         override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
-                            onError(Error.ConfigureFailed)
+                            onError(Error.CaptureSession)
                         }
                     }, null
                 )
@@ -425,6 +457,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
         } catch (e: CameraAccessException) {
             e.printStackTrace()
+            onError(Error.CameraAccess)
         }
     }
 
@@ -440,6 +473,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
             }
         } catch (e: CameraAccessException) {
             e.printStackTrace()
+            onError(Error.CameraAccess)
         }
     }
 
@@ -447,18 +481,17 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     private fun captureStillPicture() {
         Log.d(TAG, "captureStillPicture" )
         try {
-            val activity = getActivity()
             currentCameraDevice?.let {
                 val captureBuilder = it.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
                 imageReader?.let { reader-> captureBuilder.addTarget(reader.surface) }
                 captureBuilder.set( CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
                 setAutoFlash(captureBuilder)
-                val rotation = activity.windowManager.defaultDisplay.rotation
-                captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation))
+                val rotate = getOrientation()
+                captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, rotate)
                 val sessionCaptureCallback = object : CameraCaptureSession.CaptureCallback() {
                     override fun onCaptureCompleted( session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
-                        Handler(Looper.getMainLooper()).post( captureCompletedRunnable )
                         unlockFocus()
+                        Handler(Looper.getMainLooper()).post( captureCompletedRunnable )
                     }
                 }
                 captureSession?.let{ session ->
@@ -469,6 +502,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
             }
         } catch (e: CameraAccessException) {
             e.printStackTrace()
+            onError(Error.CameraAccess)
         }
     }
 
@@ -496,7 +530,6 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
     private val captureCallback = object : CameraCaptureSession.CaptureCallback() {
         private fun process(result: CaptureResult) {
-            //Log.d(TAG, "capture process $state" )
             when (state) {
                 State.Preview -> { }
                 State.WaitingLock -> {
@@ -556,14 +589,18 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
             cameraOpenCloseLock.release()
             cameraDevice.close()
             currentCameraDevice = null
+            onError(Error.CameraState)
         }
     }
 
     private val onImageAvailableListener = ImageReader.OnImageAvailableListener { reader ->
         backgroundExecutor?.execute {
-            file?.let {
-                val image = reader.acquireNextImage()
-                backgroundExecutor?.backgroundHandler?.post( CameraUtil.ImageSaver(image, it) )
+            val image = reader.acquireNextImage()
+            if( file != null) {
+                backgroundExecutor?.backgroundHandler?.post( CameraUtil.ImageSaver(image, file!!) )
+            } else {
+                onCapture(image)
+                image.close()
             }
         }
 

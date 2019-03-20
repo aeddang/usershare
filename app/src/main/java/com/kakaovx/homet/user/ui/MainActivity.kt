@@ -1,6 +1,5 @@
 package com.kakaovx.homet.user.ui
 
-import android.content.Context
 import com.kakaovx.homet.lib.page.PageActivity
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePresenter
@@ -25,20 +24,10 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     @Inject
     lateinit var repository: Repository
 
-    private fun initView(context: Context) {
-//        val window = window
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//        window.statusBarColor = resources.getColor(R.color.indicator)
-
-    }
 
     override fun onCreated() {
         Log.d(TAG, "onCreated()")
         AndroidInjection.inject(this)
-
-        baseContext?.let { initView(it) }
-
         repository.setting.isPushEnable()
         PagePresenter.getInstance<PageID>().pageStart(PageID.HOME)
         bottomTab.delegate = this

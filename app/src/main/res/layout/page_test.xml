@@ -8,9 +8,13 @@
         android:layout_marginBottom="@dimen/area_bottom"
         tools:context=".ui.MainActivity">
     <Button
-            android:text="Button"
+            android:text="test1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/btnTest"/>
+            android:layout_height="wrap_content" android:id="@+id/btnTest1"/>
+    <Button
+            android:text="test2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/btnTest2" android:layout_marginLeft="100dp"/>
     <ImageView
             android:layout_width="141dp"
             android:layout_height="137dp" app:srcCompat="@drawable/kakaovx_apeach_profile_000"

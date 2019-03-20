@@ -6,19 +6,16 @@ import android.view.Surface
 class CameraViewModel{
 
     internal val ORIENTATIONS: SparseIntArray = SparseIntArray()
-    internal val MAX_PREVIEW_WIDTH = 1920
-    internal val MAX_PREVIEW_HEIGHT = 1080
     var flashSupported: Boolean = false; internal set
     var isFront:Boolean = false
-    var isFlash:Boolean = false
+    var isFlash:Boolean = true
     var permissionGranted: Camera.PermissionGranted = Camera.PermissionGranted.UnChecked
 
     init {
-        val modifiOrientation = 180
-        ORIENTATIONS.append(Surface.ROTATION_0, 90 + modifiOrientation)
-        ORIENTATIONS.append(Surface.ROTATION_90, 0 + modifiOrientation)
-        ORIENTATIONS.append(Surface.ROTATION_180, 270 + modifiOrientation)
-        ORIENTATIONS.append(Surface.ROTATION_270, 180 + modifiOrientation)
+        ORIENTATIONS.append(Surface.ROTATION_0, 90 )
+        ORIENTATIONS.append(Surface.ROTATION_90, 0 )
+        ORIENTATIONS.append(Surface.ROTATION_180, 270 )
+        ORIENTATIONS.append(Surface.ROTATION_270, 180 )
     }
 
     fun resetPermissionGranted(){

@@ -16,6 +16,7 @@
     <string name="page_trainer">Trainer</string>
     <string name="page_list_empty">list is not exist in page.</string>
     <string name="popup_player">Player</string>
+    <string name="popup_camera">Camera</string>
     <string name="card_name">Card Name</string>
     <string name="card_description">Card Description</string>
     <string name="landscape_list_title">Landspace List Title</string>
