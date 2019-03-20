@@ -9,8 +9,11 @@ import android.util.Size
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kakaovx.homet.user.component.model.PoseModel
+import com.kakaovx.homet.user.component.model.TrainerPoseModel
 import com.kakaovx.homet.user.component.model.VxCoreLiveData
 import com.kakaovx.homet.user.component.model.VxCoreObserver
+import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.model.WorkoutData
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.constant.AppConst
@@ -18,7 +21,9 @@ import com.kakaovx.homet.user.util.AppDeviceExecutor
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.posemachine.PoseMachine
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -43,6 +48,9 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     private var deviceIO: AppDeviceExecutor? = null
     private var isProcessingImage: Boolean = false
+
+    private val trainerPoseModelList = ArrayList<TrainerPoseModel>()
+
 
     fun intCaptureView() {
         deviceIO = AppDeviceExecutor()
@@ -129,9 +137,47 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
             .subscribe()
     }
 
-    fun getProviderData(exercise_id: String): Disposable {
-        return Observable.just(exercise_id)
+    fun getTrainerMotionData(motion_id: String): Disposable {
+        return restApi.getTrainerMotionData(id = motion_id)
+            .retry(RetryPolicy.none())
+            .subscribeOn(Schedulers.io())
+            .map { res ->
+                res.data
+            }
+            .map { motion ->
+                Observable.fromIterable(motion.key_points)
+                    .subscribeOn(Schedulers.io())
+                    .map { trainerPoseData ->
+                        var i = 0
+                        val pose = ArrayList<PoseModel>()
+                        while (i < trainerPoseData.pose_vector.size) {
+                            val model = PoseModel(trainerPoseData.pose_vector[i],
+                                                  trainerPoseData.pose_vector[i + 1],
+                                                  trainerPoseData.pose_vector[i + 2])
+                            pose.add(model)
+                            i += 3
+                        }
+                        val model = TrainerPoseModel(trainerPoseData.time_stamp, pose.toList())
+                        trainerPoseModelList.add(model)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnComplete {
+                        getDataComplete(trainerPoseModelList.toList())
+                    }
+                    .subscribe()
+            }
             .subscribe()
+    }
+
+    private fun getDataComplete(trainerPoseModelList: List<TrainerPoseModel>) {
+        Log.d(TAG, "getDataComplete() start")
+        for ((count, trainerPose) in trainerPoseModelList.withIndex()) {
+            Log.d(TAG, "[$count]getTimeStamp = [${trainerPose.timestamp}]")
+            for ((count2, pose) in trainerPose.poseData.withIndex()) {
+                Log.d(TAG, "[$count]getPositions = [$count2][${pose.positionX}][${pose.positionY}][${pose.similarity}]")
+            }
+        }
+        Log.d(TAG, "getDataComplete() end")
     }
 
     @Synchronized

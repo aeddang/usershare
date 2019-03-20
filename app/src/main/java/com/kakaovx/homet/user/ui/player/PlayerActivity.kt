@@ -22,11 +22,12 @@ class PlayerActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
+        val id = intent.getStringExtra(AppConst.HOMET_VALUE_MOTION_ID)
         val url = intent.getStringExtra(AppConst.HOMET_VALUE_VIDEO_URL)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, PlayerFragment.newInstance(url))
+                .replace(R.id.container, PlayerFragment.newInstance(id, url))
                 .commitNow()
         }
         Log.d(TAG, "onCreate() default rotation = [${this.windowManager.defaultDisplay.rotation}]")

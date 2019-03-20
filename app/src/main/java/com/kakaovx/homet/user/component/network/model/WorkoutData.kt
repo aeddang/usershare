@@ -20,6 +20,7 @@ data class WorkoutData(
     @SerializedName("modify_time") val modify_time: String?,
     @SerializedName("movie_url") val movie_url: String?,
     @SerializedName("thumb_url") val thumb_url: String?,
+    @SerializedName("free_motion_id") val free_motion_id: String?,
     @SerializedName("free_motion_movie_url") val free_motion_movie_url: String?,
     @SerializedName("free_motion_thumb_url") val free_motion_thumb_url: String?
 ){
@@ -41,6 +42,7 @@ data class WorkoutData(
                 " modify_time=$modify_time\n" +
                 " movie_url=$movie_url\n" +
                 " thumb_url=$thumb_url\n" +
+                " free_motion_id=$free_motion_id\n" +
                 " free_motion_movie_url=$free_motion_movie_url\n" +
                 " free_motion_thumb_url=$free_motion_thumb_url)"
     }

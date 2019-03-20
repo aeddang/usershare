@@ -53,4 +53,6 @@
     <string name="video">영상</string>
     <string name="free_motion_movie_url">무료 동작 영상 주소</string>
     <string name="free_motion_thumbnail_url">무료 동작 썸네일 주소</string>
+    <string name="popup_camera">카메라</string>
+    <string name="free_motion_id">무료 동작 번호</string>
 </resources>

@@ -48,4 +48,10 @@ interface RestfulApi {
                        = ApiConst.HOMET_API_FIELD_VALUE_TRAINER_LIST,
                        @Field(ApiConst.HOMET_API_FIELD_KEY_USER_ID) id: String
                        = "0"): Observable<ResponseList<TrainerData>>
+
+    @FormUrlEncoded
+    @POST(ApiConst.HOMET_API_PROGRAM_URL)
+    fun getTrainerMotionData(@Field(ApiConst.HOMET_API_FIELD_KEY_MODE) key: String
+                       = ApiConst.HOMET_API_FIELD_VALUE_MOTION_JOINT,
+                       @Field(ApiConst.HOMET_API_FIELD_KEY_MOTION_ID) id: String): Observable<Response<TrainerMotionData>>
 }

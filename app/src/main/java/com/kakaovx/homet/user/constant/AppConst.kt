@@ -28,6 +28,8 @@ object AppConst {
     const val HOMET_VALUE_PROFILE = "PROFILE"
     const val HOMET_VALUE_RECOMMEND = "RECOMMEND"
     const val HOMET_VALUE_VIDEO_URL = "VIDEO_URL"
+    const val HOMET_VALUE_EXERCISE_ID = "EXERCISE_ID"
+    const val HOMET_VALUE_MOTION_ID = "MOTION_ID"
 
     /**
      * LiveData Model index

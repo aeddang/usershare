@@ -451,7 +451,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/movie_url_layout"
-                app:layout_constraintBottom_toTopOf="@id/free_motion_movie_url_layout">
+                app:layout_constraintBottom_toTopOf="@id/free_motion_id_layout">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -472,11 +472,37 @@
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/free_motion_movie_url_layout"
+                android:id="@+id/free_motion_id_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/thumbnail_url_layout"
+                app:layout_constraintBottom_toTopOf="@id/free_motion_movie_url_layout">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:textSize="@dimen/item_content_font_size"
+                    android:textColor="@color/content_title"
+                    android:text="@string/free_motion_id"/>
+            <TextView
+                    android:id="@+id/free_motion_id_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@color/colorPrimaryDark"
+                    android:textSize="@dimen/item_content_font_size"
+                    android:textColor="@color/page_home_issue_program_description"
+                    tools:text="@string/home_program_description"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/free_motion_movie_url_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/free_motion_id_layout"
                 app:layout_constraintBottom_toTopOf="@id/free_motion_thumbnail_url_layout">
             <TextView
                     android:layout_width="wrap_content"
