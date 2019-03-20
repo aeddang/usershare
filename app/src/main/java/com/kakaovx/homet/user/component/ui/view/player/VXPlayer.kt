@@ -7,7 +7,7 @@ import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.view.player.Player
 import kotlinx.android.synthetic.main.ui_player.view.*
 
-class VXPlayer: Player {
+open class VXPlayer: Player {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 

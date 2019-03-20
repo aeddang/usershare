@@ -213,11 +213,11 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
     private fun createImageReader( videoWidth:Int, videoHeight:Int) {
         if(captureMode != CaptureMode.Extraction) {
-            imageReader = ImageReader.newInstance(videoWidth, videoHeight, ImageFormat.JPEG, /*maxImages*/2)
+            imageReader = ImageReader.newInstance(videoWidth, videoHeight, ImageFormat.JPEG, 2)
             imageReader?.setOnImageAvailableListener(onImageAvailableListener, backgroundExecutor?.backgroundHandler)
         }
         if(captureMode != CaptureMode.Image) {
-            extractionReader = ImageReader.newInstance(videoWidth, videoHeight, ImageFormat.YUV_420_888, /*maxImages*/ extractionFps)
+            extractionReader = ImageReader.newInstance(videoWidth, videoHeight, ImageFormat.YUV_420_888, extractionFps)
             extractionReader?.setOnImageAvailableListener(onExtractionAvailableListener, backgroundExecutor?.backgroundHandler)
         }
     }
@@ -242,11 +242,12 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
         val activity = getActivity()
         try {
             val characteristics = findCamera()
+            val ratio = width.toFloat()/ height.toFloat()
             characteristics?.let {
                 val map = characteristics.get( CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!
                 val largest = Collections.max(
                     Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
-                    CameraUtil.CompareSizesByArea()
+                    CameraUtil.CompareRatioByArea( ratio)
                 )
                 createImageReader(largest.width, largest.height)
                 displayRotation = activity.windowManager.defaultDisplay.rotation
@@ -419,8 +420,8 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     }
 
     private fun configureTransform(viewWidth: Int, viewHeight: Int) {
-        val activity = getActivity()
         previewSize?.let {
+            val activity = getActivity()
             val rotation = activity.windowManager.defaultDisplay.rotation
             val matrix = Matrix()
             val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
@@ -486,8 +487,8 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
                 imageReader?.let { reader-> captureBuilder.addTarget(reader.surface) }
                 captureBuilder.set( CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
                 setAutoFlash(captureBuilder)
-                val rotate = getOrientation()
-                captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, rotate)
+                //val rotate = getOrientation()
+                //captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, rotate)
                 val sessionCaptureCallback = object : CameraCaptureSession.CaptureCallback() {
                     override fun onCaptureCompleted( session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
                         unlockFocus()

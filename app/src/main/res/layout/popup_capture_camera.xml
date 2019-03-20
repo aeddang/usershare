@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#f00">
-            <com.kakaovx.homet.user.component.ui.view.camera.VXCapcureCamera
+            <com.kakaovx.homet.user.component.ui.view.camera.CapcureCamera
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/camera"/>
