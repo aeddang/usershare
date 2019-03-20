@@ -166,7 +166,14 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
                     }
                     .subscribe()
             }
-            .subscribe()
+            .doOnError { e ->
+                Log.e(TAG, "getTrainerMotionData() doOnError[$e]")
+            }
+            .subscribe({
+                Log.d(TAG, "getTrainerMotionData() subscribe")
+            }, { e ->
+                Log.e(TAG, "getTrainerMotionData() error[$e]")
+            })
     }
 
     private fun getDataComplete(trainerPoseModelList: List<TrainerPoseModel>) {

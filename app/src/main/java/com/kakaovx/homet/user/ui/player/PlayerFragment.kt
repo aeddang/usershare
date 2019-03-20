@@ -335,6 +335,9 @@ class PlayerFragment : DaggerFragment() {
                         configureTransform(width, height)
                         viewModel.resumeCamera()
                     }
+                    exoPlayer?.run {
+                        playWhenReady = true
+                    }
                 }
             }
             viewModel.setExistView(true)
@@ -366,7 +369,6 @@ class PlayerFragment : DaggerFragment() {
                         override fun onSeekProcessed() {}
                     })
                     load(it)
-                    playWhenReady = true
                 }
             }
         }
@@ -437,6 +439,7 @@ class PlayerFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated()")
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
 
         initSubscribe()
