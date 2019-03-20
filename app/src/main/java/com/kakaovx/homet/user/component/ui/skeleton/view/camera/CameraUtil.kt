@@ -40,6 +40,15 @@ object CameraUtil{
 
     }
 
+    internal class CompareRatioByArea(private val ratio:Float ): Comparator<Size> {
+        override fun compare(lhs: Size, rhs: Size): Int {
+            val rL = Math.abs( lhs.width.toFloat() / lhs.height.toFloat() - ratio )
+            val rR = Math.abs( rhs.width.toFloat() / rhs.height.toFloat() - ratio )
+            return java.lang.Long.signum(rL.toLong() - rR.toLong())
+        }
+
+    }
+
     internal class ImageSaver internal constructor( private val mImage: Image, private val mFile: File) : Runnable {
         override fun run() {
             val buffer = mImage.planes[0].buffer

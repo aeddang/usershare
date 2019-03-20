@@ -10,7 +10,7 @@ import com.kakaovx.homet.user.R
 import kotlinx.android.synthetic.main.ui_capture_camera.view.*
 import java.io.File
 
-class VXCapcureCamera: VXCamera {
+class CapcureCamera: VXCamera {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 

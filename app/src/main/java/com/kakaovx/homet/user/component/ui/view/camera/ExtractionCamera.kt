@@ -5,9 +5,8 @@ import android.content.Context
 import android.media.Image
 import android.util.AttributeSet
 import android.util.Log
-import com.kakaovx.homet.user.R
 
-class VXExtractionCamera: VXCamera {
+class ExtractionCamera: VXCamera {
     private val TAG = javaClass.simpleName
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)

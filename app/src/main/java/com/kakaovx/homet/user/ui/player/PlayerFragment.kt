@@ -6,7 +6,6 @@ import android.graphics.*
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
-import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
