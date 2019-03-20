@@ -86,7 +86,7 @@ class PageFreeWorkout : RxPageFragment() {
                             Log.d(TAG, "get Data title = ${liveData.message}")
                         }
                     }
-                    AppConst.LIVE_DATA_CMD_ITEM -> {
+                    AppConst.LIVE_DATA_CMD_LIST -> {
                         liveData.contentModel?.let {
                             contentListAdapter?.addData(it) ?: Log.e(TAG, "adapter is null")
                         }

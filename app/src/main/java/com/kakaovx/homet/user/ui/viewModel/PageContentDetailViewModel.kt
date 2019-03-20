@@ -42,7 +42,7 @@ class PageContentDetailViewModel(repo: Repository) : ViewModel() {
         Log.i(TAG, "handleComplete")
 
         val liveData = PageLiveData()
-        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+        liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
         liveData.item = data
         _response.value = liveData
     }

@@ -5,7 +5,7 @@ import java.util.ArrayList
 
 class VxCoreLiveData {
 
-    var cmd: Int = AppConst.LIVE_DATA_CMD_NONE
+    var cmd: Int = AppConst.LIVE_DATA_VX_CMD_NONE
     var cameraCmd: Int = AppConst.HOMET_CAMERA_CMD_NONE
     var message: String? = null
     var data: IntArray? = null

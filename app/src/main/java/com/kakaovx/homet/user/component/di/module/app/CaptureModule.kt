@@ -16,6 +16,6 @@ class CaptureModule {
             = VxMotionRecognition(app, ctx)
 
     @Provides
-    fun provideCamera(@Named("appContext") ctx: Context, mr: VxMotionRecognition): VxCamera
-            = VxCamera(ctx, mr)
+    fun provideCamera(@Named("appContext") ctx: Context): VxCamera
+            = VxCamera(ctx)
 }

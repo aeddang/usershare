@@ -34,7 +34,7 @@ class PageTrainerViewModel(repo: Repository) : ViewModel() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { model ->
                         val liveData = PageLiveData()
-                        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+                        liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
                         liveData.listItemType = AppConst.HOMET_LIST_ITEM_TRAINER
                         liveData.contentModel = model
                         response.value = liveData
@@ -46,7 +46,7 @@ class PageTrainerViewModel(repo: Repository) : ViewModel() {
         Log.i(TAG, "handleComplete")
 
         val liveData = PageLiveData()
-        liveData.cmd = AppConst.LIVE_DATA_CMD_ITEM
+        liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
         liveData.item = data
         response.value = liveData
     }

@@ -10,6 +10,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import com.kakaovx.homet.user.constant.AppConst
 import io.reactivex.disposables.Disposable
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.lang.Long.signum
 import java.util.*
 
@@ -23,6 +25,8 @@ operator fun AppFragmentAutoClearedDisposable.plusAssign(disposable: Disposable)
         = this.add(disposable)
 
 object AppUtil {
+
+    val TAG = javaClass.simpleName
 
     fun getAppVersion(context: Context): String {
         var appVersion = "unknown"

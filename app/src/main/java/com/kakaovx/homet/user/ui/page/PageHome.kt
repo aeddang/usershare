@@ -197,7 +197,7 @@ class PageHome : RxPageFragment() {
                             Log.d(TAG, "message = [$message]")
                         } ?: Log.e(TAG, "message is null")
                     }
-                    AppConst.LIVE_DATA_CMD_ITEM -> {
+                    AppConst.LIVE_DATA_CMD_LIST -> {
                         insertData(liveData)
                     }
                     else -> Log.e(TAG, "wrong command")

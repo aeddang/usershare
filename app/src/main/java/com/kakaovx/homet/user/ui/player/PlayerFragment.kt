@@ -8,6 +8,7 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Size
@@ -16,6 +17,16 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.source.dash.DashMediaSource
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.view.BorderedText
 import com.kakaovx.homet.user.component.ui.view.OverlayView
@@ -24,6 +35,7 @@ import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.databinding.FragmentPlayerBinding
 import com.kakaovx.homet.user.util.*
 import dagger.android.support.DaggerFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
 import org.tensorflow.demo.env.ImageUtils
 import java.util.*
 import javax.inject.Inject
@@ -60,7 +72,7 @@ class PlayerFragment : DaggerFragment() {
     /**
      * The [android.util.Size] of camera preview.
      */
-    private lateinit var previewSize: Size
+    private var previewSize: Size? = null
     private lateinit var inputVideoSize: Size
 
     private var frameToCropTransform: Matrix? = null
@@ -72,188 +84,7 @@ class PlayerFragment : DaggerFragment() {
 
     private var videoUrl: String? = null
     private var mediaPlayer: MediaPlayer? = null
-
-    private val cameraListener = object: TextureView.SurfaceTextureListener {
-
-        override fun onSurfaceTextureSizeChanged(texture: SurfaceTexture?, width: Int, height: Int) {
-            Log.d(TAG, "onSurfaceTextureSizeChanged()")
-            configureTransform(width, height)
-        }
-
-        override fun onSurfaceTextureUpdated(texture: SurfaceTexture?) {
-//            Log.d(TAG, "onSurfaceTextureUpdated()")
-        }
-
-        override fun onSurfaceTextureDestroyed(texture: SurfaceTexture?): Boolean {
-            Log.d(TAG, "onSurfaceTextureDestroyed()")
-            viewModel.pauseCamera()
-            viewModel.setSurfaceTextureData(null)
-            return true
-        }
-
-        override fun onSurfaceTextureAvailable(texture: SurfaceTexture?, width: Int, height: Int) {
-            Log.d(TAG, "onSurfaceTextureAvailable()")
-            viewModel.setSurfaceTextureData(texture)
-            viewModel.getCameraId()?.let {
-                setUpCameraOutputs(it, width, height)
-                configureTransform(width, height)
-                viewModel.resumeCamera()
-            }
-        }
-    }
-
-//    /**
-//     * Max preview width that is guaranteed by Camera2 API
-//     */
-//    private val MAX_PREVIEW_WIDTH = 1920
-
-//    /**
-//     * Max preview height that is guaranteed by Camera2 API
-//     */
-//    private val MAX_PREVIEW_HEIGHT = 1080
-
-//    /**
-//     * Given `choices` of `Size`s supported by a camera, choose the smallest one that
-//     * is at least as large as the respective texture view size, and that is at most as large as
-//     * the respective max size, and whose aspect ratio matches with the specified value. If such
-//     * size doesn't exist, choose the largest one that is at most as large as the respective max
-//     * size, and whose aspect ratio matches with the specified value.
-//     *
-//     * @param choices           The list of sizes that the camera supports for the intended
-//     *                          output class
-//     * @param textureViewWidth  The width of the texture view relative to sensor coordinate
-//     * @param textureViewHeight The height of the texture view relative to sensor coordinate
-//     * @param maxWidth          The maximum width that can be chosen
-//     * @param maxHeight         The maximum height that can be chosen
-//     * @param aspectRatio       The aspect ratio
-//     * @return The optimal `Size`, or an arbitrary one if none were big enough
-//     */
-//    private fun chooseOptimalSize(
-//        choices: Array<Size>,
-//        textureViewWidth: Int,
-//        textureViewHeight: Int,
-//        maxWidth: Int,
-//        maxHeight: Int,
-//        aspectRatio: Size
-//    ): Size {
-//        Log.d(TAG, "chooseOptimalSize()")
-//
-//        // Collect the supported resolutions that are at least as big as the preview Surface
-//        val bigEnough = ArrayList<Size>()
-//        // Collect the supported resolutions that are smaller than the preview Surface
-//        val notBigEnough = ArrayList<Size>()
-//        val w = aspectRatio.width
-//        val h = aspectRatio.height
-//        for (option in choices) {
-//            if (option.width <= maxWidth && option.height <= maxHeight &&
-//                option.height == option.width * h / w) {
-//                if (option.width >= textureViewWidth && option.height >= textureViewHeight) {
-//                    bigEnough.add(option)
-//                } else {
-//                    notBigEnough.add(option)
-//                }
-//            }
-//        }
-//
-//        // Pick the smallest of those big enough. If there is no one big enough, pick the
-//        // largest of those not big enough.
-//        if (bigEnough.size > 0) {
-//            return Collections.min(bigEnough, CompareSizesByArea())
-//        } else if (notBigEnough.size > 0) {
-//            return Collections.max(notBigEnough, CompareSizesByArea())
-//        } else {
-//            android.util.Log.e(TAG, "Couldn't find any suitable preview size")
-//            return choices[0]
-//        }
-//    }
-
-//    /**
-//     * Sets up member variables related to camera.
-//     *
-//     * @param width  The width of available size for camera preview
-//     * @param height The height of available size for camera preview
-//     */
-//    private fun setUpCameraOutputs(cameraId: String, width: Int, height: Int) {
-//        Log.d(TAG, "setUpCameraOutputs()")
-//
-//        val myActivity = activity ?: return
-//        val textureView = dataBinding.captureView ?: return
-//        val manager = myActivity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-//
-//        try {
-//            val characteristics = manager.getCameraCharacteristics(cameraId)
-//            val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: return
-//
-//            // Find out if we need to swap dimension to get the preview size relative to sensor
-//            // coordinate.
-//            val displayRotation = myActivity.windowManager.defaultDisplay.rotation
-//            val sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION) ?: return
-//            val swappedDimensions = areDimensionsSwapped(sensorOrientation, displayRotation)
-//
-//            val displaySize = Point()
-//            myActivity.windowManager.defaultDisplay.getSize(displaySize)
-//            val rotatedPreviewWidth = if (swappedDimensions) height else width
-//            val rotatedPreviewHeight = if (swappedDimensions) width else height
-//            var maxPreviewWidth = if (swappedDimensions) displaySize.y else displaySize.x
-//            var maxPreviewHeight = if (swappedDimensions) displaySize.x else displaySize.y
-//
-//            if (maxPreviewWidth > MAX_PREVIEW_WIDTH) maxPreviewWidth = MAX_PREVIEW_WIDTH
-//            if (maxPreviewHeight > MAX_PREVIEW_HEIGHT) maxPreviewHeight = MAX_PREVIEW_HEIGHT
-//
-//            // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
-//            // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
-//            // garbage capture data.
-//
-//            previewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture::class.java),
-//                rotatedPreviewWidth, rotatedPreviewHeight,
-//                maxPreviewWidth, maxPreviewHeight,
-//                inputVideoSize)
-//
-//            // We fit the aspect ratio of TextureView to the size of preview we picked.
-//            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//                textureView.setAspectRatio(previewSize.width, previewSize.height)
-//            } else {
-//                textureView.setAspectRatio(previewSize.height, previewSize.width)
-//            }
-//            viewModel.setPreviewVideoSize(previewSize)
-//            initMatrix(sensorOrientation)
-//        } catch (e: CameraAccessException) {
-//            Log.e(TAG, e.toString())
-//        } catch (e: NullPointerException) {
-//            // Currently an NPE is thrown when the Camera2API is used but not supported on the
-//            // device this code runs.
-//            Log.e(TAG, e.toString())
-//        }
-//    }
-
-//    /**
-//     * Determines if the dimensions are swapped given the phone's current rotation.
-//     *
-//     * @param displayRotation The current rotation of the display
-//     *
-//     * @return true if the dimensions are swapped, false otherwise.
-//     */
-//    private fun areDimensionsSwapped(sensorOrientation: Int, displayRotation: Int): Boolean {
-//        Log.d(TAG, "areDimensionsSwapped()")
-//
-//        var swappedDimensions = false
-//        when (displayRotation) {
-//            Surface.ROTATION_0, Surface.ROTATION_180 -> {
-//                if (sensorOrientation == 90 || sensorOrientation == 270) {
-//                    swappedDimensions = true
-//                }
-//            }
-//            Surface.ROTATION_90, Surface.ROTATION_270 -> {
-//                if (sensorOrientation == 0 || sensorOrientation == 180) {
-//                    swappedDimensions = true
-//                }
-//            }
-//            else -> {
-//                Log.e(TAG, "Display rotation is invalid: $displayRotation")
-//            }
-//        }
-//        return swappedDimensions
-//    }
+    private var exoPlayer: ExoPlayer? = null
 
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, chooses the smallest one whose
@@ -318,30 +149,32 @@ class PlayerFragment : DaggerFragment() {
     private fun configureTransform(viewWidth: Int, viewHeight: Int) {
         Log.d(TAG, "configureTransform()")
 
-        val myActivity = activity ?: return
-        val rotation = myActivity.windowManager.defaultDisplay.rotation
-        val textureView = dataBinding.captureView ?: return
-        val matrix = Matrix()
-        val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
-        val bufferRect = RectF(0f, 0f, previewSize.height.toFloat(), previewSize.width.toFloat())
-        val centerX = viewRect.centerX()
-        val centerY = viewRect.centerY()
+        previewSize?.let {
+            val myActivity = activity ?: return
+            val rotation = myActivity.windowManager.defaultDisplay.rotation
+            val textureView = dataBinding.captureView ?: return
+            val matrix = Matrix()
+            val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
+            val bufferRect = RectF(0f, 0f, it.height.toFloat(), it.width.toFloat())
+            val centerX = viewRect.centerX()
+            val centerY = viewRect.centerY()
 
-        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
-            val scale = Math.max(
-                viewHeight.toFloat() / previewSize.height,
-                viewWidth.toFloat() / previewSize.width
-            )
-            with(matrix) {
-                setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
-                postScale(scale, scale, centerX, centerY)
-                postRotate((90 * (rotation - 2)).toFloat(), centerX, centerY)
+            if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
+                bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
+                val scale = Math.max(
+                    viewHeight.toFloat() / it.height,
+                    viewWidth.toFloat() / it.width
+                )
+                with(matrix) {
+                    setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
+                    postScale(scale, scale, centerX, centerY)
+                    postRotate((90 * (rotation - 2)).toFloat(), centerX, centerY)
+                }
+            } else if (Surface.ROTATION_180 == rotation) {
+                matrix.postRotate(180f, centerX, centerY)
             }
-        } else if (Surface.ROTATION_180 == rotation) {
-            matrix.postRotate(180f, centerX, centerY)
+            textureView.setTransform(matrix)
         }
-        textureView.setTransform(matrix)
     }
 
 
@@ -371,19 +204,19 @@ class PlayerFragment : DaggerFragment() {
             // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
             // garbage capture data.
 
-//            previewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture::class.java),
-//                                            width, height)
             previewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture::class.java),
                 inputVideoSize.width, inputVideoSize.height)
 
-            // We fit the aspect ratio of TextureView to the size of preview we picked.
-            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                textureView.setAspectRatio(previewSize.width, previewSize.height)
-            } else {
-                textureView.setAspectRatio(previewSize.height, previewSize.width)
+            previewSize?.let {
+                // We fit the aspect ratio of TextureView to the size of preview we picked.
+                if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    textureView.setAspectRatio(it.width, it.height)
+                } else {
+                    textureView.setAspectRatio(it.height, it.width)
+                }
+                viewModel.setPreviewVideoSize(it)
+                initMatrix(sensorOrientation, displayRotation)
             }
-            viewModel.setPreviewVideoSize(previewSize)
-            initMatrix(sensorOrientation, displayRotation)
         } catch (e: CameraAccessException) {
             Log.e(TAG, e.toString())
         } catch (e: NullPointerException) {
@@ -410,47 +243,99 @@ class PlayerFragment : DaggerFragment() {
 
         Log.i(TAG, "Optimize orientation for MotionRecognition: [$calOrientation]")
 
-        Log.i(TAG, "Initializing at size [${previewSize.width}]x[${previewSize.height}]")
+        previewSize?.let {
+            Log.i(TAG, "Initializing at size [${it.width}]x[${it.height}]")
 
-        rgbFrameBitmap = Bitmap.createBitmap(previewSize.width, previewSize.height, Bitmap.Config.ARGB_8888)
-        croppedBitmap = Bitmap.createBitmap(inputVideoSize.width, inputVideoSize.height, Bitmap.Config.ARGB_8888)
-        frameToCropTransform = ImageUtils.getTransformationMatrix(
-            previewSize.width, previewSize.height,
-            inputVideoSize.width, inputVideoSize.height,
-            calOrientation, true)
+            rgbFrameBitmap = Bitmap.createBitmap(it.width, it.height, Bitmap.Config.ARGB_8888)
+            croppedBitmap = Bitmap.createBitmap(inputVideoSize.width, inputVideoSize.height, Bitmap.Config.ARGB_8888)
+            frameToCropTransform = ImageUtils.getTransformationMatrix(
+                it.width, it.height,
+                inputVideoSize.width, inputVideoSize.height,
+                calOrientation, true)
 
-        if (viewModel.isFrontCamera()) {
-            // front facing only
-            frameToCropTransform?.postScale(1f, -1f, (inputVideoSize.width / 2).toFloat(), (inputVideoSize.height / 2).toFloat())
+            if (viewModel.isFrontCamera()) {
+                // front facing only
+                frameToCropTransform?.postScale(1f, -1f, (inputVideoSize.width / 2).toFloat(), (inputVideoSize.height / 2).toFloat())
+            }
+
+            cropToFrameTransform = Matrix()
+            frameToCropTransform?.invert(cropToFrameTransform)
+
+            viewDisposables += viewModel.processImage(it,
+                frameToCropTransform,
+                rgbFrameBitmap,
+                croppedBitmap)
         }
-
-        cropToFrameTransform = Matrix()
-        frameToCropTransform?.invert(cropToFrameTransform)
-
-        viewDisposables += viewModel.processImage(previewSize,
-                                                  frameToCropTransform,
-                                                  rgbFrameBitmap,
-                                                  croppedBitmap)
     }
 
     private fun drawInfo(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) {
-//        Log.d(TAG, "drawInfo() Thread id = [${Thread.currentThread().id}]")
-//        Log.d(TAG, "drawInfo() Thread name = [${Thread.currentThread().name}]")
-
-        val lines = viewModel.getDebugInfo(previewSize.width, previewSize.height)
-        lines?.let {
-//            Log.d(TAG, "drawInfo() [$lines]")
-            borderedText?.drawLines(canvas, 10.toFloat(), (canvas.height - 10).toFloat(), it)
-        }
-        for (data in pose) {
+        previewSize?.let {
+            val lines = viewModel.getDebugInfo(it.width, it.height)
+            lines?.let {
+                borderedText?.drawLines(canvas, 10.toFloat(), (canvas.height - 10).toFloat(), it)
+            }
+//        for (data in pose) {
+//            for ((i, value) in data.withIndex()) {
+//                Log.d(TAG, "pose position = [$i][${Arrays.toString(value)}]")
+//            }
+//        }
             viewModel.drawPose(canvas, pose)
         }
+    }
+
+    private fun buildMediaSource(uri: Uri): MediaSource {
+        val userAgent = "AwesomePlayer"
+        val extension = uri.lastPathSegment
+        extension?.let {
+            return if (it.contains("mp3") || it.contains("mp4")) ExtractorMediaSource.Factory(
+                DefaultHttpDataSourceFactory(userAgent)
+            ).createMediaSource(uri)
+            else if (it.contains("m3u8")) HlsMediaSource.Factory(DefaultHttpDataSourceFactory(userAgent)).createMediaSource(uri)
+            else {
+                val dashChunkSourceFactory = DefaultDashChunkSource.Factory(DefaultHttpDataSourceFactory("ua", DefaultBandwidthMeter()))
+                val manifestDataSourceFactory = DefaultHttpDataSourceFactory(userAgent)
+                DashMediaSource.Factory(dashChunkSourceFactory, manifestDataSourceFactory).createMediaSource(uri)
+            }
+        }
+        return ExtractorMediaSource.Factory(DefaultHttpDataSourceFactory(userAgent)).createMediaSource(uri)
+    }
+
+    private fun load(videoPath:String) {
+        val uri = Uri.parse(videoPath)
+        val source: MediaSource = buildMediaSource(uri)
+        exoPlayer?.prepare(source)
     }
 
     private fun initComponent() {
         dataBinding.captureView?.apply {
             viewModel.intCaptureView()
-            surfaceTextureListener = cameraListener
+            surfaceTextureListener = object: TextureView.SurfaceTextureListener {
+                override fun onSurfaceTextureSizeChanged(texture: SurfaceTexture?, width: Int, height: Int) {
+                    Log.d(TAG, "captureView onSurfaceTextureSizeChanged()")
+                    configureTransform(width, height)
+                }
+
+                override fun onSurfaceTextureUpdated(texture: SurfaceTexture?) {
+//                    Log.d(TAG, "captureView onSurfaceTextureUpdated()")
+                }
+
+                override fun onSurfaceTextureDestroyed(texture: SurfaceTexture?): Boolean {
+                    Log.d(TAG, "captureView onSurfaceTextureDestroyed()")
+                    viewModel.pauseCamera()
+                    viewModel.setSurfaceTextureData(null)
+                    return true
+                }
+
+                override fun onSurfaceTextureAvailable(texture: SurfaceTexture?, width: Int, height: Int) {
+                    Log.d(TAG, "captureView onSurfaceTextureAvailable()")
+                    viewModel.setSurfaceTextureData(texture)
+                    viewModel.getCameraId()?.let {
+                        setUpCameraOutputs(it, width, height)
+                        configureTransform(width, height)
+                        viewModel.resumeCamera()
+                    }
+                }
+            }
             viewModel.setExistView(true)
             inputVideoSize = viewModel.getInputVideoSize()
         }
@@ -463,40 +348,99 @@ class PlayerFragment : DaggerFragment() {
             })
         }
         dataBinding.rendererView?.apply {
-            surfaceTextureListener = object: TextureView.SurfaceTextureListener {
-                override fun onSurfaceTextureSizeChanged(texture: SurfaceTexture?, width: Int, height: Int) {
-                    Log.d(TAG, "onSurfaceTextureSizeChanged()")
-                }
-
-                override fun onSurfaceTextureUpdated(texture: SurfaceTexture?) {
-//            Log.d(TAG, "onSurfaceTextureUpdated()")
-                }
-
-                override fun onSurfaceTextureDestroyed(texture: SurfaceTexture?): Boolean {
-                    Log.d(TAG, "onSurfaceTextureDestroyed()")
-                    return true
-                }
-
-                override fun onSurfaceTextureAvailable(texture: SurfaceTexture?, width: Int, height: Int) {
-                    Log.d(TAG, "onSurfaceTextureAvailable()")
-                    val surface = Surface(texture)
-                    videoUrl?.let {
-                        mediaPlayer = MediaPlayer()
-                        val audioAttributes = AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_MEDIA)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
-                            .build()
-                        mediaPlayer?.run {
-                            setAudioAttributes(audioAttributes)
-                            setDataSource(it)
-                            setSurface(surface)
-                            prepare()
-                            start()
-                        }
-                    }
+            videoUrl?.let {
+//                mediaPlayer = MediaPlayer()
+//                val audioAttributes = AudioAttributes.Builder()
+//                    .setUsage(AudioAttributes.USAGE_MEDIA)
+//                    .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+//                    .build()
+//                mediaPlayer?.run {
+//                    setAudioAttributes(audioAttributes)
+//                    setDataSource(it)
+//                    setSurface(surface)
+//                    prepare()
+//                    start()
+//                }
+                exoPlayer = ExoPlayerFactory.newSimpleInstance(context)
+                player = exoPlayer
+                exoPlayer?.run {
+                    addListener(object: Player.EventListener{
+                        override fun onTimelineChanged( timeline: Timeline, manifest: Any? ,@Player.TimelineChangeReason reason: Int){}
+                        override fun onTracksChanged( trackGroups: TrackGroupArray, trackSelections: TrackSelectionArray) {}
+                        override fun onLoadingChanged(isLoading: Boolean) {}
+                        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {}
+                        override fun onRepeatModeChanged(@Player.RepeatMode repeatMode: Int) {}
+                        override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {}
+                        override fun onPlayerError(error: ExoPlaybackException) {}
+                        override fun onPositionDiscontinuity(@Player.DiscontinuityReason reason: Int) {}
+                        override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
+                        override fun onSeekProcessed() {}
+                    })
+                    load(it)
+                    playWhenReady = true
                 }
             }
         }
+//        dataBinding.rendererView?.apply {
+//            surfaceTextureListener = object: TextureView.SurfaceTextureListener {
+//                override fun onSurfaceTextureSizeChanged(texture: SurfaceTexture?, width: Int, height: Int) {
+//                    Log.d(TAG, "rendererView onSurfaceTextureSizeChanged()")
+//                }
+//
+//                override fun onSurfaceTextureUpdated(texture: SurfaceTexture?) {
+////                    Log.d(TAG, "rendererView onSurfaceTextureUpdated()")
+//                }
+//
+//                override fun onSurfaceTextureDestroyed(texture: SurfaceTexture?): Boolean {
+//                    Log.d(TAG, "rendererView onSurfaceTextureDestroyed()")
+//                    return true
+//                }
+//
+//                override fun onSurfaceTextureAvailable(texture: SurfaceTexture?, width: Int, height: Int) {
+//                    Log.d(TAG, "rendererView onSurfaceTextureAvailable()")
+//                    val surface = Surface(texture)
+//                    videoUrl?.let {
+//                        mediaPlayer = MediaPlayer()
+//                        val audioAttributes = AudioAttributes.Builder()
+//                            .setUsage(AudioAttributes.USAGE_MEDIA)
+//                            .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+//                            .build()
+//                        mediaPlayer?.run {
+//                            setAudioAttributes(audioAttributes)
+//                            setDataSource(it)
+//                            setSurface(surface)
+//                            prepare()
+//                            start()
+//                        }
+//                    }
+//                }
+//            }
+//        }
+    }
+
+    private fun initSubscribe() {
+        viewDisposables += viewModel.isLoading
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { isLoading ->
+                when (isLoading) {
+                    true -> {
+                        dataBinding.loadingLayout?.visibility = View.VISIBLE
+                        dataBinding.playerLayout?.visibility = View.GONE
+
+                    }
+                    false -> {
+                        dataBinding.loadingLayout?.visibility = View.GONE
+                        dataBinding.playerLayout?.visibility = View.VISIBLE
+                    }
+                }
+            }
+        viewDisposables += viewModel.message
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { value ->
+                dataBinding.loadingCount?.text = value
+            }
+        viewDisposables += viewModel.startLoader()
+        viewDisposables += viewModel.getProviderData("")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -515,6 +459,10 @@ class PlayerFragment : DaggerFragment() {
             release()
         }
         mediaPlayer = null
+        exoPlayer?.apply {
+            release()
+        }
+        exoPlayer = null
         super.onDestroy()
     }
 
@@ -533,17 +481,17 @@ class PlayerFragment : DaggerFragment() {
         Log.d(TAG, "onActivityCreated()")
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
 
+        initSubscribe()
         initComponent()
 
         viewModel.core.observe(this, Observer {
-            if (it.cmd == AppConst.LIVE_DATA_CMD_CAMERA) {
+            if (it.cmd == AppConst.LIVE_DATA_VX_CMD_CAMERA) {
                 when (it.cameraCmd) {
                     AppConst.HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE -> {
                         Log.d(TAG, "HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE")
                     }
                     AppConst.HOMET_CAMERA_CMD_REQUEST_DRAW -> {
                         dataBinding.overlayView?.apply {
-//                            Log.d(TAG, "requestDraw() overlayView postInvalidate")
                             it.poseData?.let { poseData ->
                                 pose.clear()
                                 pose.addAll(poseData)
