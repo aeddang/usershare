@@ -25,7 +25,7 @@ import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 
-class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
+class VxCamera(val context: Context) {
 
     val TAG = javaClass.simpleName
 
@@ -323,14 +323,12 @@ class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
         }
     }
 
-    private fun setInputVideoSize(width: Int, height: Int) {
+    fun setInputVideoSize(width: Int, height: Int) {
         computeVideoSize = Size(width, height)
     }
 
     fun initVxCamera() {
         Log.d(TAG, "initVxCamera()")
-        mr.initMotionRecognition()
-        setInputVideoSize(mr.getInputWidth(), mr.getInputHeight())
         getCameraIds()
     }
 
@@ -357,20 +355,9 @@ class VxCamera(val context: Context, private val mr: VxMotionRecognition) {
 
     fun getInputVideoSize(): Size = computeVideoSize ?: preDefinedVideoSize
 
-    fun getDebugInfo(previewWidth: Int, previewHeight: Int) = mr.getDebugInfo(previewWidth, previewHeight)
-
-    fun drawPose(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) = mr.drawPose(canvas, pose)
-
-    fun poseEstimate(bitmap: Bitmap): ArrayList<Array<FloatArray>>?  {
-        return mr.poseEstimate(bitmap, PoseMachine.DataProcessCallback {
-            //            Log.d(TAG, "onBitmapPrepared()")
-        })
-    }
-
     fun destroyCamera() {
         Log.d(TAG, "destroyCamera()")
         pauseCamera()
-        mr.destroy()
         surfaceTexture = null
     }
 }

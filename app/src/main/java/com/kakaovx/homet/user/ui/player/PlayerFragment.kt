@@ -72,7 +72,7 @@ class PlayerFragment : DaggerFragment() {
     /**
      * The [android.util.Size] of camera preview.
      */
-    private lateinit var previewSize: Size
+    private var previewSize: Size? = null
     private lateinit var inputVideoSize: Size
 
     private var frameToCropTransform: Matrix? = null
@@ -149,30 +149,32 @@ class PlayerFragment : DaggerFragment() {
     private fun configureTransform(viewWidth: Int, viewHeight: Int) {
         Log.d(TAG, "configureTransform()")
 
-        val myActivity = activity ?: return
-        val rotation = myActivity.windowManager.defaultDisplay.rotation
-        val textureView = dataBinding.captureView ?: return
-        val matrix = Matrix()
-        val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
-        val bufferRect = RectF(0f, 0f, previewSize.height.toFloat(), previewSize.width.toFloat())
-        val centerX = viewRect.centerX()
-        val centerY = viewRect.centerY()
+        previewSize?.let {
+            val myActivity = activity ?: return
+            val rotation = myActivity.windowManager.defaultDisplay.rotation
+            val textureView = dataBinding.captureView ?: return
+            val matrix = Matrix()
+            val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
+            val bufferRect = RectF(0f, 0f, it.height.toFloat(), it.width.toFloat())
+            val centerX = viewRect.centerX()
+            val centerY = viewRect.centerY()
 
-        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
-            val scale = Math.max(
-                viewHeight.toFloat() / previewSize.height,
-                viewWidth.toFloat() / previewSize.width
-            )
-            with(matrix) {
-                setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
-                postScale(scale, scale, centerX, centerY)
-                postRotate((90 * (rotation - 2)).toFloat(), centerX, centerY)
+            if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
+                bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
+                val scale = Math.max(
+                    viewHeight.toFloat() / it.height,
+                    viewWidth.toFloat() / it.width
+                )
+                with(matrix) {
+                    setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
+                    postScale(scale, scale, centerX, centerY)
+                    postRotate((90 * (rotation - 2)).toFloat(), centerX, centerY)
+                }
+            } else if (Surface.ROTATION_180 == rotation) {
+                matrix.postRotate(180f, centerX, centerY)
             }
-        } else if (Surface.ROTATION_180 == rotation) {
-            matrix.postRotate(180f, centerX, centerY)
+            textureView.setTransform(matrix)
         }
-        textureView.setTransform(matrix)
     }
 
 
@@ -205,14 +207,16 @@ class PlayerFragment : DaggerFragment() {
             previewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture::class.java),
                 inputVideoSize.width, inputVideoSize.height)
 
-            // We fit the aspect ratio of TextureView to the size of preview we picked.
-            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                textureView.setAspectRatio(previewSize.width, previewSize.height)
-            } else {
-                textureView.setAspectRatio(previewSize.height, previewSize.width)
+            previewSize?.let {
+                // We fit the aspect ratio of TextureView to the size of preview we picked.
+                if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    textureView.setAspectRatio(it.width, it.height)
+                } else {
+                    textureView.setAspectRatio(it.height, it.width)
+                }
+                viewModel.setPreviewVideoSize(it)
+                initMatrix(sensorOrientation, displayRotation)
             }
-            viewModel.setPreviewVideoSize(previewSize)
-            initMatrix(sensorOrientation, displayRotation)
         } catch (e: CameraAccessException) {
             Log.e(TAG, e.toString())
         } catch (e: NullPointerException) {
@@ -239,40 +243,44 @@ class PlayerFragment : DaggerFragment() {
 
         Log.i(TAG, "Optimize orientation for MotionRecognition: [$calOrientation]")
 
-        Log.i(TAG, "Initializing at size [${previewSize.width}]x[${previewSize.height}]")
+        previewSize?.let {
+            Log.i(TAG, "Initializing at size [${it.width}]x[${it.height}]")
 
-        rgbFrameBitmap = Bitmap.createBitmap(previewSize.width, previewSize.height, Bitmap.Config.ARGB_8888)
-        croppedBitmap = Bitmap.createBitmap(inputVideoSize.width, inputVideoSize.height, Bitmap.Config.ARGB_8888)
-        frameToCropTransform = ImageUtils.getTransformationMatrix(
-            previewSize.width, previewSize.height,
-            inputVideoSize.width, inputVideoSize.height,
-            calOrientation, true)
+            rgbFrameBitmap = Bitmap.createBitmap(it.width, it.height, Bitmap.Config.ARGB_8888)
+            croppedBitmap = Bitmap.createBitmap(inputVideoSize.width, inputVideoSize.height, Bitmap.Config.ARGB_8888)
+            frameToCropTransform = ImageUtils.getTransformationMatrix(
+                it.width, it.height,
+                inputVideoSize.width, inputVideoSize.height,
+                calOrientation, true)
 
-        if (viewModel.isFrontCamera()) {
-            // front facing only
-            frameToCropTransform?.postScale(1f, -1f, (inputVideoSize.width / 2).toFloat(), (inputVideoSize.height / 2).toFloat())
+            if (viewModel.isFrontCamera()) {
+                // front facing only
+                frameToCropTransform?.postScale(1f, -1f, (inputVideoSize.width / 2).toFloat(), (inputVideoSize.height / 2).toFloat())
+            }
+
+            cropToFrameTransform = Matrix()
+            frameToCropTransform?.invert(cropToFrameTransform)
+
+            viewDisposables += viewModel.processImage(it,
+                frameToCropTransform,
+                rgbFrameBitmap,
+                croppedBitmap)
         }
-
-        cropToFrameTransform = Matrix()
-        frameToCropTransform?.invert(cropToFrameTransform)
-
-        viewDisposables += viewModel.processImage(previewSize,
-                                                  frameToCropTransform,
-                                                  rgbFrameBitmap,
-                                                  croppedBitmap)
     }
 
     private fun drawInfo(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) {
-        val lines = viewModel.getDebugInfo(previewSize.width, previewSize.height)
-        lines?.let {
-            borderedText?.drawLines(canvas, 10.toFloat(), (canvas.height - 10).toFloat(), it)
-        }
+        previewSize?.let {
+            val lines = viewModel.getDebugInfo(it.width, it.height)
+            lines?.let {
+                borderedText?.drawLines(canvas, 10.toFloat(), (canvas.height - 10).toFloat(), it)
+            }
 //        for (data in pose) {
 //            for ((i, value) in data.withIndex()) {
 //                Log.d(TAG, "pose position = [$i][${Arrays.toString(value)}]")
 //            }
 //        }
-        viewModel.drawPose(canvas, pose)
+            viewModel.drawPose(canvas, pose)
+        }
     }
 
     private fun buildMediaSource(uri: Uri): MediaSource {
