@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Build
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.posemachine.MaceWrapper
@@ -19,7 +20,11 @@ class VxMotionRecognition(val app: Application, val context: Context) {
     fun initMotionRecognition() {
         Log.i(TAG, "initMotionRecognition()")
         if (poseMachine == null) {
-            poseMachine = PoseMachine(app, MaceWrapper.MODEL_TYPE.PersonLab, MaceWrapper.RUNTIME_TYPE.GPU)
+            if (Build.MODEL == "SHIELD Android TV" || Build.DEVICE == "darcy") {
+                poseMachine = PoseMachine(app, MaceWrapper.MODEL_TYPE.PersonLab, MaceWrapper.RUNTIME_TYPE.CPU)
+            } else {
+                poseMachine = PoseMachine(app, MaceWrapper.MODEL_TYPE.PersonLab, MaceWrapper.RUNTIME_TYPE.GPU)
+            }
             poseMachine?.apply {
                 Log.d(TAG, "get inputWidth = [$inputWidth]")
                 Log.d(TAG, "get inputHeight = [$inputHeight]")

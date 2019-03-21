@@ -178,13 +178,13 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     private fun getDataComplete(trainerPoseModelList: List<TrainerPoseModel>) {
         Log.d(TAG, "getDataComplete() start")
-        for ((count, trainerPose) in trainerPoseModelList.withIndex()) {
-            Log.d(TAG, "[$count]getTimeStamp = [${trainerPose.timestamp}]")
-            for ((count2, pose) in trainerPose.poseData.withIndex()) {
-                Log.d(TAG, "[$count]getPositions = [$count2][${pose.positionX}][${pose.positionY}][${pose.similarity}]")
-            }
-        }
-        Log.d(TAG, "getDataComplete() end")
+//        for ((count, trainerPose) in trainerPoseModelList.withIndex()) {
+//            Log.d(TAG, "[$count]getTimeStamp = [${trainerPose.timestamp}]")
+//            for ((count2, pose) in trainerPose.poseData.withIndex()) {
+//                Log.d(TAG, "[$count]getPositions = [$count2][${pose.positionX}][${pose.positionY}][${pose.similarity}]")
+//            }
+//        }
+//        Log.d(TAG, "getDataComplete() end")
     }
 
     @Synchronized

@@ -334,7 +334,7 @@ class PlayerFragment : DaggerFragment() {
                         setUpCameraOutputs(it, width, height)
                         configureTransform(width, height)
                         viewModel.resumeCamera()
-                    }
+                    } ?: Log.e(TAG, "camera ID is null")
                     exoPlayer?.run {
                         playWhenReady = true
                     }

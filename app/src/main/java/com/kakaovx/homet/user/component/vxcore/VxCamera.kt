@@ -10,6 +10,7 @@ import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.media.Image
 import android.media.ImageReader
+import android.os.Build
 import android.util.Size
 import android.view.Surface
 import androidx.core.content.ContextCompat
@@ -47,6 +48,7 @@ class VxCamera(val context: Context) {
     private var captureSession: CameraCaptureSession? = null
     private var frontCameraId: String? = null
     private var backCameraId: String? = null
+    private var externalCameraId: String? = null
 
     private var imageReader: ImageReader? = null
     private var dummySurfaceTexture: SurfaceTexture = SurfaceTexture(10)
@@ -184,18 +186,27 @@ class VxCamera(val context: Context) {
             // We don't use a front facing camera in this sample.
             val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
             cameraDirection?.let {
+//                Log.d(TAG, "getCameraIds() direction id = [$it]")
                 when (it) {
                     CameraCharacteristics.LENS_FACING_FRONT -> frontCameraId = cameraId
                     CameraCharacteristics.LENS_FACING_BACK -> backCameraId = cameraId
+                    CameraCharacteristics.LENS_FACING_EXTERNAL -> externalCameraId = cameraId
                 }
             }
         }
-        frontCameraId?.apply {
-            cameraId = frontCameraId
+
+        if (Build.MODEL == "SHIELD Android TV" || Build.DEVICE == "darcy") {
+            externalCameraId?.apply {
+                cameraId = externalCameraId
+            }
+        } else {
+            frontCameraId?.apply {
+                cameraId = frontCameraId
+            }
+            backCameraId?.apply {
+                cameraId = backCameraId
+            }
         }
-//        backCameraId?.apply {
-//            cameraId = backCameraId
-//        }
     }
 
     private fun setupCamera() {
