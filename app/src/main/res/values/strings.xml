@@ -54,4 +54,5 @@
     <string name="video">video</string>
     <string name="free_motion_thumbnail_url">free motion movie thumbnail url</string>
     <string name="free_motion_movie_url">free motion movie url</string>
+    <string name="free_motion_id">free motion id</string>
 </resources>

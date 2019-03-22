@@ -46,9 +46,10 @@ class PlayerFragment : DaggerFragment() {
     companion object {
         fun newInstance() = PlayerFragment()
 
-        fun newInstance(url: String): PlayerFragment {
+        fun newInstance(id: String, url: String): PlayerFragment {
             val fragment = PlayerFragment()
             val bundle = Bundle()
+            bundle.putString(AppConst.HOMET_VALUE_MOTION_ID, id)
             bundle.putString(AppConst.HOMET_VALUE_VIDEO_URL, url)
             fragment.arguments = bundle
             return fragment
@@ -81,6 +82,7 @@ class PlayerFragment : DaggerFragment() {
     private var croppedBitmap: Bitmap? = null
     private var borderedText: BorderedText? = null
 
+    private var motionId: String? = null
     private var videoUrl: String? = null
     private var mediaPlayer: MediaPlayer? = null
     private var exoPlayer: ExoPlayer? = null
@@ -332,6 +334,9 @@ class PlayerFragment : DaggerFragment() {
                         setUpCameraOutputs(it, width, height)
                         configureTransform(width, height)
                         viewModel.resumeCamera()
+                    } ?: Log.e(TAG, "camera ID is null")
+                    exoPlayer?.run {
+                        playWhenReady = true
                     }
                 }
             }
@@ -348,18 +353,6 @@ class PlayerFragment : DaggerFragment() {
         }
         dataBinding.rendererView?.apply {
             videoUrl?.let {
-//                mediaPlayer = MediaPlayer()
-//                val audioAttributes = AudioAttributes.Builder()
-//                    .setUsage(AudioAttributes.USAGE_MEDIA)
-//                    .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
-//                    .build()
-//                mediaPlayer?.run {
-//                    setAudioAttributes(audioAttributes)
-//                    setDataSource(it)
-//                    setSurface(surface)
-//                    prepare()
-//                    start()
-//                }
                 exoPlayer = ExoPlayerFactory.newSimpleInstance(context)
                 player = exoPlayer
                 exoPlayer?.run {
@@ -376,45 +369,9 @@ class PlayerFragment : DaggerFragment() {
                         override fun onSeekProcessed() {}
                     })
                     load(it)
-                    playWhenReady = true
                 }
             }
         }
-//        dataBinding.rendererView?.apply {
-//            surfaceTextureListener = object: TextureView.SurfaceTextureListener {
-//                override fun onSurfaceTextureSizeChanged(texture: SurfaceTexture?, width: Int, height: Int) {
-//                    Log.d(TAG, "rendererView onSurfaceTextureSizeChanged()")
-//                }
-//
-//                override fun onSurfaceTextureUpdated(texture: SurfaceTexture?) {
-////                    Log.d(TAG, "rendererView onSurfaceTextureUpdated()")
-//                }
-//
-//                override fun onSurfaceTextureDestroyed(texture: SurfaceTexture?): Boolean {
-//                    Log.d(TAG, "rendererView onSurfaceTextureDestroyed()")
-//                    return true
-//                }
-//
-//                override fun onSurfaceTextureAvailable(texture: SurfaceTexture?, width: Int, height: Int) {
-//                    Log.d(TAG, "rendererView onSurfaceTextureAvailable()")
-//                    val surface = Surface(texture)
-//                    videoUrl?.let {
-//                        mediaPlayer = MediaPlayer()
-//                        val audioAttributes = AudioAttributes.Builder()
-//                            .setUsage(AudioAttributes.USAGE_MEDIA)
-//                            .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
-//                            .build()
-//                        mediaPlayer?.run {
-//                            setAudioAttributes(audioAttributes)
-//                            setDataSource(it)
-//                            setSurface(surface)
-//                            prepare()
-//                            start()
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 
     private fun initSubscribe() {
@@ -439,7 +396,9 @@ class PlayerFragment : DaggerFragment() {
                 dataBinding.loadingCount?.text = value
             }
         viewDisposables += viewModel.startLoader()
-        viewDisposables += viewModel.getProviderData("")
+        motionId?.let {
+            viewDisposables += viewModel.getTrainerMotionData(it)
+        } ?: Log.e(TAG, "motionId is null")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -447,7 +406,9 @@ class PlayerFragment : DaggerFragment() {
         Log.d(TAG, "onCreate()")
         lifecycle += viewDisposables
         arguments?.apply {
+            motionId = getString(AppConst.HOMET_VALUE_MOTION_ID)
             videoUrl = getString(AppConst.HOMET_VALUE_VIDEO_URL)
+            Log.d(TAG, "onCreate() motion_id = [$motionId], video_url = [$videoUrl]")
         }
     }
 
@@ -478,10 +439,19 @@ class PlayerFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated()")
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
 
         initSubscribe()
         initComponent()
+
+        viewModel.content.observe(this, Observer { workoutData ->
+            workoutData?.run {
+                free_motion_movie_url?.let {
+                    videoUrl = it
+                }
+            }
+        })
 
         viewModel.core.observe(this, Observer {
             if (it.cmd == AppConst.LIVE_DATA_VX_CMD_CAMERA) {

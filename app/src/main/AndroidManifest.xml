@@ -49,7 +49,8 @@
         </activity>
 
         <activity android:name=".ui.player.PlayerActivity"
-                  android:theme="@style/AppTheme.NoActionBar">
+                  android:theme="@style/AppTheme.NoActionBar"
+                  android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="com.kakaovx.homet.user.action.HOMET_PLAYER"/>
                 <action android:name="android.intent.action.VIEW"/>

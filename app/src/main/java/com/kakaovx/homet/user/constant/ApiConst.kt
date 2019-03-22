@@ -53,4 +53,5 @@ object ApiConst {
     const val HOMET_API_FIELD_VALUE_MOTION_LIST = "motion_list"
     const val HOMET_API_FIELD_VALUE_MOTION_CONTENT = "motion_content"
     const val HOMET_API_FIELD_VALUE_TRAINER_LIST = "home_trainer"
+    const val HOMET_API_FIELD_VALUE_MOTION_JOINT = "motion_joint"
 }

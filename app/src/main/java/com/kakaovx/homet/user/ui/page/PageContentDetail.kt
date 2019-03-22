@@ -66,21 +66,24 @@ class PageContentDetail : RxPageFragment() {
             modifyTimeText.text = data.modify_time
             movieUrlText.text = data.movie_url
             thumbnailUrlText.text = data.thumb_url
+            freeMotionIdText.text = data.free_motion_id
             freeMotionMovieUrlText.text = data.free_motion_movie_url
             freeMotionThumbnailUrlText.text = data.free_motion_thumb_url
             playWorkoutAction.setOnClickListener {
+                val id = freeMotionIdText.text.toString()
                 val url = freeMotionMovieUrlText.text.toString()
-                if (url.isNotEmpty()) {
-                    routeToPlayer(url)
+                if (id.isNotEmpty() && url.isNotEmpty()) {
+                    routeToPlayer(id, url)
                 }
             }
         }
     }
 
-    private fun routeToPlayer(movie_url: String) {
-        Log.d(TAG, "routeToPlayer() url = [$movie_url]")
+    private fun routeToPlayer(motion_id: String, movie_url: String) {
+        Log.d(TAG, "routeToPlayer() motion_id = [$motion_id], movie_url = [$movie_url]")
         val i = Intent(AppConst.HOMET_ACTIVITY_PLAYER)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        i.putExtra(AppConst.HOMET_VALUE_MOTION_ID, motion_id)
         i.putExtra(AppConst.HOMET_VALUE_VIDEO_URL, movie_url)
         startActivity(i)
         activity?.finish()
@@ -130,7 +133,10 @@ class PageContentDetail : RxPageFragment() {
         })
 
         viewModel.content.observe(this, Observer { workoutData ->
-            workoutData?.let { initComponent(it) }
+            workoutData?.let {
+//                Log.d(TAG, "workoutData = [$workoutData]")
+                initComponent(it)
+            }
         })
 
         context?.let{ initView(it) }
