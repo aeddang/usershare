@@ -45,10 +45,6 @@ abstract class Player : RxFrameLayout, Player.EventListener, VideoListener {
         releasePlayer()
     }
 
-    open fun onInit(){
-        initPlayer()
-    }
-
     open fun onPause(){
         releasePlayer()
     }
@@ -57,7 +53,7 @@ abstract class Player : RxFrameLayout, Player.EventListener, VideoListener {
         initPlayer()
     }
 
-    fun initPlayer() {
+    open fun initPlayer() {
         if( player != null ) return
         playerView = getPlayerView()
         player = ExoPlayerFactory.newSimpleInstance(context)
@@ -68,7 +64,7 @@ abstract class Player : RxFrameLayout, Player.EventListener, VideoListener {
         player?.seekTo(viewModel.currentWindow, viewModel.playbackPosition)
     }
 
-    fun releasePlayer() {
+    open fun releasePlayer() {
         player?.let {
             viewModel.playbackPosition = it.currentPosition
             viewModel.currentWindow = it.currentWindowIndex

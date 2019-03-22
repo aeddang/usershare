@@ -21,10 +21,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#f00">
-            <com.kakaovx.homet.user.component.ui.view.camera.CapcureCamera
+            <com.kakaovx.homet.user.component.ui.view.camera.CaptureCamera
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/camera"/>
+                    android:id="@+id/camera">
+            </com.kakaovx.homet.user.component.ui.view.camera.CaptureCamera>
+            <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp" app:srcCompat="@drawable/kakaovx_apeach_profile_000"
+                    android:id="@+id/capturedView" android:layout_gravity="right|top"/>
         </FrameLayout>
     </com.kakaovx.homet.lib.page.PageGestureView>
 

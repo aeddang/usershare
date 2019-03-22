@@ -21,13 +21,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#f00">
+
             <com.kakaovx.homet.user.component.ui.view.player.VXPlayer
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:id="@+id/player"/>
             <com.kakaovx.homet.user.component.ui.view.camera.ExtractionCamera
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:id="@+id/camera" android:layout_marginTop="250dp"/>
+                    android:layout_height="match_parent" android:id="@+id/camera" android:layout_marginTop="250dp">
+            </com.kakaovx.homet.user.component.ui.view.camera.ExtractionCamera>
+
+            <Button
+                    android:text="start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/btnStart"/>
         </FrameLayout>
     </com.kakaovx.homet.lib.page.PageGestureView>
 

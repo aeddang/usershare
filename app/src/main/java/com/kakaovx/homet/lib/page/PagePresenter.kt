@@ -8,6 +8,7 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
         private  var currentInstance:Any? = null
         @Suppress("UNCHECKED_CAST")
         fun <T> getInstance(): Presenter<T> {
+            if(currentInstance == null) return PagePresenter(null, PageModel())
             return currentInstance as PagePresenter<T>
         }
     }

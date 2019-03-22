@@ -1,13 +1,15 @@
 package com.kakaovx.homet.user.component.ui.skeleton.view.camera
 
 import android.content.Context
+import android.graphics.Canvas
 import android.util.AttributeSet
+import android.util.Log
 import android.view.TextureView
 import android.view.View
 
 class AutoFitTextureView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
     TextureView(context, attrs, defStyle) {
-
+    private val TAG = javaClass.simpleName
     private var ratioWidth = 0
     private var ratioHeight = 0
 
@@ -15,15 +17,18 @@ class AutoFitTextureView @JvmOverloads constructor(context: Context, attrs: Attr
         if (width < 0 || height < 0) {
             throw IllegalArgumentException("Size cannot be negative.")
         }
+
         ratioWidth = width
         ratioHeight = height
         requestLayout()
     }
 
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val width = View.MeasureSpec.getSize(widthMeasureSpec)
         val height = View.MeasureSpec.getSize(heightMeasureSpec)
+
         if (0 == ratioWidth || 0 == ratioHeight) {
             setMeasuredDimension(width, height)
             this.translationX = 0F

@@ -24,7 +24,9 @@ import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 import android.hardware.camera2.CameraCharacteristics
+import android.util.SparseIntArray
 import android.view.ViewTreeObserver
+
 
 
 abstract class Camera : RxFrameLayout, PageRequestPermission {
@@ -35,6 +37,33 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
         fun getViewmodel(): CameraViewModel {
             if(viewModelInstance == null) viewModelInstance = CameraViewModel()
             return viewModelInstance!!
+        }
+
+        val ORIENTATIONS: SparseIntArray = object : SparseIntArray() {
+            init {
+                append(Surface.ROTATION_0, 90)
+                append(Surface.ROTATION_90, 0)
+                append(Surface.ROTATION_180, 270)
+                append(Surface.ROTATION_270, 180)
+            }
+        }
+
+    }
+
+    private var delegate: Delegate? = null
+    interface Delegate{
+        fun onCaptureStart(camera: Camera){}
+        fun onCaptureCompleted(camera: Camera, file:File?){}
+        fun onExtractStart(camera: Camera){}
+        fun onExtractEnd(camera: Camera){}
+        fun onError(camera: Camera, type:Error, data:Any?){}
+    }
+    fun setOnCameraListener( _delegate:Delegate? ){ delegate = _delegate }
+
+    val myArray: SparseIntArray = object : SparseIntArray() {
+        init {
+            append(1, 2)
+            append(10, 20)
         }
     }
 
@@ -63,6 +92,13 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
         Extraction,
         All
     }
+    enum class CameraRatioType{
+        Largest,
+        Smallest,
+        LargestViewRatio,
+        SmallestViewRatio,
+        Custom
+    }
 
     private val TAG = javaClass.simpleName
 
@@ -70,35 +106,45 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     private var textureView: AutoFitTextureView? = null
     private var blankSurfaceTexture = SurfaceTexture(10)
     private var currentCameraDevice: CameraDevice? = null
-    private var state: State = State.Preview
-    private var sensorOrientation: Int = 0
-    private var deviceOrientation:Int = 0
-    private var displayRotation:Int = 0
     private var backgroundExecutor: CameraExecutor? = null
     private var imageReader: ImageReader? = null
     private var extractionReader: ImageReader? = null
     private val cameraOpenCloseLock = Semaphore(1)
     private var previewRequestBuilder: CaptureRequest.Builder? = null
     private var previewRequest: CaptureRequest? = null
-    private var cameraId: String? = null
     private var captureSession: CameraCaptureSession? = null
-    private var previewSize: Size? = null
     private var isInit:Boolean = false
     private var captureCompletedRunnable: Runnable = Runnable { onCapture() }
     private var initCameraRunnable: Runnable = Runnable { initCamera() }
     private var releaseCameraRunnable: Runnable = Runnable { releaseCamera() }
 
+
+    var previewSize: Size? = null; private set
+    var cameraOutputSize:Size? = null; private set
+    var cameraId: String? = null; private set
+    var state: State = State.Preview; private set
+    var sensorOrientation: Int = 0; private set
+    var deviceOrientation:Int = 0; private set
+    var displayRotation:Int = 0; private set
+    var isFront: Boolean = viewModel.isFront; protected set
+    var isFlash: Boolean = viewModel.isFlash; protected set
+
+    protected open var cameraRatioType:CameraRatioType = CameraRatioType.Largest
     protected open var file: File? = null
     protected open var captureMode:CaptureMode = CaptureMode.Image
     protected open var extractionFps: Int = 15
-    protected open var isFront: Boolean = viewModel.isFront
-    protected open var isFlash: Boolean = viewModel.isFlash
     protected open var maxPreviewWidth = 1920
     protected open var maxPreviewHeight = 1080
 
+    var customSize: Size = Size(maxPreviewWidth,maxPreviewHeight)
 
-    abstract fun getTextureView(): AutoFitTextureView
-    abstract fun getActivity(): FragmentActivity
+    protected open fun getTextureView(): AutoFitTextureView{
+        val texture = AutoFitTextureView(context)
+        this.addView(texture,0, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        return texture
+    }
+
+    abstract fun getActivity(): FragmentActivity?
     abstract fun getNeededPermissions():Array<String>
     protected open fun requestCameraPermission(){ PagePresenter.getInstance<Any>().requestPermission(getNeededPermissions(), this) }
     protected open fun hasCameraPermission():Boolean{ return PagePresenter.getInstance<Any>().hasPermissions(getNeededPermissions() ) }
@@ -115,20 +161,27 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     @CallSuper
     override fun onDestroyed() {
         releaseCamera()
+        delegate = null
         file?.delete()
         file = null
+        Log.d(TAG, "onDestroyed")
     }
 
     @CallSuper
-    open fun onInit(){
-        viewModel.resetPermissionGranted()
-        Handler().post(initCameraRunnable)
+    open fun startCamera(){
+        getActivity()?.let {
+            viewModel.resetPermissionGranted()
+            deviceOrientation= it.windowManager.defaultDisplay.rotation
+            Handler().post(initCameraRunnable)
+        }
     }
 
     fun takePicture() {
         if( captureMode == CaptureMode.Extraction) return
+        delegate?.onCaptureStart(this)
         lockFocus()
     }
+
 
     fun setFrontCamera() {
         viewModel.isFront = true
@@ -170,10 +223,11 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
                 it.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
                         it.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        resetCamera()
+                        textureViewAspectRatio()
                     }
                 })
             }
+
         }
     }
 
@@ -182,25 +236,34 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     @CallSuper
     open fun onResume() { if(viewModel.permissionGranted != PermissionGranted.Denied) initCamera() }
 
-    open fun onSurfaceTextureUpdated(texture: SurfaceTexture) {}
-    open fun onError(type:Error, data:Any? = null){ Log.d(TAG, type.toString()) }
-    open fun onCapture(){}
-    open fun onExtraction(image:Image){}
+    open fun onTextureViewUpdated(texture: SurfaceTexture) {
+
+    }
+    open fun onExtract(image:Image){}
     open fun onCapture(image:Image){}
+    open fun onCapture(){
+        delegate?.onCaptureCompleted(this, file)
+    }
+
+    @CallSuper
+    open fun onError(type:Error, data:Any? = null){
+        delegate?.onError(this, type, data )
+    }
+
+
 
     private fun initCamera() {
         if(isInit) return
         isInit = true
         textureView = getTextureView()
         startBackgroundThread()
-        textureView?.let {
-            if (it.isAvailable) {
-                openCamera(this.width, this.height)
+        textureView?.let { texture ->
+            if (texture .isAvailable) {
+                openCamera(width, height)
             } else {
-                it.surfaceTextureListener = surfaceTextureListener
+                texture .surfaceTextureListener = surfaceTextureListener
             }
         }
-
     }
 
     private fun releaseCamera() {
@@ -208,7 +271,9 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
         isInit = false
         closeCamera()
         stopBackgroundThread()
+        textureView?.let { removeView(it) }
         textureView = null
+        cameraOutputSize = null
     }
 
     private fun createImageReader( videoWidth:Int, videoHeight:Int) {
@@ -223,34 +288,30 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     }
 
     private fun findCamera(): CameraCharacteristics? {
-        val manager = getActivity().getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        var characteristics :CameraCharacteristics?
-        for (cId in manager.cameraIdList) {
-            characteristics = manager.getCameraCharacteristics(cId)
-            val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
-            if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT && !isFront) continue
-            if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK && isFront) continue
-            characteristics.get( CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
-            cameraId = cId
-            return characteristics
+        getActivity()?.let { activity->
+            val manager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            var characteristics :CameraCharacteristics?
+            for (cId in manager.cameraIdList) {
+                characteristics = manager.getCameraCharacteristics(cId)
+                val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
+                if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT && !isFront) continue
+                if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK && isFront) continue
+                characteristics.get( CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
+                cameraId = cId
+                return characteristics
+            }
         }
         return null
     }
 
 
     private fun setUpCameraOutputs(width: Int, height: Int) {
-        val activity = getActivity()
+
         try {
+            val activity = getActivity()
             val characteristics = findCamera()
-            val ratio = width.toFloat()/ height.toFloat()
-            characteristics?.let {
-                val map = characteristics.get( CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!
-                val largest = Collections.max(
-                    Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
-                    CameraUtil.CompareRatioByArea( ratio)
-                )
-                createImageReader(largest.width, largest.height)
-                displayRotation = activity.windowManager.defaultDisplay.rotation
+            characteristics?.let { character ->
+                activity?.let { displayRotation = it.windowManager.defaultDisplay.rotation }
                 sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)!!
                 var swappedDimensions = false
                 when (displayRotation) {
@@ -259,7 +320,8 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
                     else -> Log.e(TAG, "Display rotation is invalid: $displayRotation")
                 }
                 val displaySize = Point()
-                activity.windowManager.defaultDisplay.getSize(displaySize)
+                activity?.windowManager?.defaultDisplay?.getSize(displaySize)
+
                 var rotatedPreviewWidth = width
                 var rotatedPreviewHeight = height
                 var maxWidth = displaySize.x
@@ -270,20 +332,40 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
                     maxWidth = displaySize.y
                     maxHeight = displaySize.x
                 }
+
+                val map = character.get( CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!
+                val outputs = map.getOutputSizes(ImageFormat.JPEG)
+                cameraOutputSize = when (cameraRatioType){
+                    CameraRatioType.Largest -> Collections.max(Arrays.asList(*outputs), CameraUtil.CompareSizesByArea())
+                    CameraRatioType.Smallest -> Collections.min(Arrays.asList(*outputs), CameraUtil.CompareSizesByArea())
+                    CameraRatioType.LargestViewRatio -> {
+                        val ratio = rotatedPreviewWidth.toFloat()/ rotatedPreviewHeight.toFloat()
+                        Collections.min( Arrays.asList(*outputs), CameraUtil.CompareRatioByArea( ratio))
+                    }
+                    CameraRatioType.SmallestViewRatio -> {
+                        val ratio = rotatedPreviewWidth.toFloat()/ rotatedPreviewHeight.toFloat()
+                        Collections.min( Arrays.asList(*outputs.reversedArray()), CameraUtil.CompareRatioByArea( ratio))
+                    }
+                    CameraRatioType.Custom -> {
+                        Collections.min( Arrays.asList(*outputs.reversedArray()), CameraUtil.CompareByArea( customSize ))
+                    }
+                }
+
+                Log.d(TAG, "cameraOutputSize $cameraOutputSize")
+                createImageReader(cameraOutputSize!!.width, cameraOutputSize!!.height)
+
                 if (maxWidth > maxPreviewWidth ) maxWidth = maxPreviewWidth
                 if (maxHeight > maxPreviewHeight ) maxHeight = maxPreviewHeight
                 previewSize = CameraUtil.chooseOptimalSize(
                     map.getOutputSizes(SurfaceTexture::class.java),
                     rotatedPreviewWidth, rotatedPreviewHeight,
                     maxWidth, maxHeight,
-                    largest
+                    cameraOutputSize!!
                 )
-                val orientation = resources.configuration.orientation
-                previewSize?.let {
-                    if (orientation == Configuration.ORIENTATION_LANDSCAPE) textureView?.setAspectRatio( it.width, it.height )
-                    else textureView?.setAspectRatio( it.height, it.width )
-                }
-                val available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)
+
+                Log.d(TAG, "previewSize $previewSize")
+                this.textureViewAspectRatio()
+                val available = character.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)
                 if( available == true ){
                     viewModel.flashSupported = true
                     isFlash = viewModel.isFlash
@@ -301,6 +383,14 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
         }
     }
 
+    private fun textureViewAspectRatio(){
+        val orientation = resources.configuration.orientation
+        previewSize?.let {
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) textureView?.setAspectRatio( it.width, it.height )
+            else textureView?.setAspectRatio( it.height, it.width )
+        }
+    }
+
     @SuppressLint("MissingPermission")
     private fun openCamera(width: Int, height: Int) {
         if ( !hasCameraPermission() ) {
@@ -310,12 +400,12 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
         setUpCameraOutputs(width, height)
         configureTransform(width, height)
         val activity = getActivity()
-        val manager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val manager = activity?.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
             if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw RuntimeException("Time out waiting to lock camera opening.")
             }
-            manager.openCamera(cameraId!!, stateCallback, backgroundExecutor?.backgroundHandler)
+            cameraId?.let { manager.openCamera(it, stateCallback, backgroundExecutor?.backgroundHandler) }
         } catch (e: CameraAccessException) {
             e.printStackTrace()
         } catch (e: InterruptedException) {
@@ -324,13 +414,12 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
     }
 
-    private fun getOrientation(): Int {
-        return (viewModel.ORIENTATIONS.get(displayRotation) + sensorOrientation + 90) % 360
+    protected open fun getOrientation( rotation:Int ): Int {
+        return (ORIENTATIONS.get(rotation) + sensorOrientation + 90) % 360
     }
 
     private fun unlockFocus() {
         try {
-            Log.d(TAG, "unlockFocus" )
             previewRequestBuilder?.let { requestBuilder ->
                 requestBuilder.set(
                     CaptureRequest.CONTROL_AF_TRIGGER,
@@ -378,42 +467,41 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     }
 
     private fun createCameraPreviewSession() {
-        Log.d(TAG, "createCameraPreviewSession" )
         try {
-            val texture = if(textureView != null) textureView!!.surfaceTexture else blankSurfaceTexture
-            previewSize?.let { texture.setDefaultBufferSize(it.width, it.height) }
-            val surface = Surface(texture)
-
-            previewRequestBuilder = currentCameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-            previewRequestBuilder?.let { requestBuilder ->
-                val output = ArrayList<Surface>()
-                output.add(surface)
-                imageReader?.let { reader -> output.add(reader.surface) }
-                extractionReader?.let { reader ->
-                    requestBuilder.addTarget(reader.surface)
-                    output.add(reader.surface)
-                }
-                requestBuilder.addTarget(surface)
-                currentCameraDevice?.createCaptureSession( output,
-                    object : CameraCaptureSession.StateCallback() {
-                        override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
-                            captureSession = cameraCaptureSession
-                            try {
-                                requestBuilder.set( CaptureRequest.CONTROL_AF_MODE,  CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
-                                setAutoFlash( requestBuilder)
-                                previewRequest =  requestBuilder.build()
-                                previewRequest?.let { captureSession?.setRepeatingRequest( it, captureCallback, backgroundExecutor?.backgroundHandler ) }
-                            } catch (e: CameraAccessException) {
-                                e.printStackTrace()
+            currentCameraDevice?.let { cameraDevice ->
+                val texture = if(textureView != null) textureView!!.surfaceTexture else blankSurfaceTexture
+                previewSize?.let { texture.setDefaultBufferSize(it.width, it.height) }
+                val surface = Surface(texture)
+                previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                previewRequestBuilder?.let { requestBuilder ->
+                    val output = ArrayList<Surface>()
+                    output.add(surface)
+                    imageReader?.let { reader -> output.add(reader.surface) }
+                    extractionReader?.let { reader ->
+                        requestBuilder.addTarget(reader.surface)
+                        output.add(reader.surface) }
+                    requestBuilder.addTarget(surface)
+                    cameraDevice.createCaptureSession( output,
+                        object : CameraCaptureSession.StateCallback() {
+                            override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
+                                captureSession = cameraCaptureSession
+                                try {
+                                    requestBuilder.set( CaptureRequest.CONTROL_AF_MODE,  CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+                                    setAutoFlash( requestBuilder)
+                                    previewRequest =  requestBuilder.build()
+                                    previewRequest?.let { captureSession?.setRepeatingRequest( it, captureCallback, backgroundExecutor?.backgroundHandler ) }
+                                } catch (e: CameraAccessException) {
+                                    e.printStackTrace()
+                                }
                             }
-                        }
-
-                        override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
-                            onError(Error.CaptureSession)
-                        }
-                    }, null
-                )
+                            override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
+                                onError(Error.CaptureSession)
+                            }
+                        }, null
+                    )
+                }
             }
+
         } catch (e: CameraAccessException) {
             e.printStackTrace()
         }
@@ -422,7 +510,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     private fun configureTransform(viewWidth: Int, viewHeight: Int) {
         previewSize?.let {
             val activity = getActivity()
-            val rotation = activity.windowManager.defaultDisplay.rotation
+            val rotation = activity?.windowManager?.defaultDisplay?.rotation
             val matrix = Matrix()
             val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
             val bufferRect = RectF(0f, 0f, it.height.toFloat(), it.width.toFloat())
@@ -445,7 +533,6 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     }
 
     private fun lockFocus() {
-        Log.d(TAG, "lockFocus" )
         try {
             previewRequestBuilder?.let {
                 it.set(
@@ -478,27 +565,28 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
         }
     }
 
-
     private fun captureStillPicture() {
-        Log.d(TAG, "captureStillPicture" )
         try {
-            currentCameraDevice?.let {
-                val captureBuilder = it.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+            currentCameraDevice?.let { cameraDevice->
+                val captureBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
                 imageReader?.let { reader-> captureBuilder.addTarget(reader.surface) }
                 captureBuilder.set( CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
                 setAutoFlash(captureBuilder)
-                //val rotate = getOrientation()
-                //captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, rotate)
-                val sessionCaptureCallback = object : CameraCaptureSession.CaptureCallback() {
-                    override fun onCaptureCompleted( session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
-                        unlockFocus()
-                        Handler(Looper.getMainLooper()).post( captureCompletedRunnable )
+                val activity = getActivity()
+                activity?.let { ac->
+                    val rotate = getOrientation( ac.windowManager.defaultDisplay.rotation )
+                    captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, rotate)
+                    val sessionCaptureCallback = object : CameraCaptureSession.CaptureCallback() {
+                        override fun onCaptureCompleted( session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
+                            Handler(Looper.getMainLooper()).post( captureCompletedRunnable )
+                            unlockFocus()
+                        }
                     }
-                }
-                captureSession?.let{ session ->
-                    session.stopRepeating()
-                    session.abortCaptures()
-                    session.capture(captureBuilder.build(), sessionCaptureCallback, null)
+                    captureSession?.let{ session ->
+                        session.stopRepeating()
+                        session.abortCaptures()
+                        session.capture(captureBuilder.build(), sessionCaptureCallback, null)
+                    }
                 }
             }
         } catch (e: CameraAccessException) {
@@ -524,7 +612,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
             return true
         }
         override fun onSurfaceTextureUpdated(texture: SurfaceTexture) {
-            //onSurfaceTextureUpdated( texture )
+            onTextureViewUpdated( texture )
         }
     }
 
@@ -604,13 +692,12 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
                 image.close()
             }
         }
-
     }
 
     private val onExtractionAvailableListener = ImageReader.OnImageAvailableListener { reader ->
         backgroundExecutor?.execute {
             val image = reader.acquireNextImage()
-            onExtraction( image )
+            onExtract( image )
             image.close()
         }
     }

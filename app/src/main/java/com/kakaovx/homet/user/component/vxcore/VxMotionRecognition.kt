@@ -46,10 +46,10 @@ class VxMotionRecognition(val app: Application, val context: Context) {
     fun drawPose(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) = poseMachine?.drawPose(canvas, pose, true)
 
     fun poseEstimate(bitmap: Bitmap, callback: PoseMachine.DataProcessCallback): ArrayList<Array<FloatArray>>? {
-//        val lStartTime = System.currentTimeMillis()
+        //val lStartTime = System.currentTimeMillis()
         val data = poseMachine?.poseEstimate(bitmap, callback)
-//        val elapseTime = System.currentTimeMillis() - lStartTime
-//        Log.d(TAG, "poseEstimate() elapseTime = [$elapseTime]ms")
+        //val elapseTime = System.currentTimeMillis() - lStartTime
+        //Log.d(TAG, "poseEstimate() elapseTime = [$elapseTime]ms")
         return data
     }
 }

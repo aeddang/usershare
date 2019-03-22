@@ -75,4 +75,9 @@ internal abstract class AndroidBindingModule {
         PageTrainerModule::class
     ])
     internal abstract fun bindPageTrainer(): PageTrainer
+
+
+    @PageScope
+    @ContributesAndroidInjector( modules = [ PopupPlayerModule::class , PageModule::class])
+    internal abstract fun bindPopupPlayer():PopupPlayer
 }
