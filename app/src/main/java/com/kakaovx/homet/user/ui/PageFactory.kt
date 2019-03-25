@@ -16,7 +16,7 @@ import com.kakaovx.homet.user.ui.page.etc.account.PageAccount
 import com.kakaovx.homet.user.ui.page.etc.payment.PagePayment
 import com.kakaovx.homet.user.ui.page.planner.diet.PageDietPlanner
 import com.kakaovx.homet.user.ui.page.planner.program.PagePlanner
-import com.kakaovx.homet.user.ui.page.player.PopupCamera
+import com.kakaovx.homet.user.ui.page.camera.PopupCamera
 import com.kakaovx.homet.user.ui.page.player.PopupPlayer
 import com.kakaovx.homet.user.ui.page.profile.PageProfile
 import com.kakaovx.homet.user.ui.page.profile.setting.PageSetting
