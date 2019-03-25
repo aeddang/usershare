@@ -3,8 +3,6 @@ package com.kakaovx.homet.user.component.vxcore
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -20,7 +18,6 @@ import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.AppDeviceExecutor
 import com.kakaovx.homet.user.util.Log
-import com.kakaovx.posemachine.PoseMachine
 import org.tensorflow.demo.env.ImageUtils
 import java.util.*
 import java.util.concurrent.Semaphore

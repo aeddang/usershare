@@ -8,7 +8,6 @@ import android.media.Image
 import android.util.AttributeSet
 import androidx.annotation.CheckResult
 import com.jakewharton.rxbinding3.internal.checkMainThread
-import com.kakaovx.homet.user.R
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable

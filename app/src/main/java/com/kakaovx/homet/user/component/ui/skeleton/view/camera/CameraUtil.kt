@@ -1,10 +1,6 @@
 package com.kakaovx.homet.user.component.ui.skeleton.view.camera
 
-import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.media.Image
-import android.util.Log
-
 import android.util.Size
 import java.io.File
 import java.io.FileOutputStream
