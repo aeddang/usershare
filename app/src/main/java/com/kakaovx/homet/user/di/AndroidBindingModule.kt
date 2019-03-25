@@ -11,7 +11,7 @@ import com.kakaovx.homet.user.ui.page.content.recommend.PageHomeIssueProgramList
 import com.kakaovx.homet.user.ui.page.content.trainer.PageTrainer
 import com.kakaovx.homet.user.ui.page.content.workout.PageFreeWorkout
 import com.kakaovx.homet.user.ui.page.content.workout.detail.PageContentDetail
-import com.kakaovx.homet.user.ui.page.etc.player.PopupPlayer
+import com.kakaovx.homet.user.ui.page.player.PopupPlayer
 import com.kakaovx.homet.user.ui.oldPlayer.PlayerActivity
 import com.kakaovx.homet.user.ui.oldPlayer.PlayerFragment
 import com.kakaovx.homet.user.ui.splash.SplashFragment

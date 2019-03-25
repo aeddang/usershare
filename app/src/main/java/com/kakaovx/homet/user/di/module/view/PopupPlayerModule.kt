@@ -1,7 +1,7 @@
 package com.kakaovx.homet.user.di.module.view
 
 import androidx.fragment.app.Fragment
-import com.kakaovx.homet.user.ui.page.etc.player.PopupPlayer
+import com.kakaovx.homet.user.ui.page.player.PopupPlayer
 import dagger.Binds
 import dagger.Module
 

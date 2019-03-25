@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.ui.page.etc.player
+package com.kakaovx.homet.user.ui.page.player
 
 import android.transition.ChangeBounds
 import android.view.View

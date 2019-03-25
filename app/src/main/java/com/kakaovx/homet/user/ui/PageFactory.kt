@@ -11,8 +11,8 @@ import com.kakaovx.homet.user.ui.page.content.trainer.PageTrainer
 import com.kakaovx.homet.user.ui.page.content.workout.PageFreeWorkout
 import com.kakaovx.homet.user.ui.page.content.workout.detail.PageContentDetail
 import com.kakaovx.homet.user.ui.page.planner.main.PagePlanner
-import com.kakaovx.homet.user.ui.page.etc.player.PopupCamera
-import com.kakaovx.homet.user.ui.page.etc.player.PopupPlayer
+import com.kakaovx.homet.user.ui.page.player.PopupCamera
+import com.kakaovx.homet.user.ui.page.player.PopupPlayer
 import com.kakaovx.homet.user.ui.page.profile.PageProfile
 import com.kakaovx.homet.user.ui.page.etc.search.PageSearch
 
