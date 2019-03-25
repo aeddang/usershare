@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.ui.page.etc.search
+package com.kakaovx.homet.user.ui.page.content.search
 
 import android.content.Context
 import com.kakaovx.homet.user.R

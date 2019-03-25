@@ -14,7 +14,7 @@ import com.kakaovx.homet.user.ui.page.planner.main.PagePlanner
 import com.kakaovx.homet.user.ui.page.player.PopupCamera
 import com.kakaovx.homet.user.ui.page.player.PopupPlayer
 import com.kakaovx.homet.user.ui.page.profile.PageProfile
-import com.kakaovx.homet.user.ui.page.etc.search.PageSearch
+import com.kakaovx.homet.user.ui.page.content.search.PageSearch
 
 class PageFactory {
 
