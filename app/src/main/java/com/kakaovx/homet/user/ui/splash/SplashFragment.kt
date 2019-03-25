@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.Log
@@ -22,7 +23,7 @@ class SplashFragment : DaggerFragment() {
     private val viewDisposables = AppFragmentAutoClearedDisposable(this)
 
     @Inject
-    lateinit var viewModelFactory: SplashViewModelFactory
+    lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: SplashViewModel
 
     private val autoLogin = true

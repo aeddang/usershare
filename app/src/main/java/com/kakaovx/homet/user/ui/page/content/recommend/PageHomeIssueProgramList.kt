@@ -11,6 +11,7 @@ import com.kakaovx.homet.user.component.model.PageLiveData
 import com.kakaovx.homet.user.component.ui.module.HomeListAdapter
 import com.kakaovx.homet.user.component.ui.module.VerticalLinearLayoutManager
 import com.kakaovx.homet.user.component.ui.skeleton.model.layoutUtil.RecyclerViewBottomDecoration
+import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.AppUtil
@@ -26,7 +27,7 @@ class PageHomeIssueProgramList : RxPageFragment() {
     private val TAG = javaClass.simpleName
 
     @Inject
-    lateinit var viewViewModelFactory: PageHomeIssueProgramListViewModelFactory
+    lateinit var viewViewModelFactory: ViewModelFactory
     private lateinit var viewModel: PageHomeIssueProgramListViewModel
 
     private var issueProgramListAdapter: HomeListAdapter<HomeIssueProgramModel>? = null

@@ -55,4 +55,11 @@
     <string name="free_motion_thumbnail_url">무료 동작 썸네일 주소</string>
     <string name="popup_camera">카메라</string>
     <string name="free_motion_id">무료 동작 번호</string>
+    <string name="page_diet_planner">식단 플래너</string>
+    <string name="page_program_report">프로그램 리포트</string>
+    <string name="page_diet_report">식단 리포트</string>
+    <string name="page_search_filter">검색 조건</string>
+    <string name="page_account">계정</string>
+    <string name="page_payment">결제</string>
+    <string name="page_setting">설정</string>
 </resources>

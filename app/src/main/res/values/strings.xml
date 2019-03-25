@@ -16,7 +16,6 @@
     <string name="page_trainer">Trainer</string>
     <string name="page_list_empty">list is not exist in page.</string>
     <string name="popup_player">Player</string>
-    <string name="popup_camera">Camera</string>
     <string name="card_name">Card Name</string>
     <string name="card_description">Card Description</string>
     <string name="landscape_list_title">Landspace List Title</string>
@@ -55,4 +54,13 @@
     <string name="free_motion_thumbnail_url">free motion movie thumbnail url</string>
     <string name="free_motion_movie_url">free motion movie url</string>
     <string name="free_motion_id">free motion id</string>
+    <string name="popup_camera">Camera</string>
+    <string name="page_diet_planner">Diet Planner</string>
+    <string name="page_program_report">Program Report</string>
+    <string name="page_diet_report">diet_report</string>
+    <string name="page_search_filter">Search Filter</string>
+    <string name="page_account">Account</string>
+    <string name="page_payment">Payment</string>
+    <string name="page_setting">Setting</string>
+
 </resources>

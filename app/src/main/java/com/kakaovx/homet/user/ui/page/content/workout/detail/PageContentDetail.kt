@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.network.model.WorkoutData
+import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.databinding.PageContentDetailBinding
@@ -32,7 +33,7 @@ class PageContentDetail : RxPageFragment() {
     private var dataId: String? = null
 
     @Inject
-    lateinit var viewViewModelFactory: PageContentDetailViewModelFactory
+    lateinit var viewViewModelFactory: ViewModelFactory
     private lateinit var viewModel: PageContentDetailViewModel
 
     private fun initView(context: Context) {

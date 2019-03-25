@@ -31,7 +31,7 @@ class BottomTab: DivisionTab<PageID>{
         return arrayOf (
             PageID.HOME,
             PageID.CONTENT,
-            PageID.PLANNER,
+            PageID.PROGRAM_PLAN,
             PageID.TEST
         )
     }

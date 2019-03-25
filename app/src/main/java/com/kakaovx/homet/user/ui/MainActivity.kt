@@ -1,10 +1,12 @@
 package com.kakaovx.homet.user.ui
 
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.kakaovx.homet.lib.page.PageActivity
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.repository.Repository
+import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.component.ui.skeleton.view.DivisionTab
 import com.kakaovx.homet.user.util.Log
 import dagger.android.AndroidInjection
@@ -22,13 +24,21 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     override fun getBackStacks():Array<PageID> { return arrayOf( PageID.HOME, PageID.TEST ) }
 
     @Inject
-    lateinit var repository: Repository
-
+    lateinit var viewViewModelFactory: ViewModelFactory
+    private lateinit var viewModel: MainActivityViewModel
 
     override fun onCreated() {
         Log.d(TAG, "onCreated()")
         AndroidInjection.inject(this)
-        repository.setting.isPushEnable()
+        viewModel = ViewModelProviders.of(this, viewViewModelFactory)[MainActivityViewModel::class.java]
+
+        viewModel.response.observe(this, Observer { message ->
+            message?.let {
+                Log.d(TAG, "message = [$message]")
+            } ?: Log.e(TAG, "message is null")
+        })
+
+        viewModel.pushEnable()
         PagePresenter.getInstance<PageID>().pageStart(PageID.HOME)
         bottomTab.delegate = this
     }
