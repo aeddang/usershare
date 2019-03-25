@@ -4,14 +4,6 @@
               android:layout_height="@dimen/area_bottom" android:background="@color/bar_bg">
 
     <ImageButton
-            android:id="@+id/tab_btn_home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/tab_bg"
-            android:src="@drawable/home_select"/>
-
-    <ImageButton
             android:id="@+id/tab_btn_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -26,6 +18,14 @@
             android:layout_weight="1"
             android:background="@color/tab_bg"
             android:src="@drawable/planer"/>
+
+    <ImageButton
+            android:id="@+id/tab_btn_report"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/tab_bg"
+            android:src="@drawable/kakaovx_muzi_profile_000"/>
 
     <ImageButton
             android:id="@+id/tab_btn_profile"
