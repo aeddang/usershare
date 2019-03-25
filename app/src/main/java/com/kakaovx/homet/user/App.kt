@@ -1,7 +1,7 @@
 package com.kakaovx.homet.user
 import androidx.fragment.app.Fragment
 import com.facebook.stetho.Stetho
-import com.kakaovx.homet.user.component.di.DaggerAppComponent
+import com.kakaovx.homet.user.di.DaggerAppComponent
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.Log
 import com.squareup.leakcanary.LeakCanary

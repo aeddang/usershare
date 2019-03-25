@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.di.module.app
+package com.kakaovx.homet.user.di.module.app
 import com.kakaovx.homet.user.component.image.ImageFactory
 import dagger.Module
 import dagger.Provides

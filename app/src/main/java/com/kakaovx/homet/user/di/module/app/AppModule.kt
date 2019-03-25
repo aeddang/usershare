@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.di.module.app
+package com.kakaovx.homet.user.di.module.app
 import android.app.Application
 import com.kakaovx.homet.user.App
 import dagger.Binds

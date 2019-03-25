@@ -1,9 +1,9 @@
-package com.kakaovx.homet.user.component.di
+package com.kakaovx.homet.user.di
 
-import com.kakaovx.homet.user.component.di.annotation.ActivityScope
-import com.kakaovx.homet.user.component.di.annotation.FragmentScope
-import com.kakaovx.homet.user.component.di.annotation.PageScope
-import com.kakaovx.homet.user.component.di.module.view.*
+import com.kakaovx.homet.user.di.annotation.ActivityScope
+import com.kakaovx.homet.user.di.annotation.FragmentScope
+import com.kakaovx.homet.user.di.annotation.PageScope
+import com.kakaovx.homet.user.di.module.view.*
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.page.*
 import com.kakaovx.homet.user.ui.player.PlayerActivity

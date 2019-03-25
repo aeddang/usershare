@@ -1,7 +1,7 @@
-package com.kakaovx.homet.user.component.di
+package com.kakaovx.homet.user.di
 
 import com.kakaovx.homet.user.App
-import com.kakaovx.homet.user.component.di.module.app.*
+import com.kakaovx.homet.user.di.module.app.*
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
