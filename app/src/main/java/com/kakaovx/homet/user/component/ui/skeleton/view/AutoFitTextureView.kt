@@ -1,9 +1,7 @@
-package com.kakaovx.homet.user.component.ui.skeleton.view.camera
+package com.kakaovx.homet.user.component.ui.skeleton.view
 
 import android.content.Context
-import android.graphics.Canvas
 import android.util.AttributeSet
-import android.util.Log
 import android.view.TextureView
 import android.view.View
 
@@ -22,7 +20,6 @@ class AutoFitTextureView @JvmOverloads constructor(context: Context, attrs: Attr
         ratioHeight = height
         requestLayout()
     }
-
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)

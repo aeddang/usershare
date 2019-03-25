@@ -4,18 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
 import androidx.fragment.app.FragmentActivity
 import com.jakewharton.rxbinding3.internal.checkMainThread
 import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.ui.skeleton.view.camera.AutoFitTextureView
+import com.kakaovx.homet.user.component.ui.skeleton.view.OverlaySurfaceView
+import com.kakaovx.homet.user.component.ui.skeleton.view.AutoFitTextureView
 import com.kakaovx.homet.user.component.ui.skeleton.view.camera.Camera
-import com.kakaovx.homet.user.util.Log
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
-import kotlinx.android.synthetic.main.ui_capture_camera.view.*
+import kotlinx.android.synthetic.main.ui_camera.view.*
+
 import java.io.File
 
 typealias  VXCameraEventType = String
@@ -42,7 +44,7 @@ fun VXCamera.draw(): Observable<Canvas> {
 
 
 
-abstract class VXCamera: Camera {
+abstract class VXCamera: Camera, OverlaySurfaceView.Delegate {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
@@ -56,11 +58,27 @@ abstract class VXCamera: Camera {
     override fun getActivity(): FragmentActivity? {  return PagePresenter.getInstance<Any>().activity as? FragmentActivity }
     override fun getLayoutResId(): Int { return R.layout.ui_camera }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        Log.d(TAG,"onDraw")
+    @CallSuper
+    override fun onCreated() {
+        super.onCreated()
+        surfaceView.setOnDrawListener( this )
+    }
+
+    @CallSuper
+    override fun onDestroyed() {
+        super.onDestroyed()
+        surfaceView.setOnDrawListener( null )
+    }
+
+    override fun onPreview(){
+        surfaceView.postInvalidate()
+    }
+
+    override fun drawCanvas(canvas: Canvas) {
+        super.drawCanvas(canvas)
         delegate?.drawCanvas(this, canvas)
     }
+
 }
 
 

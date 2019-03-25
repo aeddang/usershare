@@ -8,6 +8,7 @@ import android.media.Image
 import android.util.AttributeSet
 import androidx.annotation.CheckResult
 import com.jakewharton.rxbinding3.internal.checkMainThread
+import com.kakaovx.homet.user.R
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
@@ -29,10 +30,7 @@ open class ExtractionCamera: VXCamera {
         fun extractionData(camera: VXCamera, data:IntArray ){}
     }
     fun setOnExtractionCameraListener( _delegate:Delegate? ){ delegate = _delegate }
-
-    override fun getNeededPermissions():Array<String>{
-        return arrayOf( Manifest.permission.CAMERA )
-    }
+    override fun getNeededPermissions():Array<String>{ return arrayOf( Manifest.permission.CAMERA ) }
 
     override fun onCreated() {
         super.onCreated()

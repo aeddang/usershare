@@ -33,6 +33,10 @@ class PopupPlayerViewModel(val repo: Repository) : ViewModel() {
     private var isProcessingImage: Boolean = false
     val inputVideoSize:Size =  Size( mr.getInputWidth(), mr.getInputHeight())
     var pose:ArrayList<Array<FloatArray>>? = null
+
+    var rgbFrameBitmap:Bitmap? = null
+    var croppedBitmap:Bitmap? = null
+
     fun initMotionRecognition(){
         mr.initMotionRecognition()
     }
@@ -45,15 +49,15 @@ class PopupPlayerViewModel(val repo: Repository) : ViewModel() {
     fun poseEstimate(data: IntArray, previewSize: Size, frameToCropTransform: Matrix) {
         isProcessingImage = true
 
-        var rgbFrameBitmap = Bitmap.createBitmap(previewSize.width, previewSize.height, Bitmap.Config.ARGB_8888)
-        var croppedBitmap = Bitmap.createBitmap(inputVideoSize.width, inputVideoSize.height, Bitmap.Config.ARGB_8888)
+        rgbFrameBitmap = Bitmap.createBitmap(previewSize.width, previewSize.height, Bitmap.Config.ARGB_8888)
+        croppedBitmap = Bitmap.createBitmap(inputVideoSize.width, inputVideoSize.height, Bitmap.Config.ARGB_8888)
         rgbFrameBitmap ?: return
         croppedBitmap ?: return
 
-        rgbFrameBitmap.setPixels(data, 0, previewSize.width, 0, 0, previewSize.width, previewSize.height)
-        val canvas = Canvas(croppedBitmap)
-        canvas.drawBitmap(rgbFrameBitmap, frameToCropTransform, null)
-        pose = mr.poseEstimate(croppedBitmap, PoseMachine.DataProcessCallback {
+        rgbFrameBitmap!!.setPixels(data, 0, previewSize.width, 0, 0, previewSize.width, previewSize.height)
+        val canvas = Canvas(croppedBitmap!!)
+        canvas.drawBitmap(rgbFrameBitmap!!, frameToCropTransform, null)
+        pose = mr.poseEstimate(croppedBitmap!!, PoseMachine.DataProcessCallback {
             //Log.d(TAG, "onBitmapPrepared()")
         })
         pose?.let { Log.d(TAG, "Detect Skeletons: [${it.size}]") }

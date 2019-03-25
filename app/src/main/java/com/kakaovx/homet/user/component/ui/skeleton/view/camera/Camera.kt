@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 import android.hardware.camera2.CameraCharacteristics
 import android.util.SparseIntArray
 import android.view.ViewTreeObserver
-
+import com.kakaovx.homet.user.component.ui.skeleton.view.AutoFitTextureView
 
 
 abstract class Camera : RxFrameLayout, PageRequestPermission {
@@ -138,7 +138,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
     var customSize: Size = Size(maxPreviewWidth,maxPreviewHeight)
 
-    protected open fun getTextureView(): AutoFitTextureView{
+    protected open fun getTextureView(): AutoFitTextureView {
         val texture = AutoFitTextureView(context)
         this.addView(texture,0, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         return texture
@@ -236,9 +236,8 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     @CallSuper
     open fun onResume() { if(viewModel.permissionGranted != PermissionGranted.Denied) initCamera() }
 
-    open fun onTextureViewUpdated(texture: SurfaceTexture) {
-
-    }
+    open fun onTextureViewUpdated(texture: SurfaceTexture) {}
+    open fun onPreview(){}
     open fun onExtract(image:Image){}
     open fun onCapture(image:Image){}
     open fun onCapture(){
@@ -620,7 +619,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     private val captureCallback = object : CameraCaptureSession.CaptureCallback() {
         private fun process(result: CaptureResult) {
             when (state) {
-                State.Preview -> { }
+                State.Preview -> { onPreview() }
                 State.WaitingLock -> {
                     val afState = result.get(CaptureResult.CONTROL_AF_STATE)
                     if (afState == null) {

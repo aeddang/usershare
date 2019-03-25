@@ -7,9 +7,11 @@
             android:id="@+id/texture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    <com.kakaovx.homet.user.component.ui.skeleton.view.OverlaySurfaceView
+    <com.kakaovx.homet.user.component.ui.view.OverlayView
+            android:id="@+id/overlayView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/surfaceView">
-    </com.kakaovx.homet.user.component.ui.skeleton.view.OverlaySurfaceView>
+            app:layout_constraintTop_toBottomOf="@id/capture_title"
+            app:layout_constraintBottom_toBottomOf="parent">
+    </com.kakaovx.homet.user.component.ui.view.OverlayView>
 </FrameLayout>
