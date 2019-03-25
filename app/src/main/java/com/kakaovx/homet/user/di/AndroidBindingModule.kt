@@ -5,9 +5,15 @@ import com.kakaovx.homet.user.di.annotation.FragmentScope
 import com.kakaovx.homet.user.di.annotation.PageScope
 import com.kakaovx.homet.user.di.module.view.*
 import com.kakaovx.homet.user.ui.MainActivity
-import com.kakaovx.homet.user.ui.page.*
-import com.kakaovx.homet.user.ui.player.PlayerActivity
-import com.kakaovx.homet.user.ui.player.PlayerFragment
+import com.kakaovx.homet.user.ui.page.content.PageHome
+import com.kakaovx.homet.user.ui.page.content.program.PageProgram
+import com.kakaovx.homet.user.ui.page.content.recommend.PageHomeIssueProgramList
+import com.kakaovx.homet.user.ui.page.content.trainer.PageTrainer
+import com.kakaovx.homet.user.ui.page.content.workout.PageFreeWorkout
+import com.kakaovx.homet.user.ui.page.content.workout.detail.PageContentDetail
+import com.kakaovx.homet.user.ui.page.etc.player.PopupPlayer
+import com.kakaovx.homet.user.ui.oldPlayer.PlayerActivity
+import com.kakaovx.homet.user.ui.oldPlayer.PlayerFragment
 import com.kakaovx.homet.user.ui.splash.SplashFragment
 import com.kakaovx.homet.user.ui.splash.SplashActivity
 import dagger.Module
@@ -79,5 +85,5 @@ internal abstract class AndroidBindingModule {
 
     @PageScope
     @ContributesAndroidInjector( modules = [ PopupPlayerModule::class , PageModule::class])
-    internal abstract fun bindPopupPlayer():PopupPlayer
+    internal abstract fun bindPopupPlayer(): PopupPlayer
 }

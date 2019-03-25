@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.player.PlayerActivity"
+        <activity android:name=".ui.oldPlayer.PlayerActivity"
                   android:theme="@style/AppTheme.NoActionBar"
                   android:screenOrientation="landscape">
             <intent-filter>

@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.kakaovx.homet.user.constant.AppFeature
-import com.kakaovx.homet.user.ui.page.PageHomeIssueProgramList
+import com.kakaovx.homet.user.ui.page.content.recommend.PageHomeIssueProgramList
 
 class HomePagerAdapter(val context: Context,
                        fm: FragmentManager): FragmentStatePagerAdapter(fm) {

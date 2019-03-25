@@ -4,8 +4,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="com.kakaovx.homet.user.ui.viewModel.PageContentDetailViewModel"/>
-        <variable name="viewModel" type="PageContentDetailViewModel"/>
+        <import type="com.kakaovx.homet.user.ui.page.content.workout.detail.PageContentDetailViewModel"/>
+        <variable name="viewModel" type="com.kakaovx.homet.user.ui.page.content.workout.detail.PageContentDetailViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

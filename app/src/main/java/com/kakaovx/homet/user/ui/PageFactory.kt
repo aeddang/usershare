@@ -4,6 +4,17 @@ import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePosition
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.ui.page.*
+import com.kakaovx.homet.user.ui.page.content.PageContent
+import com.kakaovx.homet.user.ui.page.content.PageHome
+import com.kakaovx.homet.user.ui.page.content.program.PageProgram
+import com.kakaovx.homet.user.ui.page.content.trainer.PageTrainer
+import com.kakaovx.homet.user.ui.page.content.workout.PageFreeWorkout
+import com.kakaovx.homet.user.ui.page.content.workout.detail.PageContentDetail
+import com.kakaovx.homet.user.ui.page.planner.main.PagePlanner
+import com.kakaovx.homet.user.ui.page.etc.player.PopupCamera
+import com.kakaovx.homet.user.ui.page.etc.player.PopupPlayer
+import com.kakaovx.homet.user.ui.page.profile.PageProfile
+import com.kakaovx.homet.user.ui.page.etc.search.PageSearch
 
 class PageFactory {
 
@@ -21,21 +32,41 @@ class PageFactory {
 
     fun getPageByID(id:PageID): PageFragment {
         return when(id) {
-            PageID.HOME -> { PageHome() }
+            PageID.HOME -> {
+                PageHome()
+            }
             PageID.CONTENT -> {
                 val param = HashMap<String, Any>()
                 param[ParamType.PAGES.key] = arrayOf(PageID.PROGRAM, PageID.FREE_WORKOUT, PageID.TRAINER)
                 PageContent().setParam(param)
             }
-            PageID.PLANNER -> { PagePlanner() }
-            PageID.SEARCH -> { PageSearch() }
-            PageID.PROFILE -> { PageProfile() }
-            PageID.PROGRAM -> { PageProgram() }
-            PageID.FREE_WORKOUT -> { PageFreeWorkout() }
-            PageID.TRAINER -> { PageTrainer() }
-            PageID.CONTENT_DETAIL -> { PageContentDetail() }
-            PageID.POPUP_PLAYER -> { PopupPlayer() }
-            PageID.POPUP_CAMERA -> { PopupCamera() }
+            PageID.PLANNER -> {
+                PagePlanner()
+            }
+            PageID.SEARCH -> {
+                PageSearch()
+            }
+            PageID.PROFILE -> {
+                PageProfile()
+            }
+            PageID.PROGRAM -> {
+                PageProgram()
+            }
+            PageID.FREE_WORKOUT -> {
+                PageFreeWorkout()
+            }
+            PageID.TRAINER -> {
+                PageTrainer()
+            }
+            PageID.CONTENT_DETAIL -> {
+                PageContentDetail()
+            }
+            PageID.POPUP_PLAYER -> {
+                PopupPlayer()
+            }
+            PageID.POPUP_CAMERA -> {
+                PopupCamera()
+            }
             PageID.TEST -> { PageTest() }
             PageID.TEST_POP -> { PageDividedGestureTest() }
         }

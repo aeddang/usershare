@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="com.kakaovx.homet.user.ui.player.PlayerViewModel"/>
+        <import type="com.kakaovx.homet.user.ui.oldPlayer.PlayerViewModel"/>
         <variable name="viewModel" type="PlayerViewModel"/>
     </data>
 
@@ -12,7 +12,7 @@
             android:id="@+id/player"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.player.PlayerFragment">
+            tools:context=".ui.oldPlayer.PlayerFragment">
 
         <TextView
                 android:id="@+id/message"
