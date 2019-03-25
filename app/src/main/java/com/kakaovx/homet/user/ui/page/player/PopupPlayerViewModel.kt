@@ -35,7 +35,7 @@ class PopupPlayerViewModel(val repo: Repository) : ViewModel() {
         deviceIO.execute { poseEstimate(data, previewSize, frameToCropTransform) }
     }
 
-    fun poseEstimate(data: IntArray, previewSize: Size, frameToCropTransform: Matrix) {
+    private fun poseEstimate(data: IntArray, previewSize: Size, frameToCropTransform: Matrix) {
         isProcessingImage = true
 
         rgbFrameBitmap = Bitmap.createBitmap(previewSize.width, previewSize.height, Bitmap.Config.ARGB_8888)

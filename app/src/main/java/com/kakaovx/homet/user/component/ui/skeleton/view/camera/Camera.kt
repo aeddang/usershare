@@ -312,6 +312,8 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
             characteristics?.let { character ->
                 activity?.let { displayRotation = it.windowManager.defaultDisplay.rotation }
                 sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)!!
+
+                Log.d(TAG, "sensorOrientation $sensorOrientation")
                 var swappedDimensions = false
                 when (displayRotation) {
                     Surface.ROTATION_0, Surface.ROTATION_180 -> if (sensorOrientation == 90 || sensorOrientation == 270) swappedDimensions = true
@@ -413,8 +415,21 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
 
     }
 
-    protected open fun getOrientation( rotation:Int ): Int {
-        return (ORIENTATIONS.get(rotation) + sensorOrientation + 90) % 360
+    fun getOrientation(): Int {
+        getActivity()?.let {
+            val rotation = it.windowManager.defaultDisplay.rotation
+            var rotate = ORIENTATIONS.get(rotation) + ((sensorOrientation-90) %180)
+            if (isFront && rotation == Surface.ROTATION_0) rotate = -rotate
+
+            return rotate
+        }
+        return 0
+    }
+
+    fun isSwap(): Boolean {
+        if( !isFront ) return false
+        if( ((sensorOrientation-90) %180) == 0) return true
+        return false
     }
 
     private fun unlockFocus() {
@@ -573,8 +588,8 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
                 setAutoFlash(captureBuilder)
                 val activity = getActivity()
                 activity?.let { ac->
-                    val rotate = getOrientation( ac.windowManager.defaultDisplay.rotation )
-                    captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, rotate)
+                    //val rotate = getOrientation( ac.windowManager.defaultDisplay.rotation )
+                    //captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, rotate)
                     val sessionCaptureCallback = object : CameraCaptureSession.CaptureCallback() {
                         override fun onCaptureCompleted( session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
                             Handler(Looper.getMainLooper()).post( captureCompletedRunnable )

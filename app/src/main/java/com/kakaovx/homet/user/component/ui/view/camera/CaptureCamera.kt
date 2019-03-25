@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Surface
 import androidx.annotation.CheckResult
 import com.jakewharton.rxbinding3.internal.checkMainThread
@@ -20,6 +21,7 @@ import com.kakaovx.homet.user.component.ui.skeleton.view.util.swapHolizental
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
+import kotlinx.android.synthetic.main.popup_player.*
 
 @CheckResult
 fun CaptureCamera.capture(): Observable<Bitmap> {
@@ -94,17 +96,14 @@ class CaptureCamera: VXCamera {
     override fun onCapture() {
         file?.let { f->
             val bitmap = BitmapFactory.decodeFile( f.absolutePath )
-            getActivity()?.let {
-                val rotation = it.windowManager.defaultDisplay.rotation
-                var rotate = ORIENTATIONS.get(rotation)
-                if (isFront && (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90))  rotate = -rotate
-                val rotatedBitmap:Bitmap = bitmap.rotate( rotate )
-                if (isFront && (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_270)) {
-                    this.onCaptureImage(rotatedBitmap.swapHolizental())
-                } else {
-                    this.onCaptureImage(rotatedBitmap)
-                }
+            var rotate = getOrientation()
+            val rotatedBitmap:Bitmap = bitmap.rotate( rotate )
+            if (isSwap() ) {
+                this.onCaptureImage(rotatedBitmap.swapHolizental())
+            } else {
+                this.onCaptureImage(rotatedBitmap)
             }
+            Log.d(TAG, "rotation $rotate sensorOrientation $sensorOrientation displayRotation $rotation" )
             super.onCapture()
             // bitmap.recycle()
         }

@@ -69,26 +69,20 @@ class PopupPlayer : RxPageDividedGestureFragment() {
         camera.motionExtract().subscribe { pose->
             camera.cameraOutputSize?.let { outputSize->
                 Log.i(TAG, "Initializing at size [${outputSize.width}]x[${outputSize.height}]")
-                activity?.let { ac->
-                    val inputSize =  viewModel.inputVideoSize
-                    val rotation = ac.windowManager.defaultDisplay.rotation
-                    var rotate = Camera.ORIENTATIONS.get(rotation)
-                    if (camera.isFront && (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90))  rotate = -rotate
+                val inputSize =  viewModel.inputVideoSize
+                var rotate = camera.getOrientation()
+                val frameToCropTransform = ImageUtils.getTransformationMatrix(
+                    outputSize.width, outputSize.height,
+                    inputSize.width, inputSize.height,
+                    rotate, true)
 
-                    val frameToCropTransform = ImageUtils.getTransformationMatrix(
-                        outputSize.width, outputSize.height,
-                        inputSize.width, inputSize.height,
-                        rotate, true)
-
-                    if ( camera.isFront ) {
-                        frameToCropTransform.postScale(-1f, 1f, (inputSize.width / 2).toFloat(), (inputSize.height / 2).toFloat())
-                    }
-
-                    val cropToFrameTransform = Matrix()
-                    frameToCropTransform?.invert(cropToFrameTransform)
-                    viewModel.poseDetect(pose, outputSize, frameToCropTransform)
-
+                if ( camera.isSwap()  ) {
+                    frameToCropTransform.postScale(-1f, 1f, (inputSize.width / 2).toFloat(), (inputSize.height / 2).toFloat())
                 }
+
+                val cropToFrameTransform = Matrix()
+                frameToCropTransform?.invert(cropToFrameTransform)
+                viewModel.poseDetect(pose, outputSize, frameToCropTransform)
 
             }
         }.apply { disposables.add(this) }
