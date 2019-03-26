@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:orientation="vertical"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_marginBottom="@dimen/area_bottom">
+
+    <com.kakaovx.homet.user.component.ui.view.graph.GraphBar
+            android:layout_width="20dp"
+            android:layout_height="200dp" android:layout_gravity="bottom|center_horizontal" android:id="@+id/bar"
+            android:layout_marginRight="50dp"/>
+    <com.kakaovx.homet.user.component.ui.view.graph.GraphBar
+            android:layout_width="200dp"
+            android:layout_height="20dp" android:layout_gravity="bottom|center_horizontal" android:id="@+id/bar2"
+            android:layout_marginLeft="70dp"/>
+
+    <com.kakaovx.homet.user.component.ui.view.graph.GraphCircle
+            android:layout_width="200dp"
+            android:layout_height="200dp" android:layout_gravity="right|top" android:id="@+id/circle"
+    />
+    <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/btnStrat"/>
+</FrameLayout>

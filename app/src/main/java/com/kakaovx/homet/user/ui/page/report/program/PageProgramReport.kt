@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
@@ -14,6 +15,7 @@ import com.kakaovx.homet.user.util.Log
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.page_home.*
+import kotlinx.android.synthetic.main.page_program_report.*
 import javax.inject.Inject
 
 class PageProgramReport : RxPageFragment() {
@@ -24,19 +26,10 @@ class PageProgramReport : RxPageFragment() {
     lateinit var viewViewModelFactory: ViewModelFactory
     private lateinit var viewModel: PageProgramReportViewModel
 
-    private fun initView(context: Context) {
-        activity?.let {
-            val myActivity: MainActivity = activity as MainActivity
-            myActivity.setSupportActionBar(toolbar)
-            myActivity.supportActionBar?.apply {
-                title = context.getString(R.string.page_content)
-                setDisplayShowTitleEnabled(true)
-            }
-        }
-    }
+
 
     @LayoutRes
-    override fun getLayoutResId(): Int = R.layout.page_content_detail
+    override fun getLayoutResId(): Int = R.layout.page_program_report
 
     override fun setParam(param: Map<String, Any>): PageFragment {
         Log.d(TAG, "setParam() data = [${param[ParamType.DETAIL.key]}]")
@@ -44,23 +37,32 @@ class PageProgramReport : RxPageFragment() {
     }
 
     override fun onSubscribe() {
+
+        val datas = arrayListOf(200.0,200.0,200.0,200.0,200.0)
         disposables += viewModel.getFoo()
+        disposables += btnStrat.clicks().subscribe{
+            bar.amount = 300.0
+            bar2.amount = 900.0
+            circle.amount = datas
+        }
     }
 
     override fun onCreated() {
         Log.d(TAG, "onCreated()")
         AndroidSupportInjection.inject(this)
-
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageProgramReportViewModel::class.java]
-
         viewModel.response.observe(this, Observer { message ->
             message?.let {
                 Log.d(TAG, "message = [$message]")
             } ?: Log.e(TAG, "message is null")
         })
+        bar.initSet(1000.0, "#ff00ff")
+        bar2.initSet(1000.0,"#ffff00", false)
 
-        context?.let{ initView(it) }
+        val colors = arrayOf("#ffff00","#00ff00", "#ff0000", "#0000ff", "#000000")
+        circle.initSet(1000.0,colors)
         super.onCreated()
+
     }
 
     override fun onDestroyed() {

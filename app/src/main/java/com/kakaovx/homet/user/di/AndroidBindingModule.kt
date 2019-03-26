@@ -5,7 +5,6 @@ import com.kakaovx.homet.user.di.annotation.PageScope
 import com.kakaovx.homet.user.di.module.view.ActivityModule
 import com.kakaovx.homet.user.di.module.view.FragmentPlayerModule
 import com.kakaovx.homet.user.di.module.view.PageModule
-import com.kakaovx.homet.user.di.module.view.PopupPlayerModule
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.oldPlayer.PlayerActivity
 import com.kakaovx.homet.user.ui.oldPlayer.PlayerFragment
@@ -79,7 +78,7 @@ internal abstract class AndroidBindingModule {
     internal abstract fun bindPageTrainer(): PageTrainer
 
     @PageScope
-    @ContributesAndroidInjector( modules = [ PopupPlayerModule::class , PageModule::class])
+    @ContributesAndroidInjector( modules = [ PageModule::class])
     internal abstract fun bindPopupPlayer(): PopupPlayer
 
     @PageScope

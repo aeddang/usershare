@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit
 import android.hardware.camera2.CameraCharacteristics
 import android.util.SparseIntArray
 import android.view.ViewTreeObserver
+import com.kakaovx.homet.user.component.ui.skeleton.thread.HandlerExecutor
 import com.kakaovx.homet.user.component.ui.skeleton.view.AutoFitTextureView
 
 
@@ -106,7 +107,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     private var textureView: AutoFitTextureView? = null
     private var blankSurfaceTexture = SurfaceTexture(10)
     private var currentCameraDevice: CameraDevice? = null
-    private var backgroundExecutor: CameraExecutor? = null
+    private var backgroundExecutor: HandlerExecutor? = null
     private var imageReader: ImageReader? = null
     private var extractionReader: ImageReader? = null
     private val cameraOpenCloseLock = Semaphore(1)
@@ -472,7 +473,7 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     }
 
     private fun startBackgroundThread() {
-        backgroundExecutor = CameraExecutor()
+        backgroundExecutor = HandlerExecutor(TAG)
     }
 
     private fun stopBackgroundThread() {

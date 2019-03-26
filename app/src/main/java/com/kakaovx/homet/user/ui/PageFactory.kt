@@ -21,6 +21,7 @@ import com.kakaovx.homet.user.ui.page.player.PopupPlayer
 import com.kakaovx.homet.user.ui.page.profile.PageProfile
 import com.kakaovx.homet.user.ui.page.profile.setting.PageSetting
 import com.kakaovx.homet.user.ui.page.report.diet.PageDietReport
+import com.kakaovx.homet.user.ui.page.report.program.PageProgramReport
 
 class PageFactory {
 
@@ -58,7 +59,7 @@ class PageFactory {
             PageID.DIET_PLAN -> PageDietPlanner()
             PageID.SETTING -> PageSetting()
             PageID.DIET_REPORT -> PageDietReport()
-            PageID.PROGRAM_REPORT -> PageProgram()
+            PageID.PROGRAM_REPORT -> PageProgramReport()
             PageID.TEST -> PageTest()
             PageID.TEST_POP -> PageDividedGestureTest()
         }

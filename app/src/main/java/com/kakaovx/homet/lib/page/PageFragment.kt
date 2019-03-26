@@ -71,6 +71,7 @@ abstract class PageFragment: Fragment(), Page {
             onDestroyed()
             Log.d(TAG,"onDestroyView()")
         }
+        Log.d(TAG,"onDestroy()")
     }
 
     open fun setParam(param:Map<String,Any>):PageFragment { return this }

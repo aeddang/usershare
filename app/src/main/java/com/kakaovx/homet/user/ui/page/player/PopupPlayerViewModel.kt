@@ -7,7 +7,7 @@ import android.util.Size
 import androidx.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.model.VxCoreObserver
 import com.kakaovx.homet.user.component.repository.Repository
-import com.kakaovx.homet.user.util.AppDeviceExecutor
+import com.kakaovx.homet.user.component.ui.skeleton.thread.HandlerExecutor
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.posemachine.PoseMachine
 import java.util.*
@@ -18,7 +18,7 @@ class PopupPlayerViewModel(val repo: Repository) : ViewModel() {
 
     private val restApi = repo.restApi
     val mr = repo.mr
-    private var deviceIO: AppDeviceExecutor = AppDeviceExecutor()
+    private var deviceIO: HandlerExecutor = HandlerExecutor(TAG)
     private var isProcessingImage: Boolean = false
     val inputVideoSize:Size =  Size( mr.getInputWidth(), mr.getInputHeight())
     var pose:ArrayList<Array<FloatArray>>? = null

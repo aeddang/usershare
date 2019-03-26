@@ -6,7 +6,6 @@ import android.view.View
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxLinearLayout
 
 abstract class DivisionTab<T> : RxLinearLayout {
-
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
