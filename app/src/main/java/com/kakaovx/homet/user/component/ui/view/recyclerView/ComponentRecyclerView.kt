@@ -13,7 +13,7 @@ class ComponentRecyclerView: RecyclerFrameLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-    override fun onCreated() {
+    override fun onCreatedView() {
         recyclerView.layoutManager = VerticalLinearLayoutManager(context)
         recyclerView.adapter = ComponentAdapter().setDataArray(arrayOf("AAA","BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
     }
@@ -22,5 +22,5 @@ class ComponentRecyclerView: RecyclerFrameLayout {
         return
     }
 
-    override fun onDestroyed() {}
+    override fun onDestroyedView() {}
 }

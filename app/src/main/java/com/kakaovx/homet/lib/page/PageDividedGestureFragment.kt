@@ -12,15 +12,15 @@ abstract class PageDividedGestureFragment: PageGestureFragment(), ViewTreeObserv
     abstract fun getDividedView(): View
 
     @CallSuper
-    override fun onCreated() {
-        super.onCreated()
+    override fun onCreatedView() {
+        super.onCreatedView()
         dividedView = getDividedView()
         dividedView.viewTreeObserver.addOnGlobalLayoutListener(this)
     }
 
     @CallSuper
-    override fun onDestroyed() {
-        super.onDestroyed()
+    override fun onDestroyedView() {
+        super.onDestroyedView()
         dividedView.viewTreeObserver.removeOnGlobalLayoutListener(this)
     }
 

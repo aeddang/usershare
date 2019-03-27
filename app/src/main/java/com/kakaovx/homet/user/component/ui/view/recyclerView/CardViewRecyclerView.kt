@@ -10,10 +10,10 @@ class CardViewRecyclerView: RecyclerFrameLayout {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    override fun onCreated() {
-        Log.d("CardViewRecyclerView", "onCreated()")
+    override fun onCreatedView() {
+        Log.d("CardViewRecyclerView", "onCreatedView()")
     }
-    override fun onDestroyed() {
-        Log.d("CardViewRecyclerView", "onDestroyed()")
+    override fun onDestroyedView() {
+        Log.d("CardViewRecyclerView", "onDestroyedView()")
     }
 }

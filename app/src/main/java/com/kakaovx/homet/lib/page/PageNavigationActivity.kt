@@ -22,7 +22,7 @@ abstract class PageNavigationActivity<T>: PageActivity<T>(), PageGestureView.Del
     private var animation: ViewPropertyAnimator? = null
 
     @CallSuper
-    override fun onCreated() {
+    override fun onCreatedView() {
         closeType = getCloseType()
         navigationView = getNavigationView()
         contentsView = getContentsView()
@@ -42,7 +42,7 @@ abstract class PageNavigationActivity<T>: PageActivity<T>(), PageGestureView.Del
     }
 
     @CallSuper
-    override fun onDestroyed() {
+    override fun onDestroyedView() {
         removeAnimation()
     }
 

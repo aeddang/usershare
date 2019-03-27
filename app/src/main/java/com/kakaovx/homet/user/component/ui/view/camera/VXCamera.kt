@@ -43,7 +43,6 @@ fun VXCamera.draw(): Observable<Canvas> {
 }
 
 
-
 abstract class VXCamera: Camera, OverlaySurfaceView.Delegate {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
@@ -59,14 +58,14 @@ abstract class VXCamera: Camera, OverlaySurfaceView.Delegate {
     override fun getLayoutResId(): Int { return R.layout.ui_camera }
 
     @CallSuper
-    override fun onCreated() {
-        super.onCreated()
+    override fun onCreatedView() {
+        super.onCreatedView()
         surfaceView.setOnDrawListener( this )
     }
 
     @CallSuper
-    override fun onDestroyed() {
-        super.onDestroyed()
+    override fun onDestroyedView() {
+        super.onDestroyedView()
         surfaceView.setOnDrawListener( null )
     }
 
@@ -84,6 +83,7 @@ abstract class VXCamera: Camera, OverlaySurfaceView.Delegate {
 
 private class DrawCameraEventObservable( private val view: VXCamera) : Observable<Canvas>() {
     @SuppressLint("RestrictedApi")
+
     override fun subscribeActual(observer: Observer<in Canvas>) {
         if ( !checkMainThread(observer))  return
         val listener = Listener(view, observer)

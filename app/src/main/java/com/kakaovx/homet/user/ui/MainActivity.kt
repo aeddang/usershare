@@ -20,15 +20,15 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     override fun getLayoutResId(): Int { return R.layout.activity_main }
     override fun getPageAreaId(): Int { return R.id.area }
     override fun getPageExitMsg(): Int { return R.string.notice_app_exit }
-    override fun getHomes():Array<PageID> { return arrayOf( PageID.CONTENT ) }
+    override fun getHomes():Array<PageID> { return arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE ) }
     override fun getBackStacks():Array<PageID> { return arrayOf( PageID.CONTENT, PageID.TEST ) }
 
     @Inject
     lateinit var viewViewModelFactory: ViewModelFactory
     private lateinit var viewModel: MainActivityViewModel
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
         AndroidInjection.inject(this)
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[MainActivityViewModel::class.java]
 
@@ -43,8 +43,8 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
         bottomTab.delegate = this
     }
 
-    override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed()")
+    override fun onDestroyedView() {
+        Log.d(TAG, "onDestroyedView()")
     }
 
     override fun onSelected(view:DivisionTab<PageID>, id:PageID) {

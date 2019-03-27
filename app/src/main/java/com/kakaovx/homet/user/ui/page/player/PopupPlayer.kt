@@ -5,14 +5,12 @@ import android.graphics.Typeface
 import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
-import android.view.Surface
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.lib.page.PageGestureView
 import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageDividedGestureFragment
-import com.kakaovx.homet.user.component.ui.skeleton.view.camera.Camera
 import com.kakaovx.homet.user.component.ui.view.BorderedText
 import com.kakaovx.homet.user.component.ui.view.camera.draw
 import com.kakaovx.homet.user.component.ui.view.camera.motionExtract
@@ -40,8 +38,8 @@ class PopupPlayer : RxPageDividedGestureFragment() {
     private var cIdx = 0
     private var captureCompletedRunnable: Runnable = Runnable { onCapture() }
 
-    override fun onCreated() {
-        super.onCreated()
+    override fun onCreatedView() {
+        super.onCreatedView()
         AndroidSupportInjection.inject(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PopupPlayerViewModel::class.java)
 
@@ -58,8 +56,8 @@ class PopupPlayer : RxPageDividedGestureFragment() {
         player.load("http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4")
     }
 
-    override fun onDestroyed() {
-        super.onDestroyed()
+    override fun onDestroyedView() {
+        super.onDestroyedView()
         borderedText = null
     }
 

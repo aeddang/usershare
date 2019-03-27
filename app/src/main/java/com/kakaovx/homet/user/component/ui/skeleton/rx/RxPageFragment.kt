@@ -9,12 +9,12 @@ abstract class RxPageFragment : PageFragment() , Rx {
     protected val disposables by lazy { CompositeDisposable() }
 
     @CallSuper
-    override fun onCreated() {
+    override fun onCreatedView() {
         onSubscribe()
     }
 
     @CallSuper
-    override fun onDestroyed() {
+    override fun onDestroyedView() {
         disposables.clear()
     }
 }

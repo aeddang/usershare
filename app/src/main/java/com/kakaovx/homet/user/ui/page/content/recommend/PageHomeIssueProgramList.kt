@@ -85,8 +85,8 @@ class PageHomeIssueProgramList : RxPageFragment() {
 
     override fun getLayoutResId() = R.layout.page_home_content_issue_list
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
         AndroidSupportInjection.inject(this)
 
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageHomeIssueProgramListViewModel::class.java]
@@ -111,12 +111,12 @@ class PageHomeIssueProgramList : RxPageFragment() {
         })
 
         context?.let{ initView(it) }
-        super.onCreated()
+        super.onCreatedView()
     }
 
-    override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed()")
+    override fun onDestroyedView() {
+        Log.d(TAG, "onDestroyedView()")
         issueProgramListAdapter = null
-        super.onDestroyed()
+        super.onDestroyedView()
     }
 }

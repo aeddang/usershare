@@ -9,14 +9,14 @@ abstract class RxPageDividedGestureFragment : PageDividedGestureFragment(), Rx {
     protected val disposables by lazy { CompositeDisposable() }
 
     @CallSuper
-    override fun onCreated() {
-        super.onCreated()
+    override fun onCreatedView() {
+        super.onCreatedView()
         onSubscribe()
     }
 
     @CallSuper
-    override fun onDestroyed() {
-        super.onDestroyed()
+    override fun onDestroyedView() {
+        super.onDestroyedView()
         disposables.clear()
     }
 }

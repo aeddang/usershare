@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.AttributeSet
 import android.util.Log
-import android.view.Surface
 import androidx.annotation.CheckResult
 import com.jakewharton.rxbinding3.internal.checkMainThread
 import com.jakewharton.rxbinding3.view.clicks
@@ -21,7 +20,6 @@ import com.kakaovx.homet.user.component.ui.skeleton.view.util.swapHolizental
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
-import kotlinx.android.synthetic.main.popup_player.*
 
 @CheckResult
 fun CaptureCamera.capture(): Observable<Bitmap> {
@@ -35,6 +33,7 @@ private class CaptureCameraEventObservable( private val view: CaptureCamera) : O
         val listener = Listener(view, observer)
         observer.onSubscribe(listener)
         view.setOnCameraListener(listener)
+        
     }
     private class Listener( private val view: CaptureCamera, private val observer: Observer<in Bitmap>) : MainThreadDisposable(), Camera.Delegate {
 
@@ -70,14 +69,14 @@ class CaptureCamera: VXCamera {
             Manifest.permission.CAMERA )
     }
 
-    override fun onCreated() {
-        super.onCreated()
+    override fun onCreatedView() {
+        super.onCreatedView()
         cameraRatioType =  CameraRatioType.LargestViewRatio
         getActivity()?.let { file = File(it.getExternalFilesDir(null), CAPTURE_FILE_NAME) }
     }
 
-    override fun onDestroyed() {
-        super.onDestroyed()
+    override fun onDestroyedView() {
+        super.onDestroyedView()
         capturedImage?.recycle()
         capturedImage = null
     }

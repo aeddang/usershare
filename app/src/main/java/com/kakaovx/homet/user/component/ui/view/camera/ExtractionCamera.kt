@@ -31,8 +31,8 @@ open class ExtractionCamera: VXCamera {
     fun setOnExtractionCameraListener( _delegate:Delegate? ){ delegate = _delegate }
     override fun getNeededPermissions():Array<String>{ return arrayOf( Manifest.permission.CAMERA ) }
 
-    override fun onCreated() {
-        super.onCreated()
+    override fun onCreatedView() {
+        super.onCreatedView()
         this.isFront = true
         cameraRatioType =  CameraRatioType.Custom
         this.captureMode = CaptureMode.Extraction

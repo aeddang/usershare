@@ -47,8 +47,8 @@ class PageDietReport : RxPageFragment() {
         disposables += viewModel.getFoo()
     }
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
         AndroidSupportInjection.inject(this)
 
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageDietReportViewModel::class.java]
@@ -60,11 +60,11 @@ class PageDietReport : RxPageFragment() {
         })
 
         context?.let{ initView(it) }
-        super.onCreated()
+        super.onCreatedView()
     }
 
-    override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed()")
-        super.onDestroyed()
+    override fun onDestroyedView() {
+        Log.d(TAG, "onDestroyedView()")
+        super.onDestroyedView()
     }
 }

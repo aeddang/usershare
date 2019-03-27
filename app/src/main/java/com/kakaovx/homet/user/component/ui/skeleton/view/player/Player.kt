@@ -38,10 +38,10 @@ abstract class Player : RxFrameLayout, Player.EventListener, VideoListener {
     protected open fun getUserAgent(): String { return "AwesomePlayer" }
     @StringRes abstract fun getAppName():Int
     abstract fun getPlayerView(): PlayerView
-    override fun onCreated() {
+    override fun onCreatedView() {
     }
 
-    override fun onDestroyed() {
+    override fun onDestroyedView() {
         releasePlayer()
     }
 

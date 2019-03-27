@@ -30,9 +30,9 @@ class PageDividedGestureTest : RxPageDividedGestureFragment() {
     override fun getBackgroundView(): View { return bg }
     override fun getDividedView(): View { return divided }
 
-    override fun onCreated() {
-        super.onCreated()
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        super.onCreatedView()
+        Log.d(TAG, "onCreatedView()")
         sharedElementEnterTransition = ChangeBounds()
         image.transitionName = "testAni"
         context?.let{ initView(it) }

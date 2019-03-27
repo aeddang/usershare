@@ -19,15 +19,8 @@ abstract class PageFragment: Fragment(), Page {
     private var restoredView:View? = null
     var pageID:Any? = null; internal set
 
-
-//    @CallSuper
-    /**
-     * disable CallSuper
-     * need to override onCreateView in DataBinding Style code.
-     * 2019.03.07 - parkkw09@kakaovx.com
-     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "onCreateView()")
+        Log.d(TAG, "onCreatedView()")
         this.restoredView?.let { return it }
         return inflater.inflate(getLayoutResId(), container, false)
     }
@@ -35,7 +28,7 @@ abstract class PageFragment: Fragment(), Page {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if( isInit ) onCreated()
+        if( isInit ) onCreatedView()
     }
 
     @CallSuper
@@ -59,7 +52,7 @@ abstract class PageFragment: Fragment(), Page {
             return
         } else {
             super.onDestroyView()
-            onDestroyed()
+            onDestroyedView()
             Log.d(TAG,"onDestroyView()")
         }
     }
@@ -68,7 +61,7 @@ abstract class PageFragment: Fragment(), Page {
     override fun onDestroy() {
         super.onDestroy()
         if( isRestoredPage ) {
-            onDestroyed()
+            onDestroyedView()
             Log.d(TAG,"onDestroyView()")
         }
         Log.d(TAG,"onDestroy()")

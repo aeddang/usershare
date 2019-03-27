@@ -12,8 +12,8 @@ class ContentCardItem(context:Context): ListItem(context) {
 
     private val TAG = javaClass.simpleName
 
-    override fun onCreated() { }
-    override fun onDestroyed() {}
+    override fun onCreatedView() { }
+    override fun onDestroyedView() {}
 
     override fun getLayoutResId(): Int {
         return R.layout.item_content_card

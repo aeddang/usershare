@@ -25,11 +25,11 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
             Log.d(TAG , "field $field ")
             startAnimation(GraphUtil.ANIMATION_DURATION)
         }
-    private var isDrawRect = false
+
     private var prevAmount:Double = 0.0
     private var currentAmount:Double = 0.0
     private lateinit var paints:ArrayList<Paint>
-    private var rect:RectF? = null
+
 
     fun initSet(totalAmount:Double, colors:Array<String>) {
         total = totalAmount
@@ -37,42 +37,38 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
         colors.forEach {
             val paint = Paint()
             paint.color = Color.parseColor( it )
+            paint.style = Paint.Style.STROKE
+            paint.strokeCap = Paint.Cap.SQUARE
+            paint.strokeWidth = 1.0f
             paints.add( paint )
         }
     }
 
     private fun getCurrentPaint():Paint?{
         val findAmount = total * currentAmount / 360.0
-        Log.d(TAG , "findAmount $findAmount ")
         val findValue = amount.find { it >= findAmount }
-        Log.d(TAG , "findValue $findValue ")
         findValue ?: return null
         val findIdx = amount.indexOf(findValue)
-        Log.d(TAG , "findIdx $findIdx ")
         if( findIdx >= paints.size) return null
         return paints[ findIdx ]
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        if( rect != null && !isDrawRect) {
-            canvas?.drawRect(rect!!, paints[0])
-            isDrawRect = true
-        }
-        getCurrentPaint()?.let {
-            Log.d(TAG , "draw paint $prevAmount $currentAmount")
-            canvas?.drawArc(rect, prevAmount.toFloat(), currentAmount.toFloat(), true, it)
-            prevAmount = currentAmount
-        }
+        var start = 0.0
+        /*
+        amount.forEachIndexed(idx, value) {
+            //var end = if ( it >  currentAmount ) currentAmount else it
 
+        }*/
     }
 
     override fun onStart() {
         currentAmount = 0.0
         prevAmount = 0.0
-        isDrawRect = false
-        rect = RectF()
-        rect?.set(0.0f, 0.0f, this.width.toFloat(), this.height.toFloat())
+        //rect = null
+        //paint = null
+
     }
 
     override fun onCompute(f: Int) {

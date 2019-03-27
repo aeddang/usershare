@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.CallSuper
 import com.kakaovx.homet.user.util.Log
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -54,6 +55,7 @@ abstract class AnimatedDrawView @kotlin.jvm.JvmOverloads constructor(context: Co
     abstract fun onCompute( f:Int )
     abstract fun onCompleted( f:Int )
 
+    @CallSuper
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         stopAnimation()

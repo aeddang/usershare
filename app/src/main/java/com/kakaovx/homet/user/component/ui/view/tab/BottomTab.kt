@@ -12,7 +12,7 @@ class BottomTab: DivisionTab<PageID>{
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-    override fun onDestroyed() {}
+    override fun onDestroyedView() {}
 
     override fun getLayoutResId(): Int {
         return R.layout.ui_bottom_tab

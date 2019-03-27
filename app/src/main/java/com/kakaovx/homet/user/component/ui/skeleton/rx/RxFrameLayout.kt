@@ -23,7 +23,7 @@ abstract class RxFrameLayout : FrameLayout, Rx, Page {
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         disposables = CompositeDisposable()
-        onCreated()
+        onCreatedView()
         onAttached()
         onSubscribe()
     }
@@ -34,6 +34,6 @@ abstract class RxFrameLayout : FrameLayout, Rx, Page {
         disposables?.clear()
         disposables = null
         onDetached()
-        onDestroyed()
+        onDestroyedView()
     }
 }

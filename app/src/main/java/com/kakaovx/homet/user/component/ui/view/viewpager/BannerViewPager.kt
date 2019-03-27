@@ -12,9 +12,9 @@ class BannerViewPager: ViewPagerFrameLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-    override fun onCreated() {
+    override fun onCreatedView() {
         viewPager.adapter = BannerPagerAdapter().setData(arrayOf("0","1","2","3"))
     }
 
-    override fun onDestroyed() {}
+    override fun onDestroyedView() {}
 }

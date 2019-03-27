@@ -40,7 +40,7 @@ abstract class DivisionTab<T> : RxLinearLayout {
         selectedTab = tab[idx]
     }
 
-    override fun onCreated() {
+    override fun onCreatedView() {
         data = getIDData()
         tab = getTabMenu()
         tab.forEach { it.setOnClickListener{view ->
@@ -50,7 +50,7 @@ abstract class DivisionTab<T> : RxLinearLayout {
         }}
     }
 
-    override fun onDestroyed() {
+    override fun onDestroyedView() {
         delegate = null
     }
 

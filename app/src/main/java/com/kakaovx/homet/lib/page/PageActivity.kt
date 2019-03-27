@@ -52,7 +52,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
         pagePresenter.activity = this
         setContentView(getLayoutResId())
         pageArea = findViewById(getPageAreaId())
-        onCreated()
+        onCreatedView()
     }
 
     @CallSuper
@@ -62,7 +62,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
         pagePresenter.onDestroy()
         popups.clear()
         historys.clear()
-        onDestroyed()
+        onDestroyedView()
     }
 
     @CallSuper

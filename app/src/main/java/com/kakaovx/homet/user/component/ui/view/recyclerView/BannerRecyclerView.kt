@@ -14,7 +14,7 @@ class BannerRecyclerView: RecyclerFrameLayout {
 
     private lateinit var viewAdapter: BannerAdapter
 
-    override fun onCreated() {
+    override fun onCreatedView() {
         viewAdapter = BannerAdapter()
         viewAdapter.delegate = this
         recyclerView.layoutManager = HorizontalLinearLayoutManager(context)
@@ -26,5 +26,5 @@ class BannerRecyclerView: RecyclerFrameLayout {
         viewAdapter.viewMoreComplete(arrayOf("AAA"+page.toString(),"BBB","CCC","DDD","EEE","FFF","AAA","BBB","CCC","DDD","EEE","FFF"))
     }
 
-    override fun onDestroyed() {}
+    override fun onDestroyedView() {}
 }

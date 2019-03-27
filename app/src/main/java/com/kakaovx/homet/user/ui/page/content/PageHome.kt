@@ -170,17 +170,17 @@ class PageHome : RxPageFragment() {
         disposables += viewModel.getIssueProgramData()
     }
 
-    override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed()")
+    override fun onDestroyedView() {
+        Log.d(TAG, "onDestroyedView()")
         programListAdapter = null
         freeWorkoutListAdapter = null
         trainerListAdapter = null
         issuePagerAdapter = null
-        super.onDestroyed()
+        super.onDestroyedView()
     }
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
         AndroidSupportInjection.inject(this)
 
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageHomeViewModel::class.java]
@@ -204,7 +204,7 @@ class PageHome : RxPageFragment() {
             } ?: Log.e(TAG, "liveData is null")
         })
         context?.let{ initView(it) }
-        super.onCreated()
+        super.onCreatedView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

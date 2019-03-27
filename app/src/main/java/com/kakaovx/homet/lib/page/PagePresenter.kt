@@ -69,11 +69,15 @@ class PagePresenter<T>(var view: View<T>?, internal val model: Model<T>): Presen
     }
 
     override fun pageStart(id:T): Presenter<T> {
+        if(model.currentPage == id) return this
+        model.currentPage = id
         view?.onPageStart(id)
         return this
     }
 
     override fun pageChange(id:T, param:Map<String, Any>?, sharedElement:android.view.View?, transitionName:String?): Presenter<T> {
+        if(model.currentPage == id) return this
+        model.currentPage = id
         view?.onPageChange(id, param, sharedElement, transitionName)
         return this
     }

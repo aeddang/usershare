@@ -47,8 +47,8 @@ class PageFilter : RxPageFragment() {
         disposables += viewModel.getFoo()
     }
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
         AndroidSupportInjection.inject(this)
 
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageFilterViewModel::class.java]
@@ -60,6 +60,6 @@ class PageFilter : RxPageFragment() {
         })
 
         context?.let{ initView(it) }
-        super.onCreated()
+        super.onCreatedView()
     }
 }

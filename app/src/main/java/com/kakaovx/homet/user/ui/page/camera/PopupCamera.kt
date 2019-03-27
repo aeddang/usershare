@@ -19,8 +19,8 @@ class PopupCamera : RxPageDividedGestureFragment() {
     override fun getBackgroundView(): View { return bg }
     override fun getDividedView(): View { return divided }
 
-    override fun onCreated() {
-        super.onCreated()
+    override fun onCreatedView() {
+        super.onCreatedView()
         sharedElementEnterTransition = ChangeBounds()
         capturedView.transitionName = "testAni"
     }

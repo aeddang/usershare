@@ -104,13 +104,13 @@ class PageContentDetail : RxPageFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.i(TAG, "onCreateView()")
+        Log.i(TAG, "onCreatedView()")
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.page_content_detail, container, false)
         return dataBinding.root
     }
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
         AndroidSupportInjection.inject(this)
 
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageContentDetailViewModel::class.java]
@@ -139,12 +139,12 @@ class PageContentDetail : RxPageFragment() {
         })
 
         context?.let{ initView(it) }
-        super.onCreated()
+        super.onCreatedView()
     }
 
-    override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed()")
-        super.onDestroyed()
+    override fun onDestroyedView() {
+        Log.d(TAG, "onDestroyedView()")
+        super.onDestroyedView()
     }
 }
 

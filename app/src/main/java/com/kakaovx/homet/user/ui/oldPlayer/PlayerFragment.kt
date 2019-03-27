@@ -430,7 +430,7 @@ class PlayerFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "onCreateView()")
+        Log.d(TAG, "onCreatedView()")
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_player, container, false)
 
         return dataBinding.root

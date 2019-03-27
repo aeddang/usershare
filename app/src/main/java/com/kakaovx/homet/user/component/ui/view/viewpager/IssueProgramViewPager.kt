@@ -13,12 +13,12 @@ class IssueProgramViewPager: RxFrameLayout, BaseAdapter.Delegate {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
 
-    override fun onCreated() {
-        Log.d("IssueProgramViewPager", "onCreated()")
+    override fun onCreatedView() {
+        Log.d("IssueProgramViewPager", "onCreatedView()")
     }
 
-    override fun onDestroyed() {
-        Log.d("IssueProgramViewPager", "onDestroyed()")
+    override fun onDestroyedView() {
+        Log.d("IssueProgramViewPager", "onDestroyedView()")
     }
 
     @LayoutRes

@@ -47,8 +47,8 @@ class PageSetting : RxPageFragment() {
         disposables += viewModel.getFoo()
     }
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
         AndroidSupportInjection.inject(this)
 
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageSettingViewModel::class.java]
@@ -60,6 +60,6 @@ class PageSetting : RxPageFragment() {
         })
 
         context?.let{ initView(it) }
-        super.onCreated()
+        super.onCreatedView()
     }
 }

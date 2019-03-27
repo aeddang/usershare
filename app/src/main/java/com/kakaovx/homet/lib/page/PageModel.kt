@@ -1,11 +1,9 @@
 package com.kakaovx.homet.lib.page
 
-import java.util.*
-import kotlin.collections.ArrayList
-
-class PageModel<T>: Model<T> {
+class PageModel<T> : Model<T> {
     internal lateinit var homes: Array<T>
     internal var backStacks: Array<T>? = null
+    override var currentPage: T? = null
     override fun onDestroy() {
     }
 

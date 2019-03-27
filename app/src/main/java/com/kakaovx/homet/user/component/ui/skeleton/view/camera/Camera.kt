@@ -156,16 +156,16 @@ abstract class Camera : RxFrameLayout, PageRequestPermission {
     }
 
     @CallSuper
-    override fun onCreated() {
+    override fun onCreatedView() {
     }
 
     @CallSuper
-    override fun onDestroyed() {
+    override fun onDestroyedView() {
         releaseCamera()
         delegate = null
         file?.delete()
         file = null
-        Log.d(TAG, "onDestroyed")
+        Log.d(TAG, "onDestroyedView")
     }
 
     @CallSuper

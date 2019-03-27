@@ -30,9 +30,9 @@ class PageContent : ViewPagerPageFragment() {
         }
     }
 
-    override fun onCreated() {
-        super.onCreated()
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        super.onCreatedView()
+        Log.d(TAG, "onCreatedView()")
 
         context?.let { initView(it) }
         activity?.let {
@@ -46,9 +46,9 @@ class PageContent : ViewPagerPageFragment() {
         }
     }
 
-    override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed()")
-        super.onDestroyed()
+    override fun onDestroyedView() {
+        Log.d(TAG, "onDestroyedView()")
+        super.onDestroyedView()
     }
 
     private class PageViewPagerAdapter(fragmentManager: FragmentManager,

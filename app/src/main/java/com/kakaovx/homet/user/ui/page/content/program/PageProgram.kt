@@ -57,8 +57,8 @@ class PageProgram : RxPageFragment() {
         return R.layout.page_program
     }
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated() start")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView() start")
         AndroidSupportInjection.inject(this)
 
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageProgramViewModel::class.java]
@@ -81,16 +81,16 @@ class PageProgram : RxPageFragment() {
                 }
             }
         })
-        super.onCreated()
+        super.onCreatedView()
 
         context?.let{ initView(it) }
         initDisposables()
-        Log.d(TAG, "onCreated() end")
+        Log.d(TAG, "onCreatedView() end")
     }
 
-    override fun onDestroyed() {
-        Log.d(TAG, "onDestroyed()")
+    override fun onDestroyedView() {
+        Log.d(TAG, "onDestroyedView()")
         contentListAdapter = null
-        super.onDestroyed()
+        super.onDestroyedView()
     }
 }

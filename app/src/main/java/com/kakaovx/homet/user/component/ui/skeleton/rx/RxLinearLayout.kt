@@ -17,7 +17,7 @@ abstract class RxLinearLayout : LinearLayout, Rx, Page {
 
     private fun init(context: Context) {
         LayoutInflater.from(context).inflate(getLayoutResId(), this, true)
-        onCreated()
+        onCreatedView()
     }
 
     @CallSuper

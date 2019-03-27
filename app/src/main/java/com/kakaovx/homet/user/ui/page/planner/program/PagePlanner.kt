@@ -54,8 +54,8 @@ class PagePlanner : RxPageFragment() {
         disposables += viewModel.getFoo()
     }
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
         AndroidSupportInjection.inject(this)
 
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PagePlannerViewModel::class.java]
@@ -67,7 +67,7 @@ class PagePlanner : RxPageFragment() {
         })
 
         context?.let{ initView(it) }
-        super.onCreated()
+        super.onCreatedView()
 
         button.clicks().subscribe(this::getAllUsers).apply { disposables.add(this) }
         hideProgress()

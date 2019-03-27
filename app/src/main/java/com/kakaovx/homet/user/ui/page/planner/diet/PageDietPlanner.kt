@@ -54,8 +54,8 @@ class PageDietPlanner : RxPageFragment() {
         disposables += plannerViewModel.getFoo()
     }
 
-    override fun onCreated() {
-        Log.d(TAG, "onCreated()")
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
         AndroidSupportInjection.inject(this)
 
         plannerViewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageDietPlannerViewModel::class.java]
@@ -67,7 +67,7 @@ class PageDietPlanner : RxPageFragment() {
         })
 
         context?.let{ initView(it) }
-        super.onCreated()
+        super.onCreatedView()
 
         button.clicks().subscribe(this::getAllUsers).apply { disposables.add(this) }
         hideProgress()
