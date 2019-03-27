@@ -1,5 +1,6 @@
 package com.kakaovx.homet.user.component.ui.view.graph
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -8,7 +9,7 @@ import com.kakaovx.homet.user.util.Log
 
 
 class GraphPolygon@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    :  AnimatedDrawView(context, attrs, defStyleAttr) {
+    :  VXGraph(context, attrs, defStyleAttr) {
     private val TAG = javaClass.simpleName
     var total:Double = 0.0
     var amount:List<Double> = ArrayList()
@@ -18,19 +19,15 @@ class GraphPolygon@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: 
             startAnimation(GraphUtil.ANIMATION_DURATION_LONG)
         }
 
-
     private var currentAmount:Double = 0.0
     private var startAngle:Float = -90.0f
     private var changeAngle:Float = -0.0f
     private var centerX = 0.0f
     private var centerY = 0.0f
     private var maxValue = 0.0f
-
-
     private lateinit var paint:Paint
-
     private lateinit var camera:Camera
-    private var isApplyCamera:Boolean = false
+
 
     fun initSet(totalAmount:Double, color:String) {
         paint = Paint()
@@ -44,8 +41,7 @@ class GraphPolygon@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: 
         //camera.rotateX(20.0f)
     }
 
-
-
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         var rotate = 0.0f
@@ -78,6 +74,21 @@ class GraphPolygon@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: 
         canvas?.restore()
         startAngle ++
         camera.restore()
+
+        if( currentAmount != 1.0 ) return
+        delegate?.let {
+            val datas = ArrayList<Pair<Double, Point>>()
+            amount.forEachIndexed { idx, value ->
+                val rt = startAngle + (changeAngle*idx)
+                val r = rt * Math.PI/180
+                val v = maxValue * value / total
+                val tx = centerX + (Math.cos(r) * v)
+                val ty = centerY + (Math.sin(r) * v)
+                val point = Point( Math.round(tx).toInt() , Math.round(ty).toInt() )
+                datas.add(Pair(value, point))
+            }
+            it.drawGraph(this, datas)
+        }
     }
 
     override fun onStart() {

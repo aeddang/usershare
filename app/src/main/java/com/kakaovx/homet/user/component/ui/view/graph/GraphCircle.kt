@@ -1,24 +1,22 @@
 package com.kakaovx.homet.user.component.ui.view.graph
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import com.kakaovx.homet.user.component.ui.skeleton.view.AnimatedDrawView
 import com.kakaovx.homet.user.util.Log
 
 
 class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    :  AnimatedDrawView(context, attrs, defStyleAttr) {
+    :  VXGraph(context, attrs, defStyleAttr) {
     private val TAG = javaClass.simpleName
     var total:Double = 0.0
     var amount:List<Double> = ArrayList()
         set(value) {
             if(value.isEmpty()) return
-            var sum= 0.0
             field = value.map {
                 val rt = it / total * 360.0
-                sum += rt
-                return@map sum
+                return@map rt
             }
             Log.d(TAG , "field $field ")
             startAnimation(GraphUtil.ANIMATION_DURATION_LONG)
@@ -33,7 +31,6 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
 
     private lateinit var rectF:RectF
     private lateinit var camera:Camera
-    private var isApplyCamera:Boolean = false
 
     fun initSet(totalAmount:Double, colors:Array<String>) {
         total = totalAmount
@@ -50,9 +47,11 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
     }
 
 
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         var start = 0.0
+        var sum = 0.0
         camera.save()
         canvas?.save()
         canvas?.translate(centerX, centerY)
@@ -60,7 +59,8 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
         canvas?.translate(-centerX, -centerY)
         canvas?.rotate(startAngle, centerX, centerY)
         amount.forEachIndexed { idx, value ->
-            val end = if ( value >  currentAmount ) currentAmount else value
+            var v = sum + value
+            val end = if ( v >  currentAmount ) currentAmount else v
             if( end <= start) return
             if(idx >= paints.size ) return
             val paint = paints[ idx ]
@@ -68,9 +68,27 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
             val e = end.toFloat() - s
             canvas?.drawArc(rectF,s, e, true, paint)
             start = end
+            sum += value
         }
         canvas?.restore()
         camera.restore()
+        if( currentAmount != 360.0 ) return
+        delegate?.let {
+            val data = ArrayList<Pair<Double, Point>>()
+            val l = rectF.width()/2.0f
+            sum = startAngle.toDouble()
+            amount.forEach { value ->
+                val v = sum + (value/2.0)
+                val r = v * Math.PI/180
+                val tx = centerX + (Math.cos(r) *l)
+                val ty = centerY + (Math.sin(r) *l)
+                val point = Point( Math.round(tx).toInt() , Math.round(ty).toInt() )
+                data.add(Pair(value, point))
+                sum += value
+            }
+            it.drawGraph(this, data)
+        }
+
     }
 
     override fun onStart() {

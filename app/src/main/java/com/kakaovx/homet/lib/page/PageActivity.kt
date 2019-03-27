@@ -185,6 +185,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
     }
 
     private fun getWillChangePageFragment(id:T, param:Map<String, Any>?, isPopup:Boolean): PageFragment{
+        onWillChangePageFragment(id, param, isPopup)
         val isBackStack = pagePresenter.model.isBackStack(id)
         if( isBackStack ) {
             val backStackFragment = supportFragmentManager.findFragmentByTag( id.toString() ) as? PageFragment
@@ -195,6 +196,8 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
         param?.let { newFragment.setParam(it) }
         return newFragment
     }
+    protected open fun onWillChangePageFragment(id:T, param:Map<String, Any>?, isPopup:Boolean) {}
+
 
     abstract fun getPageByID(id:T): PageFragment
     final override fun onPageStart(id:T) { pageChange(id, null, true) }

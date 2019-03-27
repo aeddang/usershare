@@ -32,9 +32,16 @@ class PageFactory {
             return currentInstance!!
         }
     }
-
     init {
         PageFactory.currentInstance = this
+    }
+
+
+    val homePages: Array<PageID> = arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE )
+    val backStackPages: Array<PageID> = arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE )
+    private val tabDisablePages: Array<PageID> = arrayOf(PageID.TEST)
+    fun isBottomTabHidden(id: PageID):Boolean{
+        return tabDisablePages.indexOf(id) != -1
     }
 
     fun getPageByID(id:PageID): PageFragment {

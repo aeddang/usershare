@@ -17,12 +17,6 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
 
     private val TAG = javaClass.simpleName
 
-    override fun getLayoutResId(): Int { return R.layout.activity_main }
-    override fun getPageAreaId(): Int { return R.id.area }
-    override fun getPageExitMsg(): Int { return R.string.notice_app_exit }
-    override fun getHomes():Array<PageID> { return arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE ) }
-    override fun getBackStacks():Array<PageID> { return arrayOf( PageID.CONTENT, PageID.TEST ) }
-
     @Inject
     lateinit var viewViewModelFactory: ViewModelFactory
     private lateinit var viewModel: MainActivityViewModel
@@ -64,20 +58,23 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
         return PageFactory.getInstance().getPageByID(id)
     }
 
-    override fun getPageIn(isBack:Boolean): Int {
-        return if(isBack) R.anim.slide_in_left else R.anim.slide_in_right
+    override fun onWillChangePageFragment(id:PageID, param:Map<String, Any>?, isPopup:Boolean){
+        if( PageFactory.getInstance().isBottomTabHidden(id) ) bottomTab.hideTab() else bottomTab.viewTab()
     }
 
-    override fun getPageOut(isBack:Boolean): Int {
-        return if(isBack) R.anim.slide_out_right else R.anim.slide_out_left
-    }
 
-    override fun getPopupIn(): Int {
-        return R.anim.slide_in_down
-    }
 
-    override fun getPopupOut(): Int {
-        return  R.anim.slide_out_down
-    }
+
+
+
+    override fun getLayoutResId(): Int { return R.layout.activity_main }
+    override fun getPageAreaId(): Int { return R.id.area }
+    override fun getPageExitMsg(): Int { return R.string.notice_app_exit }
+    override fun getHomes():Array<PageID> { return PageFactory.getInstance().homePages }
+    override fun getBackStacks():Array<PageID> { return PageFactory.getInstance().backStackPages }
+    override fun getPageIn(isBack:Boolean): Int { return if(isBack) R.anim.slide_in_left else R.anim.slide_in_right }
+    override fun getPageOut(isBack:Boolean): Int { return if(isBack) R.anim.slide_out_right else R.anim.slide_out_left }
+    override fun getPopupIn(): Int { return R.anim.slide_in_down }
+    override fun getPopupOut(): Int { return  R.anim.slide_out_down }
 }
 
