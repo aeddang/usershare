@@ -36,11 +36,13 @@ class PageProgramReport : RxPageFragment() {
     override fun onSubscribe() {
 
         val datas = arrayListOf(200.0,200.0,200.0,200.0,200.0)
+        val datas2 = arrayListOf(1000.0,1000.0,1000.0,1000.0,1000.0)
         disposables += viewModel.getFoo()
         disposables += btnStrat.clicks().subscribe{
             bar.amount = 300.0
             bar2.amount = 900.0
             circle.amount = datas
+            polygon.amount = datas2
         }
     }
 
@@ -56,6 +58,7 @@ class PageProgramReport : RxPageFragment() {
         })
         bar.initSet(1000.0, "#ff00ff")
         bar2.initSet(1000.0,"#ffff00", false)
+        polygon.initSet(1000.0, "#000000")
 
         val colors = arrayOf("#ffff00","#00ff00", "#ff0000", "#0000ff", "#000000")
         circle.initSet(1000.0,colors)
