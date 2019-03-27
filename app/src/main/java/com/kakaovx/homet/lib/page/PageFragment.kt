@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
-import com.kakaovx.homet.user.util.Log
 
 abstract class PageFragment: Fragment(), Page {
 
@@ -20,7 +19,7 @@ abstract class PageFragment: Fragment(), Page {
     var pageID:Any? = null; internal set
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "onCreatedView()")
+//        Log.d(TAG, "onCreatedView() in PageFragment")
         this.restoredView?.let { return it }
         return inflater.inflate(getLayoutResId(), container, false)
     }
@@ -53,7 +52,7 @@ abstract class PageFragment: Fragment(), Page {
         } else {
             super.onDestroyView()
             onDestroyedView()
-            Log.d(TAG,"onDestroyView()")
+//            Log.d(TAG,"onDestroyView() in PageFragment1")
         }
     }
 
@@ -62,9 +61,9 @@ abstract class PageFragment: Fragment(), Page {
         super.onDestroy()
         if( isRestoredPage ) {
             onDestroyedView()
-            Log.d(TAG,"onDestroyView()")
+//            Log.d(TAG,"onDestroyView() in PageFragment2")
         }
-        Log.d(TAG,"onDestroy()")
+//        Log.d(TAG,"onDestroy() in PageFragment ")
     }
 
     open fun setParam(param:Map<String,Any>):PageFragment { return this }

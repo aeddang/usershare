@@ -1,5 +1,6 @@
 package com.kakaovx.homet.user.ui.page.content.workout
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.model.ContentModel
@@ -20,9 +21,21 @@ class PageFreeWorkoutViewModel(repo: Repository) : ViewModel() {
 
     private val restApi = repo.restApi
 
-    val response: MutableLiveData<PageLiveData> = MutableLiveData()
+    private var _response: MutableLiveData<PageLiveData>? = null
+    val response: LiveData<PageLiveData>? get() = _response
+
+    fun onCreateView() {
+        Log.d(TAG, "onCreateView()")
+        _response = MutableLiveData()
+    }
+
+    fun onDestroyView() {
+        Log.d(TAG, "onDestroyView()")
+        _response = null
+    }
 
     fun getFreeWorkout(): Disposable {
+        Log.d(TAG, "getFreeWorkout()")
         return restApi.getFreeWorkoutList()
             .retry(RetryPolicy.none())
             .subscribeOn(Schedulers.io())
@@ -37,7 +50,7 @@ class PageFreeWorkoutViewModel(repo: Repository) : ViewModel() {
                         liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
                         liveData.listItemType = AppConst.HOMET_LIST_ITEM_FREE_WORKOUT
                         liveData.contentModel = model
-                        response.value = liveData
+                        _response?.value = liveData
                     }, { handleError(it) })
             }, { handleError(it) })
     }
@@ -48,7 +61,7 @@ class PageFreeWorkoutViewModel(repo: Repository) : ViewModel() {
         val liveData = PageLiveData()
         liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
         liveData.item = data
-        response.value = liveData
+        _response?.value = liveData
     }
 
     private fun handleError(err: Throwable) {

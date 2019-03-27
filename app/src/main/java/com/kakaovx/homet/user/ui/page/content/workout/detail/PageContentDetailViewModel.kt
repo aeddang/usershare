@@ -20,11 +20,23 @@ class PageContentDetailViewModel(repo: Repository) : ViewModel() {
 
     private val restApi = repo.restApi
 
-    private val _response: MutableLiveData<PageLiveData> = MutableLiveData()
-    val response: LiveData<PageLiveData> get() = _response
+    private var _response: MutableLiveData<PageLiveData>? = null
+    val response: LiveData<PageLiveData>? get() = _response
 
-    private val _content: MutableLiveData<WorkoutData> = MutableLiveData()
-    val content: LiveData<WorkoutData> get() = _content
+    private var _content: MutableLiveData<WorkoutData>? = null
+    val content: LiveData<WorkoutData>? get() = _content
+
+    fun onCreateView() {
+        Log.d(TAG, "onCreateView()")
+        _response = MutableLiveData()
+        _content = MutableLiveData()
+    }
+
+    fun onDestroyView() {
+        Log.d(TAG, "onDestroyView()")
+        _response = null
+        _content = null
+    }
 
     fun getWorkoutContent(exercise_id: String): Disposable {
         return restApi.getFreeWorkoutContent(id = exercise_id)
@@ -32,7 +44,7 @@ class PageContentDetailViewModel(repo: Repository) : ViewModel() {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .map { res ->
-                            _content.value = res.data
+                            _content?.value = res.data
 //                            _content.postValue(res.data)
                         }
                         .subscribe()
@@ -44,7 +56,7 @@ class PageContentDetailViewModel(repo: Repository) : ViewModel() {
         val liveData = PageLiveData()
         liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
         liveData.item = data
-        _response.value = liveData
+        _response?.value = liveData
     }
 
     private fun handleError(err: Throwable) {

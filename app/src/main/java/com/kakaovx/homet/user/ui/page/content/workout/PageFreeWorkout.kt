@@ -1,7 +1,9 @@
 package com.kakaovx.homet.user.ui.page.content.workout
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
+import androidx.annotation.LayoutRes
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -19,10 +21,9 @@ import com.kakaovx.homet.user.ui.ParamType
 import com.kakaovx.homet.user.util.Log
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.page_program.*
+import kotlinx.android.synthetic.main.page_free_workout.*
 import kotlinx.android.synthetic.main.ui_recyclerview.view.*
 import javax.inject.Inject
-
 
 class PageFreeWorkout : RxPageFragment() {
 
@@ -35,6 +36,7 @@ class PageFreeWorkout : RxPageFragment() {
     private var contentListAdapter: ContentListAdapter<ContentModel>? = null
 
     private fun initView(context: Context) {
+        Log.d(TAG, "initView()")
         val recyclerView: RecyclerView = listComponent.recyclerView
         contentListAdapter = ContentListAdapter(AppConst.HOMET_LIST_ITEM_FREE_WORKOUT)
         contentListAdapter?.let {
@@ -62,20 +64,9 @@ class PageFreeWorkout : RxPageFragment() {
         }
     }
 
-    private fun initDisposables() {
-        disposables += viewModel.getFreeWorkout()
-    }
-
-    override fun getLayoutResId(): Int {
-        return R.layout.page_free_workout
-    }
-
-    override fun onCreatedView() {
-        Log.d(TAG, "onCreatedView() start")
-        AndroidSupportInjection.inject(this)
-
-        viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageFreeWorkoutViewModel::class.java]
-        viewModel.response.observe(this, Observer { liveData ->
+    private fun initViewModel() {
+        Log.d(TAG, "initViewModel()")
+        viewModel.response?.observe(this, Observer { liveData ->
             liveData?.let {
                 val cmd = liveData.cmd
                 when (cmd) {
@@ -94,16 +85,60 @@ class PageFreeWorkout : RxPageFragment() {
                 }
             }
         })
-        super.onCreatedView()
+    }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
+    }
+
+    @LayoutRes
+    override fun getLayoutResId() = R.layout.page_free_workout
+
+    override fun onSubscribe() {
+        Log.d(TAG, "onSubscribe()")
+        disposables += viewModel.getFreeWorkout()
+        super.onSubscribe()
+    }
+
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
+        viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageFreeWorkoutViewModel::class.java]
+        viewModel.onCreateView()
+        initViewModel()
         context?.let{ initView(it) }
-        initDisposables()
-        Log.d(TAG, "onCreatedView() end")
+        super.onCreatedView()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onActivityCreated()")
+        super.onActivityCreated(savedInstanceState)
+    }
+
+    override fun onStart() {
+        Log.d(TAG, "onStart()")
+        super.onStart()
+    }
+
+    override fun onResume() {
+        Log.d(TAG, "onResume()")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "onPause()")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        Log.d(TAG, "onStop()")
+        super.onStop()
     }
 
     override fun onDestroyedView() {
         Log.d(TAG, "onDestroyedView()")
-        contentListAdapter = null
         super.onDestroyedView()
+        viewModel.onDestroyView()
+        contentListAdapter = null
     }
 }

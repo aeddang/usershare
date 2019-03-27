@@ -78,44 +78,9 @@ class PageContentDetail : RxPageFragment() {
         }
     }
 
-    private fun routeToPlayer(motion_id: String, movie_url: String) {
-        Log.d(TAG, "routeToPlayer() motion_id = [$motion_id], movie_url = [$movie_url]")
-        val i = Intent(AppConst.HOMET_ACTIVITY_PLAYER)
-        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        i.putExtra(AppConst.HOMET_VALUE_MOTION_ID, motion_id)
-        i.putExtra(AppConst.HOMET_VALUE_VIDEO_URL, movie_url)
-        startActivity(i)
-        activity?.finish()
-    }
-
-    @LayoutRes
-    override fun getLayoutResId(): Int = R.layout.page_content_detail
-
-    override fun setParam(param: Map<String, Any>): PageFragment {
-        dataId = param[ParamType.DETAIL.key] as String?
-        Log.d(TAG, "setParam() data = [$dataId]")
-        return this
-    }
-
-    override fun onSubscribe() {
-        dataId?.let {
-            disposables += viewModel.getWorkoutContent(it)
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.i(TAG, "onCreatedView()")
-        dataBinding = DataBindingUtil.inflate(inflater, R.layout.page_content_detail, container, false)
-        return dataBinding.root
-    }
-
-    override fun onCreatedView() {
-        Log.d(TAG, "onCreatedView()")
-        AndroidSupportInjection.inject(this)
-
-        viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageContentDetailViewModel::class.java]
-
-        viewModel.response.observe(this, Observer { liveData ->
+    private fun initViewModel() {
+        Log.d(TAG, "initViewModel()")
+        viewModel.response?.observe(this, Observer { liveData ->
             liveData?.let {
                 val cmd = liveData.cmd
                 when (cmd) {
@@ -131,21 +96,91 @@ class PageContentDetail : RxPageFragment() {
             } ?: Log.e(TAG, "liveData is null")
         })
 
-        viewModel.content.observe(this, Observer { workoutData ->
+        viewModel.content?.observe(this, Observer { workoutData ->
             workoutData?.let {
-//                Log.d(TAG, "workoutData = [$workoutData]")
+                //                Log.d(TAG, "workoutData = [$workoutData]")
                 initComponent(it)
             }
         })
+    }
 
+    private fun routeToPlayer(motion_id: String, movie_url: String) {
+        Log.d(TAG, "routeToPlayer() motion_id = [$motion_id], movie_url = [$movie_url]")
+        val i = Intent(AppConst.HOMET_ACTIVITY_PLAYER)
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        i.putExtra(AppConst.HOMET_VALUE_MOTION_ID, motion_id)
+        i.putExtra(AppConst.HOMET_VALUE_VIDEO_URL, movie_url)
+        startActivity(i)
+        activity?.finish()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate()")
+        super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
+    }
+
+    @LayoutRes
+    override fun getLayoutResId(): Int = R.layout.page_content_detail
+
+    override fun setParam(param: Map<String, Any>): PageFragment {
+        dataId = param[ParamType.DETAIL.key] as String?
+        Log.d(TAG, "setParam() data = [$dataId]")
+        return this
+    }
+
+    override fun onSubscribe() {
+        Log.d(TAG, "onSubscribe()")
+        dataId?.let {
+            disposables += viewModel.getWorkoutContent(it)
+        }
+        super.onSubscribe()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Log.i(TAG, "onCreatedView()")
+        dataBinding = DataBindingUtil.inflate(inflater, R.layout.page_content_detail, container, false)
+        return dataBinding.root
+    }
+
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
+        viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageContentDetailViewModel::class.java]
+        viewModel.onCreateView()
+        initViewModel()
         context?.let{ initView(it) }
         super.onCreatedView()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onActivityCreated()")
+        super.onActivityCreated(savedInstanceState)
+    }
+
+    override fun onStart() {
+        Log.d(TAG, "onStart()")
+        super.onStart()
+    }
+
+    override fun onResume() {
+        Log.d(TAG, "onResume()")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "onPause()")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        Log.d(TAG, "onStop()")
+        super.onStop()
     }
 
     override fun onDestroyedView() {
         Log.d(TAG, "onDestroyedView()")
         super.onDestroyedView()
+        viewModel.onDestroyView()
+        dataId = null
     }
 }
-
-
