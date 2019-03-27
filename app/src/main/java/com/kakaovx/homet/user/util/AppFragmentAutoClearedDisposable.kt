@@ -11,7 +11,7 @@ import io.reactivex.disposables.Disposable
 class AppFragmentAutoClearedDisposable (
     private val lifecycleOwner: Fragment,
     private val alwaysClearOnStop: Boolean = true,
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 )
     : LifecycleObserver {
 
@@ -46,10 +46,10 @@ class AppFragmentAutoClearedDisposable (
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun stop() {
         if (AppFeature.APP_LOG_DEBUG) Log.d(TAG, "stop(), ownerData = ${lifecycleOwner::class.java}")
-        if (!alwaysClearOnStop && !lifecycleOwner.isDetached) {
-            return
-        }
-        compositeDisposable.clear()
+//        if (!alwaysClearOnStop && !lifecycleOwner.isDetached) {
+//            return
+//        }
+//        compositeDisposable.clear()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

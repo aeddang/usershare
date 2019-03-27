@@ -8,7 +8,7 @@ import com.kakaovx.homet.user.di.module.view.PageModule
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.oldPlayer.PlayerActivity
 import com.kakaovx.homet.user.ui.oldPlayer.PlayerFragment
-import com.kakaovx.homet.user.ui.page.content.PageHome
+import com.kakaovx.homet.user.ui.page.content.recommend.PageHome
 import com.kakaovx.homet.user.ui.page.content.program.PageProgram
 import com.kakaovx.homet.user.ui.page.content.recommend.PageHomeIssueProgramList
 import com.kakaovx.homet.user.ui.page.content.search.PageFilter

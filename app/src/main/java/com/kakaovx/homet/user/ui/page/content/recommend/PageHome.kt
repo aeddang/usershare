@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.ui.page.content
+package com.kakaovx.homet.user.ui.page.content.recommend
 
 import android.content.Context
 import android.view.Menu
