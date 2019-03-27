@@ -1,6 +1,7 @@
 package com.kakaovx.homet.user.ui.page.planner.diet
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.Observer
@@ -27,7 +28,7 @@ class PageDietPlanner : RxPageFragment() {
 
     @Inject
     lateinit var viewViewModelFactory: ViewModelFactory
-    private lateinit var plannerViewModel: PageDietPlannerViewModel
+    private lateinit var viewModel: PageDietPlannerViewModel
 
     private fun initView(context: Context) {
         activity?.let {
@@ -40,39 +41,6 @@ class PageDietPlanner : RxPageFragment() {
         }
     }
 
-    @LayoutRes
-    override fun getLayoutResId(): Int {
-        return R.layout.page_network
-    }
-
-    override fun setParam(param: Map<String, Any>): PageFragment {
-        Log.d(TAG, "setParam() data = [${param[ParamType.DETAIL.key]}]")
-        return this
-    }
-
-    override fun onSubscribe() {
-        disposables += plannerViewModel.getFoo()
-    }
-
-    override fun onCreatedView() {
-        Log.d(TAG, "onCreatedView()")
-        AndroidSupportInjection.inject(this)
-
-        plannerViewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageDietPlannerViewModel::class.java]
-
-        plannerViewModel.response.observe(this, Observer { message ->
-            message?.let {
-                Log.d(TAG, "message = [$message]")
-            } ?: Log.e(TAG, "message is null")
-        })
-
-        context?.let{ initView(it) }
-        super.onCreatedView()
-
-        button.clicks().subscribe(this::getAllUsers).apply { disposables.add(this) }
-        hideProgress()
-    }
-
     private fun handleComplete(data: ResponseList<ResultData>) {
         Log.i(TAG, "handleComplete ($data)")
         hideProgress()
@@ -82,10 +50,12 @@ class PageDietPlanner : RxPageFragment() {
         Log.i(TAG, "handleError ($err)")
         hideProgress()
     }
+
     private fun showProgress() {
         progressBar.visibility = View.VISIBLE
         progressBar.animate()
     }
+
     private fun hideProgress() {
         progressBar.visibility = View.GONE
     }
@@ -103,5 +73,49 @@ class PageDietPlanner : RxPageFragment() {
             this::handleError
         ).apply { disposables.add(this) }
         */
+    }
+
+
+    private fun initViewModel() {
+        Log.d(TAG, "initViewModel()")
+        viewModel.response?.observe(this, Observer { message ->
+            message?.let {
+                Log.d(TAG, "message = [$message]")
+            } ?: Log.e(TAG, "message is null")
+        })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
+    }
+
+    @LayoutRes
+    override fun getLayoutResId(): Int { return R.layout.page_network }
+
+    override fun setParam(param: Map<String, Any>): PageFragment {
+        Log.d(TAG, "setParam() data = [${param[ParamType.DETAIL.key]}]")
+        return this
+    }
+
+    override fun onSubscribe() {
+        disposables += viewModel.getFoo()
+    }
+
+    override fun onCreatedView() {
+        Log.d(TAG, "onCreatedView()")
+        viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageDietPlannerViewModel::class.java]
+        viewModel.onCreateView()
+        initViewModel()
+        context?.let{ initView(it) }
+        super.onCreatedView()
+        button.clicks().subscribe(this::getAllUsers).apply { disposables.add(this) }
+        hideProgress()
+    }
+
+    override fun onDestroyedView() {
+        Log.d(TAG, "onDestroyedView()")
+        super.onDestroyedView()
+        viewModel.onDestroyView()
     }
 }

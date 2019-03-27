@@ -19,20 +19,30 @@ class MainActivityViewModel(repo: Repository) : ViewModel() {
     private val restApi = repo.restApi
     private val setting = repo.setting
 
-    private val _response: MutableLiveData<PageLiveData> = MutableLiveData()
-    val response: LiveData<PageLiveData> get() = _response
+    private var _response: MutableLiveData<PageLiveData>? = null
+    val response: LiveData<PageLiveData>? get() = _response
+
+    fun onCreateView() {
+        Log.d(TAG, "onCreateView()")
+        _response = MutableLiveData()
+    }
+
+    fun onDestroyView() {
+        Log.d(TAG, "onDestroyView()")
+        _response = null
+    }
 
     fun pushEnable() = setting.isPushEnable()
 
     fun getFoo(): Disposable {
         return restApi.getWorkoutList()
-                        .retry(RetryPolicy.none())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map { res ->
-                            handleComplete(res.message)
-                        }
-                        .subscribe()
+            .retry(RetryPolicy.none())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { res ->
+                handleComplete(res.message)
+            }
+            .subscribe()
     }
 
     private fun handleComplete(data: String) {
@@ -41,7 +51,7 @@ class MainActivityViewModel(repo: Repository) : ViewModel() {
         val liveData = PageLiveData()
         liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
         liveData.message = data
-        _response.value = liveData
+        _response?.value = liveData
     }
 
     private fun handleError(err: Throwable) {

@@ -48,7 +48,8 @@ class PageProgramReport : RxPageFragment() {
         Log.d(TAG, "onCreatedView()")
         AndroidSupportInjection.inject(this)
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageProgramReportViewModel::class.java]
-        viewModel.response.observe(this, Observer { message ->
+        viewModel.onCreateView()
+        viewModel.response?.observe(this, Observer { message ->
             message?.let {
                 Log.d(TAG, "message = [$message]")
             } ?: Log.e(TAG, "message is null")
@@ -65,5 +66,6 @@ class PageProgramReport : RxPageFragment() {
     override fun onDestroyedView() {
         Log.d(TAG, "onDestroyedView()")
         super.onDestroyedView()
+        viewModel.onDestroyView()
     }
 }

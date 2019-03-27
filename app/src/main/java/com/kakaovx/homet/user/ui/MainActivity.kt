@@ -31,8 +31,8 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
         Log.d(TAG, "onCreatedView()")
         AndroidInjection.inject(this)
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[MainActivityViewModel::class.java]
-
-        viewModel.response.observe(this, Observer { message ->
+        viewModel.onCreateView()
+        viewModel.response?.observe(this, Observer { message ->
             message?.let {
                 Log.d(TAG, "message = [$message]")
             } ?: Log.e(TAG, "message is null")
@@ -45,6 +45,7 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
 
     override fun onDestroyedView() {
         Log.d(TAG, "onDestroyedView()")
+        viewModel.onDestroyView()
     }
 
     override fun onSelected(view:DivisionTab<PageID>, id:PageID) {

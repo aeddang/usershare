@@ -1,6 +1,7 @@
 package com.kakaovx.homet.user.ui.page.etc.payment
 
 import android.content.Context
+import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -35,8 +36,22 @@ class PagePayment : RxPageFragment() {
         }
     }
 
+    private fun initViewModel() {
+        Log.d(TAG, "initViewModel()")
+        viewModel.response?.observe(this, Observer { message ->
+            message?.let {
+                Log.d(TAG, "message = [$message]")
+            } ?: Log.e(TAG, "message is null")
+        })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
+    }
+
     @LayoutRes
-    override fun getLayoutResId(): Int { return R.layout.page_profile }
+    override fun getLayoutResId(): Int { return R.layout.page_search }
 
     override fun setParam(param: Map<String, Any>): PageFragment {
         Log.d(TAG, "setParam() data = [${param[ParamType.DETAIL.key]}]")
@@ -49,17 +64,16 @@ class PagePayment : RxPageFragment() {
 
     override fun onCreatedView() {
         Log.d(TAG, "onCreatedView()")
-        AndroidSupportInjection.inject(this)
-
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PagePaymentViewModel::class.java]
-
-        viewModel.response.observe(this, Observer { message ->
-            message?.let {
-                Log.d(TAG, "message = [$message]")
-            } ?: Log.e(TAG, "message is null")
-        })
-
+        viewModel.onCreateView()
+        initViewModel()
         context?.let{ initView(it) }
         super.onCreatedView()
+    }
+
+    override fun onDestroyedView() {
+        Log.d(TAG, "onDestroyedView()")
+        super.onDestroyedView()
+        viewModel.onDestroyView()
     }
 }
