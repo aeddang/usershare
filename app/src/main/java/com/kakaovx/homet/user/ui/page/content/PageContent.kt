@@ -1,6 +1,7 @@
 package com.kakaovx.homet.user.ui.page.content
 
 import android.content.Context
+import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
@@ -30,9 +31,14 @@ class PageContent : ViewPagerPageFragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate()")
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreatedView() {
-        super.onCreatedView()
         Log.d(TAG, "onCreatedView()")
+        super.onCreatedView()
 
         context?.let { initView(it) }
         activity?.let {

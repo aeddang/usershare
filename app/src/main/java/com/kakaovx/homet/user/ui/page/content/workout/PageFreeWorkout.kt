@@ -97,8 +97,8 @@ class PageFreeWorkout : RxPageFragment() {
 
     override fun onSubscribe() {
         Log.d(TAG, "onSubscribe()")
-        disposables += viewModel.getFreeWorkout()
         super.onSubscribe()
+        disposables += viewModel.getFreeWorkout()
     }
 
     override fun onCreatedView() {
