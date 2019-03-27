@@ -91,6 +91,7 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
 
     private fun touchStart() {
         finalGesture = Gesture.Type.NONE
+        delegate?.onMoveStart(this)
         contentsView.let {startPosition = if(isVertical) it.translationY else it.translationX }
     }
 
@@ -150,6 +151,7 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
     }
 
     open fun onGestureClose(isClosure:Boolean = true):Long {
+        delegate?.onMoveStart(this)
         isClosed = true
         val closePosX = getClosePos().first
         val closePosY = getClosePos().second
@@ -205,9 +207,12 @@ open class PageGestureView: FrameLayout, Gesture.Delegate {
 
     protected open fun didReturnAnimation() {
         delegate?.onReturn(this)
+        delegate?.onMoveCompleted(this)
     }
 
     interface Delegate {
+        fun onMoveStart(view: PageGestureView){}
+        fun onMoveCompleted(view: PageGestureView){}
         fun onMove(view: PageGestureView, pct:Float){}
         fun onAnimate(view: PageGestureView, pct:Float){}
         fun onClose(view: PageGestureView){}

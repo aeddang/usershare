@@ -16,8 +16,11 @@ import com.kakaovx.homet.user.component.ui.view.camera.draw
 import com.kakaovx.homet.user.component.ui.view.camera.motionExtract
 import com.kakaovx.homet.user.constant.AppFeature
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.popup_player.*
 import org.tensorflow.demo.env.ImageUtils
+import java.util.concurrent.TimeUnit
 
 import javax.inject.Inject
 
@@ -36,6 +39,7 @@ class PopupPlayer : RxPageDividedGestureFragment() {
     private var borderedText: BorderedText? = null
 
     private var cIdx = 0
+    private var isDetect = false
     private var captureCompletedRunnable: Runnable = Runnable { onCapture() }
 
     override fun onCreatedView() {
@@ -54,6 +58,7 @@ class PopupPlayer : RxPageDividedGestureFragment() {
         Log.i(TAG, "viewModel.inputVideoSize [${ viewModel.inputVideoSize.width}]x[${ viewModel.inputVideoSize.height}]")
         player.initPlayer()
         player.load("http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4")
+
     }
 
     override fun onDestroyedView() {
@@ -63,10 +68,15 @@ class PopupPlayer : RxPageDividedGestureFragment() {
 
 
     override fun onSubscribe() {
+        Observable.interval(2000, TimeUnit.MILLISECONDS)
+            .timeInterval().take(1)
+            .subscribe {
+                isDetect = true
+            }.apply { disposables.add(this) }
 
         camera.motionExtract().subscribe { pose->
+            if( !isDetect ) return@subscribe
             camera.cameraOutputSize?.let { outputSize->
-                Log.i(TAG, "Initializing at size [${outputSize.width}]x[${outputSize.height}]")
                 val inputSize =  viewModel.inputVideoSize
                 var rotate = camera.getOrientation()
                 val frameToCropTransform = ImageUtils.getTransformationMatrix(
@@ -86,6 +96,7 @@ class PopupPlayer : RxPageDividedGestureFragment() {
         }.apply { disposables.add(this) }
 
         camera.draw().subscribe{ canvas ->
+            if( !isDetect ) return@subscribe
             camera.previewSize?.let { prev ->
                 viewModel.pose?.let{ viewModel.mr.drawPose(canvas, it) }
                 val lines = viewModel.mr.getDebugInfo(prev.width, prev.height)
@@ -105,6 +116,13 @@ class PopupPlayer : RxPageDividedGestureFragment() {
         imageView.setImageBitmap(viewModel.croppedBitmap)
     }
 
+    override fun onMoveStart(view: PageGestureView) {
+        isDetect = false
+    }
+
+    override fun onMoveCompleted(view: PageGestureView) {
+        isDetect = true
+    }
 
     override fun onResume() {
         super.onResume()

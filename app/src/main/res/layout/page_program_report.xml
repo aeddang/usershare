@@ -16,8 +16,8 @@
 
     <com.kakaovx.homet.user.component.ui.view.graph.GraphCircle
             android:layout_width="200dp"
-            android:layout_height="200dp" android:layout_gravity="right|top" android:id="@+id/circle"
-    />
+            android:layout_height="200dp" android:id="@+id/circle"
+            android:layout_gravity="center"/>
     <Button
             android:text="Button"
             android:layout_width="wrap_content"

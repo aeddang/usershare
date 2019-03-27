@@ -27,6 +27,7 @@ abstract class AnimatedDrawView @kotlin.jvm.JvmOverloads constructor(context: Co
     fun startAnimation( d:Long, delay:Long = 0 ) {
         frm = 0
         duration = d
+        disposable?.dispose()
         disposable = Observable.interval(fps, TimeUnit.MILLISECONDS)
             .timeInterval().delay(delay, TimeUnit.MILLISECONDS)
             .observeOn(Schedulers.computation())

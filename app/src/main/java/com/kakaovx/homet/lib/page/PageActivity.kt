@@ -202,6 +202,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
         pageChange(id, param, false, sharedElement,  transitionName )
     }
     private fun pageChange(id:T, param:Map<String, Any>? , isStart:Boolean = false, sharedElement: android.view.View? = null, transitionName:String? = null, isBack:Boolean = false) {
+        if(currentPage == id) return
         onCloseAllPopup()
         resetBackPressedAction()
         val willChangePage = getWillChangePageFragment(id, param, false)

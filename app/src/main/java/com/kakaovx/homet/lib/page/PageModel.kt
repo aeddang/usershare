@@ -3,7 +3,6 @@ package com.kakaovx.homet.lib.page
 class PageModel<T> : Model<T> {
     internal lateinit var homes: Array<T>
     internal var backStacks: Array<T>? = null
-    override var currentPage: T? = null
     override fun onDestroy() {
     }
 
