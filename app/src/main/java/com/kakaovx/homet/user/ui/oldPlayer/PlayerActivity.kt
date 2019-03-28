@@ -1,5 +1,6 @@
 package com.kakaovx.homet.user.ui.oldPlayer
 
+import android.content.Intent
 import android.os.Bundle
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.repository.Repository
@@ -30,6 +31,11 @@ class PlayerActivity : DaggerAppCompatActivity() {
                 .commitNow()
         }
 //        Log.d(TAG, "onCreate() default rotation = [${this.windowManager.defaultDisplay.rotation}]")
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        Log.d(TAG, "onNewIntent()")
+        super.onNewIntent(intent)
     }
 
     override fun onResume() {

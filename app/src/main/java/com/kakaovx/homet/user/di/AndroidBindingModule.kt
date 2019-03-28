@@ -3,7 +3,6 @@ package com.kakaovx.homet.user.di
 import com.kakaovx.homet.user.di.annotation.ActivityScope
 import com.kakaovx.homet.user.di.annotation.PageScope
 import com.kakaovx.homet.user.di.module.view.ActivityModule
-import com.kakaovx.homet.user.di.module.view.FragmentPlayerModule
 import com.kakaovx.homet.user.di.module.view.PageModule
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.oldPlayer.PlayerActivity
@@ -131,7 +130,7 @@ internal abstract class AndroidBindingModule {
     internal abstract fun bindPlayerActivity(): PlayerActivity
 
     @PageScope
-    @ContributesAndroidInjector(modules = [ FragmentPlayerModule::class ])
+    @ContributesAndroidInjector(modules = [ PageModule::class ])
     internal abstract fun bindPlayerFragment(): PlayerFragment
 
 }

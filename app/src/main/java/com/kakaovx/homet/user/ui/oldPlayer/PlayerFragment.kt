@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.component.ui.view.BorderedText
 import com.kakaovx.homet.user.component.ui.view.OverlayView
 import com.kakaovx.homet.user.constant.AppConst
@@ -59,7 +60,7 @@ class PlayerFragment : DaggerFragment() {
     private val viewDisposables = AppFragmentAutoClearedDisposable(this)
 
     @Inject
-    lateinit var viewModelFactory: PlayerViewModelFactory
+    lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: PlayerViewModel
     private lateinit var dataBinding: FragmentPlayerBinding
 
@@ -430,22 +431,27 @@ class PlayerFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "onCreatedView()")
+        Log.d(TAG, "onCreateView()")
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
+        viewModel.onCreateView()
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_player, container, false)
-
         return dataBinding.root
+    }
+
+    override fun onDestroyView() {
+        Log.d(TAG, "onDestroyView()")
+        viewModel.onDestroyView()
+        super.onDestroyView()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated()")
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
-
         initSubscribe()
         initComponent()
 
-        viewModel.content.observe(this, Observer { workoutData ->
+        viewModel.content?.observe(this, Observer { workoutData ->
             workoutData?.run {
                 free_motion_movie_url?.let {
                     videoUrl = it
@@ -453,7 +459,7 @@ class PlayerFragment : DaggerFragment() {
             }
         })
 
-        viewModel.core.observe(this, Observer {
+        viewModel.core?.observe(this, Observer {
             if (it.cmd == AppConst.LIVE_DATA_VX_CMD_CAMERA) {
                 when (it.cameraCmd) {
                     AppConst.HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE -> {

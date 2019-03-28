@@ -107,11 +107,11 @@ class PageContentDetail : RxPageFragment() {
     private fun routeToPlayer(motion_id: String, movie_url: String) {
         Log.d(TAG, "routeToPlayer() motion_id = [$motion_id], movie_url = [$movie_url]")
         val i = Intent(AppConst.HOMET_ACTIVITY_PLAYER)
+//        i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         i.putExtra(AppConst.HOMET_VALUE_MOTION_ID, motion_id)
         i.putExtra(AppConst.HOMET_VALUE_VIDEO_URL, movie_url)
         startActivity(i)
-        activity?.finish()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

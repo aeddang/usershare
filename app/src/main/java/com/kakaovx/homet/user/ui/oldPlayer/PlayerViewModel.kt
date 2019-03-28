@@ -36,13 +36,13 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
     private val cv = repo.camera
     private val mr = repo.mr
 
-    private val _content: MutableLiveData<WorkoutData> = MutableLiveData()
-    val content: LiveData<WorkoutData> get() = _content
+    private var _content: MutableLiveData<WorkoutData>? = null
+    val content: LiveData<WorkoutData>? get() = _content
 
-    private val _core: MutableLiveData<VxCoreLiveData> = MutableLiveData()
-    val core: LiveData<VxCoreLiveData> get() = _core
+    private var _core: MutableLiveData<VxCoreLiveData>? = null
+    val core: LiveData<VxCoreLiveData>? get() = _core
 
-    private val _coreData: BehaviorSubject<VxCoreLiveData> = BehaviorSubject.create()
+    private var _coreData: BehaviorSubject<VxCoreLiveData> = BehaviorSubject.create()
     val isLoading: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
     val message: BehaviorSubject<String> = BehaviorSubject.create()
 
@@ -51,6 +51,17 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     private val trainerPoseModelList = ArrayList<TrainerPoseModel>()
 
+    fun onCreateView() {
+        Log.d(TAG, "onCreateView()")
+        _content = MutableLiveData()
+        _core = MutableLiveData()
+    }
+
+    fun onDestroyView() {
+        Log.d(TAG, "onDestroyView()")
+        _content = null
+        _core = null
+    }
 
     fun intCaptureView() {
         deviceIO = AppDeviceExecutor()
@@ -211,7 +222,7 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
         liveData.cmd = AppConst.LIVE_DATA_VX_CMD_CAMERA
         liveData.cameraCmd = AppConst.HOMET_CAMERA_CMD_REQUEST_DRAW
         liveData.poseData = pose
-        _core.postValue(liveData)
+        _core?.postValue(liveData)
 
         isProcessingImage = false
     }
