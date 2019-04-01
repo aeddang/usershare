@@ -12,7 +12,7 @@ import javax.inject.Named
 class CaptureModule {
 
     @Provides
-    fun provideMotionRecognition(app: Application, @Named("appContext") ctx: Context): VxPoseEstimator
+    fun providePoseEstimator(app: Application, @Named("appContext") ctx: Context): VxPoseEstimator
             = VxPoseEstimator(app, ctx)
 
     @Provides
