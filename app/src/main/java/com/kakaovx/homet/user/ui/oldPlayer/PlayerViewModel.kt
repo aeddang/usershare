@@ -34,7 +34,7 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     private val restApi = repo.restApi
     private val cv = repo.camera
-    private val mr = repo.mr
+    private val pe = repo.poseEstimator
 
     private var _content: MutableLiveData<WorkoutData>? = null
     val content: LiveData<WorkoutData>? get() = _content
@@ -65,8 +65,8 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     fun intCaptureView() {
         deviceIO = AppDeviceExecutor()
-        mr.initMotionRecognition()
-        cv.setInputVideoSize(mr.getInputWidth(), mr.getInputHeight())
+        pe.initPoseEstimator()
+        cv.setInputVideoSize(pe.getInputWidth(), pe.getInputHeight())
         cv.initVxCamera()
         VxCoreObserver.addObserver{ observable, _ ->
             if (observable is VxCoreObserver) {
@@ -105,9 +105,9 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     fun getInputVideoSize() = cv.getInputVideoSize()
 
-    fun getDebugInfo(previewWidth: Int, previewHeight: Int) = mr.getDebugInfo(previewWidth, previewHeight)
+    fun getDebugInfo(previewWidth: Int, previewHeight: Int) = pe.getDebugInfo(previewWidth, previewHeight)
 
-    fun drawPose(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) = mr.drawPose(canvas, pose)
+    fun drawPose(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) = pe.drawPose(canvas, pose)
 
     fun processImage(previewSize: Size, frameToCropTransform: Matrix?,
                      rgbFrameBitmap: Bitmap?, croppedBitmap: Bitmap?): Disposable {
@@ -213,7 +213,7 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
         val canvas = Canvas(croppedBitmap)
         canvas.drawBitmap(rgbFrameBitmap, frameToCropTransform, null)
 
-        val pose = mr.poseEstimate(croppedBitmap, PoseMachine.DataProcessCallback {
+        val pose = pe.poseEstimate(croppedBitmap, PoseMachine.DataProcessCallback {
             //            Log.d(TAG, "onBitmapPrepared()")
         })
 //        pose?.let { Log.d(TAG, "Detect Skeletons: [${it.size}]") }
@@ -230,7 +230,7 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
     override fun onCleared() {
         Log.i(TAG, "onCleared()")
         cv.destroyCamera()
-        mr.destroy()
+        pe.destroy()
         VxCoreObserver.deleteObservers()
         deviceIO?.shutdown()
         super.onCleared()

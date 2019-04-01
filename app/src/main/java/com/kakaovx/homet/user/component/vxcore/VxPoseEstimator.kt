@@ -11,14 +11,14 @@ import com.kakaovx.posemachine.MaceWrapper
 import com.kakaovx.posemachine.PoseMachine
 import java.util.ArrayList
 
-class VxMotionRecognition(val app: Application, val context: Context) {
+class VxPoseEstimator(val app: Application, val context: Context) {
 
     val TAG = javaClass.simpleName
 
     private var poseMachine: PoseMachine? = null
 
-    fun initMotionRecognition() {
-        Log.i(TAG, "initMotionRecognition()")
+    fun initPoseEstimator() {
+        Log.i(TAG, "initPoseEstimator()")
         if (poseMachine == null) {
             if (Build.MODEL == "SHIELD Android TV" || Build.DEVICE == "darcy") {
                 poseMachine = PoseMachine(app, MaceWrapper.MODEL_TYPE.PersonLab, MaceWrapper.RUNTIME_TYPE.CPU)

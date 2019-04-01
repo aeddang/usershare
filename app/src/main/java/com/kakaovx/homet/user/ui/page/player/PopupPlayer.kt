@@ -54,7 +54,7 @@ class PopupPlayer : RxPageDividedGestureFragment() {
         borderedText?.setTypeface(Typeface.MONOSPACE)
 
         camera.customSize = viewModel.inputVideoSize
-        viewModel.initMotionRecognition()
+        viewModel.initPoseEstimator()
         Log.i(TAG, "viewModel.inputVideoSize [${ viewModel.inputVideoSize.width}]x[${ viewModel.inputVideoSize.height}]")
         player.initPlayer()
         player.load("http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4")
@@ -98,8 +98,8 @@ class PopupPlayer : RxPageDividedGestureFragment() {
         camera.draw().subscribe{ canvas ->
             if( !isDetect ) return@subscribe
             camera.previewSize?.let { prev ->
-                viewModel.pose?.let{ viewModel.mr.drawPose(canvas, it) }
-                val lines = viewModel.mr.getDebugInfo(prev.width, prev.height)
+                viewModel.pose?.let{ viewModel.pe.drawPose(canvas, it) }
+                val lines = viewModel.pe.getDebugInfo(prev.width, prev.height)
                 lines?.let { borderedText?.drawLines(canvas, 10.toFloat(), (canvas.height - 10).toFloat(), it) }
             }
             viewModel.rgbFrameBitmap?.let {
