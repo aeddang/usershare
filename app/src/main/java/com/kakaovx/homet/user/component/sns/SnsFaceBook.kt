@@ -10,7 +10,7 @@ import com.facebook.ProfileTracker
 import com.kakaovx.homet.user.util.Log
 
 
-class FaceBook(type: SnsType): SnsModule(type) {
+class SnsFaceBook(type: SnsType): SnsModule(type) {
 
     val TAG = javaClass.simpleName
     var callbackManager: CallbackManager? = null; private set
@@ -50,7 +50,7 @@ class FaceBook(type: SnsType): SnsModule(type) {
             override fun onCurrentProfileChanged( oldProfile: Profile?, currentProfile: Profile?) {
                 profileTracker?.stopTracking()
                 currentProfile?.let {
-                    val profile = Profile(it.id, it.name)
+                    val profile = SnsProfile(it.id, it.name)
                     profile.imgPath = it.getProfilePictureUri(150, 150).path
                     onProfileUpdated(profile)
                     return

@@ -66,7 +66,7 @@ class AccountManager(val preference:AccountPreference): SnsLoginManager.Delegate
         return snsManager.onActivityResult(requestCode, resultCode, data)
     }
 
-    fun getProfile(): Observable<Profile>?{
+    fun getProfile(): Observable<SnsProfile>?{
         if( !snsManager.isSignup ) return null
         return snsManager.getProfile()
     }

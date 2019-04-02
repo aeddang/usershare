@@ -1,7 +1,6 @@
 package com.kakaovx.homet.user.component.sns
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.util.Log
 import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
@@ -16,7 +15,7 @@ fun SnsModule.statusChanged(): Observable<SnsStatus> {
     return StatusChangedObservable(this)
 }
 
-fun SnsModule.profileUpdated(): Observable<Profile> {
+fun SnsModule.profileUpdated(): Observable<SnsProfile> {
     val observable = ProfileUpdatedObservable(this)
     this.requestProfile()
     return observable
@@ -33,7 +32,7 @@ abstract class SnsModule(val type:SnsType):Sns{
     protected var delegate:Delegate? = null
     protected var delegateError:DelegateError? = null
     protected var delegateProfile:DelegateProfile? = null
-    var userProfile:Profile? = null; private set
+    var userProfile:SnsProfile? = null; private set
 
     interface Delegate{
         fun statusChanged(sns: SnsModule, status:SnsStatus){}
@@ -42,7 +41,7 @@ abstract class SnsModule(val type:SnsType):Sns{
         fun onError(sns: SnsModule, error:SnsError){}
     }
     interface DelegateProfile{
-        fun profileUpdated(sns: SnsModule, profile:Profile){}
+        fun profileUpdated(sns: SnsModule, profile:SnsProfile){}
         fun onError(sns: SnsModule, error:SnsError){}
     }
     fun setOnStatusChangedListener( _delegate: SnsModule.Delegate? ){ delegate = _delegate }
@@ -70,7 +69,7 @@ abstract class SnsModule(val type:SnsType):Sns{
         delegateProfile?.onError(this, error)
     }
 
-    protected fun onProfileUpdated(profile:Profile){
+    protected fun onProfileUpdated(profile:SnsProfile){
         userProfile = profile
         delegateProfile?.profileUpdated(this, profile)
     }
@@ -100,9 +99,9 @@ private class StatusChangedObservable( private val module: SnsModule) : Observab
     }
 }
 
-private class ProfileUpdatedObservable( private val module: SnsModule) : Observable<Profile>() {
+private class ProfileUpdatedObservable( private val module: SnsModule) : Observable<SnsProfile>() {
     @SuppressLint("RestrictedApi")
-    override fun subscribeActual(observer: Observer<in Profile>) {
+    override fun subscribeActual(observer: Observer<in SnsProfile>) {
         if ( !checkMainThread(observer))  return
         val listener = Listener( module, observer)
         observer.onSubscribe(listener)
@@ -110,10 +109,10 @@ private class ProfileUpdatedObservable( private val module: SnsModule) : Observa
     }
     private class Listener(
         private val module: SnsModule,
-        private val observer: Observer<in Profile>
+        private val observer: Observer<in SnsProfile>
     ) : MainThreadDisposable(), SnsModule.DelegateProfile {
 
-        override fun profileUpdated(sns: SnsModule, profile:Profile) {
+        override fun profileUpdated(sns: SnsModule, profile:SnsProfile) {
             if (isDisposed) return
             observer.onNext(profile)
             observer.onComplete()

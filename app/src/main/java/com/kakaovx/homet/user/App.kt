@@ -80,7 +80,7 @@ class App: DaggerApplication(), HasSupportFragmentInjector {
                 })
             }
 
-            // TODO: Kakao i SDK 1.2.1.x 로 올린 후, "sandbox"로 될 수 있도록 주석 풀어야함.
+            // TODO: SnsKakao i SDK 1.2.1.x 로 올린 후, "sandbox"로 될 수 있도록 주석 풀어야함.
             KakaoI.with(this@App, "sproxy" /* BuildConfig.PHASE */) // phase 는 서버군을 특정. (기본값은 real)
                 .module(object : CoreModule() {
                     override fun provideKakaoIAuth(): KakaoIAuth {

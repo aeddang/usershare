@@ -18,7 +18,7 @@ class SnsLoginManager(val preference:AccountPreference){
     private var disposables: CompositeDisposable? = null
     private var finalAccessToken:String = ""
 
-    private val snss = arrayListOf( Kakao(SnsType.Kakao), FaceBook(SnsType.FaceBook))
+    private val snss = arrayListOf( SnsKakao(SnsType.Kakao), SnsFaceBook(SnsType.FaceBook))
     private var currentSnsType:SnsType = SnsType.ALL
     private var currentProgress:SnsStatus? = null
     private var isProgress = false
@@ -97,7 +97,7 @@ class SnsLoginManager(val preference:AccountPreference){
        signup(currentSnsType)
     }
 
-    fun getProfile(): Observable<Profile>?{
+    fun getProfile(): Observable<SnsProfile>?{
         if( !isSignup ) return null
         if( currentSnsType == SnsType.ALL ) return null
         return snss[currentSnsType.idx].profileUpdated()

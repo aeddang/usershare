@@ -75,7 +75,7 @@ object AppConst {
     const val HOMET_CAMERA_CMD_REQUEST_DRAW = 0x406
 
     /**
-     * Kakao I Command Type
+     * SnsKakao I Command Type
      */
     const val HOMET_KAKAOI_CMD_NONE = 0x500
     const val HOMET_KAKAOI_CMD_STATE = 0x501

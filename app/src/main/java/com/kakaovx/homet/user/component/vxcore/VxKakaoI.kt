@@ -87,7 +87,7 @@ class VxKakaoI(val context: Context, val settings: SettingPreference) {
         }
 
         /**
-         * NOTE. Kakao SDK 의 Application User ID 를 전달
+         * NOTE. SnsKakao SDK 의 Application User ID 를 전달
          *
          * @see com.kakao.auth.network.response.AccessTokenInfoResponse#getUserId()
          */
