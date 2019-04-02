@@ -64,15 +64,19 @@ class SplashFragment : DaggerFragment() {
         Log.d(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
         lifecycle += viewDisposables
-        sessionCallback = SessionCallback()
-        Session.getCurrentSession().addCallback(sessionCallback)
-        Session.getCurrentSession().checkAndImplicitOpen()
+        if (AppFeature.APP_KAKAO_DEV_LOGIN) {
+            sessionCallback = SessionCallback()
+            Session.getCurrentSession().addCallback(sessionCallback)
+            Session.getCurrentSession().checkAndImplicitOpen()
+        }
     }
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy()")
         super.onDestroy()
-        Session.getCurrentSession().removeCallback(sessionCallback)
+        if (AppFeature.APP_KAKAO_DEV_LOGIN) {
+            Session.getCurrentSession().removeCallback(sessionCallback)
+        }
     }
 
     override fun onCreateView(
