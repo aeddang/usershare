@@ -72,8 +72,13 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
             if (observable is VxCoreObserver) {
                 observable.getData()?.let {
                     if (it.cmd == AppConst.LIVE_DATA_VX_CMD_CAMERA) {
-                        if (isProcessingImage.not())
+                        if (isProcessingImage.not()) {
                             _coreData.onNext(it)
+                        } else {}
+                    } else if (it.cmd == AppConst.LIVE_DATA_VX_CMD_KAKAOI) {
+                        _core?.postValue(it)
+                    } else {
+                        Log.e(TAG, "wrong cmd = ${it.cmd}")
                     }
                 }
             }

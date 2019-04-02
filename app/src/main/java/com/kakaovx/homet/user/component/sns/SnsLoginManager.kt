@@ -6,6 +6,7 @@ import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.preference.AccountPreference
 import com.kakaovx.homet.user.component.ui.view.toast.VXToast
+import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.ui.PageID
 import com.kakaovx.homet.user.util.Log
 import io.reactivex.Observable
@@ -45,39 +46,43 @@ class SnsLoginManager(val preference:AccountPreference){
             Log.d(TAG, "logout")
         }
         snss.forEach {sns->
-            sns.create()
-            sns.statusChanged().subscribe{ status->
-                if((currentSnsType == sns.type && isProgress)
-                    || currentSnsType == SnsType.ALL)
-                {
-                    if(status.progress >= currentProgress!!.progress){
-                        progressComplete(status, sns.type)
-                        return@subscribe
+            if (!AppFeature.APP_KAKAO_DEV_LOGIN) {
+                sns.create()
+                sns.statusChanged().subscribe{ status->
+                    if((currentSnsType == sns.type && isProgress)
+                        || currentSnsType == SnsType.ALL)
+                    {
+                        if(status.progress >= currentProgress!!.progress){
+                            progressComplete(status, sns.type)
+                            return@subscribe
+                        }
+                        when( status ){
+                            SnsStatus.Logout ->{ sns.login() }
+                            SnsStatus.Login ->{ sns.signUp() }
+                            SnsStatus.Signup ->{
+                                currentSnsType = sns.type
+                                progressComplete(status, sns.type) }
+                        }
                     }
-                    when( status ){
-                        SnsStatus.Logout ->{ sns.login() }
-                        SnsStatus.Login ->{ sns.signUp() }
-                        SnsStatus.Signup ->{
-                            currentSnsType = sns.type
-                            progressComplete(status, sns.type) }
-                    }
-                }
-            }.apply { disposables?.add(this) }
+                }.apply { disposables?.add(this) }
 
-            sns.error().subscribe { error->
-                isProgress = false
-                Log.d(TAG, "error $error")
-                PagePresenter.getInstance<PageID>().activity?.getCurrentActivity()?.let {
-                    when( error ){
-                        SnsError.Client ->{ VXToast.makeToast(it, R.string.error_client, Toast.LENGTH_SHORT).show()}
-                        SnsError.Session ->{ VXToast.makeToast(it, R.string.error_session, Toast.LENGTH_SHORT).show() }
-                        SnsError.Network ->{ VXToast.makeToast(it, R.string.error_network, Toast.LENGTH_SHORT).show() }
-                        SnsError.Server ->{ VXToast.makeToast(it, R.string.error_server, Toast.LENGTH_SHORT).show() }
+                sns.error().subscribe { error->
+                    isProgress = false
+                    Log.d(TAG, "error $error")
+                    PagePresenter.getInstance<PageID>().activity?.getCurrentActivity()?.let {
+                        when( error ){
+                            SnsError.Client ->{ VXToast.makeToast(it, R.string.error_client, Toast.LENGTH_SHORT).show()}
+                            SnsError.Session ->{ VXToast.makeToast(it, R.string.error_session, Toast.LENGTH_SHORT).show() }
+                            SnsError.Network ->{ VXToast.makeToast(it, R.string.error_network, Toast.LENGTH_SHORT).show() }
+                            SnsError.Server ->{ VXToast.makeToast(it, R.string.error_server, Toast.LENGTH_SHORT).show() }
+                        }
                     }
-                }
-                if(currentSnsType == sns.type) { delegate?.onError(error) }
+                    if(currentSnsType == sns.type) { delegate?.onError(error) }
 
-            }.apply { disposables?.add(this) }
+                }.apply { disposables?.add(this) }
+            } else {
+                return@forEach
+            }
         }
     }
 

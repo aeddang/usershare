@@ -13,6 +13,7 @@ import android.text.TextUtils
 import android.util.Size
 import android.util.TypedValue
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -26,7 +27,9 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
+import com.kakao.i.KakaoI
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.component.model.VxCoreObserver
 import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.component.ui.view.BorderedText
 import com.kakaovx.homet.user.component.ui.view.OverlayView
@@ -87,6 +90,7 @@ class PlayerFragment : DaggerFragment() {
     private var videoUrl: String? = null
     private var mediaPlayer: MediaPlayer? = null
     private var exoPlayer: ExoPlayer? = null
+    private var backupVolume: Float = 0.0.toFloat()
 
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, chooses the smallest one whose
@@ -478,8 +482,50 @@ class PlayerFragment : DaggerFragment() {
                         Log.e(TAG, "wrong camera cmd")
                     }
                 }
+            } else if (it.cmd == AppConst.LIVE_DATA_VX_CMD_KAKAOI) {
+                when (it.kakaoiCmd) {
+                    AppConst.HOMET_KAKAOI_CMD_STATE -> {
+                        when (it.state) {
+                            KakaoI.STATE_DEACTIVATED -> {
+                                Log.d(TAG, "onStateChanged() KakaoI.STATE_DEACTIVATED")
+                            }
+                            KakaoI.STATE_IDLE -> {
+                                Log.d(TAG, "onStateChanged() KakaoI.STATE_IDLE")
+                                if (backupVolume != 0.0.toFloat()) {
+                                    exoPlayer?.audioComponent?.volume = backupVolume
+                                    backupVolume = 0.0.toFloat()
+                                } else { }
+                            }
+                            KakaoI.STATE_PROCESSING -> {
+                                Log.d(TAG, "onStateChanged() KakaoI.STATE_PROCESSING")
+                            }
+                            KakaoI.STATE_RECOGNIZING -> {
+                                Log.d(TAG, "onStateChanged() KakaoI.STATE_RECOGNIZING")
+                                exoPlayer?.audioComponent?.volume?.run {
+                                    backupVolume = this
+                                    exoPlayer?.audioComponent?.volume = 0.0.toFloat()
+                                }
+                            }
+                            else -> {
+                                Log.d(TAG, "onStateChanged() state=${it.state}")
+                            }
+                        }
+                    }
+                    AppConst.HOMET_KAKAOI_CMD_SEND_SPEECH_TEXT -> {
+                        it.message?.run { Toast.makeText(context, this, Toast.LENGTH_LONG).show() }
+                    }
+                    AppConst.HOMET_KAKAOI_CMD_RECV_SPEECH_TEXT -> {
+                        it.message?.run { Toast.makeText(context, this, Toast.LENGTH_LONG).show() }
+                    }
+                    AppConst.HOMET_KAKAOI_CMD_START_SETTING_ACTIVITY -> {
+                        viewModel.repo.kakaoI.startSettingActivity(context!!)
+                    }
+                    else -> {
+                        Log.e(TAG, "wrong kakao cmd")
+                    }
+                }
             } else {
-                Log.e(TAG, "wrong cmd")
+                Log.e(TAG, "wrong cmd = ${it.cmd}")
             }
         })
     }
