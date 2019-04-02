@@ -48,10 +48,10 @@ find_library( # Sets the name of the path variable.
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
 
-message(DEBUG, "PROJECT_SOURCE_DIR   [${PROJECT_SOURCE_DIR}]")
-message(DEBUG, "LIB_PATH   [${LIB_PATH}]")
-message(DEBUG, "CMAKE_SOURCE_DIR   [${CMAKE_SOURCE_DIR}]")
-message(DEBUG, "CMAKE_ANDROID_ARCH_ABI   [${CMAKE_ANDROID_ARCH_ABI}]")
+message(STATUS "PROJECT_SOURCE_DIR   [${PROJECT_SOURCE_DIR}]")
+message(STATUS "LIB_PATH   [${LIB_PATH}]")
+message(STATUS "CMAKE_SOURCE_DIR   [${CMAKE_SOURCE_DIR}]")
+message(STATUS "CMAKE_ANDROID_ARCH_ABI   [${CMAKE_ANDROID_ARCH_ABI}]")
 
 target_link_libraries( # Specifies the target library.
         mace_personlab_jni

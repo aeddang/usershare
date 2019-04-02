@@ -35,8 +35,9 @@ class SplashFragment : DaggerFragment() {
     private fun routeToMainPage() {
         Log.d(TAG, "routeToMainPage()")
         val i = Intent(AppConst.HOMET_ACTIVITY_MAIN)
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(i)
         activity?.finish()
     }

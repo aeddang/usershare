@@ -72,4 +72,9 @@ object AppConst {
     const val HOMET_CAMERA_CMD_SURFACE_AVAILABLE = 0x404
     const val HOMET_CAMERA_CMD_ON_IMAGE_AVAILABLE = 0x405
     const val HOMET_CAMERA_CMD_REQUEST_DRAW = 0x406
+
+    /**
+     * Preference Key
+     */
+    const val PUSH_ENABLE = "push_enable"
 }

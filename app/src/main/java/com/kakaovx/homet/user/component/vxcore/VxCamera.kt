@@ -200,9 +200,9 @@ class VxCamera(val context: Context) {
             frontCameraId?.apply {
                 cameraId = frontCameraId
             }
-            backCameraId?.apply {
-                cameraId = backCameraId
-            }
+//            backCameraId?.apply {
+//                cameraId = backCameraId
+//            }
         }
     }
 

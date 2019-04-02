@@ -17,17 +17,17 @@ class PopupPlayerViewModel(val repo: Repository) : ViewModel() {
     val TAG = javaClass.simpleName
 
     private val restApi = repo.restApi
-    val mr = repo.mr
+    val pe = repo.poseEstimator
     private var deviceIO: HandlerExecutor = HandlerExecutor(TAG)
     private var isProcessingImage: Boolean = false
-    val inputVideoSize:Size =  Size( mr.getInputWidth(), mr.getInputHeight())
+    val inputVideoSize:Size =  Size( pe.getInputWidth(), pe.getInputHeight())
     var pose:ArrayList<Array<FloatArray>>? = null
 
     var rgbFrameBitmap:Bitmap? = null
     var croppedBitmap:Bitmap? = null
 
-    fun initMotionRecognition(){
-        mr.initMotionRecognition()
+    fun initPoseEstimator(){
+        pe.initPoseEstimator()
     }
 
     fun poseDetect(data: IntArray, previewSize: Size, frameToCropTransform: Matrix ){
@@ -46,7 +46,7 @@ class PopupPlayerViewModel(val repo: Repository) : ViewModel() {
         rgbFrameBitmap!!.setPixels(data, 0, previewSize.width, 0, 0, previewSize.width, previewSize.height)
         val canvas = Canvas(croppedBitmap!!)
         canvas.drawBitmap(rgbFrameBitmap!!, frameToCropTransform, null)
-        pose = mr.poseEstimate(croppedBitmap!!, PoseMachine.DataProcessCallback {
+        pose = pe.poseEstimate(croppedBitmap!!, PoseMachine.DataProcessCallback {
             //Log.d(TAG, "onBitmapPrepared()")
         })
         pose?.let { Log.d(TAG, "Detect Skeletons: [${it.size}]") }
@@ -56,7 +56,7 @@ class PopupPlayerViewModel(val repo: Repository) : ViewModel() {
     override fun onCleared() {
         Log.i(TAG, "onCleared()")
         pose = null
-        mr.destroy()
+        pe.destroy()
         VxCoreObserver.deleteObservers()
         deviceIO.shutdown()
         super.onCleared()

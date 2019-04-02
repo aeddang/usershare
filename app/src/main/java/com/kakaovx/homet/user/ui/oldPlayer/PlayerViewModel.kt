@@ -34,15 +34,15 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     private val restApi = repo.restApi
     private val cv = repo.camera
-    private val mr = repo.mr
+    private val pe = repo.poseEstimator
 
-    private val _content: MutableLiveData<WorkoutData> = MutableLiveData()
-    val content: LiveData<WorkoutData> get() = _content
+    private var _content: MutableLiveData<WorkoutData>? = null
+    val content: LiveData<WorkoutData>? get() = _content
 
-    private val _core: MutableLiveData<VxCoreLiveData> = MutableLiveData()
-    val core: LiveData<VxCoreLiveData> get() = _core
+    private var _core: MutableLiveData<VxCoreLiveData>? = null
+    val core: LiveData<VxCoreLiveData>? get() = _core
 
-    private val _coreData: BehaviorSubject<VxCoreLiveData> = BehaviorSubject.create()
+    private var _coreData: BehaviorSubject<VxCoreLiveData> = BehaviorSubject.create()
     val isLoading: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
     val message: BehaviorSubject<String> = BehaviorSubject.create()
 
@@ -51,11 +51,22 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     private val trainerPoseModelList = ArrayList<TrainerPoseModel>()
 
+    fun onCreateView() {
+        Log.d(TAG, "onCreateView()")
+        _content = MutableLiveData()
+        _core = MutableLiveData()
+    }
+
+    fun onDestroyView() {
+        Log.d(TAG, "onDestroyView()")
+        _content = null
+        _core = null
+    }
 
     fun intCaptureView() {
         deviceIO = AppDeviceExecutor()
-        mr.initMotionRecognition()
-        cv.setInputVideoSize(mr.getInputWidth(), mr.getInputHeight())
+        pe.initPoseEstimator()
+        cv.setInputVideoSize(pe.getInputWidth(), pe.getInputHeight())
         cv.initVxCamera()
         VxCoreObserver.addObserver{ observable, _ ->
             if (observable is VxCoreObserver) {
@@ -94,9 +105,9 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     fun getInputVideoSize() = cv.getInputVideoSize()
 
-    fun getDebugInfo(previewWidth: Int, previewHeight: Int) = mr.getDebugInfo(previewWidth, previewHeight)
+    fun getDebugInfo(previewWidth: Int, previewHeight: Int) = pe.getDebugInfo(previewWidth, previewHeight)
 
-    fun drawPose(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) = mr.drawPose(canvas, pose)
+    fun drawPose(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) = pe.drawPose(canvas, pose)
 
     fun processImage(previewSize: Size, frameToCropTransform: Matrix?,
                      rgbFrameBitmap: Bitmap?, croppedBitmap: Bitmap?): Disposable {
@@ -202,7 +213,7 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
         val canvas = Canvas(croppedBitmap)
         canvas.drawBitmap(rgbFrameBitmap, frameToCropTransform, null)
 
-        val pose = mr.poseEstimate(croppedBitmap, PoseMachine.DataProcessCallback {
+        val pose = pe.poseEstimate(croppedBitmap, PoseMachine.DataProcessCallback {
             //            Log.d(TAG, "onBitmapPrepared()")
         })
 //        pose?.let { Log.d(TAG, "Detect Skeletons: [${it.size}]") }
@@ -211,7 +222,7 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
         liveData.cmd = AppConst.LIVE_DATA_VX_CMD_CAMERA
         liveData.cameraCmd = AppConst.HOMET_CAMERA_CMD_REQUEST_DRAW
         liveData.poseData = pose
-        _core.postValue(liveData)
+        _core?.postValue(liveData)
 
         isProcessingImage = false
     }
@@ -219,7 +230,7 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
     override fun onCleared() {
         Log.i(TAG, "onCleared()")
         cv.destroyCamera()
-        mr.destroy()
+        pe.destroy()
         VxCoreObserver.deleteObservers()
         deviceIO?.shutdown()
         super.onCleared()
