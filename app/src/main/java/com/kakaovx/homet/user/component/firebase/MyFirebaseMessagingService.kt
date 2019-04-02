@@ -10,8 +10,8 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.firebase.messaging.R
 import com.google.firebase.messaging.RemoteMessage
+import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.ui.MainActivity
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -44,7 +44,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendRegistrationToServer(token: String?) {
         // TODO: Implement this method to send token to your app server.
     }
-    /*
+
     private fun sendNotification(messageBody: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -54,8 +54,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon()
-            .setContentTitle(getString(R.string.fcm_message))
+            .setSmallIcon(R.drawable.ic_sit_up)
+            .setContentTitle(getString(R.string.fcm_title))
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
@@ -73,6 +73,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
     }
-    */
+
 
 }

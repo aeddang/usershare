@@ -69,6 +69,12 @@
     <string name="error_session">error_sessionr</string>
     <string name="error_server">error_server</string>
     <string name="error_network">error_network</string>
+
+    <!-- For Fcm -->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="default_notification_channel_name" translatable="true">Weather</string>
+    <string name="fcm_title">FCM Message</string>
+
     <!-- For kakao -->
     <string name="kakao_app_key">a8073223b58af3f8bf06db2be018964c</string>
 
