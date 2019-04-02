@@ -1,18 +1,21 @@
+@file:Suppress("DEPRECATION")
+
 package com.kakaovx.homet.user.util
 
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Base64
 import android.util.Size
 import android.view.Surface
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import com.kakaovx.homet.user.constant.AppConst
 import io.reactivex.disposables.Disposable
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.lang.Long.signum
+import java.security.MessageDigest
 import java.util.*
 
 operator fun Lifecycle.plusAssign(observer: LifecycleObserver)
@@ -101,6 +104,42 @@ object AppUtil {
             Surface.ROTATION_90 -> 90
             else -> 0
         }
+
+    @SuppressLint("PackageManagerGetSignatures")
+    fun getApplicationSignature(context:Context): List<String> {
+        val packageName: String = context.packageName
+        val signatureList: List<String>
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                val sig = context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES).signingInfo
+                signatureList = if (sig.hasMultipleSigners()) {
+                    // Send all with apkContentsSigners
+                    sig.apkContentsSigners.map {
+                        val digest = MessageDigest.getInstance("SHA")
+                        digest.update(it.toByteArray())
+                        Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
+                    }
+                } else {
+                    sig.signingCertificateHistory.map {
+                        val digest = MessageDigest.getInstance("SHA")
+                        digest.update(it.toByteArray())
+                        Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
+                    }
+                }
+            } else {
+                val sig = context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures
+                signatureList = sig.map {
+                    val digest = MessageDigest.getInstance("SHA")
+                    digest.update(it.toByteArray())
+                    Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
+                }
+            }
+            return signatureList
+        } catch (e: Exception) {
+            // Handle error
+        }
+        return emptyList()
+    }
 }
 
 /**

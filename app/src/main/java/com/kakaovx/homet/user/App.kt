@@ -10,6 +10,13 @@ import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
+import com.kakao.auth.IApplicationConfig
+import com.kakao.auth.ApprovalType
+import com.kakao.auth.AuthType
+import com.kakao.auth.ISessionConfig
+import com.kakao.auth.KakaoAdapter
+
+
 
 
 class App: DaggerApplication() , HasSupportFragmentInjector {
@@ -35,7 +42,6 @@ class App: DaggerApplication() , HasSupportFragmentInjector {
                 return
             }
         }
-
         if (AppFeature.APP_REMOTE_DEBUG) {
             Log.d(TAG, "Start Remote Debug")
             Stetho.initializeWithDefaults(this)

@@ -31,7 +31,8 @@ buildscript {
         stethoVersion = '1.5.0'
         leakcanaryVersion = '1.6.3'
         gsonVersion = '2.8.2'
-
+        kakaoVersion = '1.17.0'
+        facebookVersion = '[4,5)'
         // unstable
         rxBindingVersion = '3.0.0-alpha2'
     }
@@ -54,6 +55,8 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
     }
 }
 

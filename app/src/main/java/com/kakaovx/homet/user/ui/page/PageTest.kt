@@ -20,8 +20,9 @@ class PageTest : RxPageFragment() {
 
     @Suppress("UNUSED_PARAMETER")
     private fun onTest1(v: Unit) {
-        PagePresenter.getInstance<PageID>().openPopup(PageID.POPUP_CAMERA, null, image, "testAni")
-        PagePresenter.getInstance<PageID>().pageChange(PageID.PROGRAM_REPORT)
+       // PagePresenter.getInstance<PageID>().openPopup(PageID.POPUP_LOGIN, null, image, "testAni")
+        PagePresenter.getInstance<PageID>().openPopup(PageID.POPUP_LOGIN)
+        //PagePresenter.getInstance<PageID>().pageChange(PageID.PROGRAM_REPORT)
     }
 
     @Suppress("UNUSED_PARAMETER")

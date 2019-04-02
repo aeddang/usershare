@@ -15,7 +15,6 @@
     <string name="page_free_workout">무료운동</string>
     <string name="page_trainer">트레이너</string>
     <string name="page_list_empty">페이지에 목록이 없습니다.</string>
-    <string name="popup_player">플레이어</string>
     <string name="card_name">카드 이름</string>
     <string name="card_description">카드 설명</string>
     <string name="landscape_list_title">가로 리스트 제목</string>
@@ -53,7 +52,6 @@
     <string name="video">영상</string>
     <string name="free_motion_movie_url">무료 동작 영상 주소</string>
     <string name="free_motion_thumbnail_url">무료 동작 썸네일 주소</string>
-    <string name="popup_camera">카메라</string>
     <string name="free_motion_id">무료 동작 번호</string>
     <string name="page_diet_planner">식단 플래너</string>
     <string name="page_program_report">프로그램 리포트</string>
@@ -62,4 +60,20 @@
     <string name="page_account">계정</string>
     <string name="page_payment">결제</string>
     <string name="page_setting">설정</string>
+
+    <string name="popup_player">플레이어</string>
+    <string name="popup_login">로그인</string>
+    <string name="popup_camera">카메라</string>
+
+    <string name="error_client">"error_client</string>
+    <string name="error_session">error_sessionr</string>
+    <string name="error_server">error_server</string>
+    <string name="error_network">error_network</string>
+    <!-- For kakao -->
+    <string name="kakao_app_key">a8073223b58af3f8bf06db2be018964c</string>
+
+    <!-- For FaceBook -->
+    <string name="facebook_app_id">231276660290973</string>
+    <string name="fb_provider_authorities">com.facebook.app.FacebookContentProvider231276660290973</string>
+    <string name="fb_login_protocol_scheme">fb231276660290973</string>
 </resources>

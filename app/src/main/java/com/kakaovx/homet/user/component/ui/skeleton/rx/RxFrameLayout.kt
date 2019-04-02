@@ -12,7 +12,6 @@ abstract class RxFrameLayout : FrameLayout, Rx, Page {
 
     constructor(context: Context): super(context) { init(context) }
     constructor(context: Context, attrs: AttributeSet): super(context, attrs) { init(context) }
-
     protected var disposables: CompositeDisposable? = null
 
     private fun init(context: Context) {
