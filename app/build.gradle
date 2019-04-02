@@ -70,6 +70,14 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
 
     /**
+     * sns
+     */
+    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: rootProject.kakaoVersion
+    implementation group: 'com.kakao.sdk', name: 'kakaolink', version: rootProject.kakaoVersion
+    implementation group: 'com.kakao.sdk', name: 'kakaostory', version: rootProject.kakaoVersion
+    implementation "com.facebook.android:facebook-android-sdk:$rootProject.facebookVersion"
+
+    /**
      * Java
      */
     compileOnly 'javax.annotation:jsr250-api:1.0'

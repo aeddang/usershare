@@ -1,5 +1,6 @@
 package com.kakaovx.homet.lib.page
 
+import android.content.Context
 import android.view.View
 import androidx.annotation.LayoutRes
 
@@ -40,6 +41,8 @@ interface Presenter<T> {
 interface Activity {
     fun getCurrentPageFragment(): PageFragment?
     fun getCurrentFragment(): PageFragment?
+    fun getCurrentContext(): Context
+    fun getCurrentActivity(): android.app.Activity
     fun getPageAreaSize():Pair<Float,Float>
 }
 

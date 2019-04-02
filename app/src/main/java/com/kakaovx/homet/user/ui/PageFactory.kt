@@ -17,6 +17,7 @@ import com.kakaovx.homet.user.ui.page.etc.payment.PagePayment
 import com.kakaovx.homet.user.ui.page.planner.diet.PageDietPlanner
 import com.kakaovx.homet.user.ui.page.planner.program.PagePlanner
 import com.kakaovx.homet.user.ui.page.camera.PopupCamera
+import com.kakaovx.homet.user.ui.page.etc.login.PopupLogin
 import com.kakaovx.homet.user.ui.page.player.PopupPlayer
 import com.kakaovx.homet.user.ui.page.profile.PageProfile
 import com.kakaovx.homet.user.ui.page.profile.setting.PageSetting
@@ -39,6 +40,10 @@ class PageFactory {
 
     val homePages: Array<PageID> = arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE )
     val backStackPages: Array<PageID> = arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE )
+    private val needLoginPages: Array<PageID> = arrayOf( PageID.PROGRAM_REPORT, PageID.TEST )
+    fun isNeedLoginPage(id: PageID):Boolean{
+        return needLoginPages.indexOf(id) != -1
+    }
     private val tabDisablePages: Array<PageID> = arrayOf(PageID.TEST)
     fun isBottomTabHidden(id: PageID):Boolean{
         return tabDisablePages.indexOf(id) != -1
@@ -59,16 +64,19 @@ class PageFactory {
             PageID.FREE_WORKOUT -> PageFreeWorkout()
             PageID.TRAINER -> PageTrainer()
             PageID.CONTENT_DETAIL -> PageContentDetail()
-            PageID.POPUP_PLAYER -> PopupPlayer()
-            PageID.POPUP_CAMERA -> PopupCamera()
             PageID.ACCOUNT -> PageAccount()
             PageID.PAYMENT -> PagePayment()
             PageID.DIET_PLAN -> PageDietPlanner()
             PageID.SETTING -> PageSetting()
             PageID.DIET_REPORT -> PageDietReport()
             PageID.PROGRAM_REPORT -> PageProgramReport()
+
             PageID.TEST -> PageTest()
             PageID.TEST_POP -> PageDividedGestureTest()
+
+            PageID.POPUP_PLAYER -> PopupPlayer()
+            PageID.POPUP_CAMERA -> PopupCamera()
+            PageID.POPUP_LOGIN -> PopupLogin()
         }
     }
 }
@@ -86,13 +94,14 @@ enum class PageID(val resId: Int, override var position: Int = 9999):PagePositio
     PROGRAM_REPORT(R.string.page_program_report, 9),
     DIET_REPORT(R.string.page_diet_report, 10),
     PROFILE(R.string.page_profile, 11),
-    POPUP_PLAYER(R.string.popup_player, 12),
-    POPUP_CAMERA(R.string.popup_camera, 13),
     ACCOUNT(R.string.page_account, 14),
     PAYMENT(R.string.page_payment, 15),
     SETTING(R.string.page_setting, 16),
     TEST(1000000000, 17),
-    TEST_POP(1000000002)
+    TEST_POP(1000000002),
+    POPUP_PLAYER(R.string.popup_player),
+    POPUP_CAMERA(R.string.popup_camera),
+    POPUP_LOGIN(R.string.popup_login)
 }
 
 enum class ParamType(val key:String) {

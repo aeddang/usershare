@@ -16,6 +16,7 @@ import com.kakaovx.homet.user.ui.page.content.trainer.PageTrainer
 import com.kakaovx.homet.user.ui.page.content.workout.PageFreeWorkout
 import com.kakaovx.homet.user.ui.page.content.workout.detail.PageContentDetail
 import com.kakaovx.homet.user.ui.page.etc.account.PageAccount
+import com.kakaovx.homet.user.ui.page.etc.login.PopupLogin
 import com.kakaovx.homet.user.ui.page.etc.payment.PagePayment
 import com.kakaovx.homet.user.ui.page.planner.diet.PageDietPlanner
 import com.kakaovx.homet.user.ui.page.planner.program.PagePlanner
@@ -49,7 +50,7 @@ internal abstract class AndroidBindingModule {
      */
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [ ActivityModule::class ])
+    @ContributesAndroidInjector(modules = [])
     internal abstract fun bindMainActivity(): MainActivity
 
     @PageScope
@@ -119,6 +120,10 @@ internal abstract class AndroidBindingModule {
     @PageScope
     @ContributesAndroidInjector(modules = [ PageModule::class ])
     internal abstract fun bindPageProgramReport(): PageProgramReport
+
+    @PageScope
+    @ContributesAndroidInjector(modules = [ ])
+    internal abstract fun bindPopupLogin(): PopupLogin
 
     /**
      * Old Player Activity

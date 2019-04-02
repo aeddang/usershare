@@ -15,6 +15,11 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import java.util.*
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
 
@@ -122,6 +127,14 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
         hasPermissions(permissions)?.let { requestPermissionResult(requestCode, it.first, it.second) }
     }
 
+    override fun getCurrentContext(): Context{
+        return this.applicationContext
+    }
+
+    override fun getCurrentActivity(): android.app.Activity {
+        return this
+    }
+
     override fun getCurrentPageFragment(): PageFragment? {
         if( currentPage == null ) return null
         val fragment = supportFragmentManager.findFragmentByTag(currentPage.toString())
@@ -196,6 +209,8 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
         param?.let { newFragment.setParam(it) }
         return newFragment
     }
+
+    protected open fun isChangePageAble(id:T, param:Map<String, Any>?, isPopup:Boolean):Boolean { return true }
     protected open fun onWillChangePageFragment(id:T, param:Map<String, Any>?, isPopup:Boolean) {}
 
 
@@ -205,6 +220,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
         pageChange(id, param, false, sharedElement,  transitionName )
     }
     private fun pageChange(id:T, param:Map<String, Any>? , isStart:Boolean = false, sharedElement: android.view.View? = null, transitionName:String? = null, isBack:Boolean = false) {
+        if( !isChangePageAble(id, param, false) ) return
         if(currentPage == id) return
         onCloseAllPopup()
         resetBackPressedAction()
@@ -239,6 +255,7 @@ abstract class PageActivity<T> : AppCompatActivity(), View<T>, Page, Activity {
 
     abstract fun getPopupByID(id:T): PageFragment
     final override fun onOpenPopup(id:T, param:Map<String, Any>?, sharedElement: android.view.View?, transitionName:String?) {
+        if( !isChangePageAble(id, param, false) ) return
         resetBackPressedAction()
         val popup = getWillChangePageFragment(id, param, true)
         val transaction = supportFragmentManager.beginTransaction()

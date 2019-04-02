@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.net.CookieManager
 import java.net.CookiePolicy
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 
 @Module
@@ -31,12 +32,14 @@ open class NetworkModule {
     private val READ_TIMEOUT: Long = 30
 
     @Provides
+    @Singleton
     fun provideCache(application: Application): Cache {
         val cacheSize = 10 * 1024 * 1024 // 10MB
         return Cache(application.cacheDir, cacheSize.toLong())
     }
 
     @Provides
+    @Singleton
     fun provideInterceptor(): Interceptor {
         return Interceptor {
             val builder: Request.Builder = it.request().newBuilder()
@@ -72,11 +75,13 @@ open class NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideGs(): Gson {
         return GsonBuilder().create()
     }
 
     @Provides
+    @Singleton
     fun provideCallAdapterFactory(): CallAdapter.Factory
             = RxJava2CallAdapterFactory.createAsync()
 
