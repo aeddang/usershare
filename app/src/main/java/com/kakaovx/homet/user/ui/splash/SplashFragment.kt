@@ -19,6 +19,7 @@ import com.kakao.util.exception.KakaoException
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.constant.AppConst
+import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.AppFragmentAutoClearedDisposable
 import com.kakaovx.homet.user.util.Log
 import com.kakaovx.homet.user.util.plusAssign
@@ -86,7 +87,9 @@ class SplashFragment : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory)[SplashViewModel::class.java]
 
-        viewDisposables += viewModel.startLogin(autoLogin)
+        if (!AppFeature.APP_KAKAO_DEV_LOGIN) {
+            viewDisposables += viewModel.startLogin(autoLogin)
+        }
 
         viewModel.autoLoginResponse.observe(this, Observer {
             when (it) {

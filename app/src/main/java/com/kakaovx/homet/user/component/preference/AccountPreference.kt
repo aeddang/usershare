@@ -2,7 +2,7 @@ package com.kakaovx.homet.user.component.preference
 import android.content.Context
 
 private const val LOGIN_TYPE = "login_type"
-private const val ACCESS_TOKEN = "acces_token"
+private const val ACCESS_TOKEN = "access_token"
 
 class AccountPreference (context: Context) : CachedPreference(context, PreferenceName.LOGIN) {
 

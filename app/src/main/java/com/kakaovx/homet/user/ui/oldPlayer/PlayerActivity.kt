@@ -1,6 +1,9 @@
 package com.kakaovx.homet.user.ui.oldPlayer
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.media.AudioFocusRequest
+import android.media.AudioManager
 import android.os.Bundle
 import com.kakao.i.KakaoI
 import com.kakao.i.KakaoIListeningBinder
@@ -13,6 +16,7 @@ import com.kakaovx.homet.user.util.Log
 import dagger.android.support.DaggerAppCompatActivity
 import org.jetbrains.anko.toast
 import javax.inject.Inject
+
 
 class PlayerActivity : DaggerAppCompatActivity() {
 
@@ -86,6 +90,7 @@ class PlayerActivity : DaggerAppCompatActivity() {
         }
     }
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate()")
 //        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
@@ -99,56 +104,11 @@ class PlayerActivity : DaggerAppCompatActivity() {
 
         kakaoI?.apply {
             initKakaoI(kakaoIAccountCallback, kakaoIEventListener)
-            VxCoreObserver.addObserver{ observable, _ ->
-                if (observable is VxCoreObserver) {
-                    observable.getData()?.let {
-                        if (it.cmd == AppConst.LIVE_DATA_VX_CMD_KAKAOI) {
-                            when (it.kakaoiCmd) {
-                                AppConst.HOMET_KAKAOI_CMD_STATE -> {
-                                    when (it.state) {
-                                        KakaoI.STATE_DEACTIVATED -> {
-                                            Log.d(TAG, "onStateChanged() KakaoI.STATE_DEACTIVATED")
-                                        }
-                                        KakaoI.STATE_IDLE -> {
-                                            Log.d(TAG, "onStateChanged() KakaoI.STATE_IDLE")
-                                        }
-                                        KakaoI.STATE_PROCESSING -> {
-                                            Log.d(TAG, "onStateChanged() KakaoI.STATE_PROCESSING")
-                                        }
-                                        KakaoI.STATE_RECOGNIZING -> {
-                                            Log.d(TAG, "onStateChanged() KakaoI.STATE_RECOGNIZING")
-                                        }
-                                        else -> {
-                                            Log.d(TAG, "onStateChanged() state=${it.state}")
-                                        }
-                                    }
-                                }
-                                AppConst.HOMET_KAKAOI_CMD_SEND_SPEECH_TEXT -> {
-                                    it.message?.run { toast(this) }
-                                }
-                                AppConst.HOMET_KAKAOI_CMD_RECV_SPEECH_TEXT -> {
-                                    it.message?.run { toast(this) }
-                                }
-                                AppConst.HOMET_KAKAOI_CMD_START_SETTING_ACTIVITY -> {
-                                    startSettingActivity(this@PlayerActivity)
-                                }
-                                else -> {
-                                    Log.e(TAG, "wrong kakao cmd")
-                                }
-                            }
-                        } else if (it.cmd == AppConst.LIVE_DATA_VX_CMD_CAMERA) {
-
-                        } else {
-                            Log.e(TAG, "wrong cmd")
-                        }
-                    }
-                }
-            }
         } ?: Log.e(TAG, "kakaoI is null")
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, PlayerFragment.newInstance(id, url))
+                .replace(com.kakaovx.homet.user.R.id.container, PlayerFragment.newInstance(id, url))
                 .commitNow()
         }
 //        Log.d(TAG, "onCreate() default rotation = [${this.windowManager.defaultDisplay.rotation}]")
@@ -170,6 +130,7 @@ class PlayerActivity : DaggerAppCompatActivity() {
         kakaoI?.onStart()
     }
 
+    @SuppressLint("NewApi")
     override fun onStop() {
         Log.d(TAG, "onStop()")
         super.onStop()
@@ -179,6 +140,5 @@ class PlayerActivity : DaggerAppCompatActivity() {
     override fun onDestroy() {
         Log.d(TAG, "onDestroy()")
         super.onDestroy()
-        VxCoreObserver.deleteObservers()
     }
 }

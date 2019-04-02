@@ -7,6 +7,7 @@ object AppFeature {
     const val APP_REMOTE_DEBUG = true
     const val APP_MEMORY_DEBUG = true
     const val APP_LOG_DEBUG = true
+    const val APP_KAKAO_DEV_LOGIN = false
 
     /**
      * Viewpager page count
