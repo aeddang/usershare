@@ -2,8 +2,8 @@ package com.kakaovx.homet.user.ui.page.camera
 
 import android.transition.ChangeBounds
 import android.view.View
-import com.kakaovx.homet.user.R
 import com.kakaovx.homet.lib.page.PageGestureView
+import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageDividedGestureFragment
 import com.kakaovx.homet.user.component.ui.view.camera.capture
 import kotlinx.android.synthetic.main.popup_capture_camera.*

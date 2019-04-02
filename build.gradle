@@ -54,6 +54,8 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "${projectDir}/../repositories" }
+        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
     }
 }
 

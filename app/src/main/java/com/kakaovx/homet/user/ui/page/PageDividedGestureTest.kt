@@ -3,8 +3,8 @@ package com.kakaovx.homet.user.ui.page
 import android.content.Context
 import android.transition.ChangeBounds
 import android.view.View
-import com.kakaovx.homet.user.R
 import com.kakaovx.homet.lib.page.PageGestureView
+import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageDividedGestureFragment
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.util.Log

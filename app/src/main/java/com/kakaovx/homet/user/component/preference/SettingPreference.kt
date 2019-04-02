@@ -12,4 +12,8 @@ class SettingPreference (context: Context) : CachedPreference(context, Preferenc
     fun isPushEnable(): Boolean {
         return get(AppConst.PUSH_ENABLE, false) as Boolean
     }
+
+    fun putAppUserId(appUserId: Long) = put(AppConst.APP_USER_ID, appUserId)
+
+    fun getAppUserId(): Long = get(AppConst.APP_USER_ID, 0.toLong()) as Long
 }

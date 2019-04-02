@@ -37,7 +37,7 @@ internal abstract class AndroidBindingModule {
      */
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [])
+    @ContributesAndroidInjector(modules = [ ActivityModule::class ])
     internal abstract fun bindSplashActivity(): SplashActivity
 
     @PageScope
@@ -126,7 +126,7 @@ internal abstract class AndroidBindingModule {
      */
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [])
+    @ContributesAndroidInjector(modules = [ ActivityModule::class ])
     internal abstract fun bindPlayerActivity(): PlayerActivity
 
     @PageScope

@@ -23,7 +23,8 @@ object AppPermissionManager {
         var ret = false
         if (checkPermission(ctx, Manifest.permission.CAMERA)
             && checkPermission(ctx, Manifest.permission.READ_EXTERNAL_STORAGE)
-            && checkPermission(ctx, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            && checkPermission(ctx, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            && checkPermission(ctx, Manifest.permission.RECORD_AUDIO)) {
             ret = true
         }
         return ret
@@ -33,7 +34,8 @@ object AppPermissionManager {
         val ret = false
         val userPermissions = arrayOf(Manifest.permission.CAMERA,
                                       Manifest.permission.READ_EXTERNAL_STORAGE,
-                                      Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                      Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                      Manifest.permission.RECORD_AUDIO)
         ActivityCompat.requestPermissions(activity, userPermissions, PERMISSIONS_REQUEST_CODE)
         return ret
     }

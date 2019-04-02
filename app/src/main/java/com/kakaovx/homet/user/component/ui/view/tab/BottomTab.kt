@@ -6,7 +6,6 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
-import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.view.DivisionTab
 import com.kakaovx.homet.user.ui.PageID

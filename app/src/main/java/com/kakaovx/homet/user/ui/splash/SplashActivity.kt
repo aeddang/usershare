@@ -1,6 +1,8 @@
 package com.kakaovx.homet.user.ui.splash
 
+import android.content.Intent
 import android.os.Bundle
+import com.kakao.auth.Session
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.util.AppPermissionManager
 import com.kakaovx.homet.user.util.Log
@@ -28,6 +30,14 @@ class SplashActivity : DaggerAppCompatActivity() {
             Log.i(TAG, "Accept All User Permissions")
             startFragmentTransaction(savedInstanceState)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

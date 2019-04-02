@@ -5,8 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.kakao.auth.ApiResponseCallback
+import com.kakao.auth.AuthService
+import com.kakao.auth.ISessionCallback
+import com.kakao.auth.Session
+import com.kakao.auth.network.response.AccessTokenInfoResponse
+import com.kakao.network.ErrorResult
+import com.kakao.util.exception.KakaoException
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.constant.AppConst
@@ -26,6 +35,8 @@ class SplashFragment : DaggerFragment() {
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: SplashViewModel
 
+    private var sessionCallback: SessionCallback? = null
+
     private val autoLogin = true
 
     companion object {
@@ -39,7 +50,9 @@ class SplashFragment : DaggerFragment() {
 //        i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(i)
-        activity?.finish()
+        activity?.run {
+            ActivityCompat.finishAfterTransition(this)
+        }
     }
 
     private fun showLoginForm() {
@@ -47,14 +60,18 @@ class SplashFragment : DaggerFragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
         lifecycle += viewDisposables
-        Log.d(TAG, "onCreate()")
+        sessionCallback = SessionCallback()
+        Session.getCurrentSession().addCallback(sessionCallback)
+        Session.getCurrentSession().checkAndImplicitOpen()
     }
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy()")
         super.onDestroy()
+        Session.getCurrentSession().removeCallback(sessionCallback)
     }
 
     override fun onCreateView(
@@ -84,5 +101,34 @@ class SplashFragment : DaggerFragment() {
                 false -> showLoginForm()
             }
         })
+    }
+
+    private inner class SessionCallback : ISessionCallback {
+
+        override fun onSessionOpened() {
+            AuthService.getInstance().requestAccessTokenInfo(object : ApiResponseCallback<AccessTokenInfoResponse>() {
+                override fun onSuccess(result: AccessTokenInfoResponse?) {
+                    if (result != null) {
+                        val userId = result.userId
+                        viewModel.setUserId(userId)
+                        Log.d(TAG, "onSuccess: userId = [$userId]")
+                        routeToMainPage()
+                    }
+                }
+
+                override fun onSessionClosed(errorResult: ErrorResult) {
+                    Log.d(TAG, "onSessionClosed: " + errorResult.errorMessage)
+                }
+
+                override fun onNotSignedUp() {}
+            })
+        }
+
+        override fun onSessionOpenFailed(exception: KakaoException?) {
+            exception?.apply {
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                Log.e(TAG, "onSessionOpenFailed: ", exception)
+            }
+        }
     }
 }

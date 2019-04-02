@@ -43,8 +43,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/player_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".ui.player.PlayerFragment">
+                android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/renderer_layout"
