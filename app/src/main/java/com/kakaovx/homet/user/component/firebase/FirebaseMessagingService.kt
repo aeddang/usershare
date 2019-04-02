@@ -7,26 +7,23 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.ui.MainActivity
+import com.kakaovx.homet.user.util.Log
 
-class MyFirebaseMessagingService : FirebaseMessagingService() {
-    companion object {
-        private var TAG = javaClass.simpleName
-    }
+
+class FirebaseMessagingService : FirebaseMessagingService() {
+    private var TAG = javaClass.simpleName
 
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         Log.d(TAG, "From: ${remoteMessage?.from}")
-        // Check if message contains a data payload.
         remoteMessage?.data?.isNotEmpty()?.let {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
             handleNow()
         }
-        // Check if message contains a notification payload.
         remoteMessage?.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
         }

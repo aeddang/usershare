@@ -21,7 +21,11 @@ class Kakao(type: SnsType): SnsModule(type) {
     private var callback: SessionCallback? = null
     private var accessToken:String? = null
     override fun create(){
-        KakaoSDK.init(KakaoSDKAdapter())
+        try {
+            KakaoSDK.init(KakaoSDKAdapter())
+        } catch  (e:RuntimeException) {
+            Log.d(TAG, "KakaoSDK already init")
+        }
         callback = SessionCallback()
         Session.getCurrentSession().addCallback(callback)
         if (Session.getCurrentSession().isOpenable) Session.getCurrentSession().checkAndImplicitOpen()

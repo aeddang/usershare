@@ -88,6 +88,5 @@ object AppConst {
     /**
      * Preference Key
      */
-    const val PUSH_ENABLE = "push_enable"
     const val APP_USER_ID = "app_user_id"
 }
