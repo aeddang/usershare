@@ -16,6 +16,7 @@ class SplashViewModel(repo: Repository) : ViewModel() {
     val TAG = javaClass.simpleName
 
     private val restApi = repo.restApi
+    private val settings = repo.setting
 
     val response: MutableLiveData<Boolean> = MutableLiveData()
     val autoLoginResponse: MutableLiveData<Boolean> = MutableLiveData()
@@ -47,6 +48,8 @@ class SplashViewModel(repo: Repository) : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .map { autoLoginResponse.value = it }
             .subscribe()
+
+    fun setUserId(userId: Long)  = settings.putAppUserId(userId)
 
     override fun onCleared() {
         Log.i(TAG, "onCleared()")

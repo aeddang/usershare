@@ -11,16 +11,28 @@ android {
     }
     defaultConfig {
         applicationId "com.kakaovx.homet.user"
+//        applicationId "com.kakao.i.sample.sandbox"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.compileSdkVersion
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // kakao sdk
+        buildConfigField "String", "PHASE", "\"sandbox\""
+        resValue "string", "demo_app_key", "fa659f49b09e80f55b4e0d73cf671ff3"
     }
 //    kapt {
 //        generateStubs = true
 //    }
+
+//    signingConfigs {
+//        debug {
+//            storeFile file('debug.keystore')
+//        }
+//    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -176,4 +188,10 @@ dependencies {
      */
     implementation project(':posemachine')
 
+    /**
+     * Kakao SDK
+     */
+    implementation "com.kakao.i:sdk-android:1.2.0.18"
+    implementation "com.kakao.i:wakeup-dialoid:1.1.0"
+    implementation "com.kakao.sdk:usermgmt:1.15.1"
 }

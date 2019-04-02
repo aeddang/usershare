@@ -10,10 +10,9 @@ import android.util.Log
 import androidx.annotation.CheckResult
 import com.jakewharton.rxbinding3.internal.checkMainThread
 import com.jakewharton.rxbinding3.view.clicks
+import com.kakaovx.homet.user.R
 import kotlinx.android.synthetic.main.ui_capture_camera.view.*
 import java.io.File
-
-import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.view.camera.Camera
 import com.kakaovx.homet.user.component.ui.skeleton.view.util.rotate
 import com.kakaovx.homet.user.component.ui.skeleton.view.util.swapHolizental

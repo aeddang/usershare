@@ -61,6 +61,7 @@ object AppConst {
      */
     const val LIVE_DATA_VX_CMD_NONE = 0x0300
     const val LIVE_DATA_VX_CMD_CAMERA = 0x0301
+    const val LIVE_DATA_VX_CMD_KAKAOI = 0x0302
 
     /**
      * Camera Command Type
@@ -74,7 +75,19 @@ object AppConst {
     const val HOMET_CAMERA_CMD_REQUEST_DRAW = 0x406
 
     /**
+     * Kakao I Command Type
+     */
+    const val HOMET_KAKAOI_CMD_NONE = 0x500
+    const val HOMET_KAKAOI_CMD_STATE = 0x501
+    const val HOMET_KAKAOI_CMD_SEND_SPEECH_TEXT = 0x502
+    const val HOMET_KAKAOI_CMD_RECV_SPEECH_TEXT = 0x503
+    const val HOMET_KAKAOI_CMD_START_SETTING_ACTIVITY = 0x504
+
+
+
+    /**
      * Preference Key
      */
     const val PUSH_ENABLE = "push_enable"
+    const val APP_USER_ID = "app_user_id"
 }

@@ -11,7 +11,6 @@ import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFac
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.ParamType
-import com.kakaovx.homet.user.ui.page.etc.payment.PagePaymentViewModel
 import com.kakaovx.homet.user.util.Log
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign

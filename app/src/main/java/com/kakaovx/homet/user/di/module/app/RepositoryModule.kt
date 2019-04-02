@@ -4,6 +4,7 @@ import com.kakaovx.homet.user.component.network.api.RestfulApi
 import com.kakaovx.homet.user.component.preference.SettingPreference
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.component.vxcore.VxCamera
+import com.kakaovx.homet.user.component.vxcore.VxKakaoI
 import com.kakaovx.homet.user.component.vxcore.VxPoseEstimator
 import com.kakaovx.homet.user.util.AppExecutors
 import dagger.Module
@@ -19,7 +20,8 @@ class RepositoryModule {
                           restApi: RestfulApi,
                           setting: SettingPreference,
                           camera: VxCamera,
-                          poseEstimator: VxPoseEstimator
+                          poseEstimator: VxPoseEstimator,
+                          kakaoI: VxKakaoI
     ): Repository
-            = Repository(executors, restApi, setting, camera, poseEstimator)
+            = Repository(executors, restApi, setting, camera, poseEstimator, kakaoI)
 }

@@ -17,6 +17,7 @@ import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFac
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.databinding.PageContentDetailBinding
+
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.ParamType
 import com.kakaovx.homet.user.util.Log

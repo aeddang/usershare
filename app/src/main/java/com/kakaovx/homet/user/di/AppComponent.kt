@@ -7,6 +7,7 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
+
 @Singleton
 @Component(modules = [
     AppModule::class,
@@ -15,6 +16,7 @@ import javax.inject.Singleton
     PreferenceModule::class,
     NetworkModule::class,
     CaptureModule::class,
+    KakaoModule::class,
     AndroidBindingModule::class,
     AndroidSupportInjectionModule::class
 ])

@@ -7,8 +7,8 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.kakaovx.homet.user.R
 import com.kakaovx.homet.lib.page.PageGestureView
+import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageDividedGestureFragment
 import com.kakaovx.homet.user.component.ui.view.BorderedText
@@ -17,11 +17,9 @@ import com.kakaovx.homet.user.component.ui.view.camera.motionExtract
 import com.kakaovx.homet.user.constant.AppFeature
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.popup_player.*
 import org.tensorflow.demo.env.ImageUtils
 import java.util.concurrent.TimeUnit
-
 import javax.inject.Inject
 
 class PopupPlayer : RxPageDividedGestureFragment() {

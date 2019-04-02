@@ -71,8 +71,10 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
         VxCoreObserver.addObserver{ observable, _ ->
             if (observable is VxCoreObserver) {
                 observable.getData()?.let {
-                    if (isProcessingImage.not())
-                        _coreData.onNext(it)
+                    if (it.cmd == AppConst.LIVE_DATA_VX_CMD_CAMERA) {
+                        if (isProcessingImage.not())
+                            _coreData.onNext(it)
+                    }
                 }
             }
         }

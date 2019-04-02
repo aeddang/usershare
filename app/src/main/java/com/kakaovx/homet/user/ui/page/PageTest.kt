@@ -1,6 +1,5 @@
 package com.kakaovx.homet.user.ui.page
 
-
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
