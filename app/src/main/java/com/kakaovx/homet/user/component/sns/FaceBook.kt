@@ -12,7 +12,7 @@ import com.kakaovx.homet.user.util.Log
 
 class FaceBook(type: SnsType): SnsModule(type) {
 
-    val TAG = javaClass.simpleName + "SNS"
+    val TAG = javaClass.simpleName
     var callbackManager: CallbackManager? = null; private set
     private var accessToken:AccessToken? = null
     private var accessTokenTracker:AccessTokenTracker? = null
@@ -23,14 +23,12 @@ class FaceBook(type: SnsType): SnsModule(type) {
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
-                    Log.d(TAG, " onSuccess")
                     checkStatus()
                 }
 
                 override fun onCancel() {
                     onStatusError( SnsError.Client )
                     onStatusChanged( SnsStatus.Logout )
-                    Log.d(TAG, "onCancel")
                 }
 
                 override fun onError(exception: FacebookException) {
@@ -44,7 +42,6 @@ class FaceBook(type: SnsType): SnsModule(type) {
             override fun onCurrentAccessTokenChanged( oldAccessToken: AccessToken?, currentAccessToken: AccessToken?) {
                 accessToken = currentAccessToken
                 accessTokenTracker?.stopTracking()
-                Log.d(TAG, "Signup $accessToken")
                 onStatusChanged( SnsStatus.Signup )
             }
         }
@@ -56,7 +53,6 @@ class FaceBook(type: SnsType): SnsModule(type) {
                     val profile = Profile(it.id, it.name)
                     profile.imgPath = it.getProfilePictureUri(150, 150).path
                     onProfileUpdated(profile)
-                    Log.d(TAG, "Profile ${profile}")
                     return
                 }
                 onProfileError(SnsError.Client)
@@ -68,14 +64,11 @@ class FaceBook(type: SnsType): SnsModule(type) {
 
     private fun checkStatus(){
         accessToken = AccessToken.getCurrentAccessToken()
-        Log.d(TAG, "checkStatus $accessToken")
         if(accessToken == null) onStatusChanged( SnsStatus.Logout )
         accessToken?.let { token ->
             if (!token.isExpired) {
-                Log.d(TAG, "checkStatus Signup ${token.token}")
                 onStatusChanged(SnsStatus.Signup)
             }else {
-                Log.d(TAG, "checkStatus isExpired")
                 onStatusChanged( SnsStatus.Login )
                 accessTokenTracker?.let { if( !it.isTracking ) it.startTracking() }
             }

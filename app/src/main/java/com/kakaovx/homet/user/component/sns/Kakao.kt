@@ -29,9 +29,7 @@ class Kakao(type: SnsType): SnsModule(type) {
 
     private inner class SessionCallback : ISessionCallback {
         override fun onSessionOpened() {
-            Log.d(TAG, "onSessionOpened")
             accessToken = Session.getCurrentSession().tokenInfo.accessToken
-            Log.d(TAG, "onSessionOpened $accessToken")
             onStatusChanged( SnsStatus.Login )
 
         }
@@ -76,7 +74,6 @@ class Kakao(type: SnsType): SnsModule(type) {
     override fun logout(){
         UserManagement.getInstance().requestLogout(object : LogoutResponseCallback() {
             override fun onCompleteLogout() {
-                Log.d(TAG, "logouts")
                 onStatusChanged( SnsStatus.Logout )
             }
         })
@@ -126,25 +123,21 @@ class Kakao(type: SnsType): SnsModule(type) {
         UserManagement.getInstance().requestSignup(object : ApiResponseCallback<Long>() {
             override fun onNotSignedUp() {
                 onStatusChanged( SnsStatus.Login )
-                Log.d(TAG, "Signup onNotSignedUp")
             }
             override fun onSuccess(result: Long?) {
                 onStatusChanged( SnsStatus.Signup )
-                Log.d(TAG, "Signup onSuccess")
             }
             override fun onFailure(errorResult: ErrorResult?) {
                 if(errorResult?.errorCode == -102){
                     onStatusChanged( SnsStatus.Signup )
-                    Log.d(TAG, "Signup onSuccess  already registered")
                     return
                 }
                 val message = "UsermgmtResponseCallback : failure : " + errorResult!!
-                Log.d(TAG, "Signup $message")
+                Log.d(TAG, "Signup onFailure $message")
                 onStatusError(SnsError.Server)
                 onStatusChanged( SnsStatus.Login )
             }
             override fun onSessionClosed(errorResult: ErrorResult) {
-                Log.d(TAG, "Signup onSessionClosed")
                 onStatusError(SnsError.Session)
                 onStatusChanged( SnsStatus.Logout )
             }

@@ -15,7 +15,7 @@ import com.kakaovx.homet.user.ui.page.content.trainer.PageTrainer
 import com.kakaovx.homet.user.ui.page.content.workout.PageFreeWorkout
 import com.kakaovx.homet.user.ui.page.content.workout.detail.PageContentDetail
 import com.kakaovx.homet.user.ui.page.etc.account.PageAccount
-import com.kakaovx.homet.user.ui.page.etc.login.PopupLogin
+import com.kakaovx.homet.user.ui.page.etc.account.PopupLogin
 import com.kakaovx.homet.user.ui.page.etc.payment.PagePayment
 import com.kakaovx.homet.user.ui.page.planner.diet.PageDietPlanner
 import com.kakaovx.homet.user.ui.page.planner.program.PagePlanner

@@ -4,7 +4,7 @@ import android.content.Context
 private const val LOGIN_TYPE = "login_type"
 private const val ACCESS_TOKEN = "acces_token"
 
-class MemberPreference (context: Context) : CachedPreference(context, PreferenceName.LOGIN) {
+class AccountPreference (context: Context) : CachedPreference(context, PreferenceName.LOGIN) {
 
     fun setLoginData(type:Int, token:String) {
         put(LOGIN_TYPE, type)

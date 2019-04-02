@@ -1,6 +1,6 @@
-package com.kakaovx.homet.user.component.member
+package com.kakaovx.homet.user.component.account
 
-enum class MemberStatus(var value: Any?){
+enum class AccountStatus(var value: Any?){
     Logout(null),
     Login(null),
     Error(null)

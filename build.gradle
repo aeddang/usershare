@@ -33,6 +33,9 @@ buildscript {
         gsonVersion = '2.8.2'
         kakaoVersion = '1.17.0'
         facebookVersion = '[4,5)'
+        googleServicesVersion = '4.0.1'
+        firebaseCoreVersion = '16.0.1'
+        firebaseMsgVersion = '17.5.0'
         // unstable
         rxBindingVersion = '3.0.0-alpha2'
     }
@@ -45,7 +48,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
+        classpath "com.google.gms:google-services:$googleServicesVersion"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

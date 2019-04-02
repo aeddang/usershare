@@ -1,16 +1,11 @@
 package com.kakaovx.homet.user.ui
 
 import android.content.Intent
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.kakaovx.homet.lib.page.PageActivity
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.member.MemberManager
-import com.kakaovx.homet.user.component.sns.FaceBook
-import com.kakaovx.homet.user.component.sns.Kakao
-import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
+import com.kakaovx.homet.user.component.account.AccountManager
 import com.kakaovx.homet.user.component.ui.skeleton.view.DivisionTab
 import com.kakaovx.homet.user.util.AppUtil
 import com.kakaovx.homet.user.util.Log
@@ -23,7 +18,7 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     private val TAG = javaClass.simpleName
 
     @Inject
-    lateinit var memberManager: MemberManager
+    lateinit var accountManager: AccountManager
 
     override fun onCreatedView() {
         Log.d(TAG, "onCreatedView()")
@@ -37,7 +32,7 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
 
     override fun onDestroy() {
         super.onDestroy()
-        memberManager.destory()
+        accountManager.destory()
     }
 
     override fun onDestroyedView() {
@@ -45,7 +40,7 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if( memberManager.onActivityResult(requestCode, resultCode, data) )  return
+        if( accountManager.onActivityResult(requestCode, resultCode, data) )  return
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -67,8 +62,8 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
 
     override  fun isChangePageAble(id:PageID, param:Map<String, Any>?, isPopup:Boolean):Boolean {
         val needLogin = PageFactory.getInstance().isNeedLoginPage( id )
-        if(needLogin && !memberManager.isLogin){
-            memberManager.login(id, param, isPopup)
+        if(needLogin && !accountManager.isLogin){
+            accountManager.login(id, param, isPopup)
             return false
         }
         return true

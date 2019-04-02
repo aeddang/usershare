@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.ui.page.etc.login
+package com.kakaovx.homet.user.ui.page.etc.account
 
 
 import androidx.core.view.isVisible
@@ -6,9 +6,9 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.member.MemberManager
-import com.kakaovx.homet.user.component.member.MemberStatus
-import com.kakaovx.homet.user.component.member.statusChanged
+import com.kakaovx.homet.user.component.account.AccountManager
+import com.kakaovx.homet.user.component.account.AccountStatus
+import com.kakaovx.homet.user.component.account.statusChanged
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
 import com.kakaovx.homet.user.ui.PageID
 import dagger.android.support.AndroidSupportInjection
@@ -34,7 +34,7 @@ class PopupLogin : RxPageFragment() {
         return super.setParam(param)
     }
 
-    @Inject lateinit var memberManager: MemberManager
+    @Inject lateinit var accountManager: AccountManager
     override fun getLayoutResId(): Int { return R.layout.popup_login }
     override fun onCreatedView() {
         AndroidSupportInjection.inject(this)
@@ -45,7 +45,7 @@ class PopupLogin : RxPageFragment() {
 
     private fun setBtnStatus(){
 
-        if(memberManager.isLogin){
+        if(accountManager.isLogin){
             btnFaceBook.isVisible = false
             btnKakao.isVisible = false
             btnLogout.isVisible = true
@@ -58,15 +58,15 @@ class PopupLogin : RxPageFragment() {
 
 
     override fun onSubscribe(){
-        btnLogout.clicks().subscribe { memberManager.logout()
+        btnLogout.clicks().subscribe { accountManager.logout()
         }.apply { disposables.add(this) }
 
-        memberManager.statusChanged().subscribe{ status ->
+        accountManager.statusChanged().subscribe{ status ->
             setBtnStatus()
             when(  status ){
-                MemberStatus.Logout ->{  }
-                MemberStatus.Login ->{ movePage() }
-                MemberStatus.Error ->{  }
+                AccountStatus.Logout ->{  }
+                AccountStatus.Login ->{ movePage() }
+                AccountStatus.Error ->{  }
             }
         }.apply { disposables.add(this) }
     }

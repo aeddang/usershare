@@ -17,7 +17,7 @@ import com.kakaovx.homet.user.ui.page.etc.payment.PagePayment
 import com.kakaovx.homet.user.ui.page.planner.diet.PageDietPlanner
 import com.kakaovx.homet.user.ui.page.planner.program.PagePlanner
 import com.kakaovx.homet.user.ui.page.camera.PopupCamera
-import com.kakaovx.homet.user.ui.page.etc.login.PopupLogin
+import com.kakaovx.homet.user.ui.page.etc.account.PopupLogin
 import com.kakaovx.homet.user.ui.page.player.PopupPlayer
 import com.kakaovx.homet.user.ui.page.profile.PageProfile
 import com.kakaovx.homet.user.ui.page.profile.setting.PageSetting
@@ -41,13 +41,9 @@ class PageFactory {
     val homePages: Array<PageID> = arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE )
     val backStackPages: Array<PageID> = arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE )
     private val needLoginPages: Array<PageID> = arrayOf( PageID.PROGRAM_REPORT, PageID.TEST )
-    fun isNeedLoginPage(id: PageID):Boolean{
-        return needLoginPages.indexOf(id) != -1
-    }
+    fun isNeedLoginPage(id: PageID):Boolean{ return needLoginPages.indexOf(id) != -1 }
     private val tabDisablePages: Array<PageID> = arrayOf(PageID.TEST)
-    fun isBottomTabHidden(id: PageID):Boolean{
-        return tabDisablePages.indexOf(id) != -1
-    }
+    fun isBottomTabHidden(id: PageID):Boolean{ return tabDisablePages.indexOf(id) != -1 }
 
     fun getPageByID(id:PageID): PageFragment {
         return when(id) {

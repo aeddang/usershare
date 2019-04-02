@@ -2,9 +2,9 @@ package com.kakaovx.homet.user.di.module.app
 
 import android.app.Application
 import android.content.Context
+import com.kakaovx.homet.user.component.account.AccountManager
 import com.kakaovx.homet.user.component.image.ImageFactory
-import com.kakaovx.homet.user.component.member.MemberManager
-import com.kakaovx.homet.user.component.preference.MemberPreference
+import com.kakaovx.homet.user.component.preference.AccountPreference
 import com.kakaovx.homet.user.util.AppExecutors
 import dagger.Module
 import dagger.Provides
@@ -24,7 +24,7 @@ class BaseModule {
 
     @Provides
     @Singleton
-    fun provideMemberManager(preference: MemberPreference): MemberManager = MemberManager(preference)
+    fun provideAccountManager(preference: AccountPreference): AccountManager = AccountManager(preference)
 
     @Provides
     @Singleton
