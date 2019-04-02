@@ -1,6 +1,8 @@
 package com.kakaovx.homet.user.ui.page.etc.login
 
 
+import androidx.core.view.isVisible
+import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
@@ -32,19 +34,35 @@ class PopupLogin : RxPageFragment() {
         return super.setParam(param)
     }
 
-
     @Inject lateinit var memberManager: MemberManager
-
-
     override fun getLayoutResId(): Int { return R.layout.popup_login }
     override fun onCreatedView() {
         AndroidSupportInjection.inject(this)
         super.onCreatedView()
         btnFaceBook.setReadPermissions("email")
+        setBtnStatus()
     }
 
+    private fun setBtnStatus(){
+
+        if(memberManager.isLogin){
+            btnFaceBook.isVisible = false
+            btnKakao.isVisible = false
+            btnLogout.isVisible = true
+        }else{
+            btnLogout.isVisible = false
+            btnFaceBook.isVisible = true
+            btnKakao.isVisible = true
+        }
+    }
+
+
     override fun onSubscribe(){
+        btnLogout.clicks().subscribe { memberManager.logout()
+        }.apply { disposables.add(this) }
+
         memberManager.statusChanged().subscribe{ status ->
+            setBtnStatus()
             when(  status ){
                 MemberStatus.Logout ->{  }
                 MemberStatus.Login ->{ movePage() }
