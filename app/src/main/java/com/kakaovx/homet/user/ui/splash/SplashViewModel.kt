@@ -44,7 +44,7 @@ class SplashViewModel(repo: Repository) : ViewModel() {
 
     fun startLogin(isAuto: Boolean = true): Disposable
         = Observable.just(isAuto)
-            .delay(2000L, TimeUnit.MILLISECONDS)
+//            .delay(2000L, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .map { autoLoginResponse.value = it }
             .subscribe()
