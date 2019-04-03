@@ -43,10 +43,12 @@
                 android:name=".ui.MainActivity"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:configChanges="orientation|keyboard|screenSize">
-            <intent-filter android:autoVerify="true">
+            <intent-filter>
                 <action android:name="com.kakaovx.homet.user.action.HOMET_MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
                 <!-- firebase DL-->
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:host="kakaovx.com" android:scheme="http"/>
