@@ -75,6 +75,7 @@ dependencies {
      */
     implementation "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
     implementation "com.google.firebase:firebase-messaging:$rootProject.firebaseMsgVersion"
+    implementation "com.google.firebase:firebase-dynamic-links:$rootProject.firebaseDynamicLinkVersion"
 
     /**
      * sns
@@ -188,7 +189,7 @@ dependencies {
     implementation project(':posemachine')
 
     /**
-     * Kakao SDK
+     * SnsKakao SDK
      */
     implementation "com.kakao.i:sdk-android:1.2.0.18"
     implementation "com.kakao.i:wakeup-dialoid:1.1.0"

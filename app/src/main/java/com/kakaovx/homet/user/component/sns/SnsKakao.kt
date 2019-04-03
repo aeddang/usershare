@@ -15,7 +15,7 @@ import com.kakao.util.OptionalBoolean
 import java.util.*
 
 
-class Kakao(type: SnsType): SnsModule(type) {
+class SnsKakao(type: SnsType): SnsModule(type) {
 
     val TAG = javaClass.simpleName + "SNS"
     private var callback: SessionCallback? = null
@@ -110,7 +110,7 @@ class Kakao(type: SnsType): SnsModule(type) {
                 onProfileError(SnsError.Session)
                 onStatusChanged( SnsStatus.Login )
             } else {
-                val profile = Profile(result.kakaoAccount.displayId, result.nickname)
+                val profile = SnsProfile(result.kakaoAccount.displayId, result.nickname)
                 profile.age = result.kakaoAccount.ageRange.ordinal
                 profile.imgPath = result.profileImagePath
                 profile.email = result.kakaoAccount.email

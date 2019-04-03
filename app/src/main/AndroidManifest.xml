@@ -61,7 +61,7 @@
             </intent-filter>
         </activity>
 
-        <!-- FaceBook -->
+        <!-- SnsFaceBook -->
         <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
                 android:value="@string/facebook_app_id"/>
@@ -79,7 +79,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <!-- Kakao -->
+        <!-- SnsKakao -->
         <meta-data
                 android:name="com.kakao.sdk.AppKey"
                 android:value="@string/kakao_app_key"/>

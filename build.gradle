@@ -36,6 +36,7 @@ buildscript {
         googleServicesVersion = '4.0.1'
         firebaseCoreVersion = '16.0.1'
         firebaseMsgVersion = '17.5.0'
+        firebaseDynamicLinkVersion = '16.1.7'
         // unstable
         rxBindingVersion = '3.0.0-alpha2'
     }

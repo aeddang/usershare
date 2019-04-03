@@ -78,7 +78,7 @@
     <!-- For kakao -->
     <string name="kakao_app_key">a8073223b58af3f8bf06db2be018964c</string>
 
-    <!-- For FaceBook -->
+    <!-- For SnsFaceBook -->
     <string name="facebook_app_id">231276660290973</string>
     <string name="fb_provider_authorities">com.facebook.app.FacebookContentProvider231276660290973</string>
     <string name="fb_login_protocol_scheme">fb231276660290973</string>
