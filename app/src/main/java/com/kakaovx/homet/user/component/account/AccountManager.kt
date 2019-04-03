@@ -27,14 +27,9 @@ class AccountManager(val preference:AccountPreference): SnsLoginManager.Delegate
     interface Delegate{
         fun statusChanged(status:AccountStatus){}
     }
+    fun addStatusChangedListener(delegate:Delegate){ delegates.add(delegate) }
+    fun removeStatusChangedListener(delegate:Delegate){ delegates.remove(delegate) }
 
-    fun addStatusChangedListener(delegate:Delegate){
-        delegates.add(delegate)
-    }
-
-    fun removeStatusChangedListener(delegate:Delegate){
-        delegates.remove(delegate)
-    }
 
     var isLogin:Boolean = false; private set
         get(){ return snsManager.isSignup }
