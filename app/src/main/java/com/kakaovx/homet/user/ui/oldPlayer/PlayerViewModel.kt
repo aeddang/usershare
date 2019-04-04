@@ -10,7 +10,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.model.PoseModel
-import com.kakaovx.homet.user.component.model.TrainerPoseModel
 import com.kakaovx.homet.user.component.model.VxCoreLiveData
 import com.kakaovx.homet.user.component.model.VxCoreObserver
 import com.kakaovx.homet.user.component.network.RetryPolicy
@@ -27,6 +26,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class PlayerViewModel(val repo: Repository) : ViewModel() {
 
@@ -49,7 +49,7 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
     private var deviceIO: AppDeviceExecutor? = null
     private var isProcessingImage: Boolean = false
 
-    private val trainerPoseModelList = ArrayList<TrainerPoseModel>()
+    private val trainerPoseModelList: Hashtable<String, List<PoseModel>> = Hashtable()
 
     fun onCreateView() {
         Log.d(TAG, "onCreateView()")
@@ -175,12 +175,16 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
                             pose.add(model)
                             i += 3
                         }
-                        val model = TrainerPoseModel(trainerPoseData.time_stamp, pose.toList())
-                        trainerPoseModelList.add(model)
+                        val timeStamp = trainerPoseData.time_stamp.toInt()
+                        trainerPoseModelList[timeStamp.toString()] = pose.toList()
+                        Log.d(TAG, "getTrainerMotionData() model = [$timeStamp]")
+//                        for ((index, model) in pose.withIndex()) {
+//                            Log.d(TAG, "getTrainerMotionData() index[$index] X[${model.positionX}]Y[${model.positionY}]similarity[${model.similarity}]")
+//                        }
                     }
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnComplete {
-                        getDataComplete(trainerPoseModelList.toList())
+                        getDataComplete(trainerPoseModelList)
                     }
                     .subscribe()
             }
@@ -194,15 +198,43 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
             })
     }
 
-    private fun getDataComplete(trainerPoseModelList: List<TrainerPoseModel>) {
-        Log.d(TAG, "getDataComplete() start")
+    fun simpleCalculateSimilarity(currentTimeStamp: Long, pose: ArrayList<Array<FloatArray>>): Array<IntArray>? {
+        val searchThreshold = 15
+        val trainerTimeInterval = 30
+
+        if (trainerPoseModelList.size < 0) {
+            Log.e(TAG, "simpleCalculateSimilarity() trainer data is empty")
+            return null
+        }
+
+        if (currentTimeStamp < trainerTimeInterval) {
+            Log.e(TAG, "simpleCalculateSimilarity() currentTimeStamp < trainerTimeInterval")
+            return null
+        }
+
+        for (key in (currentTimeStamp - searchThreshold)..(currentTimeStamp + searchThreshold)) {
+            trainerPoseModelList[key.toString()]?.run {
+//                Log.d(TAG, "found data trainerTimeStamp[$key], currentTimeStamp[$currentTimeStamp]")
+                if (pose.size == 0) {
+                    Log.e(TAG, "simpleCalculateSimilarity() pose is null")
+                    return null
+                }
+                return pe.simpleCalculateSimilarity(pose, this)
+            }
+        }
+
+//        Log.e(TAG, "simpleCalculateSimilarity() can not found trainer data")
+        return null
+    }
+
+    private fun getDataComplete(trainerPoseModelList: Hashtable<String, List<PoseModel>>) {
+        Log.d(TAG, "getDataComplete()")
 //        for ((count, trainerPose) in trainerPoseModelList.withIndex()) {
 //            Log.d(TAG, "[$count]getTimeStamp = [${trainerPose.timestamp}]")
 //            for ((count2, pose) in trainerPose.poseData.withIndex()) {
 //                Log.d(TAG, "[$count]getPositions = [$count2][${pose.positionX}][${pose.positionY}][${pose.similarity}]")
 //            }
 //        }
-//        Log.d(TAG, "getDataComplete() end")
     }
 
     @Synchronized
