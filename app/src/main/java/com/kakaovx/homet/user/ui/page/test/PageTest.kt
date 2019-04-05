@@ -31,6 +31,7 @@ class PageTest : RxPageFragment() {
         btnShare.clicks().subscribe(this::onShare).apply { disposables.add(this) }
         btnCamera.clicks().subscribe(this::onCamera).apply { disposables.add(this) }
         btnPermission.clicks().subscribe(this::onPermission).apply { disposables.add(this) }
+        btnGraph.clicks().subscribe(this::onGraph).apply { disposables.add(this) }
     }
 
     /**
@@ -112,7 +113,13 @@ class PageTest : RxPageFragment() {
             })
     }
 
-
+    /**
+     * 그래프 테스트 페이지 호출
+     */
+    @Suppress("UNUSED_PARAMETER")
+    private fun onGraph(v: Unit) {
+        PagePresenter.getInstance<PageID>().openPopup(PageID.POPUP_GRAPH_TEST)
+    }
 
 
 }

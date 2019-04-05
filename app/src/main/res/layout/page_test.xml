@@ -40,5 +40,9 @@
                 android:text="Permission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/btnPermission"/>
+        <Button
+                android:text="Graph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btnGraph"/>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

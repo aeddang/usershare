@@ -23,6 +23,7 @@ import com.kakaovx.homet.user.ui.page.profile.PageProfile
 import com.kakaovx.homet.user.ui.page.profile.setting.PageSetting
 import com.kakaovx.homet.user.ui.page.report.diet.PageDietReport
 import com.kakaovx.homet.user.ui.page.report.program.PageProgramReport
+import com.kakaovx.homet.user.ui.page.test.PopupGraphTest
 
 class PageFactory {
 
@@ -93,6 +94,7 @@ class PageFactory {
 
             PageID.TEST -> PageTest()
             PageID.POPUP_DIVIDED_GESTURE_TEST -> PopupDividedGestureTest()
+            PageID.POPUP_GRAPH_TEST -> PopupGraphTest()
         }
     }
 }
@@ -125,7 +127,8 @@ enum class PageID(val resId: Int, override var position: Int = 9999):PagePositio
     POPUP_LOGIN(R.string.popup_login),
 
     TEST(1000000000),
-    POPUP_DIVIDED_GESTURE_TEST(1000000002)
+    POPUP_DIVIDED_GESTURE_TEST(1000000002),
+    POPUP_GRAPH_TEST(1000000003)
 }
 
 enum class ParamType(val key:String) {
