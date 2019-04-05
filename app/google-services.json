@@ -21,6 +21,22 @@
             "package_name": "com.kakaovx.homet.user",
             "certificate_hash": "c47cb094c79af42ae448b62970860702888a8c78"
           }
+        },
+        {
+          "client_id": "460290128219-hio6vbp30qicsmvgpnmjpcr87caphup6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kakaovx.homet.user",
+            "certificate_hash": "a38b30d0a0bceb2f57886147367d91e9d0d16176"
+          }
+        },
+        {
+          "client_id": "460290128219-2nu5ag5jf53vgs9fnvtl6dq9ltqechmc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kakaovx.homet.user",
+            "certificate_hash": "2f5ddbbe6ca95e4cd8ac04248986e454befa94e3"
+          }
         }
       ],
       "api_key": [
