@@ -18,6 +18,10 @@
                     android:layout_gravity="bottom"
                     android:id="@+id/bottomTab">
             </com.kakaovx.homet.user.component.ui.view.tab.BottomTab>
+        <Button
+                android:text="ex"
+                android:layout_width="50dp"
+                android:layout_height="50dp" android:id="@+id/btnEx" android:layout_gravity="right|top"/>
     </FrameLayout>
 
 </FrameLayout>

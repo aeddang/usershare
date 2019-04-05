@@ -7,16 +7,38 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/area_bottom"
         tools:context=".ui.MainActivity">
-    <Button
-            android:text="test1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/btnTest1"/>
-    <Button
-            android:text="test2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/btnTest2" android:layout_marginLeft="100dp"/>
-    <ImageView
-            android:layout_width="141dp"
-            android:layout_height="137dp" app:srcCompat="@drawable/kakaovx_apeach_profile_000"
-            android:id="@+id/image" android:layout_marginTop="100dp"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <Button
+                android:text="pageChange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btnGo"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <Button
+                    android:text="callPopup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/btnPopup" android:layout_weight="1"/>
+            <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" app:srcCompat="@drawable/kakaovx_apeach_profile_000"
+                    android:id="@+id/imageView"/>
+        </LinearLayout>
+        <Button
+                android:text=" share"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btnShare"/>
+        <Button
+                android:text="camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btnCamera"/>
+        <Button
+                android:text="Permission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btnPermission"/>
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

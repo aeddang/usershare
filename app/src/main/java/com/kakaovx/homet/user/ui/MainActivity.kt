@@ -1,24 +1,31 @@
 package com.kakaovx.homet.user.ui
 
 import android.content.Intent
+import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.lib.page.PageActivity
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.account.AccountManager
+import com.kakaovx.homet.user.component.deeplink.DeepLinkManager
+import com.kakaovx.homet.user.component.firebase.FirebaseDynamicLink
+import com.kakaovx.homet.user.component.ui.skeleton.rx.Rx
 import com.kakaovx.homet.user.component.ui.skeleton.view.DivisionTab
 import com.kakaovx.homet.user.util.AppUtil
 import com.kakaovx.homet.user.util.Log
 import dagger.android.AndroidInjection
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
+class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID>, Rx {
 
     private val TAG = javaClass.simpleName
-
+    private var disposables: CompositeDisposable = CompositeDisposable()
     @Inject
     lateinit var accountManager: AccountManager
+    @Inject
+    lateinit var deepLinkManager:DeepLinkManager
 
     override fun onCreatedView() {
         Log.d(TAG, "onCreatedView()")
@@ -27,12 +34,17 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID> {
         bottomTab.delegate = this
         val keys = AppUtil.getApplicationSignature(this)
         Log.d(TAG, "onCreatedView() $keys")
+        onSubscribe()
+    }
 
+    override fun onSubscribe() {
+        btnEx.clicks().subscribe { PagePresenter.getInstance<PageID>().pageChange(PageID.TEST) }.apply { disposables.add(this) }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         accountManager.destory()
+        disposables.clear()
     }
 
     override fun onDestroyedView() {

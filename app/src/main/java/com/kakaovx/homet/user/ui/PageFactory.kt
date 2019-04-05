@@ -3,8 +3,8 @@ package com.kakaovx.homet.user.ui
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePosition
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.ui.page.PageDividedGestureTest
-import com.kakaovx.homet.user.ui.page.PageTest
+import com.kakaovx.homet.user.ui.page.test.PopupDividedGestureTest
+import com.kakaovx.homet.user.ui.page.test.PageTest
 import com.kakaovx.homet.user.ui.page.content.PageContent
 import com.kakaovx.homet.user.ui.page.content.program.PageProgram
 import com.kakaovx.homet.user.ui.page.content.search.PageFilter
@@ -37,11 +37,31 @@ class PageFactory {
         PageFactory.currentInstance = this
     }
 
-
+    /**
+     * 홈페이지 등록
+     * 등록시 뒤로실행시 옙종료
+     */
     val homePages: Array<PageID> = arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE )
+
+    /**
+     * 재사용가능 페이지등록
+     * 등록시 viewModel 및 fragment가 재사용 -> 페이지 재구성시 효율적
+     */
     val backStackPages: Array<PageID> = arrayOf( PageID.CONTENT, PageID.PROGRAM_PLAN, PageID.TRAINER, PageID.PROGRAM_REPORT, PageID.PROFILE )
+
+    /**
+     * 로그인필수 페이지등록
+     * 등록시 AccountManager가 판단하여 로그인 팝업 호출
+     * 로그인시 원하는 페이지로 자동이동
+     * 비로그인시 페이지이동 불가
+     */
     private val needLoginPages: Array<PageID> = arrayOf( PageID.PROGRAM_REPORT, PageID.TEST )
     fun isNeedLoginPage(id: PageID):Boolean{ return needLoginPages.indexOf(id) != -1 }
+
+    /**
+     * 하단메뉴 숨기는 페이지 등록
+     * 등록시 하단네비게이션 숨김
+     */
     private val tabDisablePages: Array<PageID> = arrayOf(PageID.TEST)
     fun isBottomTabHidden(id: PageID):Boolean{ return tabDisablePages.indexOf(id) != -1 }
 
@@ -67,16 +87,23 @@ class PageFactory {
             PageID.DIET_REPORT -> PageDietReport()
             PageID.PROGRAM_REPORT -> PageProgramReport()
 
-            PageID.TEST -> PageTest()
-            PageID.TEST_POP -> PageDividedGestureTest()
-
             PageID.POPUP_PLAYER -> PopupPlayer()
             PageID.POPUP_CAMERA -> PopupCamera()
             PageID.POPUP_LOGIN -> PopupLogin()
+
+            PageID.TEST -> PageTest()
+            PageID.POPUP_DIVIDED_GESTURE_TEST -> PopupDividedGestureTest()
         }
     }
 }
 
+/**
+ * PageID
+ * position 값에따라 시작 에니메이션 변경
+ * 기존페이지보다 클때 : 오른쪽 -> 왼족
+ * 기존페이지보다 작을때 : 왼쪽 -> 오른쪽
+ * history back 반대
+ */
 enum class PageID(val resId: Int, override var position: Int = 9999):PagePosition {
     CONTENT(R.string.page_content, 0),
     PROGRAM(R.string.page_program, 1),
@@ -93,11 +120,12 @@ enum class PageID(val resId: Int, override var position: Int = 9999):PagePositio
     ACCOUNT(R.string.page_account, 14),
     PAYMENT(R.string.page_payment, 15),
     SETTING(R.string.page_setting, 16),
-    TEST(1000000000, 17),
-    TEST_POP(1000000002),
     POPUP_PLAYER(R.string.popup_player),
     POPUP_CAMERA(R.string.popup_camera),
-    POPUP_LOGIN(R.string.popup_login)
+    POPUP_LOGIN(R.string.popup_login),
+
+    TEST(1000000000),
+    POPUP_DIVIDED_GESTURE_TEST(1000000002)
 }
 
 enum class ParamType(val key:String) {

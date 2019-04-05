@@ -33,7 +33,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="com.kakaovx.homet.user.action.HOMET_SPLASH"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
@@ -51,9 +50,10 @@
             <intent-filter>
                 <!-- firebase DL-->
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="kakaovx.com" android:scheme="http"/>
-                <data android:host="kakaovx.page.link" android:scheme="http"/>
-                <data android:host="kakaovx.page.link" android:scheme="https"/>
+                <data android:host="@string/fdl_domain" android:scheme="http" tools:ignore="ManifestResource"/>
+                <data android:host="@string/fdl_domain" android:scheme="https" tools:ignore="ManifestResource"/>
+                <data android:host="@string/fdl_link" android:scheme="http" tools:ignore="ManifestResource"/>
+                <data android:host="@string/fdl_link" android:scheme="https" tools:ignore="ManifestResource"/>
             </intent-filter>
         </activity>
 
@@ -82,7 +82,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/fb_login_protocol_scheme" />
+                <data android:scheme="@string/fb_login_protocol_scheme"  tools:ignore="ManifestResource"/>
             </intent-filter>
         </activity>
         <!-- SnsKakao -->

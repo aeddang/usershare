@@ -1,22 +1,26 @@
 package com.kakaovx.homet.user.ui.page.etc.account
 
 
+import android.Manifest
+import android.widget.Toast
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PagePresenter
+import com.kakaovx.homet.lib.page.PageRequestPermission
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.account.AccountManager
 import com.kakaovx.homet.user.component.account.AccountStatus
 import com.kakaovx.homet.user.component.account.statusChanged
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageFragment
+import com.kakaovx.homet.user.component.ui.view.toast.VXToast
 import com.kakaovx.homet.user.ui.PageID
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.popup_login.*
 import javax.inject.Inject
 
 
-class PopupLogin : RxPageFragment() {
+class PopupLogin : RxPageFragment(), PageRequestPermission {
 
     companion object {
         const val WILL_CHANGE_PAGE = "willChangePage"
@@ -39,8 +43,15 @@ class PopupLogin : RxPageFragment() {
     override fun onCreatedView() {
         AndroidSupportInjection.inject(this)
         super.onCreatedView()
+        PagePresenter.getInstance<PageID>().requestPermission( arrayOf( Manifest.permission.READ_PHONE_STATE ), this )
         btnFaceBook.setReadPermissions("email")
         setBtnStatus()
+    }
+
+    override fun onRequestPermissionResult(resultAll:Boolean ,  permissions: List<Boolean>?){
+        if(resultAll) return
+        context?.let { VXToast.makeToast(it, R.string.error_need_permission, Toast.LENGTH_SHORT).show() }
+        PagePresenter.getInstance<PageID>().goBack()
     }
 
     private fun setBtnStatus(){

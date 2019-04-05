@@ -117,15 +117,15 @@ object AppUtil {
                     sig.apkContentsSigners.map {
                         val digest = MessageDigest.getInstance("SHA")
                         digest.update(it.toByteArray())
-                        Log.d(TAG, "digest $digest")
-                        Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
+                        byte2HexFormatted(digest.digest())
+                        //Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
                     }
                 } else {
                     sig.signingCertificateHistory.map {
                         val digest = MessageDigest.getInstance("SHA")
                         digest.update(it.toByteArray())
-                        Log.d(TAG, "digest $digest")
-                        Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
+                        byte2HexFormatted(digest.digest())
+                        //Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
                     }
                 }
             } else {
@@ -133,8 +133,8 @@ object AppUtil {
                 signatureList = sig.map {
                     val digest = MessageDigest.getInstance("SHA")
                     digest.update(it.toByteArray())
-                    Log.d(TAG, "digest $digest")
-                    Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
+                    byte2HexFormatted(digest.digest())
+                    //Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
                 }
             }
             return signatureList
@@ -142,6 +142,19 @@ object AppUtil {
             // Handle error
         }
         return emptyList()
+    }
+
+    fun byte2HexFormatted(arr: ByteArray): String {
+        val str = StringBuilder(arr.size * 2)
+        for (i in arr.indices) {
+            var h = Integer.toHexString(arr[i].toInt())
+            val l = h.length
+            if (l == 1) h = "0$h"
+            if (l > 2) h = h.substring(l - 2, l)
+            str.append(h.toUpperCase())
+            if (i < arr.size - 1) str.append(':')
+        }
+        return str.toString()
     }
 }
 

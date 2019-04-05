@@ -13,7 +13,16 @@
           "package_name": "com.kakaovx.homet.user"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "460290128219-mgc9c4pfqu8nfcv0heq1gf452ls5ft2b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kakaovx.homet.user",
+            "certificate_hash": "c47cb094c79af42ae448b62970860702888a8c78"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBNAE1sqeFlchot4gYaJF6FskXp6K5u6tM"

@@ -4,9 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import com.kakao.auth.Session
 import com.kakaovx.homet.user.R
+import com.kakaovx.homet.user.component.deeplink.DeepLinkManager
+import com.kakaovx.homet.user.component.firebase.FirebaseDynamicLink
 import com.kakaovx.homet.user.util.AppPermissionManager
 import com.kakaovx.homet.user.util.Log
 import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
 class SplashActivity : DaggerAppCompatActivity() {
 
@@ -23,13 +26,15 @@ class SplashActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
+        /*
         if (!AppPermissionManager.checkPermissions(this)) {
             AppPermissionManager.requestPermissions(this)
         } else {
             Log.i(TAG, "Accept All User Permissions")
             startFragmentTransaction(savedInstanceState)
         }
+        */
+        startFragmentTransaction(savedInstanceState)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

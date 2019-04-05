@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_id">com.kakaovx.homet.user</string>
     <string name="app_name">Kakao Home Training</string>
     <string name="notice_app_exit">Please click BACK again to exit</string>
     <string name="home_recommend_A">#recommned1</string>
@@ -69,11 +70,18 @@
     <string name="error_session">error_sessionr</string>
     <string name="error_server">error_server</string>
     <string name="error_network">error_network</string>
+    <string name="error_need_permission">error_need_permission</string>
+
+    <string name="title_share">title share</string>
 
     <!-- For Fcm -->
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="default_notification_channel_name" translatable="true">Weather</string>
     <string name="fcm_title">FCM Message</string>
+
+    <!-- For Fdl -->
+    <string name="fdl_domain">kakaovx.com</string>
+    <string name="fdl_link">kakaovxtest.page.link</string>
 
     <!-- For kakao -->
     <string name="kakao_app_key">a8073223b58af3f8bf06db2be018964c</string>

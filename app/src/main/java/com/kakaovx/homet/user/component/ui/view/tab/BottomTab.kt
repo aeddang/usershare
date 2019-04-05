@@ -33,7 +33,7 @@ class BottomTab: DivisionTab<PageID>{
             PageID.CONTENT,
             PageID.PROGRAM_PLAN,
             PageID.PROGRAM_REPORT,
-            PageID.TEST
+            PageID.ACCOUNT
         )
     }
 

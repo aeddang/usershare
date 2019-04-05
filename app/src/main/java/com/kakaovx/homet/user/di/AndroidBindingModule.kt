@@ -3,10 +3,13 @@ package com.kakaovx.homet.user.di
 import com.kakaovx.homet.user.di.annotation.ActivityScope
 import com.kakaovx.homet.user.di.annotation.PageScope
 import com.kakaovx.homet.user.di.module.view.ActivityModule
+import com.kakaovx.homet.user.di.module.view.MainActivityModule
 import com.kakaovx.homet.user.di.module.view.PageModule
+import com.kakaovx.homet.user.di.module.view.SplashActivityModule
 import com.kakaovx.homet.user.ui.MainActivity
 import com.kakaovx.homet.user.ui.oldPlayer.PlayerActivity
 import com.kakaovx.homet.user.ui.oldPlayer.PlayerFragment
+import com.kakaovx.homet.user.ui.page.test.PageTest
 import com.kakaovx.homet.user.ui.page.content.recommend.PageHome
 import com.kakaovx.homet.user.ui.page.content.program.PageProgram
 import com.kakaovx.homet.user.ui.page.content.recommend.PageHomeIssueProgramList
@@ -38,7 +41,7 @@ internal abstract class AndroidBindingModule {
      */
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [ ActivityModule::class ])
+    @ContributesAndroidInjector(modules = [ SplashActivityModule::class, ActivityModule::class ])
     internal abstract fun bindSplashActivity(): SplashActivity
 
     @PageScope
@@ -50,7 +53,7 @@ internal abstract class AndroidBindingModule {
      */
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [])
+    @ContributesAndroidInjector(modules = [ MainActivityModule::class, ActivityModule::class ])
     internal abstract fun bindMainActivity(): MainActivity
 
     @PageScope
@@ -120,6 +123,11 @@ internal abstract class AndroidBindingModule {
     @PageScope
     @ContributesAndroidInjector(modules = [ PageModule::class ])
     internal abstract fun bindPageProgramReport(): PageProgramReport
+
+
+    @PageScope
+    @ContributesAndroidInjector(modules = [ PageModule::class ])
+    internal abstract fun bindPageTest(): PageTest
 
     @PageScope
     @ContributesAndroidInjector(modules = [ ])
