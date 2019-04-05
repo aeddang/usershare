@@ -29,7 +29,6 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.kakao.i.KakaoI
 import com.kakaovx.homet.user.R
-import com.kakaovx.homet.user.component.model.VxCoreObserver
 import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.component.ui.view.BorderedText
 import com.kakaovx.homet.user.component.ui.view.OverlayView
@@ -277,14 +276,18 @@ class PlayerFragment : DaggerFragment() {
     private fun drawInfo(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) {
         previewSize?.let {
             val lines = viewModel.getDebugInfo(it.width, it.height)
-            lines?.let {
-                borderedText?.drawLines(canvas, 10.toFloat(), (canvas.height - 10).toFloat(), it)
+            exoPlayer?.run {
+//            Log.d(TAG, "currentPosition = $currentPosition")
+                val ret = viewModel.simpleCalculateSimilarity(currentPosition, pose)
+//                ret?.run {
+//                    for (jointPosition in ret.indices) {
+//                        lines.add("[jointPosition[$jointPosition], X[${ret[jointPosition][0]}], Y[${ret[jointPosition][1]}]]")
+//                    }
+//                }
             }
-//        for (data in pose) {
-//            for ((i, value) in data.withIndex()) {
-//                Log.d(TAG, "pose position = [$i][${Arrays.toString(value)}]")
-//            }
-//        }
+            lines?.run {
+                borderedText?.drawLines(canvas, 10.toFloat(), (canvas.height - 10).toFloat(), this)
+            }
             viewModel.drawPose(canvas, pose)
         }
     }
