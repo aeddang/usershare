@@ -56,7 +56,7 @@ class PageFactory {
      * 로그인시 원하는 페이지로 자동이동
      * 비로그인시 페이지이동 불가
      */
-    private val needLoginPages: Array<PageID> = arrayOf( PageID.PROGRAM_REPORT, PageID.TEST )
+    private val needLoginPages: Array<PageID> = arrayOf( PageID.PROGRAM_REPORT, PageID.PROGRAM_REPORT )
     fun isNeedLoginPage(id: PageID):Boolean{ return needLoginPages.indexOf(id) != -1 }
 
     /**

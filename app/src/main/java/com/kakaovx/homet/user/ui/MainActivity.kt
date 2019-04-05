@@ -8,7 +8,6 @@ import com.kakaovx.homet.lib.page.PagePresenter
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.account.AccountManager
 import com.kakaovx.homet.user.component.deeplink.DeepLinkManager
-import com.kakaovx.homet.user.component.firebase.FirebaseDynamicLink
 import com.kakaovx.homet.user.component.ui.skeleton.rx.Rx
 import com.kakaovx.homet.user.component.ui.skeleton.view.DivisionTab
 import com.kakaovx.homet.user.util.AppUtil

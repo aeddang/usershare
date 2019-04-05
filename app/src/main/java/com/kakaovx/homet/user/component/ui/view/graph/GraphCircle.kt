@@ -15,16 +15,17 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
         set(value) {
             if(value.isEmpty()) return
             field = value.map {
-                val rt = it / total * 360.0
+                val rt = it / total * totalDegree
                 return@map rt
             }
             Log.d(TAG , "field $field ")
             startAnimation(GraphUtil.ANIMATION_DURATION_LONG)
         }
 
+    private var totalDegree = 180.0
     private var prevAmount:Double = 0.0
     private var currentAmount:Double = 0.0
-    private var startAngle:Float = -90.0f
+    private var startAngle:Float = -180.0f
     private var centerX = 0.0f
     private var centerY = 0.0f
     private lateinit var paints:ArrayList<Paint>
@@ -72,7 +73,7 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
         }
         canvas?.restore()
         camera.restore()
-        if( currentAmount != 360.0 ) return
+        if( currentAmount != totalDegree ) return
         delegate?.let {
             val data = ArrayList<Pair<Double, Point>>()
             val l = rectF.width()/2.0f
@@ -88,7 +89,6 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
             }
             it.drawGraph(this, data)
         }
-
     }
 
     override fun onStart() {
@@ -104,11 +104,11 @@ class GraphCircle@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: A
     }
 
     override fun onCompute(f: Int) {
-        currentAmount = GraphUtil.easeOutSine(currentTime.toDouble(), 0.0 , 360.0 , duration.toDouble())
+        currentAmount = GraphUtil.easeOutSine(currentTime.toDouble(), 0.0 , totalDegree , duration.toDouble())
     }
 
     override fun onCompleted(f: Int) {
-        currentAmount =  360.0
+        currentAmount =  totalDegree
     }
 
 }
