@@ -66,6 +66,7 @@ open class FrameAnimation@kotlin.jvm.JvmOverloads constructor(context: Context, 
         if( width != 0 && height != 0) dest = Rect(0, 0, width, height)
     }
 
+    
     override fun onCompute(f: Int) {
         currentFrame += move
         if(isRefeat){
