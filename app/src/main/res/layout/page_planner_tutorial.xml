@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/tutorial_ImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="10dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tutorial_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="시작하기"
+                android:textSize="30sp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tutorial_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="김홈트님께 맞는 프로그램을 찾으러 갈까요?"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tutorial_button"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="프로그램 보러가기"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

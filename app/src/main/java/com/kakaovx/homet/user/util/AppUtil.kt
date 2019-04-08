@@ -117,15 +117,15 @@ object AppUtil {
                     sig.apkContentsSigners.map {
                         val digest = MessageDigest.getInstance("SHA")
                         digest.update(it.toByteArray())
-                        byte2HexFormatted(digest.digest())
-                        //Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
+                        //byte2HexFormatted(digest.digest())
+                        Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
                     }
                 } else {
                     sig.signingCertificateHistory.map {
                         val digest = MessageDigest.getInstance("SHA")
                         digest.update(it.toByteArray())
-                        byte2HexFormatted(digest.digest())
-                        //Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
+                        //byte2HexFormatted(digest.digest())
+                        Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
                     }
                 }
             } else {
@@ -133,8 +133,8 @@ object AppUtil {
                 signatureList = sig.map {
                     val digest = MessageDigest.getInstance("SHA")
                     digest.update(it.toByteArray())
-                    byte2HexFormatted(digest.digest())
-                    //Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
+                    //byte2HexFormatted(digest.digest())
+                    Base64.encodeToString(digest.digest(), Base64.NO_WRAP)
                 }
             }
             return signatureList

@@ -41,40 +41,6 @@ class PageDietPlanner : RxPageFragment() {
         }
     }
 
-    private fun handleComplete(data: ResponseList<ResultData>) {
-        Log.i(TAG, "handleComplete ($data)")
-        hideProgress()
-    }
-
-    private fun handleError(err: Throwable) {
-        Log.i(TAG, "handleError ($err)")
-        hideProgress()
-    }
-
-    private fun showProgress() {
-        progressBar.visibility = View.VISIBLE
-        progressBar.animate()
-    }
-
-    private fun hideProgress() {
-        progressBar.visibility = View.GONE
-    }
-
-    fun getAllUsers(v: Unit) {
-        /*
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["q"] = "apple"
-        api.searchRepositories(params)
-        showProgress()
-
-        RxObservableConverter.forNetwork(api.searchRepositories(params))
-        .subscribe(
-            this::handleComplete,
-            this::handleError
-        ).apply { disposables.add(this) }
-        */
-    }
-
 
     private fun initViewModel() {
         Log.d(TAG, "initViewModel()")
@@ -109,8 +75,6 @@ class PageDietPlanner : RxPageFragment() {
         initViewModel()
         context?.let{ initView(it) }
         super.onCreatedView()
-        button.clicks().subscribe(this::getAllUsers).apply { disposables.add(this) }
-        hideProgress()
     }
 
     override fun onDestroyedView() {
