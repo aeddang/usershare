@@ -1,12 +1,9 @@
 package com.kakaovx.homet.user.component.ui.skeleton.view
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.PixelFormat
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.CallSuper
-import com.kakaovx.homet.user.util.Log
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
