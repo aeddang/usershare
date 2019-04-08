@@ -34,10 +34,10 @@ class PageProgramReport : RxPageFragment() {
     }
 
     override fun onSubscribe() {
-        disposables += viewModel.getProgramList()
-        disposables += btnStrat.clicks().subscribe{
+        viewModel.getProgramList().apply { disposables.add(this) }
+        btnStrat.clicks().subscribe{
            PagePresenter.getInstance<PageID>().openPopup(PageID.POPUP_PLAYER)
-        }
+        }.apply { disposables.add(this) }
     }
 
     override fun onCreatedView() {

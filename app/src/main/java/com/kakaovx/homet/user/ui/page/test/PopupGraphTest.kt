@@ -1,20 +1,13 @@
 package com.kakaovx.homet.user.ui.page.test
 
-import android.graphics.drawable.Drawable
-import android.transition.ChangeBounds
+
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks
-import com.kakaovx.homet.lib.page.PageFragment
 import com.kakaovx.homet.lib.page.PageGestureView
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxPageGestureFragment
-import com.kakaovx.homet.user.ui.page.report.program.PageProgramReportViewModel
-import com.kakaovx.homet.user.util.Log
-import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.page_program_report.*
-import kotlinx.android.synthetic.main.popup_test.*
+import kotlinx.android.synthetic.main.popup_graph.*
 
 class PopupGraphTest : RxPageGestureFragment() {
 
