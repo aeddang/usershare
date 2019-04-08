@@ -1,4 +1,4 @@
-package com.kakaovx.homet.user.component.vxcore
+package com.kakaovx.homet.user.ui.oldPlayer.parts
 
 import android.Manifest
 import android.content.Context
@@ -40,7 +40,7 @@ class VxCamera(val context: Context) {
     private lateinit var previewRequestBuilder: CaptureRequest.Builder
     private lateinit var previewRequest: CaptureRequest
 
-    private var cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+    private var cameraManager = context?.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     private var cameraDevice: CameraDevice? = null
     private var captureSession: CameraCaptureSession? = null
     private var frontCameraId: String? = null

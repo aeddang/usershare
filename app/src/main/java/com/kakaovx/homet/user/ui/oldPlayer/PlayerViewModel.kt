@@ -15,6 +15,7 @@ import com.kakaovx.homet.user.component.model.VxCoreObserver
 import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.network.model.WorkoutData
 import com.kakaovx.homet.user.component.repository.Repository
+import com.kakaovx.homet.user.ui.oldPlayer.parts.VxCamera
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.AppDeviceExecutor
 import com.kakaovx.homet.user.util.Log
@@ -32,8 +33,9 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     val TAG = javaClass.simpleName
 
+    private lateinit var cv: VxCamera
+
     private val restApi = repo.restApi
-    private val cv = repo.camera
     private val pe = repo.poseEstimator
 
     private var _content: MutableLiveData<WorkoutData>? = null
@@ -51,10 +53,11 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
 
     private val trainerPoseModelList: Hashtable<String, List<PoseModel>> = Hashtable()
 
-    fun onCreateView() {
+    fun onCreateView(camera: VxCamera) {
         Log.d(TAG, "onCreateView()")
         _content = MutableLiveData()
         _core = MutableLiveData()
+        cv = camera
     }
 
     fun onDestroyView() {
@@ -66,8 +69,8 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
     fun intCaptureView() {
         deviceIO = AppDeviceExecutor()
         pe.initPoseEstimator()
-        cv.setInputVideoSize(pe.getInputWidth(), pe.getInputHeight())
-        cv.initVxCamera()
+        cv?.setInputVideoSize(pe.getInputWidth(), pe.getInputHeight())
+        cv?.initVxCamera()
         VxCoreObserver.addObserver{ observable, _ ->
             if (observable is VxCoreObserver) {
                 observable.getData()?.let {
