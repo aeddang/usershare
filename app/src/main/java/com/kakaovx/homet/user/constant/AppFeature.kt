@@ -17,8 +17,8 @@ object AppFeature {
     /**
      * Default Compute Video Size
      */
-    const val APP_FEATURE_VIDEO_WIDTH = PoseDef.input_width
-    const val APP_FEATURE_VIDEO_HEIGHT = PoseDef.input_height
+    const val APP_FEATURE_VIDEO_WIDTH = 800
+    const val APP_FEATURE_VIDEO_HEIGHT = 800
 
     const val APP_FEATURE_TEXT_SIZE_DIP = 10.toFloat()
 

@@ -255,10 +255,11 @@ class PlayerViewModel(val repo: Repository) : ViewModel() {
         val canvas = Canvas(croppedBitmap)
         canvas.drawBitmap(rgbFrameBitmap, frameToCropTransform, null)
 
-        val pose = pe.poseEstimate(croppedBitmap, PoseMachine.DataProcessCallback {
-            //            Log.d(TAG, "onBitmapPrepared()")
-        })
+//        val pose = pe.poseEstimate(croppedBitmap, PoseMachine.DataProcessCallback {
+//            //            Log.d(TAG, "onBitmapPrepared()")
+//        })
 //        pose?.let { Log.d(TAG, "Detect Skeletons: [${it.size}]") }
+        val pose = null
 
         val liveData = VxCoreLiveData()
         liveData.cmd = AppConst.LIVE_DATA_VX_CMD_CAMERA

@@ -8,10 +8,10 @@ import android.os.Build
 import com.kakaovx.homet.user.component.model.PoseModel
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.util.Log
-import com.kakaovx.posemachine.MaceWrapper
-import com.kakaovx.posemachine.PoseMachine
+import com.kakaovx.posemachine.BaseWrapper
 import com.kakaovx.posemachine.Keypoints
-import java.util.ArrayList
+import com.kakaovx.posemachine.PoseMachine
+import java.util.*
 
 class VxPoseEstimator(val app: Application, val context: Context) {
 
@@ -23,9 +23,11 @@ class VxPoseEstimator(val app: Application, val context: Context) {
         Log.i(TAG, "initPoseEstimator()")
         if (poseMachine == null) {
             if (Build.MODEL == "SHIELD Android TV" || Build.DEVICE == "darcy") {
-                poseMachine = PoseMachine(app, MaceWrapper.MODEL_TYPE.PersonLab, MaceWrapper.RUNTIME_TYPE.CPU)
+                poseMachine = PoseMachine(app, BaseWrapper.NNPE_TYPE.Mace, BaseWrapper.MODEL_TYPE.PersonLab, BaseWrapper.RUNTIME_TYPE.CPU,
+                    224, 224, 3, 16)
             } else {
-                poseMachine = PoseMachine(app, MaceWrapper.MODEL_TYPE.PersonLab, MaceWrapper.RUNTIME_TYPE.GPU)
+                poseMachine = PoseMachine(app, BaseWrapper.NNPE_TYPE.Mace, BaseWrapper.MODEL_TYPE.PersonLab, BaseWrapper.RUNTIME_TYPE.GPU,
+                    224, 224, 3, 16)
             }
             poseMachine?.apply {
                 Log.d(TAG, "get inputWidth = [$inputWidth]")
@@ -39,7 +41,7 @@ class VxPoseEstimator(val app: Application, val context: Context) {
     fun destroy() {
         Log.i(TAG, "destroy()")
         poseMachine?.apply {
-            this.destroy()
+            this.Destory()
         }
         poseMachine = null
     }
@@ -50,15 +52,15 @@ class VxPoseEstimator(val app: Application, val context: Context) {
 
     fun getDebugInfo(previewWidth: Int, previewHeight: Int) = poseMachine?.getDebugInfo(previewWidth, previewHeight)
 
-    fun drawPose(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) = poseMachine?.drawPose(canvas, pose, true)
+    fun drawPose(canvas: Canvas, pose: ArrayList<Array<FloatArray>>) = poseMachine?.drawPose(canvas, pose, null, true, 0.toDouble())
 
-    fun poseEstimate(bitmap: Bitmap, callback: PoseMachine.DataProcessCallback): ArrayList<Array<FloatArray>>? {
-        //val lStartTime = System.currentTimeMillis()
-        val data = poseMachine?.poseEstimate(bitmap, callback)
-        //val elapseTime = System.currentTimeMillis() - lStartTime
-        //Log.d(TAG, "poseEstimate() elapseTime = [$elapseTime]ms")
-        return data
-    }
+//    fun poseEstimate(bitmap: Bitmap, callback: PoseMachine.DataProcessCallback): ArrayList<Array<FloatArray>>? {
+//        //val lStartTime = System.currentTimeMillis()
+//        val data = poseMachine?.poseEstimate(bitmap, callback)
+//        //val elapseTime = System.currentTimeMillis() - lStartTime
+//        //Log.d(TAG, "poseEstimate() elapseTime = [$elapseTime]ms")
+//        return data
+//    }
 
     fun simpleCalculateSimilarity(pose: ArrayList<Array<FloatArray>>, trainerPose: List<PoseModel>): Array<IntArray> {
         val positionThreshold = 30
