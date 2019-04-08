@@ -18,7 +18,7 @@ abstract class AnimatedDrawView @kotlin.jvm.JvmOverloads constructor(context: Co
     private val TAG = javaClass.simpleName
 
     private var disposable: Disposable? = null
-    private var fps: Long = 1000/60
+    protected var fps: Long = 1000/60
     private var frm:Int = 0
     protected var duration:Long = 0
     protected val currentTime:Long
@@ -35,9 +35,11 @@ abstract class AnimatedDrawView @kotlin.jvm.JvmOverloads constructor(context: Co
                 frm ++
                 if(frm == 1) onStart()
                 onCompute(frm)
-                if (duration <= currentTime) {
-                    stopAnimation()
-                    onCompleted(frm)
+                if(duration > 0) {
+                    if (duration <= currentTime) {
+                        stopAnimation()
+                        onCompleted(frm)
+                    }
                 }
                 postInvalidate()
             }
