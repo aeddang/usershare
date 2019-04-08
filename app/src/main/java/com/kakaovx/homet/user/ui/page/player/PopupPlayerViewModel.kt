@@ -9,7 +9,6 @@ import com.kakaovx.homet.user.component.model.VxCoreObserver
 import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.component.ui.skeleton.thread.HandlerExecutor
 import com.kakaovx.homet.user.util.Log
-import com.kakaovx.posemachine.PoseMachine
 import java.util.*
 
 class PopupPlayerViewModel(val repo: Repository) : ViewModel() {
@@ -46,9 +45,9 @@ class PopupPlayerViewModel(val repo: Repository) : ViewModel() {
         rgbFrameBitmap!!.setPixels(data, 0, previewSize.width, 0, 0, previewSize.width, previewSize.height)
         val canvas = Canvas(croppedBitmap!!)
         canvas.drawBitmap(rgbFrameBitmap!!, frameToCropTransform, null)
-        pose = pe.poseEstimate(croppedBitmap!!, PoseMachine.DataProcessCallback {
-            //Log.d(TAG, "onBitmapPrepared()")
-        })
+//        pose = pe.poseEstimate(croppedBitmap!!, PoseMachine.DataProcessCallback {
+//            //Log.d(TAG, "onBitmapPrepared()")
+//        })
         pose?.let { Log.d(TAG, "Detect Skeletons: [${it.size}]") }
         isProcessingImage = false
     }

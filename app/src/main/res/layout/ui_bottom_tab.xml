@@ -3,35 +3,53 @@
               android:layout_width="match_parent"
               android:layout_height="@dimen/area_bottom" android:background="@color/bar_bg">
 
-    <ImageButton
-            android:id="@+id/tab_btn_content"
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/tab_bg"
-            android:src="@drawable/contents"/>
+            android:layout_height="match_parent" android:layout_weight="1">
+        <com.kakaovx.homet.user.component.ui.view.gif.FrameAnimation
+                android:id="@+id/aniContent"
+                android:layout_width="50dp"
+                android:layout_height="50dp" android:layout_gravity="center"/>
+        <Button
+                android:id="@+id/tab_btn_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:background="@color/transparent"/>
 
-    <ImageButton
-            android:id="@+id/tab_btn_planner"
+    </FrameLayout>
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/tab_bg"
-            android:src="@drawable/planer"/>
-
-    <ImageButton
-            android:id="@+id/tab_btn_report"
+            android:layout_height="match_parent" android:layout_weight="1">
+        <com.kakaovx.homet.user.component.ui.view.gif.FrameAnimation
+                android:id="@+id/aniPlanner"
+                android:layout_width="50dp"
+                android:layout_height="50dp" android:layout_gravity="center"/>
+        <Button
+                android:id="@+id/tab_btn_planner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:background="@color/transparent"/>
+    </FrameLayout>
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/tab_bg"
-            android:src="@drawable/kakaovx_muzi_profile_000"/>
-
-    <ImageButton
-            android:id="@+id/tab_btn_profile"
+            android:layout_height="match_parent" android:layout_weight="1">
+        <com.kakaovx.homet.user.component.ui.view.gif.FrameAnimation
+                android:id="@+id/aniReport"
+                android:layout_width="50dp"
+                android:layout_height="50dp" android:layout_gravity="center"/>
+        <Button
+                android:id="@+id/tab_btn_report"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:background="@color/transparent"/>
+    </FrameLayout>
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/tab_bg"
-            android:src="@drawable/my"/>
+            android:layout_height="match_parent" android:layout_weight="1">
+        <com.kakaovx.homet.user.component.ui.view.gif.FrameAnimation
+                android:id="@+id/aniProfile"
+                android:layout_width="50dp"
+                android:layout_height="50dp" android:layout_gravity="center"/>
+        <Button
+                android:id="@+id/tab_btn_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:background="@color/transparent"/>
+    </FrameLayout>
 </LinearLayout>

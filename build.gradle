@@ -4,7 +4,7 @@ buildscript {
     ext {
         // Sdk and tools
         compileSdkVersion = 28
-        minSdkVersion = 21
+        minSdkVersion = 23
         targetSdkVersion = 28
 
         // stable
@@ -60,8 +60,10 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
-        maven { url "${projectDir}/../repositories" }
         maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
