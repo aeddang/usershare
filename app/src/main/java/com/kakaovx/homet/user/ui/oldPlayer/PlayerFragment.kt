@@ -13,7 +13,6 @@ import android.text.TextUtils
 import android.util.Size
 import android.util.TypedValue
 import android.view.*
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -27,11 +26,11 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
-import com.kakao.i.KakaoI
 import com.kakaovx.homet.user.R
 import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ViewModelFactory
 import com.kakaovx.homet.user.component.ui.view.BorderedText
 import com.kakaovx.homet.user.component.ui.view.OverlayView
+import com.kakaovx.homet.user.ui.oldPlayer.parts.VxCamera
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.constant.AppFeature
 import com.kakaovx.homet.user.databinding.FragmentPlayerBinding
@@ -60,6 +59,7 @@ class PlayerFragment : DaggerFragment() {
     }
 
     private val viewDisposables = AppFragmentAutoClearedDisposable(this)
+    private lateinit var camera: VxCamera
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -412,6 +412,9 @@ class PlayerFragment : DaggerFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate()")
+        context?.let {
+            camera = VxCamera(it)
+        }
         lifecycle += viewDisposables
         arguments?.apply {
             motionId = getString(AppConst.HOMET_VALUE_MOTION_ID)
@@ -440,7 +443,7 @@ class PlayerFragment : DaggerFragment() {
     ): View {
         Log.d(TAG, "onCreateView()")
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
-        viewModel.onCreateView()
+        viewModel.onCreateView(camera)
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_player, container, false)
         return dataBinding.root
     }
@@ -483,48 +486,6 @@ class PlayerFragment : DaggerFragment() {
                     }
                     else -> {
                         Log.e(TAG, "wrong camera cmd")
-                    }
-                }
-            } else if (it.cmd == AppConst.LIVE_DATA_VX_CMD_KAKAOI) {
-                when (it.kakaoiCmd) {
-                    AppConst.HOMET_KAKAOI_CMD_STATE -> {
-                        when (it.state) {
-                            KakaoI.STATE_DEACTIVATED -> {
-                                Log.d(TAG, "onStateChanged() KakaoI.STATE_DEACTIVATED")
-                            }
-                            KakaoI.STATE_IDLE -> {
-                                Log.d(TAG, "onStateChanged() KakaoI.STATE_IDLE")
-                                if (backupVolume != 0.0.toFloat()) {
-                                    exoPlayer?.audioComponent?.volume = backupVolume
-                                    backupVolume = 0.0.toFloat()
-                                } else { }
-                            }
-                            KakaoI.STATE_PROCESSING -> {
-                                Log.d(TAG, "onStateChanged() KakaoI.STATE_PROCESSING")
-                            }
-                            KakaoI.STATE_RECOGNIZING -> {
-                                Log.d(TAG, "onStateChanged() KakaoI.STATE_RECOGNIZING")
-                                exoPlayer?.audioComponent?.volume?.run {
-                                    backupVolume = this
-                                    exoPlayer?.audioComponent?.volume = 0.0.toFloat()
-                                }
-                            }
-                            else -> {
-                                Log.d(TAG, "onStateChanged() state=${it.state}")
-                            }
-                        }
-                    }
-                    AppConst.HOMET_KAKAOI_CMD_SEND_SPEECH_TEXT -> {
-                        it.message?.run { Toast.makeText(context, this, Toast.LENGTH_LONG).show() }
-                    }
-                    AppConst.HOMET_KAKAOI_CMD_RECV_SPEECH_TEXT -> {
-                        it.message?.run { Toast.makeText(context, this, Toast.LENGTH_LONG).show() }
-                    }
-                    AppConst.HOMET_KAKAOI_CMD_START_SETTING_ACTIVITY -> {
-                        viewModel.repo.kakaoI.startSettingActivity(context!!)
-                    }
-                    else -> {
-                        Log.e(TAG, "wrong kakao cmd")
                     }
                 }
             } else {
