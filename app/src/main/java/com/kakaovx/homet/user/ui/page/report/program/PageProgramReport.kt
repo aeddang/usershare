@@ -23,8 +23,6 @@ class PageProgramReport : RxPageFragment() {
     lateinit var viewViewModelFactory: ViewModelFactory
     private lateinit var viewModel: PageProgramReportViewModel
 
-
-
     @LayoutRes
     override fun getLayoutResId(): Int = R.layout.page_program_report
 
@@ -37,7 +35,7 @@ class PageProgramReport : RxPageFragment() {
 
         val datas = arrayListOf(200.0,200.0,200.0,200.0,200.0)
         val datas2 = arrayListOf(1000.0,1000.0,1000.0,1000.0,1000.0)
-        disposables += viewModel.getFoo()
+        disposables += viewModel.getProgramList()
         disposables += btnStrat.clicks().subscribe{
             bar.amount = 300.0
             bar2.amount = 900.0
@@ -51,11 +49,7 @@ class PageProgramReport : RxPageFragment() {
         AndroidSupportInjection.inject(this)
         viewModel = ViewModelProviders.of(this, viewViewModelFactory)[PageProgramReportViewModel::class.java]
         viewModel.onCreateView()
-        viewModel.response?.observe(this, Observer { message ->
-            message?.let {
-                Log.d(TAG, "message = [$message]")
-            } ?: Log.e(TAG, "message is null")
-        })
+
         bar.initSet(1000.0, "#ff00ff")
         bar2.initSet(1000.0,"#ffff00", false)
         polygon.initSet(1000.0, "#000000")

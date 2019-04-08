@@ -16,7 +16,6 @@ abstract class AnimatedDrawView @kotlin.jvm.JvmOverloads constructor(context: Co
     : View(context, attrs, defStyleAttr) {
 
     private val TAG = javaClass.simpleName
-
     private var disposable: Disposable? = null
     protected var fps: Long = 1000/60
     private var frm:Int = 0

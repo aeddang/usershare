@@ -107,25 +107,34 @@ class PageFactory {
  * history back 반대
  */
 enum class PageID(val resId: Int, override var position: Int = 9999):PagePosition {
+    //group1
     CONTENT(R.string.page_content, 0),
     PROGRAM(R.string.page_program, 1),
     FREE_WORKOUT(R.string.page_free_workout, 2),
-    SEARCH(R.string.page_search, 3),
-    SEARCH_FILTER(R.string.page_search_filter, 4),
-    TRAINER(R.string.page_trainer, 5),
-    CONTENT_DETAIL(R.string.page_content, 6),
-    PROGRAM_PLAN(R.string.page_planner, 7),
-    DIET_PLAN(R.string.page_diet_planner, 8),
-    PROGRAM_REPORT(R.string.page_program_report, 9),
-    DIET_REPORT(R.string.page_diet_report, 10),
-    PROFILE(R.string.page_profile, 11),
-    ACCOUNT(R.string.page_account, 14),
-    PAYMENT(R.string.page_payment, 15),
-    SETTING(R.string.page_setting, 16),
+    TRAINER(R.string.page_trainer, 3),
+    CONTENT_DETAIL(R.string.page_content, 4),
+    //group2
+    PROGRAM_PLAN(R.string.page_planner, 100),
+    DIET_PLAN(R.string.page_diet_planner, 101),
+    //group3
+    PROGRAM_REPORT(R.string.page_program_report, 200),
+    DIET_REPORT(R.string.page_diet_report, 201),
+    //group4
+    PROFILE(R.string.page_profile, 300),
+    ACCOUNT(R.string.page_account, 301),
+    SETTING(R.string.page_setting, 303),
+    //group5
+    SEARCH(R.string.page_search, 500),
+    SEARCH_FILTER(R.string.page_search_filter, 501),
+    //group6
+    PAYMENT(R.string.page_payment, 600),
+
+    //popup
     POPUP_PLAYER(R.string.popup_player),
     POPUP_CAMERA(R.string.popup_camera),
     POPUP_LOGIN(R.string.popup_login),
 
+    //test
     TEST(1000000000),
     POPUP_DIVIDED_GESTURE_TEST(1000000002),
     POPUP_GRAPH_TEST(1000000003)

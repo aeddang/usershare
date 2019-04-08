@@ -1,62 +1,48 @@
 package com.kakaovx.homet.user.ui.page.report.program
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+
 import androidx.lifecycle.ViewModel
-import com.kakaovx.homet.user.component.model.PageLiveData
-import com.kakaovx.homet.user.component.network.RetryPolicy
 import com.kakaovx.homet.user.component.repository.Repository
-import com.kakaovx.homet.user.constant.AppConst
+import com.kakaovx.homet.user.component.network.RxObservableConverter
+import com.kakaovx.homet.user.component.network.api.RestfulApi
+import com.kakaovx.homet.user.component.network.model.ProgramData
+import com.kakaovx.homet.user.component.ui.skeleton.model.viewmodel.ApiModel
 import com.kakaovx.homet.user.util.Log
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 
 class PageProgramReportViewModel(repo: Repository) : ViewModel() {
 
     val TAG = javaClass.simpleName
-
     private val restApi = repo.restApi
 
-    private var _response: MutableLiveData<PageLiveData>? = null
-    val response: LiveData<PageLiveData>? get() = _response
+    val programList: ProgramList = ProgramList(restApi)
 
     fun onCreateView() {
-        Log.d(TAG, "onCreateView()")
-        _response = MutableLiveData()
+
     }
 
     fun onDestroyView() {
-        Log.d(TAG, "onDestroyView()")
-        _response = null
+        programList.cancel()
     }
 
-    fun getFoo(): Disposable {
-        return restApi.getWorkoutList()
-            .retry(RetryPolicy.none())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { res ->
-                handleComplete(res.message)
-            }
-            .subscribe()
+    fun getProgramList(): Disposable {
+        return programList.load()
+    }
+}
+
+
+class ProgramList( restApi: RestfulApi) : ApiModel<List<ProgramData>>( restApi) {
+
+
+    override fun load(param: Map<String, Any>?): Disposable {
+        Log.d(TAG, "getProgramData()")
+        return RxObservableConverter.forNetwork( restApi.getProgramList()).subscribe(
+            { this.handleComplete(it.data) },
+            { this.handleError(it) }
+        )
     }
 
-    private fun handleComplete(data: String) {
-        Log.i(TAG, "handleComplete")
+    override fun cancel() {
 
-        val liveData = PageLiveData()
-        liveData.cmd = AppConst.LIVE_DATA_CMD_LIST
-        liveData.message = data
-        _response?.value = liveData
-    }
-
-    private fun handleError(err: Throwable) {
-        Log.i(TAG, "handleError ($err)")
-    }
-
-    override fun onCleared() {
-        Log.i(TAG, "onCleared()")
-        super.onCleared()
     }
 }

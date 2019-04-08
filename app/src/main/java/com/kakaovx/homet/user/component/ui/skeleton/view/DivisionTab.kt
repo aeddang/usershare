@@ -3,12 +3,14 @@ package com.kakaovx.homet.user.component.ui.skeleton.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import com.jakewharton.rxbinding3.view.clicks
 import com.kakaovx.homet.user.component.ui.skeleton.rx.RxLinearLayout
+import com.kakaovx.homet.user.util.Log
 
 abstract class DivisionTab<T> : RxLinearLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context,attrs)
-
+    private val TAG = javaClass.simpleName
     var delegate: Delegate<T>? = null
 
     private var selectedIdx:Int = -1
@@ -43,11 +45,18 @@ abstract class DivisionTab<T> : RxLinearLayout {
     override fun onCreatedView() {
         data = getIDData()
         tab = getTabMenu()
-        tab.forEach { it.setOnClickListener{view ->
-            selectedTab = view
-            delegate?.onSelected(this, selectedIdx)
-            delegate?.onSelected(this, data[selectedIdx])
-        }}
+
+    }
+
+    override fun onSubscribe() {
+        super.onSubscribe()
+        tab.forEach {view ->
+            view.clicks().subscribe {
+                selectedTab = view
+                delegate?.onSelected(this, selectedIdx)
+                delegate?.onSelected(this, data[selectedIdx])
+            }.apply { disposables?.add(this) }
+        }
     }
 
     override fun onDestroyedView() {

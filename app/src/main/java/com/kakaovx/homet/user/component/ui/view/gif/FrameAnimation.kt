@@ -4,14 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import androidx.annotation.CallSuper
 import com.kakaovx.homet.user.component.ui.skeleton.view.AnimatedDrawView
+import com.kakaovx.homet.user.util.Log
 
 
-class FrameAnimation@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+open class FrameAnimation@kotlin.jvm.JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     :  AnimatedDrawView(context, attrs, defStyleAttr) {
     private val TAG = javaClass.simpleName
     private var paint = Paint()
-    private lateinit var bitmap:Bitmap
     private var low = 1
     private var column = 1
     private var totalFrame = 1
@@ -21,22 +22,29 @@ class FrameAnimation@kotlin.jvm.JvmOverloads constructor(context: Context, attrs
     private var src:Rect? = null
     private var dest:Rect? = null
     private var currentFrame:Int = -1
-    private var dr:Int = 0
+    private var move:Int  = 1
+    private var isRefeat:Boolean = false
+
     var frame:Int = 0
         set(value) {
             field = value
             if( currentFrame == field ) return
             startAnimation(-1)
         }
+    private var bitmap:Bitmap? = null
 
-    fun initSet(resId:Int, low:Int, column:Int, totalFrame:Int = -1) {
+    fun initSet(resId:Int, column:Int, low:Int, isRefeat:Boolean = false, fps:Long = 1000/60, totalFrame:Int = -1) {
+        this.fps = fps
         this.low = low
         this. column = column
+        this.isRefeat = isRefeat
         this.totalFrame = if( totalFrame != -1) totalFrame else low * column
-        bitmap = BitmapFactory.decodeResource(resources, resId)
         paint.style = Paint.Style.FILL
-        frameWidth = bitmap.width / column
-        frameHeight = bitmap.height / low
+        bitmap = BitmapFactory.decodeResource(resources, resId)
+        bitmap?.let {
+            frameWidth = it.width / column
+            frameHeight = it.height / low
+        }
         this.frame = 0
     }
 
@@ -44,26 +52,47 @@ class FrameAnimation@kotlin.jvm.JvmOverloads constructor(context: Context, attrs
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.drawBitmap(bitmap, src, dest, paint)
+        bitmap?.let { bm ->
+            if(dest == null)  setDest()
+            dest?.let { canvas?.drawBitmap( bm , src, it, paint) }
+        }
     }
 
     override fun onStart() {
-        dest = Rect(0, 0, width, height)
+        setDest()
+        Log.d(TAG,"dest $dest")
+    }
+    private fun setDest(){
+        if( width != 0 && height != 0) dest = Rect(0, 0, width, height)
     }
 
     override fun onCompute(f: Int) {
-        currentFrame ++
-        if(currentFrame == totalFrame) currentFrame = 0
+        currentFrame += move
+        if(isRefeat){
+            if(currentFrame == totalFrame) {
+                currentFrame = totalFrame-2
+                move = -1
+            } else if( currentFrame == -1 ) {
+                currentFrame = 1
+                move = 1
+            }
+
+        }else if(currentFrame == totalFrame){
+            currentFrame = 0
+        }
+
         val idxX = currentFrame % this.column
         val idxY = Math.floor((currentFrame / this.column).toDouble())
-        val tx = idxX * this.width
-        val ty = idxY * this.height
-        src = Rect(tx, ty.toInt(), frameWidth, frameHeight)
-        if(currentFrame == frame) onCompute(f)
+        val tx = idxX * frameWidth
+        val ty = (idxY * frameHeight).toInt()
+        src = Rect(tx, ty, tx + frameWidth, ty + frameHeight)
+        Log.d(TAG,"frame  $frame currentFrame $currentFrame")
+        if(currentFrame == frame) onCompleted(f)
 
     }
 
+    @CallSuper
     override fun onCompleted(f: Int) {
-
+        stopAnimation()
     }
 }

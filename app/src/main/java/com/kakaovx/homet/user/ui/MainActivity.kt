@@ -82,6 +82,7 @@ class MainActivity : PageActivity<PageID>(), DivisionTab.Delegate<PageID>, Rx {
 
     override fun onWillChangePageFragment(id:PageID, param:Map<String, Any>?, isPopup:Boolean){
         if( PageFactory.getInstance().isBottomTabHidden(id) ) bottomTab.hideTab() else bottomTab.viewTab()
+        bottomTab.setActivityPage(id)
     }
 
     override fun getLayoutResId(): Int { return R.layout.activity_main }
