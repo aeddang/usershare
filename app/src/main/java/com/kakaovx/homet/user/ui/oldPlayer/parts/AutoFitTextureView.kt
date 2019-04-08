@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kakaovx.homet.user.component.ui.view
+package com.kakaovx.homet.user.ui.oldPlayer.parts
 
 import android.content.Context
 import android.util.AttributeSet

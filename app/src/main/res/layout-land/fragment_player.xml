@@ -101,13 +101,13 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/capture_view"/>
 
-                <com.kakaovx.homet.user.component.ui.view.AutoFitTextureView
+                <com.kakaovx.homet.user.ui.oldPlayer.parts.AutoFitTextureView
                         android:id="@+id/capture_view"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         app:layout_constraintTop_toBottomOf="@id/capture_title"
                         app:layout_constraintBottom_toBottomOf="parent">
-                </com.kakaovx.homet.user.component.ui.view.AutoFitTextureView>
+                </com.kakaovx.homet.user.ui.oldPlayer.parts.AutoFitTextureView>
 
                 <com.kakaovx.homet.user.component.ui.view.OverlayView
                         android:id="@+id/overlay_view"
