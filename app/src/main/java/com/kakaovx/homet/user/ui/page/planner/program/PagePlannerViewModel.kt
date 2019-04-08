@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kakaovx.homet.user.component.model.PageLiveData
+import com.kakaovx.homet.user.component.repository.Repository
 import com.kakaovx.homet.user.constant.AppConst
 import com.kakaovx.homet.user.util.Log
 
-class PagePlannerViewModel(/*repo: Repository*/) : ViewModel() {
+class PagePlannerViewModel(repo: Repository) : ViewModel() {
 
     val tag = "page_planner_view_model_log"
 
